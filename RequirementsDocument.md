@@ -82,11 +82,11 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<In the form DO SOMETHING, or VERB NOUN, describe high level capabilities of the system>
 
-\<they match to high level use cases>
+\<they match to high level use cases> 
 
 | ID        | Description  |
 | ------------- |:-------------:| 
-|  FR1     |  |
+|  FR1     | prova1 |
 |  FR2     |   |
 | FRx..  | | 
 
