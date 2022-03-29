@@ -61,8 +61,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Stakeholder name                   |                                        Description                                        |
 | ---------------------------------- | :---------------------------------------------------------------------------------------: |
 | Medium Companies / Retailers       |                                                                                           |
-| System Administrator				 |																							 |
-| User Management System			 |																							 |
+| System Administrator               |                                                                                           |
+| User Management System             |                                                                                           |
 | Suppliers                          |   companies that supply items to the warehouse, hence to the warehouse's owner company    |
 | Physical Warehouse                 |                                  items stocking facility                                  |
 | Warehouse Items                    |                               items stocked in a warehouse                                |
@@ -115,11 +115,56 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<they match to high level use cases> 
 
-| ID    | Description |
-| ----- | :---------: |
-| FR1   |   prova1    |
-| FR2   |             |
-| FRx.. |             |
+| ID  |        |         |                                |                             Description                              |
+| --- | ------ | ------- | ------------------------------ | :------------------------------------------------------------------: |
+| FR1 |        |         |                                |                        Placement of an Order                         |
+|     | FR1.1  |         | Placement of an internal order |
+|     |        | FR1.1.1 |                                |                      Choice of the wanted item                       |
+|     |        | FR1.1.2 |                                |      Choice of the attributes for an item (quantity, color...)       |
+|     |        | FR1.1.3 |                                |                       Issue Order to warehouse                       |
+|     |        | FR1.1.4 |                                |                      Complete an internal order                      |
+|     |        |         | FR1.1.4.1                      |                           Log placed order                           |
+|     | FR1.2  |         |                                |                 Placement of an order to a supplier                  |
+|     |        | FR1.2.1 |                                |    Record info of a supplier (in case not already in the system)     |
+|     |        | FR1.2.2 |                                |        Choice of the supplier (in case already in the system)        |
+|     |        | FR1.2.3 |                                |                Fill information needed for the order                 |
+|     |        | FR1.2.4 |                                |               Check Availability of the requested item               |
+|     |        | FR1.2.5 |                                |        Handle payment of the items (external payment system)         |
+|     |        | FR1.2.6 |                                |                              Send order                              |
+|     |        | FR1.2.7 |                                |                      Complete an internal order                      |
+|     |        |         | FR1.2.7.1                      |                           Log placed order                           |
+| FR2 |        |         |                                |                 Management of the physical warehouse                 |
+|     | FR2.1  |         |                                |                    Check availability of an item                     |
+|     | FR2.2  |         |                                |                   Collect an item to be delivered                    |
+|     | FR2.3  |         |                                |         Select a free position in which to stock a new item          |
+|     | FR2.4  |         |                                |               Issue a position replacement for an item               |
+|     | FR2.5  |         |                                |                   Track an item by it's properties                   |
+|     | FR2.6  |         |                                |                     Prepare an item for delivery                     |
+|     | FR2.7  |         |                                |              Check space availability in the warehouse               |
+|     | FR2.8  |         |                                |                    Collect an item to be stocked                     |
+|     | FR2.9  |         |                                |              Elimination of an item from the warehouse               |
+|     | FR2.10 |         |                                |               Placement of an item in the pick-up area               |
+| FR3 |        |         |                                |                       Quality Tests Management                       |
+|     | FR3.1  |         |                                |                 Schedule a quality test for an item                  |
+|     | FR3.2  |         |                                |               Insert in the system a new quality test                |
+|     | FR3.3  |         |                                |            Insert outcome of a quality test in the system            |
+|     | FR3.4  |         |                                |                        Show outcome of a test                        |
+|     | FR3.5  |         |                                |        Modify parameters of a quality test (pass/reject rate)        |
+|     | FR3.6  |         |                                | Schedule return of an item in case of unfullfilled test requirements |
+| FR4 |        |         |                                |                         Inventory Management                         |
+|     | FR4.1  |         |                                |                   Add a new item to the inventory                    |
+|     | FR4.2  |         |                                |                  Remove an item from the inventory                   |
+|     | FR4.3  |         |                                |                         Edit info of an item                         |
+|     | FR4.4  |         |                                |                       Add supplier for an item                       |
+|     | FR4.5  |         |                                |                     Remove supplier for an item                      |
+|     | FR4.6  |         |                                |                      Edit supplier for an item                       |
+|     | FR4.7  |         |                                |             Track items to be placed in the pick-up area             |
+| FR5 |        |         |                                |                           Users Management                           |
+|     | FR5.1  |         |                                |                              Add a user                              |
+|     | FR5.2  |         |                                |                            Remove a user                             |
+|     | FR5.3  |         |                                |                     Manage permissions of a user                     |
+|     | FR5.4  |         |                                |                 Edit personal information of a user                  |
+|     | FR5.5  |         |                                |                      Show information of users                       |
 
 ## Non Functional Requirements
 
