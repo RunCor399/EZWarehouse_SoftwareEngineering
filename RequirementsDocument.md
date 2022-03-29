@@ -8,8 +8,8 @@ Version: 0.0
 
  
 | Version number | Change |
-| ----------------- |:-----------|
-| | | 
+| -------------- | :----- |
+|                |        |
 
 
 # Contents
@@ -20,17 +20,26 @@ Version: 0.0
 	+ [Context Diagram](#context-diagram)
 	+ [Interfaces](#interfaces) 
 	
+- [Contents](#contents)
+- [Informal description](#informal-description)
+- [Stakeholders](#stakeholders)
+	- [Context Diagram](#context-diagram)
+	- [Interfaces](#interfaces)
 - [Stories and personas](#stories-and-personas)
 - [Functional and non functional requirements](#functional-and-non-functional-requirements)
-	+ [Functional Requirements](#functional-requirements)
-	+ [Non functional requirements](#non-functional-requirements)
+	- [Functional Requirements](#functional-requirements)
+	- [Non Functional Requirements](#non-functional-requirements)
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
-	+ [Use case diagram](#use-case-diagram)
-	+ [Use cases](#use-cases)
-    	+ [Relevant scenarios](#relevant-scenarios)
+	- [Use case diagram](#use-case-diagram)
+		- [Use case 1, UC1](#use-case-1-uc1)
+				- [Scenario 1.1](#scenario-11)
+				- [Scenario 1.2](#scenario-12)
+				- [Scenario 1.x](#scenario-1x)
+		- [Use case 2, UC2](#use-case-2-uc2)
+		- [Use case x, UCx](#use-case-x-ucx)
 - [Glossary](#glossary)
-- [System design](#system-design)
-- [Deployment diagram](#deployment-diagram)
+- [System Design](#system-design)
+- [Deployment Diagram](#deployment-diagram)
 
 # Informal description
 Medium companies and retailers need a simple application to manage the relationship with suppliers and the inventory of physical items stocked in a physical warehouse. 
@@ -49,11 +58,30 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 # Stakeholders
 
 
-| Stakeholder name  | Description | 
-| ----------------- |:-----------:|
-|   Stakeholder x..     |             | 
+| Stakeholder name                   |                                        Description                                        |
+| ---------------------------------- | :---------------------------------------------------------------------------------------: |
+| Medium Companies / Retailers       |                                                                                           |
+| Suppliers                          |   companies that supply items to the warehouse, hence to the warehouse's owner company    |
+| Physical Warehouse                 |                                  items stocking facility                                  |
+| Warehouse Items                    |                               items stocked in a warehouse                                |
+| Warehouse Manager                  |                        person in charge of managing the warehouse                         |
+| Items Ordering system              |                            system that manages incoming orders                            |
+| Items Availability Checking System |                         system that checks availability of items                          |
+| Items Collection System            |                        system that collects items to be delivered                         |
+| Items Delivery System              |                 system that manages the delivery of items within an order                 |
+| Warehouse worker                   |                                                                                           |
+| Courier                            |                                                                                           |
+| Quality Office                     |                            office that performs tests on items                            |
+| Quality Checking System            |                    system that schedules tests and logs their outcomes                    |
+| Quality Tests                      |                          tests for the different items)     !!!                           |
+| Items Stocking System              |              system that manages the stocking in the warehouse of new items               |
+| Items Returning System             | system that manages the returning of items that haven't passed one or more quality checks |
+| Warehouse Space Management System  |             system that optimizes the space occupied by items in a warehouse              |
+| Items Location Tracking System     |                    system that tracks items that have to be dispatched                    |
+| Company Organizational Units       |                    sub-parts of the same company owning the warehouse                     |
+| Internal Ordering System           |                   system that manages company-internal incoming orders                    |
 
-# Context Diagram and interfaces
+#Context Diagram and interfaces
 
 ## Context Diagram
 \<Define here Context diagram using UML use case diagram>
@@ -65,9 +93,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<GUIs will be described graphically in a separate document>
 
-| Actor | Logical Interface | Physical Interface  |
-| ------------- |:-------------:| -----:|
-|   Actor x..     |  |  |
+| Actor     | Logical Interface | Physical Interface |
+| --------- | :---------------: | -----------------: |
+| Actor x.. |                   |                    |
 
 # Stories and personas
 \<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
@@ -85,22 +113,22 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<they match to high level use cases> 
 
-| ID        | Description  |
-| ------------- |:-------------:| 
-|  FR1     | prova1 |
-|  FR2     |   |
-| FRx..  | | 
+| ID    | Description |
+| ----- | :---------: |
+| FR1   |   prova1    |
+| FR2   |             |
+| FRx.. |             |
 
 ## Non Functional Requirements
 
 \<Describe constraints on functional requirements>
 
-| ID        | Type (efficiency, reliability, ..)           | Description  | Refers to |
-| ------------- |:-------------:| :-----:| -----:|
-|  NFR1     |   |  | |
-|  NFR2     | |  | |
-|  NFR3     | | | |
-| NFRx .. | | | | 
+| ID      | Type (efficiency, reliability, ..) | Description | Refers to |
+| ------- | :--------------------------------: | :---------: | --------: |
+| NFR1    |                                    |             |           |
+| NFR2    |                                    |             |           |
+| NFR3    |                                    |             |           |
+| NFRx .. |                                    |             |           |
 
 
 # Use case diagram and use cases
@@ -112,13 +140,13 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<next describe here each use case in the UCD>
 ### Use case 1, UC1
-| Actors Involved        |  |
-| ------------- |:-------------:| 
-|  Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
-|  Post condition     | \<Boolean expression, must evaluate to true after UC is finished> |
-|  Nominal Scenario     | \<Textual description of actions executed by the UC> |
-|  Variants     | \<other normal executions> |
-|  Exceptions     | \<exceptions, errors > |
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
+| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
+| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
+| Variants         |                      \<other normal executions>                      |
+| Exceptions       |                        \<exceptions, errors >                        |
 
 ##### Scenario 1.1 
 
@@ -130,14 +158,14 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<only relevant scenarios should be described>
 
-| Scenario 1.1 | |
-| ------------- |:-------------:| 
-|  Precondition     | \<Boolean expression, must evaluate to true before the scenario can start> |
-|  Post condition     | \<Boolean expression, must evaluate to true after scenario is finished> |
-| Step#        | Description  |
-|  1     |  |  
-|  2     |  |
-|  ...     |  |
+| Scenario 1.1   |                                                                            |
+| -------------- | :------------------------------------------------------------------------: |
+| Precondition   | \<Boolean expression, must evaluate to true before the scenario can start> |
+| Post condition |  \<Boolean expression, must evaluate to true after scenario is finished>   |
+| Step#          |                                Description                                 |
+| 1              |                                                                            |
+| 2              |                                                                            |
+| ...            |                                                                            |
 
 ##### Scenario 1.2
 
