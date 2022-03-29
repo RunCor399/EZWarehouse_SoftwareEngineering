@@ -4,6 +4,10 @@
 - Medium Companies / Retailers
    
 -  Retailers (com)
+
+- System Administrator
+
+- User Management System
   
 - Suppliers (companies that supply items to the warehouse, hence to the warehouse's owner company)
   
