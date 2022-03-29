@@ -170,12 +170,23 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<Describe constraints on functional requirements>
 
-| ID      | Type (efficiency, reliability, ..) | Description | Refers to |
-| ------- | :--------------------------------: | :---------: | --------: |
-| NFR1    |                                    |             |           |
-| NFR2    |                                    |             |           |
-| NFR3    |                                    |             |           |
-| NFRx .. |                                    |             |           |
+| ID    | Type (efficiency, reliability, ..) |                                                                  Description                                                                   | Refers to |
+| ----- | :--------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: | --------: |
+| NFR1  |             Usability              |                 The software must be easy to use also for employees which have a limited amount of knowledge in the IT domain                  |           |
+| NFR2  |            Portability             |           In a company there might be different computers with different OS's, the software should be able to work in each of them.            |           |
+| NFR3  |          Interoperability          |             The software should be able to cooperate with other software in order, for instance, to receive orders from suppliers              |           |
+| NFR4  |       Easy to be maintained        |                     In order to avoid expensive down times, the software should be able to be fixed in case of sudden bugs                     |           |
+| NFR5  |             Efficiency             | The software must be efficient in managing the operations of space optimization, collection, shipment and stocking of a large number of items. |           |
+| NFR6  |            Scalability             |        If the company grows in dimensions (wrt the amount of sent and received orders), the software must be able to keep up and scale.        |           |
+| NFR7  |             Robustness             |   The software must behave in a reasonable way also in case of unexpected scenarios (wrong inputs, bugs) in order to avoid economic damages    |           |
+| NFR8  |                                    |                                 Nationality of companies that will use the software (multi-language platform)                                  |           |
+| NFR9  |                                    |  Use of different measurement metrics in case the software will be used in different continents (i.e. currencies, distance, space, speed...)   |           |
+| NFR10 |                                    |                                                   Consistency of data within the application                                                   |           |
+| NFR11 |                                    |                                                          Privacy and Security of data                                                          |           |
+| NFR12 |                                    |                                Need-to-know (Every user has only the necessary information to perform his job)                                 |           |
+| NFR13 |                                    |                        Least privilege (Every user has the necessary amount of privileges necessary to perform his job)                        |           |
+| NFR14 |            Availability            |                                             (The order of defects in a year must be lower than 10)                                             |           |
+
 
 
 # Use case diagram and use cases
