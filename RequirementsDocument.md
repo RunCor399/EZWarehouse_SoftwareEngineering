@@ -32,6 +32,18 @@ Version: 1.0
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
 	- [Use case diagram](#use-case-diagram)
 		- [Use case 1, UC1](#use-case-1-uc1)
+	- [Use case 1, UC1 - Create User Account](#use-case-1-uc1---create-user-account)
+	- [Use case 2, UC2 - Modify user account](#use-case-2-uc2---modify-user-account)
+	- [Use case 3, UC3 - Delete user account](#use-case-3-uc3---delete-user-account)
+	- [Use case 4, UC4 - An item is quality tested](#use-case-4-uc4---an-item-is-quality-tested)
+		- [Scenario 4.1](#scenario-41)
+		- [Scenario 4.2](#scenario-42)
+	- [Use case 6, UC6 - A test is modified](#use-case-6-uc6---a-test-is-modified)
+	- [Use case 7, UC7 - A test is added](#use-case-7-uc7---a-test-is-added)
+		- [Use case 8, UC8](#use-case-8-uc8)
+		- [Use case 9, UC9](#use-case-9-uc9)
+		- [Use case 10, UC10](#use-case-10-uc10)
+		- [Use case 11, UC11](#use-case-11-uc11)
 				- [Scenario 1.1](#scenario-11)
 				- [Scenario 1.2](#scenario-12)
 				- [Scenario 1.x](#scenario-1x)
@@ -115,56 +127,56 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<they match to high level use cases> 
 
-| ID  |        |         |                                |                             Description                              |
-| --- | ------ | ------- | ------------------------------ | :------------------------------------------------------------------: |
-| FR1 |        |         |                                |                        Placement of an Order                         |
-|     | FR1.1  |         | Placement of an internal order |
-|     |        | FR1.1.1 |                                |                      Choice of the wanted item                       |
-|     |        | FR1.1.2 |                                |      Choice of the attributes for an item (quantity, color...)       |
-|     |        | FR1.1.3 |                                |                       Issue Order to warehouse                       |
-|     |        | FR1.1.4 |                                |                      Complete an internal order                      |
-|     |        |         | FR1.1.4.1                      |                           Log placed order                           |
-|     | FR1.2  |         |                                |                 Placement of an order to a supplier                  |
-|     |        | FR1.2.1 |                                |    Record info of a supplier (in case not already in the system)     |
-|     |        | FR1.2.2 |                                |        Choice of the supplier (in case already in the system)        |
-|     |        | FR1.2.3 |                                |                Fill information needed for the order                 |
-|     |        | FR1.2.4 |                                |               Check Availability of the requested item               |
-|     |        | FR1.2.5 |                                |        Handle payment of the items (external payment system)         |
-|     |        | FR1.2.6 |                                |                              Send order                              |
-|     |        | FR1.2.7 |                                |                      Complete an internal order                      |
-|     |        |         | FR1.2.7.1                      |                           Log placed order                           |
-| FR2 |        |         |                                |                 Management of the physical warehouse                 |
-|     | FR2.1  |         |                                |                    Check availability of an item                     |
-|     | FR2.2  |         |                                |                   Collect an item to be delivered                    |
-|     | FR2.3  |         |                                |         Select a free position in which to stock a new item          |
-|     | FR2.4  |         |                                |               Issue a position replacement for an item               |
-|     | FR2.5  |         |                                |                   Track an item by it's properties                   |
-|     | FR2.6  |         |                                |                     Prepare an item for delivery                     |
-|     | FR2.7  |         |                                |              Check space availability in the warehouse               |
-|     | FR2.8  |         |                                |                    Collect an item to be stocked                     |
-|     | FR2.9  |         |                                |              Elimination of an item from the warehouse               |
-|     | FR2.10 |         |                                |               Placement of an item in the pick-up area               |
-| FR3 |        |         |                                |                       Quality Tests Management                       |
-|     | FR3.1  |         |                                |                 Schedule a quality test for an item                  |
-|     | FR3.2  |         |                                |               Insert in the system a new quality test                |
-|     | FR3.3  |         |                                |            Insert outcome of a quality test in the system            |
-|     | FR3.4  |         |                                |                        Show outcome of a test                        |
-|     | FR3.5  |         |                                |        Modify parameters of a quality test (pass/reject rate)        |
-|     | FR3.6  |         |                                | Schedule return of an item in case of unfullfilled test requirements |
-| FR4 |        |         |                                |                         Inventory Management                         |
-|     | FR4.1  |         |                                |                   Add a new item to the inventory                    |
-|     | FR4.2  |         |                                |                  Remove an item from the inventory                   |
-|     | FR4.3  |         |                                |                         Edit info of an item                         |
-|     | FR4.4  |         |                                |                       Add supplier for an item                       |
-|     | FR4.5  |         |                                |                     Remove supplier for an item                      |
-|     | FR4.6  |         |                                |                      Edit supplier for an item                       |
-|     | FR4.7  |         |                                |             Track items to be placed in the pick-up area             |
-| FR5 |        |         |                                |                           Users Management                           |
-|     | FR5.1  |         |                                |                              Add a user                              |
-|     | FR5.2  |         |                                |                            Remove a user                             |
-|     | FR5.3  |         |                                |                     Manage permissions of a user                     |
-|     | FR5.4  |         |                                |                 Edit personal information of a user                  |
-|     | FR5.5  |         |                                |                      Show information of users                       |
+| ID  |        |         |           |                             Description                              |
+| --- | ------ | ------- | --------- | :------------------------------------------------------------------: |
+| FR1 |        |         |           |                        Placement of an Order                         |
+|     | FR1.1  |         |           |                    Placement of an internal order                    |
+|     |        | FR1.1.1 |           |                      Choice of the wanted item                       |
+|     |        | FR1.1.2 |           |      Choice of the attributes for an item (quantity, color...)       |
+|     |        | FR1.1.3 |           |                       Issue Order to warehouse                       |
+|     |        | FR1.1.4 |           |                      Complete an internal order                      |
+|     |        |         | FR1.1.4.1 |                           Log placed order                           |
+|     | FR1.2  |         |           |                 Placement of an order to a supplier                  |
+|     |        | FR1.2.1 |           |    Record info of a supplier (in case not already in the system)     |
+|     |        | FR1.2.2 |           |        Choice of the supplier (in case already in the system)        |
+|     |        | FR1.2.3 |           |                Fill information needed for the order                 |
+|     |        | FR1.2.4 |           |               Check Availability of the requested item               |
+|     |        | FR1.2.5 |           |        Handle payment of the items (external payment system)         |
+|     |        | FR1.2.6 |           |                              Send order                              |
+|     |        | FR1.2.7 |           |                      Complete an internal order                      |
+|     |        |         | FR1.2.7.1 |                           Log placed order                           |
+| FR2 |        |         |           |                 Management of the physical warehouse                 |
+|     | FR2.1  |         |           |                    Check availability of an item                     |
+|     | FR2.2  |         |           |                   Collect an item to be delivered                    |
+|     | FR2.3  |         |           |         Select a free position in which to stock a new item          |
+|     | FR2.4  |         |           |               Issue a position replacement for an item               |
+|     | FR2.5  |         |           |                   Track an item by it's properties                   |
+|     | FR2.6  |         |           |                     Prepare an item for delivery                     |
+|     | FR2.7  |         |           |              Check space availability in the warehouse               |
+|     | FR2.8  |         |           |                    Collect an item to be stocked                     |
+|     | FR2.9  |         |           |              Elimination of an item from the warehouse               |
+|     | FR2.10 |         |           |               Placement of an item in the pick-up area               |
+| FR3 |        |         |           |                       Quality Tests Management                       |
+|     | FR3.1  |         |           |                 Schedule a quality test for an item                  |
+|     | FR3.2  |         |           |               Insert in the system a new quality test                |
+|     | FR3.3  |         |           |            Insert outcome of a quality test in the system            |
+|     | FR3.4  |         |           |                        Show outcome of a test                        |
+|     | FR3.5  |         |           |        Modify parameters of a quality test (pass/reject rate)        |
+|     | FR3.6  |         |           | Schedule return of an item in case of unfullfilled test requirements |
+| FR4 |        |         |           |                         Inventory Management                         |
+|     | FR4.1  |         |           |                   Add a new item to the inventory                    |
+|     | FR4.2  |         |           |                  Remove an item from the inventory                   |
+|     | FR4.3  |         |           |                         Edit info of an item                         |
+|     | FR4.4  |         |           |                       Add supplier for an item                       |
+|     | FR4.5  |         |           |                     Remove supplier for an item                      |
+|     | FR4.6  |         |           |                      Edit supplier for an item                       |
+|     | FR4.7  |         |           |             Track items to be placed in the pick-up area             |
+| FR5 |        |         |           |                           Users Management                           |
+|     | FR5.1  |         |           |                              Add a user                              |
+|     | FR5.2  |         |           |                            Remove a user                             |
+|     | FR5.3  |         |           |                     Manage permissions of a user                     |
+|     | FR5.4  |         |           |                 Edit personal information of a user                  |
+|     | FR5.5  |         |           |                      Show information of users                       |
 
 ## Non Functional Requirements
 
@@ -183,8 +195,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | NFR9  |                                    |  Use of different measurement metrics in case the software will be used in different continents (i.e. currencies, distance, space, speed...)   |           |
 | NFR10 |                                    |                                                   Consistency of data within the application                                                   |           |
 | NFR11 |                                    |                                                          Privacy and Security of data                                                          |           |
-| NFR12 |                                    |                                Need-to-know (Every user has only the necessary information to perform his job)                                 |           |
-| NFR13 |                                    |                        Least privilege (Every user has the necessary amount of privileges necessary to perform his job)                        |           |
+| NFR12 |            Need-to-know            |                                        Every user has only the necessary information to perform his job                                        |           |
+| NFR13 |          Least privilege           |                                 Every user has the necessary amount of privileges necessary to perform his job                                 |           |
 | NFR14 |            Availability            |                                             (The order of defects in a year must be lower than 10)                                             |           |
 
 
@@ -198,6 +210,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<next describe here each use case in the UCD>
 ### Use case 1, UC1
+
+
 | Actors Involved  |                                                                      |
 | ---------------- | :------------------------------------------------------------------: |
 | Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
@@ -205,6 +219,125 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Nominal Scenario |         \<Textual description of actions executed by the UC>         |
 | Variants         |                      \<other normal executions>                      |
 | Exceptions       |                        \<exceptions, errors >                        |
+
+
+
+## Use case 1, UC1 - Create User Account
+| Actors Involved  |                                         Manager, User Management System, System Administrator                                         |
+| ---------------- | :-----------------------------------------------------------------------------------------------------------------------------------: |
+| Precondition     |                                                       Account U does not exist                                                        |
+| Post condition   |                                                     Account U added in the system                                                     |
+| Nominal Scenario |                                      New user creates a new account U and populates its fields.                                       |
+| Variants         | A user can create only one account, this is checked through the email (one email, one account at most). Administrator can create many |
+
+## Use case 2, UC2 - Modify user account
+| Actors Involved  |             Manager, User Management System, System Administrator              |
+| ---------------- | :----------------------------------------------------------------------------: |
+| Precondition     |                                Account U exists                                |
+| Post condition   |                                                                                |
+| Nominal Scenario |                User U modifies one or more fields of account U                 |
+| Variants         | User U can modify only his / her account. Administrator can modify any account |
+
+## Use case 3, UC3 - Delete user account
+| Actors Involved  |             Manager, User Management System, System Administrator              |
+| ---------------- | :----------------------------------------------------------------------------: |
+| Precondition     |                                Account U exists                                |
+| Post condition   |                       Account U deleted from the system                        |
+| Nominal Scenario |                    User selects an user account U to delete                    |
+| Variants         | User U can delete only his / her account. Administrator can delete any account |
+
+## Use case 4, UC4 - An item is quality tested
+| Actors Involved  | Manager, Quality Checking System, Quality Tests |
+| ---------------- | :---------------------------------------------: |
+| Precondition     |               Item is not tested                |
+| Post condition   |                 Item is tested                  |
+| Nominal Scenario | A quality officier tests the quality of an item |
+| Variants         |        Only quality officier makes tests        |
+| Exceptions       |                                                 |
+
+### Scenario 4.1
+| Scenario 4.1   |                      The item passes the quality test                      |
+| -------------- | :------------------------------------------------------------------------: |
+| Precondition   | \<Boolean expression, must evaluate to true before the scenario can start> |
+| Post condition |  \<Boolean expression, must evaluate to true after scenario is finished>   |
+| Step#          |                                Description                                 |
+| 1              |                                                                            |
+| 2              |                                                                            |
+| ...            |
+
+### Scenario 4.2
+| Scenario 4.2   |                   The item doesn't pass the quality test                   |
+| -------------- | :------------------------------------------------------------------------: |
+| Precondition   | \<Boolean expression, must evaluate to true before the scenario can start> |
+| Post condition |  \<Boolean expression, must evaluate to true after scenario is finished>   |
+| Step#          |                                Description                                 |
+| 1              |                                                                            |
+| 2              |                                                                            |
+| ...            |
+
+## Use case 5, UC5 - A test is added
+| Actors Involved  |     Manager, Quality Checking System, Quality Tests     |
+| ---------------- | :-----------------------------------------------------: |
+| Precondition     |                The test T does not exist                |
+| Post condition   |                    The test T exists                    |
+| Nominal Scenario | The quality officier inserts the new test in the system |
+| Variants         |    Only quality officier insert tests in the system     |
+| Exceptions       |                                                         |
+
+## Use case 6, UC6 - A test is modified
+| Actors Involved  |           Manager, Quality Checking System, Quality Tests            |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     |                          The test T exists                           |
+| Post condition   |                        The test T is modified                        |
+| Nominal Scenario | The quality officier modifies the parameters of a test in the system |
+| Variants         |                                                                      |
+| Exceptions       |                                                                      |
+
+## Use case 7, UC7 - A test is added
+| Actors Involved  |   Manager, Quality Checking System, Quality Tests    |
+| ---------------- | :--------------------------------------------------: |
+| Precondition     |                  The test T exists                   |
+| Post condition   |               The test T doesn't exist               |
+| Nominal Scenario | The quality officier delete the test T in the system |
+| Variants         |  Only quality officier deletes tests in the system   |
+| Exceptions       |                                                      |
+
+### Use case 8, UC8
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
+| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
+| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
+| Variants         |                      \<other normal executions>                      |
+| Exceptions       |                        \<exceptions, errors >                        |
+
+### Use case 9, UC9
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
+| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
+| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
+| Variants         |                      \<other normal executions>                      |
+| Exceptions       |                        \<exceptions, errors >                        |
+
+### Use case 10, UC10
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
+| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
+| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
+| Variants         |                      \<other normal executions>                      |
+| Exceptions       |                        \<exceptions, errors >                        |
+
+### Use case 11, UC11
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
+| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
+| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
+| Variants         |                      \<other normal executions>                      |
+| Exceptions       |                        \<exceptions, errors >                        |
+
 
 ##### Scenario 1.1 
 
