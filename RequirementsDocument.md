@@ -191,49 +191,101 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 # Use case diagram and use cases
 
-
-## Use case diagram
-\<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
-
-
-\<next describe here each use case in the UCD>
-### Use case 1, UC1
-| Actors Involved  |                                                                      |
-| ---------------- | :------------------------------------------------------------------: |
-| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
-| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
-| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
-| Variants         |                      \<other normal executions>                      |
-| Exceptions       |                        \<exceptions, errors >                        |
+### Use case 1, UC1 - Placement of an internal order
+| Actors Involved        | Manager, OU |
+| ------------- |:-------------:| 
+|  Precondition     | An item has to be ordered |
+|  Post condition     | The desired item is ordered |
+|  Nominal Scenario     | The OU issues an order for the item (by selecting it and its attributes), the manager receives the order and the item is delivered |
+|  Variants     |   |
+|  Exceptions     | The item is not available; the item doesn't pass most of the tests that it has to do |
 
 ##### Scenario 1.1 
 
-\<describe here scenarios instances of UC1>
-
-\<a scenario is a sequence of steps that corresponds to a particular execution of one use case>
-
-\<a scenario is a more formal description of a story>
-
-\<only relevant scenarios should be described>
-
-| Scenario 1.1   |                                                                            |
-| -------------- | :------------------------------------------------------------------------: |
-| Precondition   | \<Boolean expression, must evaluate to true before the scenario can start> |
-| Post condition |  \<Boolean expression, must evaluate to true after scenario is finished>   |
-| Step#          |                                Description                                 |
-| 1              |                                                                            |
-| 2              |                                                                            |
-| ...            |                                                                            |
+| Scenario 1.1 | Placement of internal order (item available) |
+| ------------- |:-------------:| 
+|  Precondition     | The OU requests an item from the warehouse |
+|  Post condition     | The OU receives the item |
+| Step#        | Description  |
+|  1     | OU selects the item and its properties |  
+|  2     | The warehouse manager receives the order |
+|  3     | The manager checks if the item is available |
+|  4     | The manager prepares the item to be delivered |
+|  5     | The item is delivered |
+|  6     | The OU receives the item |
+|  7    | Update history of the item |
+|  ...     |  |
 
 ##### Scenario 1.2
 
-##### Scenario 1.x
+| Scenario 1.2 | Placement of internal order (item not available) |
+| ------------- |:-------------:| 
+|  Precondition     | The OU requests an item from the warehouse |
+|  Post condition     | The OU doesn't receive the item |
+| Step#        | Description  |
+|  1     | OU selects the item and its properties |  
+|  2     | The warehouse manager receives the order |
+|  3     | The manager checks if the item is available |
+|  4     | The item is not available, the order is declined |
+|  ...     |  |
 
-### Use case 2, UC2
-..
+### Use case 2, UC2 - Placement of an external order
+| Actors Involved        | Manager, Supplier |
+| ------------- |:-------------:| 
+|  Precondition     | An item has to be ordered |
+|  Post condition     | The desired item is ordered |
+|  Nominal Scenario     | The manager issues an order for the item (by selecting it and its attributes), the suppliers receives the order and the item is delivered |
+|  Variants     |   |
+|  Exceptions     | The item is not available; the supplier doesn't have the item; the item doesn't pass most of the tests that it has to do |
 
-### Use case x, UCx
-..
+##### Scenario 2.1
+
+| Scenario 2.1 | Placement of external order (item available, supplier already exists) |
+| ------------- |:-------------:| 
+|  Precondition     | The manager requests an item from a supplier |
+|  Post condition     | The manager receives the item |
+| Step#        | Description  |
+|  1     | the manager selects the item and its properties | 
+|  2     | The manager selects the supplier from which the item has to be received (from an already known supplier) | 
+|  3     | The supplier receives the order |
+|  4     | The supplier checks if the item is available |
+|  5     | The supplier prepares the item to be delivered |
+|  6     | The item is delivered |
+|  7     | The manager receives the item |
+|  8    | Update history of the item |
+|  ...     |  |
+
+##### Scenario 2.2
+
+| Scenario 2.2 | Placement of external order (item not available, supplier already exists) |
+| ------------- |:-------------:| 
+|  Precondition     | The manager requests an item from a supplier |
+|  Post condition     | The manager does not receive the item |
+| Step#        | Description  |
+|  1     | the manager selects the item and its properties |  
+|  2     | The manager selects the supplier from which the item has to be received (from an already known supplier)| 
+|  3     | The supplier receives the order |
+|  4     | The supplier checks if the item is available |
+|  5     | The item is not available, the order is declined |
+|  ...     |  |
+
+##### Scenario 2.3
+
+| Scenario 2.3 | Placement of external order (new supplier) |
+| ------------- |:-------------:| 
+|  Precondition     | The manager requests an item from a supplier |
+|  Post condition     | The manager receives the item |
+| Step#        | Description  |
+|  1     | the manager selects the item and its properties |
+|  2     | The manager selects the supplier from which the item has to be received |   
+|  3     | The supplier receives the order |
+|  4     | The supplier checks if the item is available |
+|  5     | None of the supplier on the list has the item, select a new supplier |
+|  6     | The supplier prepares the item to be delivered |
+|  7     | The item is delivered |
+|  8     | The manager receives the item |
+|  9    | Update history of the item |
+|  ...     |  |
 
 
 
