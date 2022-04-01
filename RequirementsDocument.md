@@ -31,7 +31,13 @@ Version: 1.0
 	- [Non Functional Requirements](#non-functional-requirements)
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
 	- [Use case diagram](#use-case-diagram)
-		- [Use case 1, UC1](#use-case-1-uc1)
+		- [Use case 3, UC3 Track an item position and supply     (FR 2.1 - 2.5)](#use-case-3-uc3-track-an-item-position-and-supply-----fr-21---25)
+		- [Use case 4, UC4 Collect an item  (FR 2.2 - 2.8)](#use-case-4-uc4-collect-an-item--fr-22---28)
+		- [Use case 5, UC5 Select a free position in which to stock a new item   (FR 2.3 - 2.7)](#use-case-5-uc5-select-a-free-position-in-which-to-stock-a-new-item---fr-23---27)
+		- [Use case 6, UC6 Issue a position replacement for an item](#use-case-6-uc6-issue-a-position-replacement-for-an-item)
+		- [Use case 7, UC7 Prepare an item for delivery](#use-case-7-uc7-prepare-an-item-for-delivery)
+		- [Use case 8, UC8 Elimination of an item from the warehouse](#use-case-8-uc8-elimination-of-an-item-from-the-warehouse)
+		- [Use case 9, UC9 Placement of an item in the pickup area](#use-case-9-uc9-placement-of-an-item-in-the-pickup-area)
 				- [Scenario 1.1](#scenario-11)
 				- [Scenario 1.2](#scenario-12)
 				- [Scenario 1.x](#scenario-1x)
@@ -197,14 +203,72 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 
 \<next describe here each use case in the UCD>
-### Use case 1, UC1
+### Use case 3, UC3 Track an item position and supply     (FR 2.1 - 2.5)
 | Actors Involved  |                                                                      |
 | ---------------- | :------------------------------------------------------------------: |
-| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
-| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
-| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
-| Variants         |                      \<other normal executions>                      |
-| Exceptions       |                        \<exceptions, errors >                        |
+| Precondition     |  User is logged, item's information (id, name...) are known		  									  |
+| Post condition   |  Supply and position of the item is know 										  						  |
+| Nominal Scenario |  User types the information of the item he wants to find in the warehouse              				  |
+| Variants         |                                          																  |
+| Exceptions       |  An item with the given information couldn't be found                                            		  |
+
+
+### Use case 4, UC4 Collect an item  (FR 2.2 - 2.8)
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     |  User is logged, item's information (id, name...) are known		  									  		  |
+| Post condition   |  The item is found and ready to be moved									  									  |
+| Nominal Scenario |  User types the information of the item he wants to collect           											  |
+| Variants         |  Physical position within the warehouse is used to collect an item                                       		  |
+| Exceptions       |  An item couldn't be found     																				  |
+
+### Use case 5, UC5 Select a free position in which to stock a new item   (FR 2.3 - 2.7)
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     |  User is logged, item's has already been collected		  									  |
+| Post condition   |  A free position is found								  									  |
+| Nominal Scenario |  User specifies the type of item and it's dimensions           							  |
+| Variants         |  Search for free positions without inserting any items information                           |
+| Exceptions       |  No available free spaces inside the warehouse   											  |
+
+
+
+### Use case 6, UC6 Issue a position replacement for an item
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     |  User is logged, item's position is known, new item position is known		  				   |
+| Post condition   |  The item has been moved to it's new position									  			   |
+| Nominal Scenario |  The two items which position has to be switched are selected, items are exchanged       	   |
+| Variants         |  Destination position is empty, no need to move another item                                  |
+| Exceptions       |  No other position in the warehouse is suitable for the item charateristics      			   |
+
+
+### Use case 7, UC7 Prepare an item for delivery
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     |  User is logged, item has been collected	  				   								   |
+| Post condition   |  The item is ready to be delivered to the pick-up area								  		   |
+| Nominal Scenario |  Needed operations are done on the item that needs to be delivered (i.e. packaging)      	   |
+| Variants         |                                   															   |
+| Exceptions       |  The item can't be prepared due to logistic problems   			   						   |
+
+### Use case 8, UC8 Elimination of an item from the warehouse
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     |  User is logged, item to be dropped has been collected  			  |
+| Post condition   |  The item will no longer be inside the warehouse					  |
+| Nominal Scenario |  The item is trashed hence it's position is freed up      	   		  |
+| Variants         |                                   									  |
+| Exceptions       |  								  			   						  |
+
+### Use case 9, UC9 Placement of an item in the pickup area
+| Actors Involved  |                                                                      |
+| ---------------- | :------------------------------------------------------------------: |
+| Precondition     |  User is logged, item has been prepared for delivery	  			  |
+| Post condition   |  The item will no longer be managed by the warehouse				  |
+| Nominal Scenario |  The item is moved in the designated pickup area      	   			  |
+| Variants         |                                   									  |
+| Exceptions       |    			   						  							  |
 
 ##### Scenario 1.1 
 
