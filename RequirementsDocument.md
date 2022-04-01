@@ -1,15 +1,16 @@
 
  #Requirements Document 
 
-Date: 22 march 2022
+Date: 01 April 2022
 
-Version: 1.0
+Version: 2.0
 
 
  
 | Version number | Change                                                                              |
 | -------------- | :---------------------------------------------------------------------------------- |
 | 1.0            | Definition of Stakeholders, functional requirements and non-functional requirements |
+| 2.0            | Definition of Use cases and scenarios                                               |
 
 
 # Contents
@@ -32,7 +33,19 @@ Version: 1.0
 	- [Non Functional Requirements](#non-functional-requirements)
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
 	- [Use case diagram](#use-case-diagram)
-		- [Use case 1, UC1](#use-case-1-uc1)
+	- [Use case 1, UC1 - Placement of an internal order](#use-case-1-uc1---placement-of-an-internal-order)
+		- [Scenario 1.1](#scenario-11)
+	- [Use case 2, UC2 - Placement of an external order](#use-case-2-uc2---placement-of-an-external-order)
+		- [Scenario 2.1](#scenario-21)
+		- [Scenario 2.2](#scenario-22)
+		- [Scenario 2.3](#scenario-23)
+	- [Use case 3, UC3 Track an item position and supply     (FR 2.1 - 2.5)](#use-case-3-uc3-track-an-item-position-and-supply-----fr-21---25)
+	- [Use case 4, UC4 Collect an item  (FR 2.2 - 2.8)](#use-case-4-uc4-collect-an-item--fr-22---28)
+	- [Use case 5, UC5 Select a free position in which to stock a new item   (FR 2.3 - 2.7)](#use-case-5-uc5-select-a-free-position-in-which-to-stock-a-new-item---fr-23---27)
+	- [Use case 6, UC6 Issue a position replacement for an item](#use-case-6-uc6-issue-a-position-replacement-for-an-item)
+	- [Use case 7, UC7 Prepare an item for delivery](#use-case-7-uc7-prepare-an-item-for-delivery)
+	- [Use case 8, UC8 Elimination of an item from the warehouse](#use-case-8-uc8-elimination-of-an-item-from-the-warehouse)
+	- [Use case 9, UC9 Placement of an item in the pickup area](#use-case-9-uc9-placement-of-an-item-in-the-pickup-area)
 	- [Use case 10, UC10 - Create User Account](#use-case-10-uc10---create-user-account)
 	- [Use case 11, UC11 - Modify user account](#use-case-11-uc11---modify-user-account)
 	- [Use case 12, UC12 - Delete user account](#use-case-12-uc12---delete-user-account)
@@ -41,9 +54,9 @@ Version: 1.0
 		- [Scenario 13.2](#scenario-132)
 	- [Use case 15, UC15 - A test is modified](#use-case-15-uc15---a-test-is-modified)
 	- [Use case 16, UC16 - A test is added](#use-case-16-uc16---a-test-is-added)
-		- [Use case 17, UC17](#use-case-17-uc17)
-		- [Use case 18, UC18](#use-case-18-uc18)
-		- [Use case 19, UC19](#use-case-19-uc19)
+	- [Use case 17, UC17](#use-case-17-uc17)
+	- [Use case 18, UC18](#use-case-18-uc18)
+	- [Use case 19, UC19](#use-case-19-uc19)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -204,17 +217,158 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 
 \<next describe here each use case in the UCD>
-### Use case 1, UC1
 
 
-| Actors Involved  |                                                                      |
-| ---------------- | :------------------------------------------------------------------: |
-| Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
-| Post condition   |  \<Boolean expression, must evaluate to true after UC is finished>   |
-| Nominal Scenario |         \<Textual description of actions executed by the UC>         |
-| Variants         |                      \<other normal executions>                      |
-| Exceptions       |                        \<exceptions, errors >                        |
+## Use case 1, UC1 - Placement of an internal order
+| Actors Involved  |                                                            Manager, OU                                                             |
+| ---------------- | :--------------------------------------------------------------------------------------------------------------------------------: |
+| Precondition     |                                                     An item has to be ordered                                                      |
+| Post condition   |                                                    The desired item is ordered                                                     |
+| Nominal Scenario | The OU issues an order for the item (by selecting it and its attributes), the manager receives the order and the item is delivered |
+| Variants         |                                                                                                                                    |
+| Exceptions       |                        The item is not available; the item doesn't pass most of the tests that it has to do                        |
 
+### Scenario 1.1
+
+| Scenario 1.1   | Placement of internal order (item available)  |
+| -------------- | :-------------------------------------------: |
+| Precondition   |  The OU requests an item from the warehouse   |
+| Post condition |           The OU receives the item            |
+| Step#          |                  Description                  |
+| 1              |    OU selects the item and its properties     |
+| 2              |   The warehouse manager receives the order    |
+| 3              |  The manager checks if the item is available  |
+| 4              | The manager prepares the item to be delivered |
+| 5              |             The item is delivered             |
+| 6              |           The OU receives the item            |
+| 7              |          Update history of the item           |
+| ...            |                                               |
+
+## Use case 2, UC2 - Placement of an external order
+| Actors Involved  |                                                             Manager, Supplier                                                             |
+| ---------------- | :---------------------------------------------------------------------------------------------------------------------------------------: |
+| Precondition     |                                                         An item has to be ordered                                                         |
+| Post condition   |                                                        The desired item is ordered                                                        |
+| Nominal Scenario | The manager issues an order for the item (by selecting it and its attributes), the suppliers receives the order and the item is delivered |
+| Variants         |                                                                                                                                           |
+| Exceptions       |         The item is not available; the supplier doesn't have the item; the item doesn't pass most of the tests that it has to do          |
+
+
+### Scenario 2.1
+
+| Scenario 2.1   |                  Placement of external order (item available, supplier already exists)                   |
+| -------------- | :------------------------------------------------------------------------------------------------------: |
+| Precondition   |                               The manager requests an item from a supplier                               |
+| Post condition |                                      The manager receives the item                                       |
+| Step#          |                                               Description                                                |
+| 1              |                             the manager selects the item and its properties                              |
+| 2              | The manager selects the supplier from which the item has to be received (from an already known supplier) |
+| 3              |                                     The supplier receives the order                                      |
+| 4              |                               The supplier checks if the item is available                               |
+| 5              |                              The supplier prepares the item to be delivered                              |
+| 6              |                                          The item is delivered                                           |
+| 7              |                                      The manager receives the item                                       |
+| 8              |                                        Update history of the item                                        |
+| ...            |                                                                                                          |
+
+### Scenario 2.2
+
+| Scenario 2.2   |                Placement of external order (item not available, supplier already exists)                 |
+| -------------- | :------------------------------------------------------------------------------------------------------: |
+| Precondition   |                               The manager requests an item from a supplier                               |
+| Post condition |                                  The manager does not receive the item                                   |
+| Step#          |                                               Description                                                |
+| 1              |                             the manager selects the item and its properties                              |
+| 2              | The manager selects the supplier from which the item has to be received (from an already known supplier) |
+| 3              |                                     The supplier receives the order                                      |
+| 4              |                               The supplier checks if the item is available                               |
+| 5              |                             The item is not available, the order is declined                             |
+| ...            |                                                                                                          |
+
+### Scenario 2.3
+
+| Scenario 2.3   |               Placement of external order (new supplier)                |
+| -------------- | :---------------------------------------------------------------------: |
+| Precondition   |              The manager requests an item from a supplier               |
+| Post condition |                      The manager receives the item                      |
+| Step#          |                               Description                               |
+| 1              |             the manager selects the item and its properties             |
+| 2              | The manager selects the supplier from which the item has to be received |
+| 3              |                     The supplier receives the order                     |
+| 4              |              The supplier checks if the item is available               |
+| 5              |  None of the supplier on the list has the item, select a new supplier   |
+| 6              |             The supplier prepares the item to be delivered              |
+| 7              |                          The item is delivered                          |
+| 8              |                      The manager receives the item                      |
+| 9              |                       Update history of the item                        |
+| ...            |                                                                         |
+
+## Use case 3, UC3 Track an item position and supply     (FR 2.1 - 2.5)
+| Actors Involved  |                                                                          |
+| ---------------- | :----------------------------------------------------------------------: |
+| Precondition     |        User is logged, item's information (id, name...) are known        |
+| Post condition   |                 Supply and position of the item is know                  |
+| Nominal Scenario | User types the information of the item he wants to find in the warehouse |
+| Variants         |                                                                          |
+| Exceptions       |           An item with the given information couldn't be found           |
+
+
+## Use case 4, UC4 Collect an item  (FR 2.2 - 2.8)
+| Actors Involved  |                                                                   |
+| ---------------- | :---------------------------------------------------------------: |
+| Precondition     |    User is logged, item's information (id, name...) are known     |
+| Post condition   |              The item is found and ready to be moved              |
+| Nominal Scenario |    User types the information of the item he wants to collect     |
+| Variants         | Physical position within the warehouse is used to collect an item |
+| Exceptions       |                     An item couldn't be found                     |
+
+## Use case 5, UC5 Select a free position in which to stock a new item   (FR 2.3 - 2.7)
+| Actors Involved  |                                                                   |
+| ---------------- | :---------------------------------------------------------------: |
+| Precondition     |         User is logged, item's has already been collected         |
+| Post condition   |                     A free position is found                      |
+| Nominal Scenario |        User specifies the type of item and it's dimensions        |
+| Variants         | Search for free positions without inserting any items information |
+| Exceptions       |           No available free spaces inside the warehouse           |
+
+
+
+## Use case 6, UC6 Issue a position replacement for an item
+| Actors Involved  |                                                                                   |
+| ---------------- | :-------------------------------------------------------------------------------: |
+| Precondition     |       User is logged, item's position is known, new item position is known        |
+| Post condition   |                   The item has been moved to it's new position                    |
+| Nominal Scenario | The two items which position has to be switched are selected, items are exchanged |
+| Variants         |            Destination position is empty, no need to move another item            |
+| Exceptions       |    No other position in the warehouse is suitable for the item charateristics     |
+
+
+## Use case 7, UC7 Prepare an item for delivery
+| Actors Involved  |                                                                                    |
+| ---------------- | :--------------------------------------------------------------------------------: |
+| Precondition     |                      User is logged, item has been collected                       |
+| Post condition   |               The item is ready to be delivered to the pick-up area                |
+| Nominal Scenario | Needed operations are done on the item that needs to be delivered (i.e. packaging) |
+| Variants         |                                                                                    |
+| Exceptions       |                The item can't be prepared due to logistic problems                 |
+
+## Use case 8, UC8 Elimination of an item from the warehouse
+| Actors Involved  |                                                       |
+| ---------------- | :---------------------------------------------------: |
+| Precondition     | User is logged, item to be dropped has been collected |
+| Post condition   |    The item will no longer be inside the warehouse    |
+| Nominal Scenario |  The item is trashed hence it's position is freed up  |
+| Variants         |                                                       |
+| Exceptions       |                                                       |
+
+## Use case 9, UC9 Placement of an item in the pickup area
+| Actors Involved  |                                                     |
+| ---------------- | :-------------------------------------------------: |
+| Precondition     | User is logged, item has been prepared for delivery |
+| Post condition   | The item will no longer be managed by the warehouse |
+| Nominal Scenario |   The item is moved in the designated pickup area   |
+| Variants         |                                                     |
+| Exceptions       |                                                     |
 
 
 ## Use case 10, UC10 - Create User Account
@@ -251,17 +405,18 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Exceptions       |                                                 |
 
 ### Scenario 13.1
-| Scenario 13.1   |                      The item passes the quality test                      |
+| Scenario 13.1  |                      The item passes the quality test                      |
 | -------------- | :------------------------------------------------------------------------: |
 | Precondition   | \<Boolean expression, must evaluate to true before the scenario can start> |
 | Post condition |  \<Boolean expression, must evaluate to true after scenario is finished>   |
 | Step#          |                                Description                                 |
 | 1              |                                                                            |
 | 2              |                                                                            |
-| ...            |
+| ...            |                                                                            |
+
 
 ### Scenario 13.2
-| Scenario 13.2   |                   The item doesn't pass the quality test                   |
+| Scenario 13.2  |                   The item doesn't pass the quality test                   |
 | -------------- | :------------------------------------------------------------------------: |
 | Precondition   | \<Boolean expression, must evaluate to true before the scenario can start> |
 | Post condition |  \<Boolean expression, must evaluate to true after scenario is finished>   |
@@ -296,8 +451,20 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Nominal Scenario | The quality officier delete the test T in the system |
 | Variants         |  Only quality officier deletes tests in the system   |
 | Exceptions       |                                                      |
+| Scenario 1.2     |   Placement of internal order (item not available)   |
+| -------------    |                   :-------------:                    |
+| Precondition     |      The OU requests an item from the warehouse      |
+| Post condition   |           The OU doesn't receive the item            |
+| Step#            |                     Description                      |
+| 1                |        OU selects the item and its properties        |
+| 2                |       The warehouse manager receives the order       |
+| 3                |     The manager checks if the item is available      |
+| 4                |   The item is not available, the order is declined   |
+| ...              |                                                      |
 
-### Use case 17, UC17
+
+
+## Use case 17, UC17
 | Actors Involved  |            Manager, Items Stocking System            |
 | ---------------- | :--------------------------------------------------: |
 | Precondition     |          An Item I is not in the inventary           |
@@ -306,7 +473,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Variants         |              \<other normal executions>              |
 | Exceptions       |                \<exceptions, errors >                |
 
-### Use case 18, UC18
+## Use case 18, UC18
 | Actors Involved  |            Manager, Items Stocking System            |
 | ---------------- | :--------------------------------------------------: |
 | Precondition     |            An Item I is in the inventary             |
@@ -315,7 +482,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Variants         |              \<other normal executions>              |
 | Exceptions       |                \<exceptions, errors >                |
 
-### Use case 19, UC19
+## Use case 19, UC19
 | Actors Involved  |            Manager, Items Stocking System            |
 | ---------------- | :--------------------------------------------------: |
 | Precondition     |            An Item I is in the inventary             |
