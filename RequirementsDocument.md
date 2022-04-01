@@ -35,6 +35,7 @@ Version: 2.0
 	- [Use case diagram](#use-case-diagram)
 	- [Use case 1, UC1 - Placement of an internal order](#use-case-1-uc1---placement-of-an-internal-order)
 		- [Scenario 1.1](#scenario-11)
+		- [Scenario 1.2](#scenario-12)
 	- [Use case 2, UC2 - Placement of an external order](#use-case-2-uc2---placement-of-an-external-order)
 		- [Scenario 2.1](#scenario-21)
 		- [Scenario 2.2](#scenario-22)
@@ -244,6 +245,19 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | 7              |          Update history of the item           |
 | ...            |                                               |
 
+### Scenario 1.2
+| Scenario 1.2   |  Placement of internal order (item unavailable)  |
+| -------------- | :----------------------------------------------: |
+| Precondition   |    The OU requests an item from the warehouse    |
+| Post condition |         The OU doesn't receive the item          |
+| Step#          |                   Description                    |
+| 1              |      OU selects the item and its properties      |
+| 2              |     The warehouse manager receives the order     |
+| 3              |   The manager checks if the item is available    |
+| 4              | The item is not available, the order is declined |
+| ...            |                                                  |
+
+
 ## Use case 2, UC2 - Placement of an external order
 | Actors Involved  |                                                             Manager, Supplier                                                             |
 | ---------------- | :---------------------------------------------------------------------------------------------------------------------------------------: |
@@ -284,6 +298,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | 4              |                               The supplier checks if the item is available                               |
 | 5              |                             The item is not available, the order is declined                             |
 | ...            |                                                                                                          |
+
+
+
 
 ### Scenario 2.3
 
@@ -452,15 +469,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Variants         |  Only quality officier deletes tests in the system   |
 | Exceptions       |                                                      |
 | Scenario 1.2     |   Placement of internal order (item not available)   |
-| -------------    |                   :-------------:                    |
-| Precondition     |      The OU requests an item from the warehouse      |
-| Post condition   |           The OU doesn't receive the item            |
-| Step#            |                     Description                      |
-| 1                |        OU selects the item and its properties        |
-| 2                |       The warehouse manager receives the order       |
-| 3                |     The manager checks if the item is available      |
-| 4                |   The item is not available, the order is declined   |
-| ...              |                                                      |
+
 
 
 
