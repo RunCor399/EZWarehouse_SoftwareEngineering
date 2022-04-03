@@ -108,9 +108,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 # Context Diagram and interfaces
 
 ## Context Diagram
-\<Define here Context diagram using UML use case diagram>
 
-\<actors are a subset of stakeholders>
+![Context Diagram](CONTEXTDIAGRAM.png)
 
 ## Interfaces
 
@@ -515,13 +514,12 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 \<concepts are used consistently all over the document, ex in use cases, requirements etc>
 
 # System Design
-\<describe here system design>
 
-\<must be consistent with Context diagram>
+![System Design](SYSTEMDESIGN.png)
 
 # Deployment Diagram 
 
-\<describe here deployment diagram >
+![Deployment Diagram](DEPLOYMENTDIAGRAM.png)
 
 
 
