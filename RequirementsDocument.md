@@ -44,7 +44,12 @@ Version: 2.0
 	- [Use case 4, UC4 Collect an item  (FR 2.2 - 2.8)](#use-case-4-uc4-collect-an-item--fr-22---28)
 	- [Use case 5, UC5 Select a free position in which to stock a new item   (FR 2.3 - 2.7)](#use-case-5-uc5-select-a-free-position-in-which-to-stock-a-new-item---fr-23---27)
 	- [Use case 6, UC6 Issue a position replacement for an item](#use-case-6-uc6-issue-a-position-replacement-for-an-item)
+		- [Scenario 6.1](#scenario-61)
+		- [Scenario 6.2](#scenario-62)
+		- [Scenario 6.3](#scenario-63)
 	- [Use case 7, UC7 Prepare an item for delivery](#use-case-7-uc7-prepare-an-item-for-delivery)
+		- [Scenario 7.1](#scenario-71)
+		- [Scenario 7.2](#scenario-72)
 	- [Use case 8, UC8 Elimination of an item from the warehouse](#use-case-8-uc8-elimination-of-an-item-from-the-warehouse)
 	- [Use case 9, UC9 Placement of an item in the pickup area](#use-case-9-uc9-placement-of-an-item-in-the-pickup-area)
 	- [Use case 10, UC10 - Create User Account](#use-case-10-uc10---create-user-account)
@@ -326,27 +331,36 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | 9              |                       Update history of the item                        |
 | ...            |                                                                         |
 
-## Use case 3, UC3 Track an item position and supply     (FR 2.1 - 2.5)
-| Actors Involved  |                                                                          |
+
+******************************
+ ## Use case 3, UC3 Track an item position and supply     (FR 2.1 - 2.5)
+| Actors Involved  |                     Manager                                              |
 | ---------------- | :----------------------------------------------------------------------: |
 | Precondition     |        User is logged, item's information (id, name...) are known        |
-| Post condition   |                 Supply and position of the item is know                  |
+| Post condition   |                 Supply and position of the item is known                 |
 | Nominal Scenario | User types the information of the item he wants to find in the warehouse |
 | Variants         |                                                                          |
 | Exceptions       |           An item with the given information couldn't be found           |
 
 
+
+
+
+
 ## Use case 4, UC4 Collect an item  (FR 2.2 - 2.8)
-| Actors Involved  |                                                                   |
+| Actors Involved  |               Manager, Warehouse Worker                           |
 | ---------------- | :---------------------------------------------------------------: |
-| Precondition     |    User is logged, item's information (id, name...) are known     |
-| Post condition   |              The item is found and ready to be moved              |
-| Nominal Scenario |    User types the information of the item he wants to collect     |
-| Variants         | Physical position within the warehouse is used to collect an item |
+| Precondition     |            User is logged, item's position is known               |
+| Post condition   |              The item is collected and ready to be moved          |
+| Nominal Scenario |    User types the position of the item he wants to collect        |
+| Variants         |                                                                   |
 | Exceptions       |                     An item couldn't be found                     |
 
+
+
+
 ## Use case 5, UC5 Select a free position in which to stock a new item   (FR 2.3 - 2.7)
-| Actors Involved  |                                                                   |
+| Actors Involved  |                            Manager                                |
 | ---------------- | :---------------------------------------------------------------: |
 | Precondition     |         User is logged, item's has already been collected         |
 | Post condition   |                     A free position is found                      |
@@ -356,18 +370,75 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 
+
+
+
+
+
+
 ## Use case 6, UC6 Issue a position replacement for an item
-| Actors Involved  |                                                                                   |
-| ---------------- | :-------------------------------------------------------------------------------: |
-| Precondition     |       User is logged, item's position is known, new item position is known        |
-| Post condition   |                   The item has been moved to it's new position                    |
-| Nominal Scenario | The two items which position has to be switched are selected, items are exchanged |
-| Variants         |            Destination position is empty, no need to move another item            |
-| Exceptions       |    No other position in the warehouse is suitable for the item charateristics     |
+| Actors Involved  |                         Manager                                                          	|
+| ---------------- | :-------------------------------------------------------------------------------: 			|
+| Precondition     |       User is logged, item's ID is known, destination position is known      				|
+| Post condition   |                   The item has been moved to it's new position                    			|
+| Nominal Scenario | 	The two items which position has to be switched are selected, items are exchanged 		|
+| Variants         |    Destination position is empty, No available position in which to move the second item 	|
+| Exceptions       |    																		     			|
+
+
+### Scenario 6.1
+| Scenario 6.1   |                   Position replacement for an item in a busy position       									|
+| -------------- | :---------------------------------------------------------------------:   									|
+| Precondition   |         User is logged, item's ID is known, destination position in which the item will be moved is known	|		    	
+| Post condition |         The item has been moved to it's new position            	     										|
+| Step#          |                               Description                                 									|
+| 1              |      	Position of first item in the warehouse is obtained by it's ID           	 						|
+| 2				 |     		The system checks if destination position is available or not 										|
+| 3				 |     		Destination position is not empty																	|
+| 4              |          First item is collected                    															|
+| 5              |          The system checks for an available position in which to stock the second item     					|
+| 6              | 			New position for second item is found 																|
+| 7              |          Second item is collected by a Warehouse worker														|
+| 8              |          First item is moved and stocked by a warehouse worker in it's destination position 					|
+| 9              |          Second item is moved and stocked by a warehouse worker in it's destination position 				|
+
+
+
+### Scenario 6.2
+| Scenario 6.2   |                   Position replacement for an item in an empty position      								|
+| -------------- | :---------------------------------------------------------------------:   									|
+| Precondition   |         User is logged, item's ID is known, destination position in which the item will be moved is known	|		    	
+| Post condition |         The item has been moved to it's new position            	     										|
+| Step#          |                               Description                                 									|
+| 1              |      	Position of first item in the warehouse is obtained by it's ID           	 						|
+| 2				 |     		The system checks if destination position is available or not 										|
+| 3				 |     		Destination position is empty																		|			
+| 4              |          First item is collected                    															|
+| 5              |          First item is moved and stocked by a warehouse worker in it's destination position 					|
+
+
+### Scenario 6.3
+| Scenario 6.3   |                   No available new position for second item        											|
+| -------------- | :---------------------------------------------------------------------:   									|
+| Precondition   |         User is logged, item's ID is known, destination position in which the item will be moved is known	|		    	
+| Post condition |         The item will be stocked back in it's original position          	     							|
+| Step#          |                               Description                                 									|
+| 1              |      	Position of first item in the warehouse is obtained by it's ID           	 						|
+| 2				 |     		The system checks if destination position is available or not 										|
+| 3				 |     		Destination position is not empty																	|
+| 4              |          First item is collected                    															|
+| 5              |          The system checks for an available position in which to stock the second item     					|
+| 6              | 			No position for second item could be found 															|
+| 7              |          First item is stocked back in it's original position 												|
+
+											
+
+
+                           
 
 
 ## Use case 7, UC7 Prepare an item for delivery
-| Actors Involved  |                                                                                    |
+| Actors Involved  |                        Manager, Warehouse worker                                   |
 | ---------------- | :--------------------------------------------------------------------------------: |
 | Precondition     |                      User is logged, item has been collected                       |
 | Post condition   |               The item is ready to be delivered to the pick-up area                |
@@ -375,8 +446,35 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | Variants         |                                                                                    |
 | Exceptions       |                The item can't be prepared due to logistic problems                 |
 
+
+### Scenario 7.1
+| Scenario 7.1   |                   Delivery of an item     											|
+| -------------- | :---------------------------------------------------------------------:   			|
+| Precondition   |         User is logged, item's ID is known, pickup area has been defined				|		    	
+| Post condition |         The item will be placed in the pickup area        	     					|
+| Step#          |                               Description                                 			|
+| 1              |      	Position of the item in the warehouse is obtained by it's ID           	 	|
+| 2				 |     		A warehouse worker collects the item 										|
+| 3				 |     		The warehouse worker prepares the item for delivery							|
+| 4              |          The item is moved to the pickup area               							|
+
+
+### Scenario 7.2
+| Scenario 7.2   |                   Unable to delivery     													|
+| -------------- | :---------------------------------------------------------------------:   					|
+| Precondition   |         User is logged, item's ID is known, pickup area has been defined						|		    	
+| Post condition |         The item will be placed back in it's position     	     							|
+| Step#          |                               Description                                 					|
+| 1              |      	Position of the item in the warehouse is obtained by it's ID           	 			|
+| 2				 |     		A warehouse worker collects the item 												|			
+| 3				 |     		The warehouse worker prepares the item for delivery									|
+| 4              |          The item couldn't be prepared and it's placed back in it's original position        |
+
+
+
+
 ## Use case 8, UC8 Elimination of an item from the warehouse
-| Actors Involved  |                                                       |
+| Actors Involved  |                     Manager, Warehouse worker         |
 | ---------------- | :---------------------------------------------------: |
 | Precondition     | User is logged, item to be dropped has been collected |
 | Post condition   |    The item will no longer be inside the warehouse    |
@@ -385,13 +483,15 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | Exceptions       |                                                       |
 
 ## Use case 9, UC9 Placement of an item in the pickup area
-| Actors Involved  |                                                     |
+| Actors Involved  |                 Manager, Warehouse worker           |
 | ---------------- | :-------------------------------------------------: |
 | Precondition     | User is logged, item has been prepared for delivery |
 | Post condition   | The item will no longer be managed by the warehouse |
 | Nominal Scenario |   The item is moved in the designated pickup area   |
 | Variants         |                                                     |
 | Exceptions       |                                                     |
+
+
 
 
 ## Use case 10, UC10 - Create User Account
