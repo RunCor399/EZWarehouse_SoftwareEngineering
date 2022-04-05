@@ -471,8 +471,6 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Scenario 1.2     |   Placement of internal order (item not available)   |
 
 
-
-
 ## Use case 17, UC17
 | Actors Involved  |            Manager, Items Stocking System            |
 | ---------------- | :--------------------------------------------------: |
