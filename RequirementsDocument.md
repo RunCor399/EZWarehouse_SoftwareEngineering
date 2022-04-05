@@ -109,7 +109,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 ## Context Diagram
 
-![Context Diagram](CONTEXTDIAGRAM.png)
+![Context Diagram](images/ContextDiagram.png)
 
 ## Interfaces
 
@@ -513,11 +513,11 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 # System Design
 
-![System Design](SYSTEMDESIGN.png)
+![System Design](images/SystemDesign.png)
 
 # Deployment Diagram 
 
-![Deployment Diagram](DEPLOYMENTDIAGRAM.png)
+![Deployment Diagram](images/DeploymentDiagram.png)
 
 
 
