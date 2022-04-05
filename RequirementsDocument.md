@@ -108,29 +108,35 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Items Location Tracking System     |                    system that tracks items that have to be dispatched                    |
 | Company Organizational Units       |                    sub-parts of the same company owning the warehouse                     |
 | Internal Ordering System           |                   system that manages company-internal incoming orders                    |
+| Payment System                     |                       system that handles the payment for an order                        |
 
 # Context Diagram and interfaces
 
 ## Context Diagram
-\<Define here Context diagram using UML use case diagram>
 
-\<actors are a subset of stakeholders>
+![Context Diagram](images/ContextDiagram.png)
 
 ## Interfaces
-\<describe here each interface in the context diagram>
 
-\<GUIs will be described graphically in a separate document>
-
-| Actor     | Logical Interface | Physical Interface |
-| --------- | :---------------: | -----------------: |
-| Actor x.. |                   |                    |
+| Actor              | Logical Interface | Physical Interface |
+| ---------          | :-------------------------------------------------------------------------------------: | :----------------------------------: |
+| Payment System     | API (https://stripe.com/docs/api)       												   | Internet link                       |
+| Supplier           | Sends/receives email               													   | Internet link                       |
+| Courirer           | Receives email                                                                          | Internet link                       |
+| Product            | API for reading barcodes (https://developers.google.com/ml-kit/vision/barcode-scanning) | Mobile Phone Camera                 |
+| Warehouse Worker   | GUI                                                                                     | Screen, keyboard and mouse on PC, touchscreen on smartphone|
+| Warehouse Manager  | GUI                                                                                     | Screen, keyboard and mouse on PC, touchscreen on smartphone|
+| QO Worker          | GUI                                                                                     | Screen, keyboard and mouse on PC, touchscreen on smartphone|
+| OU Worker          | GUI                                                                                     | Screen, keyboard and mouse on PC, touchscreen on smartphone|
+| Administrator      | GUI                                                                                     | Screen, keyboard and mouse on PC    |
 
 # Stories and personas
-\<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
 
-\<Persona is-an-instance-of actor>
+Mark is a middle-aged man, he is the Warehouse Manager and has an inclination for order and discipline. When a product of a certain type is close to sold out, Mark reorders it. Mark is also very busy because of his position and work, he always gets home very late to fulfill his duties and he never has time to spend with his family. So Mark needs a fast and easy way to track the availability of a product, but he also needs an easy way to contact a supplier and perform the orders of the warehouse. Since he spends a lot of time in his office, he would like to have the opportuinity to perform all these kind of actions from the office PC.
 
-\<stories will be formalized later as scenarios in use cases>
+Gina is a young woman, she is a normal part-time employee of the warehouse, and she has a really bad memory. When storing or removing a product, she would like to have a way to update the product's information without waiting to reach the office PC, since maybe she's going to forget it, so she would like to manage this kind of operations with her business phone as soon as possible.  
+
+Albert is an old man, but he still works in the warehouse since he is part of a poor family. He wants to do his best in this work, so he'd like to have a tool that helps him in tracking in the most efficient way the warehouse products. Since he's old, he doesn't have great tech skills, so he would only be able to use an application with a basic user interface.
 
 
 # Functional and non functional requirements
@@ -608,13 +614,12 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 \<concepts are used consistently all over the document, ex in use cases, requirements etc>
 
 # System Design
-\<describe here system design>
 
-\<must be consistent with Context diagram>
+![System Design](images/SystemDesign.png)
 
 # Deployment Diagram 
 
-\<describe here deployment diagram >
+![Deployment Diagram](images/DeploymentDiagram.png)
 
 
 
