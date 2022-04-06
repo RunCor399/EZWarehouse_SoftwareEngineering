@@ -7,10 +7,11 @@ Version: 2.0
 
 
  
-| Version number | Change                                                                              |
-| -------------- | :---------------------------------------------------------------------------------- |
-| 1.0            | Definition of Stakeholders, functional requirements and non-functional requirements |
-| 2.0            | Definition of Use cases and scenarios                                               |
+| Version number | Change                                                                              							  |
+| -------------- | :--------------------------------------------------------------------------------------------------------------|
+| 1.0            | Definition of Stakeholders, functional requirements and non-functional requirements 						      |
+| 2.0            | Definition of Use cases and scenarios                                               							  |
+| 3.0            | Revision of Use cases and scenarios, Added draft of GUI, Context Diagram, System Design and Deployment Diagram |
 
 
 # Contents
