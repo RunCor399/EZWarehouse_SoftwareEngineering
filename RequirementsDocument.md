@@ -16,12 +16,6 @@ Version: 2.0
 
 # Contents
 
-- [Informal description](#informal-description)
-- [Stakeholders](#stakeholders)
-- [Context Diagram and interfaces](#context-diagram-and-interfaces)
-	+ [Context Diagram](#context-diagram)
-	+ [Interfaces](#interfaces) 
-	
 - [Contents](#contents)
 - [Informal description](#informal-description)
 - [Stakeholders](#stakeholders)

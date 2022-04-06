@@ -16,7 +16,21 @@ Version: 1.0
     - [Edit user](#edit-user)
     - [Delete user](#delete-user)
   - [Test Area](#test-area)
+    - [Test History](#test-history)
+      - [Edit Test Log](#edit-test-log)
+    - [Test Schedule](#test-schedule)
+      - [New Test Scheduling](#new-test-scheduling)
+    - [Test Case Management](#test-case-management)
+      - [New Test Case](#new-test-case)
+      - [Edit Test Case](#edit-test-case)
+      - [Delete Test Case](#delete-test-case)
   - [Order Area](#order-area)
+    - [Internal Order](#internal-order)
+    - [Suppliers List](#suppliers-list)
+      - [Adding a Supplier](#adding-a-supplier)
+      - [Editing a Supplier](#editing-a-supplier)
+    - [Placing an order](#placing-an-order)
+    - [Orders History](#orders-history)
   - [Warehouse Area](#warehouse-area)
 
 # Gui wireframes
@@ -59,6 +73,67 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 ## Test Area
 
+![test area](gui_images/test_area.png)
+
+### Test History
+
+![test history](gui_images/test_history.png)
+
+#### Edit Test Log
+
+![Edit Test Log](gui_images/edit_test_log.png)
+
+### Test Schedule
+
+![test history](gui_images/test_schedule.png)
+
+#### New Test Scheduling
+
+![new test scheduling](gui_images/new_test_scheduluing.png)
+
+### Test Case Management
+
+![test case management](gui_images/test_case_management.png)
+
+#### New Test Case
+
+![New Test Case](gui_images/new_test_case.png)
+
+#### Edit Test Case
+
+![Edit Test Case](gui_images/edit_test_case.png)
+
+#### Delete Test Case
+
+![Delete Test Case](gui_images/delete_test_case.png)
+
 ## Order Area
 
+![order area](gui_images/order_area.png)
+
+### Internal Order
+
+![internal orders](gui_images/internal_orders.png)
+
+### Suppliers List
+
+![supplier list](gui_images/suppliers_list.png)
+
+#### Adding a Supplier
+
+![Adding a supplier](gui_images/new_supplier.png)
+
+#### Editing a Supplier
+
+![Editing a supplier](gui_images/edit_supplier.png)
+
+### Placing an order
+
+![Placing an order](gui_images/place_an_order.png)
+
+### Orders History
+
+![Orders history](gui_images/external_order_history.png)
+
 ## Warehouse Area
+
