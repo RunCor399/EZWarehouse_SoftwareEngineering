@@ -138,9 +138,6 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 ## Functional Requirements
 
-\<In the form DO SOMETHING, or VERB NOUN, describe high level capabilities of the system>
-
-\<they match to high level use cases> 
 
 | ID  |        |         |           |                             Description                              |
 | --- | ------ | ------- | --------- | :------------------------------------------------------------------: |
@@ -195,9 +192,8 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 ## Non Functional Requirements
 
-\<Describe constraints on functional requirements>
 
-| ID    | Type (efficiency, reliability, ..) |                                                                  Description                                                                   | Refers to |
+| ID    | Type |                                                                  Description                                                                   | Refers to |
 | ----- | :--------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: | --------: |
 | NFR1  |             Usability              |                 The software must be easy to use also for employees which have a limited amount of knowledge in the IT domain                  |           |
 | NFR2  |            Portability             |           In a company there might be different computers with different OS's, the software should be able to work in each of them.            |           |
@@ -602,18 +598,22 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 # Glossary
 
-\<use UML class diagram to define important terms, or concepts in the domain of the system, and their relationships> 
-
-\<concepts are used consistently all over the document, ex in use cases, requirements etc>
+<img src="images/Glossary.png" style="height: 800px; width: 900px"/>
+<br/>
+<br/>
+<br/>
 
 # System Design
 
-![System Design](images/SystemDesign.png)
+
+<img src="images/SystemDesign.png" style="height: 250px; width: 400px"/>
+<br/>
+<br/>
+<br/>
 
 # Deployment Diagram 
 
-![Deployment Diagram](images/DeploymentDiagram.png)
 
-
+<img src="images/DeploymentDiagram.png" style="height: 270px; width: 600px"/>
 
 
