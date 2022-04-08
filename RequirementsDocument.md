@@ -74,10 +74,7 @@ The warehouse is part of a company. Other organizational units (OU) of the compa
 
 EZWH (EaSy WareHouse) is a software application to support the management of a warehouse.
 
-
-
 # Stakeholders
-
 
 | Stakeholder name                   |                                        Description                                        |
 | ---------------------------------- | :---------------------------------------------------------------------------------------: |
