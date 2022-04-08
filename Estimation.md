@@ -35,33 +35,33 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 ### 
 |         Activity name    |           | Estimated effort (person hours)   |             
 | ----------- | -----------------------|---------------------------------- | 
-| Requirements | | |
-|              | Stakeholders definition ||
-|              | Actors definition ||
-|              | Functional Requirements definition ||
-|              | Non-Functional Requirements definition ||
-|              | Use cases definition ||
-|              | Scenarios definition ||
-|              | Use cases diagram formalization ||
-|              | Glossary formalization ||
-|              | System design formalization ||
-|              | Deployment diagram formalization ||
-| GUI Prototype | | |
-|              | GUI structure definition ||
-|              | GUI drafts creation ||
-| Design | | |
-|              | High level design||
-|              | Low level design ||
-|              | Verification traceability matrix ||
-|              | Verification sequence diagrams ||
-| Coding | | |
-|              | Definition of programming patterns ||
-|              | Implementation of classes ||
-|              | Integration among classes ||
-| Testing | | |
-|              | Unit Testing ||
-|              | Integration Testing ||
-|              | Acceptance Testing ||
+| Requirements | | 296 |
+|              | Stakeholders definition | 32 |
+|              | Actors definition | 8 |
+|              | Functional Requirements definition | 64 |
+|              | Non-Functional Requirements definition | 32 |
+|              | Use cases definition | 48 |
+|              | Scenarios definition | 64 |
+|              | Use cases diagram formalization | 8 |
+|              | Glossary formalization | 16 |
+|              | System design formalization | 16 |
+|              | Deployment diagram formalization | 8 |
+| GUI Prototype | | 120 |
+|              | GUI structure definition | 24 |
+|              | GUI drafts creation | 96 |
+| Design | | 112 |
+|              | High level design| 32 |
+|              | Low level design | 48 |
+|              | Verification traceability matrix | 16 |
+|              | Verification sequence diagrams | 16 |
+| Coding | | 144 |
+|              | Definition of programming patterns | 32 |
+|              | Implementation of classes | 64 |
+|              | Integration among classes | 48 |
+| Testing | | 128 |
+|              | Unit Testing | 48 |
+|              | Integration Testing | 48 |
+|              | Acceptance Testing | 32 |
 
 ###
 Insert here Gantt chart with above activities
