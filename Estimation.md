@@ -33,9 +33,36 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 
 # Estimate by activity decomposition
 ### 
-|         Activity name    | Estimated effort (person hours)   |             
-| ----------- | ------------------------------- | 
-| | |
+|         Activity name    |           | Estimated effort (person hours)   |             
+| ----------- | -----------------------|---------------------------------- | 
+| Requirements | | |
+|              | Stakeholders definition ||
+|              | Actors definition ||
+|              | Functional Requirements definition ||
+|              | Non-Functional Requirements definition ||
+|              | Use cases definition ||
+|              | Scenarios definition ||
+|              | Use cases diagram formalization ||
+|              | Glossary formalization ||
+|              | System design formalization ||
+|              | Deployment diagram formalization ||
+| GUI Prototype | | |
+|              | GUI structure definition ||
+|              | GUI drafts creation ||
+| Design | | |
+|              | High level design||
+|              | Low level design ||
+|              | Verification traceability matrix ||
+|              | Verification sequence diagrams ||
+| Coding | | |
+|              | Definition of programming patterns ||
+|              | Implementation of classes ||
+|              | Integration among classes ||
+| Testing | | |
+|              | Unit Testing ||
+|              | Integration Testing ||
+|              | Acceptance Testing ||
+
 ###
 Insert here Gantt chart with above activities
 
