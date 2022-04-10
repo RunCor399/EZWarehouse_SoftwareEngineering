@@ -241,8 +241,6 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | 4              | The manager prepares the item to be delivered |
 | 5              |             The item is delivered             |
 | 6              |           The OU receives the item            |
-| 7              |          Update history of the item           |
-| ...            |                                               |
 
 ### Scenario 1.2
 | Scenario 1.2   |  Placement of internal order (item unavailable)  |
@@ -254,7 +252,6 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | 2              |     The warehouse manager receives the order     |
 | 3              |   The manager checks if the item is available    |
 | 4              | The item is not available, the order is declined |
-| ...            |                                                  |
 
 
 ## Use case 2, UC2 - Placement of an external order
@@ -281,8 +278,7 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | 5              |                              The supplier prepares the item to be delivered                              |
 | 6              |                                          The item is delivered                                           |
 | 7              |                                      The manager receives the item                                       |
-| 8              |                                        Update history of the item                                        |
-| ...            |                                                                                                          |
+
 
 ### Scenario 2.2
 
@@ -296,7 +292,6 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | 3              |                                     The supplier receives the order                                      |
 | 4              |                               The supplier checks if the item is available                               |
 | 5              |                             The item is not available, the order is declined                             |
-| ...            |                                                                                                          |
 
 
 
@@ -316,12 +311,9 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | 6              |             The supplier prepares the item to be delivered              |
 | 7              |                          The item is delivered                          |
 | 8              |                      The manager receives the item                      |
-| 9              |                       Update history of the item                        |
-| ...            |                                                                         |
 
 
-******************************
- ## Use case 3, UC3 Track an item position and supply     (FR 2.1 - 2.5)
+ ## Use case 3, UC3 Track an item position and supply
 | Actors Involved  |                     Manager                                              |
 | ---------------- | :----------------------------------------------------------------------: |
 | Precondition     |        User is logged, item's information (id, name...) are known        |
@@ -330,37 +322,126 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | Variants         |                                                                          |
 | Exceptions       |           An item with the given information couldn't be found           |
 
+### Scenario 3.1
+| Scenario 3.1   | Item informations are retreived correctly	|
+| -------------- | :-------------------------------------------: |
+| Precondition   | The manager doesn't know some informations of an item |
+| Post condition | The manager gets to know all the desired informations of the item |
+| Step#          |   Description   |
+| 1  | The manager searches the item by its ID |
+| 2	 | The item is found into the warehouse |
+| 3	 | The manager receives all the informations that was looking for (availability and position of the item) correctly |
+
+### Scenario 3.2
+| Scenario 3.2   | The item doesn't exist into the warehouse |
+| -------------- | :-------------------------------------------: |
+| Precondition   | The manager doesn't know some informations of an item |
+| Post condition | The informations are not retreived successfully |
+| Step#          |   Description   |
+| 1  | The manager searches the item by its ID |
+| 2	 | The ID doesn't match with any of the items into the warehouse |
+| 3	 | The item doesn't exist into the warehouse, the system gives an alert to the manager |
 
 
-
-
-
-## Use case 4, UC4 Collect an item  (FR 2.2 - 2.8)
-| Actors Involved  |               Manager, Warehouse Worker                           |
+## Use case 4, UC4 Collect an item  
+| Actors Involved  |      Manager, Warehouse Worker             |
 | ---------------- | :---------------------------------------------------------------: |
-| Precondition     |            User is logged, item's position is known               |
-| Post condition   |              The item is collected and ready to be moved          |
-| Nominal Scenario |    User types the position of the item he wants to collect        |
-| Variants         |                                                                   |
-| Exceptions       |                     An item couldn't be found                     |
+| Precondition     |    User is logged, item's position is known|
+| Post condition   |   The item is collected and ready to be moved |
+| Nominal Scenario |    User types the position of the item he wants to collect |
+| Variants  |                        |
+| Exceptions       |   An item couldn't be found      |
+
+### Scenario 4.1
+| Scenario 4.1   | The item is moved into the pick up area|
+| -------------- | :-------------------------------------------: |
+| Precondition   | The stored item has to be delivered  |
+| Post condition | The item is into the pick up area |
+| Step#          |   Description   |
+| 1  | The manager receives an internal order for the item |
+| 2	 | The manager checks if the item is stored into the warehouse |
+| 3	 | The manager checks if the requested quantity of the item is available |
+| 4	 | The item can be delivered; the manager changes its status on "to be delivered" |
+| 5	 | The warehouse worker moves the item to the pick up area |
+
+### Scenario 4.2
+| Scenario 4.2   | The item doesn't exist into the warehouse|
+| -------------- | :-------------------------------------------: |
+| Precondition   | The stored item has to be delivered |
+| Post condition | The delivery request is declined |
+| Step#          |   Description   |
+| 1  | The manager receives an internal order for the item |
+| 2	 | The manager checks if the item is stored into the warehouse |
+| 3	 | The request doesn't give any results: the item doesn't exist into the warehouse |
+| 4	 | The delivery request is declined |
+
+### Scenario 4.3
+| Scenario 4.3   | The item exists, but the quantity is not enough|
+| -------------- | :-------------------------------------------: |
+| Precondition   | The stored item has to be delivered |
+| Post condition | The delivery request is declined |
+| Step#          |   Description   |
+| 1  | The manager receives an internal order for the item |
+| 2	 | The manager checks if the item is stored into the warehouse |
+| 3	 | The manager checks if the requested quantity of the item is available |
+| 4 | The quantity is not enough to satisfy the request|
+| 5	 | The delivery request is declined |
 
 
 
-
-## Use case 5, UC5 Select a free position in which to stock a new item   (FR 2.3 - 2.7)
-| Actors Involved  |                            Manager                                |
+## Use case 5, UC5 Select a free position in which to stock a new item  
+| Actors Involved  |   Manager |
 | ---------------- | :---------------------------------------------------------------: |
-| Precondition     |         User is logged, item's has already been collected         |
-| Post condition   |                     A free position is found                      |
-| Nominal Scenario |        User specifies the type of item and it's dimensions        |
-| Variants         | Search for free positions without inserting any items information |
-| Exceptions       |           No available free spaces inside the warehouse           |
+| Precondition     |   User is logged, item's has already been collected |
+| Post condition   |  A free position is found  |
+| Nominal Scenario |  User specifies the type of item and it's dimensions |
+| Variants   | Search for free positions without inserting any items information |
+| Exceptions       |  No available free spaces inside the warehouse  |
+
+### Scenario 5.1
+| Scenario 5.1   | Storing an item into a desired position|
+| -------------- | :-------------------------------------------: |
+| Precondition   | The item has to be stored into a specific position |
+| Post condition | The item is stored into the desired position |
+| Step#          |   Description   |
+| 1  | The manager receives the item to store |
+| 2	 | The manager checks its dimensions |
+| 3	 | The manager checks if there is enough free space into the warehouse to store the item |
+| 4	 | The manager checks the category of the item |
+| 5	 | The manager checks if there is enough free space into the section of the warehouse that contains items of the same category |
+| 6	 | The item can be stored into the desired position |
+| 7	 | The item is stored, its status is changed on "stored" |
+| 8	 | The position of the item is saved into the system |
 
 
+### Scenario 5.2
+| Scenario 5.2   | Storing an item into a random position	|
+| -------------- | :-------------------------------------------: |
+| Precondition   | The item has to be stored into an available position |
+| Post condition | The item is put into a position that is big enough to contain it |
+| Step#          |   Description   |
+| 1  | The manager receives the item to store |
+| 2	 | The manager checks its dimensions |
+| 3	 | The manager checks if there is enough free space into the warehouse to store the item |
+| 4	 | The manager checks the category of the item |
+| 5	 | The manager checks if there is enough free space into the section of the warehouse that contains items of the same category |
+| 6	 | There is no space into the section of items of the same category |
+| 7	 | The item can be stored in another position of the warehouse |
+| 8	 | The item is stored, its status is changed on "stored" |
+| 9	 | The position of the item is saved into the system |
 
 
-
-
+### Scenario 5.3
+| Scenario 5.3   | There is no more space into the warehouse|
+| -------------- | :-------------------------------------------: |
+| Precondition   | The item has to be stored into an available position |
+| Post condition | The item is not stored |
+| Step#          |   Description   |
+| 1  | The manager receives the item to store |
+| 2	 | The manager checks its dimensions |
+| 3	 | The manager checks if there is enough free space into the warehouse to store the item |
+| 4	 | There is no free space into the warehouse |
+| 5  | The item is sent back to the supplier |
 
 
 
@@ -591,6 +672,59 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | Nominal Scenario | \<Textual description of actions executed by the UC> |
 | Variants         |              \<other normal executions>              |
 | Exceptions       |                \<exceptions, errors >                |
+
+## Use case 20, UC20 Update status of an item
+| Actors Involved  |      Manager, Worker               	|
+| ---------------- | :--------------------------------------------------: |
+| Precondition     |   Item exists, but its status is unknown 	|
+| Post condition   |     The item history is updated   	|
+| Nominal Scenario | 	The item, based on its condition (if it is stored or not), gets its informations updated |
+| Variants         |     	|
+| Exceptions       |  The item doesn't exist into the warehouse	|
+
+### Scenario 20.1
+| Scenario 20.1   |  Update status (new item, status = to be stored)	|
+| -------------- | :-------------------------------------------: |
+| Precondition   |  The item is new and its status is unknown	|
+| Post condition |    The item's status is set on "to be stored"  |
+| Step#          |      Description       							|
+| 1              | A new item is sent to the warehouse	|
+| 2              | The item is not selected for a test	|
+| 3				 |  The warehouse worker sets the item status on "to be stored" until it has a place to be stored into the warehouse	|
+
+
+### Scenario 20.2
+| Scenario 20.2   | Update status (new item, status = to be tested)	|
+| -------------- | :-------------------------------------------: |
+| Precondition   |  The item is new and its status is unknown	|
+| Post condition |    The item's status is set on "to be tested"  |
+| Step#     |      Description   		|
+| 1              | A new item is sent to the warehouse	|
+| 2              | The item is selected to be tested	|
+| 3		| The warehouse worker sets the status on "to be tested" before giving the item to the quality officer|
+
+
+### Scenario 20.3
+| Scenario 20.3   |    Update status (tested item, status = to be stored)	|
+| -------------- | :-------------------------------------------: |
+| Precondition   |  The item has to be tested	|
+| Post condition |    The item is tested and its status is on "to be stored"  |
+| Step#          |      Description    				|
+| 1              |  The warehouse worker selects the item that has to be tested   |
+| 2				 |  The quality officer selects the test that the item has to do  |
+| 3		| The item passes the test and it can be stored	|
+| 4     |   The warehouse worker finds a place to put the item into the warehouse |
+| 5     | The warehouse worker changes the item's status on "to be stored"|
+
+### Scenario 20.4
+| Scenario 20.4   | Update status (item status = to be delivered)	|
+| -------------- | :-------------------------------------------: |
+| Precondition   |  The item has to be delivered and its status is currently on "stored"|
+| Post condition |    The item's status is set on "to be delivered"  |
+| Step#          |      Description       		|
+| 1              | The warehouse manager receives an internal order that includes an item that is stored into the warehouse |
+| 2				 | The manager checks if the item can be delivered (conditions, test passed, etc) |
+| 3				 | The item can be delivered; the manager changes its status on "to be delivered" |
 
 
 # Glossary
