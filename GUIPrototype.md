@@ -13,30 +13,38 @@ Version: 1.0
   - [Home](#home)
   - [Admin area](#admin-area)
     - [New user](#new-user)
-    - [Edit user](#edit-user)
+    - [View user](#view-user)
     - [Delete user](#delete-user)
   - [Test Area](#test-area)
     - [Test History](#test-history)
-      - [Edit Test Log](#edit-test-log)
+      - [View Test Log](#view-test-log)
     - [Test Schedule](#test-schedule)
+      - [View Test Schedule](#view-test-schedule)
       - [New Test Scheduling](#new-test-scheduling)
+      - [Delete Test Schedule](#delete-test-schedule)
     - [Test Case Management](#test-case-management)
       - [New Test Case](#new-test-case)
-      - [Edit Test Case](#edit-test-case)
+      - [View Test Case](#view-test-case)
       - [Delete Test Case](#delete-test-case)
+    - [Test Area - Mobile Version](#test-area---mobile-version)
   - [Order Area](#order-area)
     - [Internal Order](#internal-order)
+    - [View Internal Order](#view-internal-order)
+    - [Delete Internal Order](#delete-internal-order)
+    - [Placing an order](#placing-an-order)
+    - [External Order History](#external-order-history)
+    - [Delete External Order](#delete-external-order)
     - [Suppliers List](#suppliers-list)
       - [Adding a Supplier](#adding-a-supplier)
-      - [Editing a Supplier](#editing-a-supplier)
-    - [Placing an order](#placing-an-order)
-    - [Orders History](#orders-history)
+    - [Suppliers List](#suppliers-list-1)
+    - [Delete Supplier](#delete-supplier)
   - [Warehouse Management](#warehouse-management)
-    - [List of selected item](#list-of-selected-item)
     - [New Item](#new-item)
+    - [View Item By Code](#view-item-by-code)
     - [Inserting Item](#inserting-item)
-    - [Edit Item](#edit-item)
-    - [Warehouse mobile](#warehouse-mobile)
+    - [View Item](#view-item)
+    - [Delete Item](#delete-item)
+    - [Warehouse Area - Mobile Version](#warehouse-area---mobile-version)
 
 # Gui wireframes
 
@@ -45,7 +53,7 @@ Version: 1.0
 <img src="gui_images/login.png" alt="login" width="600"/>
 
 In the login window, a warehouse user can insert email and password to login in the application. Eventually he can recover password clicking on *Forgot password?*. There is also a mobile version of the window.
-
+ 
 ##  Home
 
 <img src="gui_images/home.png" alt="Home" width="600"/>
@@ -64,9 +72,9 @@ Accessing to the administration Area, with admin permissions, it is possible to 
 
 An admin can add a user to the user list inserting all the needed informations.
 
-### Edit user
+### View user
 
-<img src="gui_images/edit_user.png" alt="Edit user" width="600"/>
+<img src="gui_images/view_user.png" alt="Edit user" width="600"/>
 
 An user can edit his own informations. An admin can edit informations about all users.
 
@@ -84,17 +92,25 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/test_history.png" alt="Test History" width="600"/>
 
-#### Edit Test Log
+#### View Test Log
 
-<img src="gui_images/edit_test_log.png" alt="Edit Test Log" width="600"/>
+<img src="gui_images/view_test_log.png" alt="Edit Test Log" width="600"/>
 
 ### Test Schedule
 
 <img src="gui_images/test_schedule.png" alt="Test Schedule" width="600"/>
 
+#### View Test Schedule
+
+<img src="gui_images/view_scheduled_test.png" alt="Test Schedule" width="600"/>
+
 #### New Test Scheduling
 
 <img src="gui_images/new_test_scheduling.png" alt="New Test Scheduling" width="600"/>
+
+#### Delete Test Schedule
+
+<img src="gui_images/delete_test_schedule.png" alt="New Test Scheduling" width="300"/>
 
 ### Test Case Management
 
@@ -104,13 +120,17 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/new_test_case.png" alt="New Test Case" width="600"/>
 
-#### Edit Test Case
+#### View Test Case
 
-<img src="gui_images/edit_test_case.png" alt="Edit Test Case" width="600"/>
+<img src="gui_images/view_test_case.png" alt="New Test Case" width="600"/>
 
 #### Delete Test Case
 
 <img src="gui_images/delete_test_case.png" alt="Delete Test Case" width="300"/>
+
+### Test Area - Mobile Version
+
+<img src="gui_images/mobile_test.png" alt="Test Area - Mobile Version" width="600"/>
 
 ## Order Area
 
@@ -118,7 +138,27 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 ### Internal Order
 
-<img src="gui_images/internal_orders.png" alt="Internal Order" width="600"/>
+<img src="gui_images/OU_orders.png" alt="Internal Order" width="600"/>
+
+### View Internal Order
+
+<img src="gui_images/view_internal_order.png" alt="View Internal Order" width="600"/>
+
+### Delete Internal Order
+
+<img src="gui_images/delete_internal_order.png" alt="Delete Internal Order" width="300"/>
+
+### Placing an order
+
+<img src="gui_images/place_an_order.png" alt="Placing an order" width="600"/>
+
+### External Order History
+
+<img src="gui_images/orders_history.png" alt="Orders History" width="600"/>
+
+### Delete External Order 
+
+<img src="gui_images/delete_external_order.png" alt="Delete External Order" width="300"/>
 
 ### Suppliers List
 
@@ -128,38 +168,38 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/new_supplier.png" alt="Adding a Supplier" width="600"/>
 
-#### Editing a Supplier
+### Suppliers List
 
-<img src="gui_images/edit_supplier.png" alt="Editing a Supplier" width="600"/>
+<img src="gui_images/view_supplier.png" alt="View Supplier" width="600"/>
 
-### Placing an order
+### Delete Supplier 
 
-<img src="gui_images/place_an_order.png" alt="Placing an order" width="600"/>
-
-### Orders History
-
-<img src="gui_images/external_order_history.png" alt="Orders History" width="600"/>
+<img src="gui_images/delete_supplier.png" alt="Delete Supplier" width="300"/>
 
 ## Warehouse Management
 
 <img src="gui_images/warehouse_management.png" alt="Warehouse Management" width="600"/>
 
-### List of selected item
-
-<img src="gui_images/list_of_selected_item.png" alt="List of selected item" width="600"/>
-
 ### New Item
 
 <img src="gui_images/new_item.png" alt="New Item" width="600"/>
 
+### View Item By Code
+
+<img src="gui_images/view_item_by_code.png" alt="View Item By Code" width="600"/>
+
 ### Inserting Item
 
-<img src="gui_images/inserting_item.png" alt="Inserting Item" width="600"/>
+<img src="gui_images/insert_item.png" alt="Inserting Item" width="600"/>
 
-### Edit Item
+### View Item
 
-<img src="gui_images/edit_item.png" alt="Edit Item" width="600"/>
+<img src="gui_images/view_item.png" alt="View Item" width="600"/>
 
-### Warehouse mobile
+### Delete Item
 
-<img src="gui_images/warehouse_mobile.png" alt="Warehouse mobile" width="600"/>
+<img src="gui_images/delete_item.png" alt="Delete Item" width="300"/>
+
+### Warehouse Area - Mobile Version
+
+<img src="gui_images/warehouse_mobile.png" alt="Warehouse Area - Mobile Version" width="600"/>
