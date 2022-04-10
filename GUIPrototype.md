@@ -162,7 +162,7 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 ### Suppliers List
 
-<img src="gui_images/suppliers_list.png" alt="Suppliers List" width="600"/>
+<img src="gui_images/supplier_list.png" alt="Suppliers List" width="600"/>
 
 #### Adding a Supplier
 

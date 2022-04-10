@@ -1,7 +1,11 @@
 # Project Estimation  
-Date: 08/04/2022
+Date: 10/04/2022
 
-Version: 1.0
+| Version number | Change                                                                              							  |
+| -------------- | :--------------------------------------------------------------------------------------------------------------|
+| 1.0            | Initial base version						                                                                      |
+| 2.0            | Updated estimation tables                                             							              |
+
 
 
 # Estimation approach
@@ -11,13 +15,14 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 |             | Estimate                        |             
 | ----------- | ------------------------------- |  
 | NC =  Estimated number of classes to be developed   |      25 (model) + 30 (interfaces + abstract) + 10 (view) + 25(Controller) = 90 |          
-|  A = Estimated average size per class, in LOC       |         200 LOC                   | 
-| S = Estimated size of project, in LOC (= NC * A) | 90 * 200 = 18000 |
-| E = Estimated effort, in person hours   |   18000 / 10 = 1800                                   |   
-| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro) | 1800 * 30 = 54000 | 
-| Estimated calendar time, in calendar weeks (Assume team of 4 people, 8 hours per day, 5 days per week ) |    11,25 weeks           |      
+|  A = Estimated average size per class, in LOC       |         140 LOC                   | 
+| S = Estimated size of project, in LOC (= NC * A) | 90 * 140 = 12600 |
+| E = Estimated effort, in person hours   |   12600 / 10 = 1260                                   |   
+| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro) | 1260 * 30 = 37800 | 
+| Estimated calendar time, in calendar weeks (Assume team of 4 people, 8 hours per day, 5 days per week ) |    1260 / (8 * 4 * 5) = 7,8 weeks           |      
 
-
+- Effort is evaluated considering 10 LOC per hour produced by each employee
+- Number of classes and LOC for each class are computed considering a real Java project
 
 # Estimate by product decomposition
 ### 
@@ -29,9 +34,8 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 |code |144 |
 | unit tests | 48 |
 | api tests | 80 |
-| management documents  | ?? |
+| management documents  | 32 |
 
-based on what?
 
 # Estimate by activity decomposition
 ### 
@@ -67,18 +71,20 @@ based on what?
 |              | Integration Testing | 48 |
 |              | Acceptance Testing | 32 |
 
-###
-Insert here Gantt chart with above activities
+### Gantt Chart
+
+<img src="./images/Gantt_chart.png" />
+
 
 # Summary
 
 Report here the results of the three estimation approaches. The  estimates may differ. Discuss here the possible reasons for the difference
 
-|             | Estimated effort                        |   Estimated duration |          
+|             | Estimated effort (person hours)                        |   Estimated duration (days) |          
 | ----------- | ------------------------------- | ---------------|
-| estimate by size ||
-| estimate by product decomposition ||
-| estimate by activity decomposition ||
+| estimate by size | 1200 | 54 |
+| estimate by product decomposition | 840 | 38  |
+| estimate by activity decomposition | 860 | 40 |
 
 
 
