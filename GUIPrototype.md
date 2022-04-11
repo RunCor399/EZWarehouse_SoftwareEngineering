@@ -110,35 +110,43 @@ In this page is possiible to view and edit informations about a test log. Only q
 
 <img src="gui_images/view_scheduled_test.png" alt="View and Edit Test Schedule" width="600"/>
 
-In the Test Schedule Area is possible to visualize the schedule of the test that have been planned. Clicking on a row is possible to open a more complete page aboute the single scheduled test.
+In the Test Schedule Area it is possible to visualize the schedule of the test that have been planned. Clicking on a row is possible to open a more complete page aboute the single scheduled test.
 
 #### New Test Scheduling
 
 <img src="gui_images/new_test_scheduling.png" alt="New Test Scheduling" width="600"/>
 
-In this page is possible to schedule new tests, in a fixed o random way.
+In this page it is possible to schedule new tests, in a fixed o random way.
 
 #### Delete Test Schedule
 
 <img src="gui_images/delete_test_schedule.png" alt="Delete Test Scheduling" width="300"/>
 
-With this Alert Dialog Window is asked confirm for the delete of a scheduled test
+With this Alert Dialog Window it is asked confirm for the delete of a scheduled test
 
 ### Test Case Management
 
 <img src="gui_images/test_case_management.png" alt="Test Case Management" width="600"/>
 
+In this page is possible to visualize the list of all test cases.
+
 #### New Test Case
 
 <img src="gui_images/new_test_case.png" alt="New Test Case" width="600"/>
+
+In this page is possible to create a new test case. The code will be procedurally created.
 
 #### View and Edit Test Case
 
 <img src="gui_images/view_test_case.png" alt="View and Edit Test Case" width="600"/>
 
+In this page it is possible to view and edit informations about a single test case.
+
 #### Delete Test Case
 
 <img src="gui_images/delete_test_case.png" alt="Delete Test Case" width="300"/>
+
+With this Alert Dialog Window is asked confirm for the delete of a test case
 
 ### Test Area - Mobile Version
 
@@ -150,29 +158,43 @@ This is a mobile version of the whole Test Area
 
 <img src="gui_images/order_area.png" alt="Order Area" width="600"/>
 
+In the Order Area it is possible to access to Internal Order History, External Order History, Suppliers list and it is possible to place an order
+
 ### Internal Order
 
 <img src="gui_images/OU_orders.png" alt="Internal Order" width="600"/>
+
+Here it is possible to visualize the orders received from Organizational Units.
 
 #### View and Edit Internal Order
 
 <img src="gui_images/view_internal_order.png" alt="View and Edit Internal Order" width="600"/>
 
+In this page it is possible to view and edit informations about a single Internal Order Log.
+
 #### Delete Internal Order
 
 <img src="gui_images/delete_internal_order.png" alt="Delete Internal Order" width="300"/>
+
+With this Alert Dialog Window is asked confirm for the delete of an internal order
 
 ### Placing an order
 
 <img src="gui_images/place_an_order.png" alt="Placing an order" width="600"/>
 
+Here it is possible to place an order, selecting an Item, a Supplier and the quantity.
+
 ### External Order History
 
 <img src="gui_images/orders_history.png" alt="Orders History" width="600"/>
 
+In this page it is possible to view and edit informations about a single External Order Log.
+
 #### Delete External Order 
 
 <img src="gui_images/delete_external_order.png" alt="Delete External Order" width="300"/>
+
+With this Alert Dialog Window is asked confirm for the delete of an external order
 
 ### Suppliers List
 
@@ -186,9 +208,13 @@ This is a mobile version of the whole Test Area
 
 <img src="gui_images/view_supplier.png" alt="View and Edit Supplier" width="600"/>
 
+In this page it is possible to view and edit informations about a single Supplier.
+
 ### Delete Supplier 
 
 <img src="gui_images/delete_supplier.png" alt="Delete Supplier" width="300"/>
+
+With this Alert Dialog Window is asked confirm for the delete of a supplier
 
 ## Warehouse Management
 
@@ -210,9 +236,13 @@ This is a mobile version of the whole Test Area
 
 <img src="gui_images/view_item.png" alt="View and Edit Item" width="600"/>
 
+In this page it is possible to view and edit informations about a single item type.
+
 #### Delete Item
 
 <img src="gui_images/delete_item.png" alt="Delete Item" width="300"/>
+
+With this Alert Dialog Window is asked confirm for the delete of an item
 
 ### Warehouse Area - Mobile Version
 
