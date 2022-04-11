@@ -17,40 +17,40 @@ Version: 1.0
     - [Delete user](#delete-user)
   - [Test Area](#test-area)
     - [Test History](#test-history)
-      - [View Test Log](#view-test-log)
+      - [View and Edit Test Log](#view-and-edit-test-log)
     - [Test Schedule](#test-schedule)
       - [View Test Schedule](#view-test-schedule)
       - [New Test Scheduling](#new-test-scheduling)
       - [Delete Test Schedule](#delete-test-schedule)
     - [Test Case Management](#test-case-management)
       - [New Test Case](#new-test-case)
-      - [View Test Case](#view-test-case)
+      - [View and Edit Test Case](#view-and-edit-test-case)
       - [Delete Test Case](#delete-test-case)
     - [Test Area - Mobile Version](#test-area---mobile-version)
   - [Order Area](#order-area)
     - [Internal Order](#internal-order)
-    - [View Internal Order](#view-internal-order)
-    - [Delete Internal Order](#delete-internal-order)
+      - [View and Edit Internal Order](#view-and-edit-internal-order)
+      - [Delete Internal Order](#delete-internal-order)
     - [Placing an order](#placing-an-order)
     - [External Order History](#external-order-history)
-    - [Delete External Order](#delete-external-order)
+      - [Delete External Order](#delete-external-order)
     - [Suppliers List](#suppliers-list)
       - [Adding a Supplier](#adding-a-supplier)
-    - [Suppliers List](#suppliers-list-1)
+    - [View and Edit Supplier](#view-and-edit-supplier)
     - [Delete Supplier](#delete-supplier)
   - [Warehouse Management](#warehouse-management)
     - [New Item](#new-item)
-    - [View Item By Code](#view-item-by-code)
-    - [Inserting Item](#inserting-item)
-    - [View Item](#view-item)
-    - [Delete Item](#delete-item)
+    - [View and Edit Item By Code](#view-and-edit-item-by-code)
+      - [Inserting Item](#inserting-item)
+      - [View and Edit Item](#view-and-edit-item)
+      - [Delete Item](#delete-item)
     - [Warehouse Area - Mobile Version](#warehouse-area---mobile-version)
 
 # Gui wireframes
 
 ##  Login
 
-<img src="gui_images/login.png" alt="login" width="600"/>
+<img src="gui_images/login.png" alt="Login" width="600"/>
 
 In the login window, a warehouse user can insert email and password to login in the application. Eventually he can recover password clicking on *Forgot password?*. There is also a mobile version of the window.
  
@@ -64,7 +64,7 @@ In the home window a user can access to the different areas of the applications.
 
 <img src="gui_images/admin_area.png" alt="Admin area" width="600"/>
 
-Accessing to the administration Area, with admin permissions, it is possible to view the user list of the applications. It is possible to select a user to view all the information, search a user by name, edit users' data, add a new user or delete an existing user. The confirm of a delete is asked by a Alert Dialog window. It is possible to go back to home window clicking *back* button.
+Accessing to the administration Area, with admin permissions, it is possible to view the user list of the applications. It is possible to select a user to view all the information, search a user by name, view users' data, add a new user or delete an existing user. The confirm of a delete is asked by a Alert Dialog window. It is possible to go back to home window clicking *back* button. If a user without admin permission accesses to admin area, he jumps to his own profile page
 
 ### New user
 
@@ -74,9 +74,9 @@ An admin can add a user to the user list inserting all the needed informations.
 
 ### View user
 
-<img src="gui_images/view_user.png" alt="Edit user" width="600"/>
+<img src="gui_images/view_user.png" alt="View and Edit user" width="600"/>
 
-An user can edit his own informations. An admin can edit informations about all users.
+An user can view and edit his own informations. An admin can view and edit informations about all users.
 
 ### Delete user
 
@@ -88,13 +88,19 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/test_area.png" alt="Test Area" width="600"/>
 
+In the test area is possible to access to Test History, Test Scheduling and Test Management areas.
+
 ### Test History
 
 <img src="gui_images/test_history.png" alt="Test History" width="600"/>
 
-#### View Test Log
+In the Test History Area is possible to visualize a log of the test that have been executed. Clicking on a row is possible to open a more complete page aboute the single log
 
-<img src="gui_images/view_test_log.png" alt="Edit Test Log" width="600"/>
+#### View and Edit Test Log
+
+<img src="gui_images/view_test_log.png" alt="View and Edit Test Log" width="600"/>
+
+In this page is possiible to view and edit informations about a test log. Only quality officiers can edit informations.
 
 ### Test Schedule
 
@@ -102,15 +108,21 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 #### View Test Schedule
 
-<img src="gui_images/view_scheduled_test.png" alt="Test Schedule" width="600"/>
+<img src="gui_images/view_scheduled_test.png" alt="View and Edit Test Schedule" width="600"/>
+
+In the Test Schedule Area is possible to visualize the schedule of the test that have been planned. Clicking on a row is possible to open a more complete page aboute the single scheduled test.
 
 #### New Test Scheduling
 
 <img src="gui_images/new_test_scheduling.png" alt="New Test Scheduling" width="600"/>
 
+In this page is possible to schedule new tests, in a fixed o random way.
+
 #### Delete Test Schedule
 
-<img src="gui_images/delete_test_schedule.png" alt="New Test Scheduling" width="300"/>
+<img src="gui_images/delete_test_schedule.png" alt="Delete Test Scheduling" width="300"/>
+
+With this Alert Dialog Window is asked confirm for the delete of a scheduled test
 
 ### Test Case Management
 
@@ -120,9 +132,9 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/new_test_case.png" alt="New Test Case" width="600"/>
 
-#### View Test Case
+#### View and Edit Test Case
 
-<img src="gui_images/view_test_case.png" alt="New Test Case" width="600"/>
+<img src="gui_images/view_test_case.png" alt="View and Edit Test Case" width="600"/>
 
 #### Delete Test Case
 
@@ -132,6 +144,8 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/mobile_test.png" alt="Test Area - Mobile Version" width="600"/>
 
+This is a mobile version of the whole Test Area
+
 ## Order Area
 
 <img src="gui_images/order_area.png" alt="Order Area" width="600"/>
@@ -140,11 +154,11 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/OU_orders.png" alt="Internal Order" width="600"/>
 
-### View Internal Order
+#### View and Edit Internal Order
 
-<img src="gui_images/view_internal_order.png" alt="View Internal Order" width="600"/>
+<img src="gui_images/view_internal_order.png" alt="View and Edit Internal Order" width="600"/>
 
-### Delete Internal Order
+#### Delete Internal Order
 
 <img src="gui_images/delete_internal_order.png" alt="Delete Internal Order" width="300"/>
 
@@ -156,7 +170,7 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/orders_history.png" alt="Orders History" width="600"/>
 
-### Delete External Order 
+#### Delete External Order 
 
 <img src="gui_images/delete_external_order.png" alt="Delete External Order" width="300"/>
 
@@ -168,9 +182,9 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/new_supplier.png" alt="Adding a Supplier" width="600"/>
 
-### Suppliers List
+### View and Edit Supplier
 
-<img src="gui_images/view_supplier.png" alt="View Supplier" width="600"/>
+<img src="gui_images/view_supplier.png" alt="View and Edit Supplier" width="600"/>
 
 ### Delete Supplier 
 
@@ -184,22 +198,24 @@ This window appears to ask confirm about the delete of a user. Only admins can d
 
 <img src="gui_images/new_item.png" alt="New Item" width="600"/>
 
-### View Item By Code
+### View and Edit Item By Code
 
-<img src="gui_images/view_item_by_code.png" alt="View Item By Code" width="600"/>
+<img src="gui_images/view_item_by_code.png" alt="View and Edit Item By Code" width="600"/>
 
-### Inserting Item
+#### Inserting Item
 
 <img src="gui_images/insert_item.png" alt="Inserting Item" width="600"/>
 
-### View Item
+#### View and Edit Item
 
-<img src="gui_images/view_item.png" alt="View Item" width="600"/>
+<img src="gui_images/view_item.png" alt="View and Edit Item" width="600"/>
 
-### Delete Item
+#### Delete Item
 
 <img src="gui_images/delete_item.png" alt="Delete Item" width="300"/>
 
 ### Warehouse Area - Mobile Version
 
 <img src="gui_images/warehouse_mobile.png" alt="Warehouse Area - Mobile Version" width="600"/>
+
+This is a mobile version of the whole Warehouse Area
