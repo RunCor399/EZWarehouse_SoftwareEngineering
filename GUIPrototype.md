@@ -106,11 +106,13 @@ In this page is possiible to view and edit informations about a test log. Only q
 
 <img src="gui_images/test_schedule.png" alt="Test Schedule" width="600"/>
 
+In the Test Schedule Area it is possible to visualize the schedule of the test that have been planned. Clicking on a row is possible to open a more complete page aboute the single scheduled test.
+
 #### View Test Schedule
 
 <img src="gui_images/view_scheduled_test.png" alt="View and Edit Test Schedule" width="600"/>
 
-In the Test Schedule Area it is possible to visualize the schedule of the test that have been planned. Clicking on a row is possible to open a more complete page aboute the single scheduled test.
+In this page it is possible to view and edit informations about a single scheduled test.
 
 #### New Test Scheduling
 
@@ -128,7 +130,7 @@ With this Alert Dialog Window it is asked confirm for the delete of a scheduled 
 
 <img src="gui_images/test_case_management.png" alt="Test Case Management" width="600"/>
 
-In this page is possible to visualize the list of all test cases.
+In this page is possible to visualize the list of all test cases. It is possibile to add a new Test Case with the button down-right, search a test by code with the search bar down-left or get back to the home with the Back button.
 
 #### New Test Case
 
@@ -164,19 +166,19 @@ In the Order Area it is possible to access to Internal Order History, External O
 
 <img src="gui_images/OU_orders.png" alt="Internal Order" width="600"/>
 
-Here it is possible to visualize the orders received from Organizational Units.
+Here it is possible to visualize the orders received from Organizational Units. It is possibile to search an order by code with the search bar down-left or get back to the home with the Back button.
 
 #### View and Edit Internal Order
 
 <img src="gui_images/view_internal_order.png" alt="View and Edit Internal Order" width="600"/>
 
-In this page it is possible to view and edit informations about a single Internal Order Log.
+In this page it is possible to view and edit informations about a single Internal Order Log. 
 
 #### Delete Internal Order
 
 <img src="gui_images/delete_internal_order.png" alt="Delete Internal Order" width="300"/>
 
-With this Alert Dialog Window is asked confirm for the delete of an internal order
+With this Alert Dialog Window is asked confirm for the delete of an internal order.
 
 ### Placing an order
 
@@ -188,7 +190,7 @@ Here it is possible to place an order, selecting an Item, a Supplier and the qua
 
 <img src="gui_images/orders_history.png" alt="Orders History" width="600"/>
 
-In this page it is possible to view and edit informations about a single External Order Log.
+In this page it is possible to view and edit informations about a single External Order Log. It is possibile to search an order by code with the search bar down-left or get back to the home with the Back button.
 
 #### Delete External Order 
 
@@ -200,9 +202,14 @@ With this Alert Dialog Window is asked confirm for the delete of an external ord
 
 <img src="gui_images/supplier_list.png" alt="Suppliers List" width="600"/>
 
+Here it is possible to visualize the list of all the suppliers. It is possibile to add a new Supplier with the button down-right, search an Item by code with the search bar down-left or get back to the home with the Back button.
+
+
 #### Adding a Supplier
 
 <img src="gui_images/new_supplier.png" alt="Adding a Supplier" width="600"/>
+
+In this page is possible to add a new Supplier.
 
 ### View and Edit Supplier
 
@@ -220,17 +227,25 @@ With this Alert Dialog Window is asked confirm for the delete of a supplier
 
 <img src="gui_images/warehouse_management.png" alt="Warehouse Management" width="600"/>
 
+In this page it is possible to see a list of every type of items stored. It is possibile to add a new Item with the button down-right, search an Item by code with the search bar down-left or get back to the home with the Back button.
+
 ### New Item
 
 <img src="gui_images/new_item.png" alt="New Item" width="600"/>
+
+In this page is possible to add a new item.
 
 ### View and Edit Item By Code
 
 <img src="gui_images/view_item_by_code.png" alt="View and Edit Item By Code" width="600"/>
 
+In this page is possible to view all the article of a type of item. It is even possible to eliminate or edit the position of the article in the warehouse clicking on the pencil button.
+
 #### Inserting Item
 
 <img src="gui_images/insert_item.png" alt="Inserting Item" width="600"/>
+
+In this page is possible to insert a new article in the warehouse. With the Autocomplete button an algoritm finds a way to insert every item in a free spot. 
 
 #### View and Edit Item
 
