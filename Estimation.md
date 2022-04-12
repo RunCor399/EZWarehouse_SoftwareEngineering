@@ -88,5 +88,11 @@ Report here the results of the three estimation approaches. The  estimates may d
 | estimate by activity decomposition | 860                             | 40                        |
 
 
+The estimation obtained by size of the project is the most reliable one as it is based on a real project, even if for a different domain.
+The other two values instead are purely based on estimation and suppositions related to the amount of work that four people could do to get to the desired results.
+
+Since the amount of experience on which the last two estimation are built upon is low, the two results are very similar one to another
+
+
 
 
