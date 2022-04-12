@@ -1,5 +1,6 @@
 # Project Estimation  
-Date: 10/04/2022
+
+Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto Giovanna
 
 | Version number | Change                    |
 | -------------- | :------------------------ |

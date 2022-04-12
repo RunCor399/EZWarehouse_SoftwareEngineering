@@ -1,10 +1,7 @@
 
- #Requirements Document 
+ # Requirements Document 
 
-Date: 01 April 2022
-
-Version: 2.0
-
+ Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto Giovanna
 
  
 | Version number | Change                                                                                                         |
@@ -12,10 +9,12 @@ Version: 2.0
 | 1.0            | Definition of Stakeholders, functional requirements and non-functional requirements                            |
 | 2.0            | Definition of Use cases and scenarios                                                                          |
 | 3.0            | Revision of Use cases and scenarios, Added draft of GUI, Context Diagram, System Design and Deployment Diagram |
+| 4.0            | Added use cases diagram and revised the whole document                                                         |
 
 
 # Contents
 
+- [Requirements Document](#requirements-document)
 - [Contents](#contents)
 - [Informal description](#informal-description)
 - [Stakeholders](#stakeholders)
@@ -60,6 +59,7 @@ Version: 2.0
 	- [Use case 12, UC12 - An item is quality tested](#use-case-12-uc12---an-item-is-quality-tested)
 		- [Scenario 12.1](#scenario-121)
 		- [Scenario 12.2](#scenario-122)
+	- [Use case 13, UC13 - A test case is added](#use-case-13-uc13---a-test-case-is-added)
 	- [Use case 14, UC14 - A test case is modified](#use-case-14-uc14---a-test-case-is-modified)
 	- [Use case 15, UC15 - A test case is removed](#use-case-15-uc15---a-test-case-is-removed)
 	- [Use case 16, UC16 - A test is scheduled](#use-case-16-uc16---a-test-is-scheduled)
@@ -75,6 +75,7 @@ Version: 2.0
 		- [Scenario 24.2](#scenario-242)
 		- [Scenario 24.3](#scenario-243)
 		- [Scenario 24.4](#scenario-244)
+	- [Use case 25, UC25 User Login](#use-case-25-uc25-user-login)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -207,22 +208,18 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 ## Non Functional Requirements
 
 
-| ID    |         Type          |                                                                  Description                                                                   | Refers to |
-| ----- | :-------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: | --------: |
-| NFR1  |       Usability       |                 The software must be easy to use also for employees which have a limited amount of knowledge in the IT domain                  |           |
-| NFR2  |      Portability      |           In a company there might be different computers with different OS's, the software should be able to work in each of them.            |           |
-| NFR3  |   Interoperability    |             The software should be able to cooperate with other software in order, for instance, to receive orders from suppliers              |           |
-| NFR4  | Easy to be maintained |                     In order to avoid expensive down times, the software should be able to be fixed in case of sudden bugs                     |           |
-| NFR5  |      Efficiency       | The software must be efficient in managing the operations of space optimization, collection, shipment and stocking of a large number of items. |           |
-| NFR6  |      Scalability      |        If the company grows in dimensions (wrt the amount of sent and received orders), the software must be able to keep up and scale.        |           |
-| NFR7  |      Robustness       |   The software must behave in a reasonable way also in case of unexpected scenarios (wrong inputs, bugs) in order to avoid economic damages    |           |
-| NFR8  |                       |                                 Nationality of companies that will use the software (multi-language platform)                                  |           |
-| NFR9  |                       |  Use of different measurement metrics in case the software will be used in different continents (i.e. currencies, distance, space, speed...)   |           |
-| NFR10 |                       |                                                   Consistency of data within the application                                                   |           |
-| NFR11 |                       |                                                          Privacy and Security of data                                                          |           |
-| NFR12 |     Need-to-know      |                                        Every user has only the necessary information to perform his job                                        |           |
-| NFR13 |    Least privilege    |                                 Every user has the necessary amount of privileges necessary to perform his job                                 |           |
-| NFR14 |     Availability      |                                             (The order of defects in a year must be lower than 10)                                             |           |
+| ID    |             Type              |                                                                  Description                                                                   | Refers to |
+| ----- | :---------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: | --------: |
+| NFR1  |           Usability           |                 The software must be easy to use also for employees which have a limited amount of knowledge in the IT domain                  |    All FR |
+| NFR2  |          Portability          |           In a company there might be different computers with different OS's, the software should be able to work in each of them.            |    All FR |
+| NFR3  |          Efficiency           | The software must be efficient in managing the operations of space optimization, collection, shipment and stocking of a large number of items. |    All FR |
+| NFR4  |          Robustness           |   The software must behave in a reasonable way also in case of unexpected scenarios (wrong inputs, bugs) in order to avoid economic damages    |    All FR |
+| NFR5  |    Multi-language support     |                                 Nationality of companies that will use the software (multi-language platform)                                  |    All FR |
+| NFR6  | International metrics support |  Use of different measurement metrics in case the software will be used in different continents (i.e. currencies, distance, space, speed...)   |    All FR |
+| NFR7  |          Consistency          |                                                   Consistency of data within the application                                                   |    All FR |
+| NFR8  |            Privacy            |                                                          Privacy and Security of data                                                          |       FR5 |
+| NFR9  |         Need-to-know          |                                        Every user has only the necessary information to perform his job                                        |       FR5 |
+| NFR10 |        Least privilege        |                                 Every user has the necessary amount of privileges necessary to perform his job                                 |       FR5 |
 
 
 
@@ -230,14 +227,14 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 ## Use case diagram
-<img src="images/UseCaseDiagram.jpg" style="height: 1200px; width: 1200px"/>
+<img src="images/UseCaseDiagram.png" style="height: 1200px; width: 1200px"/>
 <br/>
 <br/>
 <br/>
 
 
 ## Use case 1, UC1 - Placement of an internal order
-| Actors Involved  |                                                            Manager, OU, Product, Courier                                                             |
+| Actors Involved  |                                                   Manager, OU, Product, Courier                                                    |
 | ---------------- | :--------------------------------------------------------------------------------------------------------------------------------: |
 | Precondition     |                                                     An item has to be ordered                                                      |
 | Post condition   |                                                    The desired item is ordered                                                     |
@@ -272,7 +269,7 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 ## Use case 2, UC2 - Placement of an external order
-| Actors Involved  |                                                             Manager, Supplier, Product, Payment System, Courier                                                             |
+| Actors Involved  |                                            Manager, Supplier, Product, Payment System, Courier                                            |
 | ---------------- | :---------------------------------------------------------------------------------------------------------------------------------------: |
 | Precondition     |                                                         An item has to be ordered                                                         |
 | Post condition   |                                                        The desired item is ordered                                                        |
@@ -331,7 +328,7 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
  ## Use case 3, UC3 Track an item position and supply
-| Actors Involved  |                                 Manager, Product                                  |
+| Actors Involved  |                             Manager, Product                             |
 | ---------------- | :----------------------------------------------------------------------: |
 | Precondition     |        User is logged, item's information (id, name...) are known        |
 | Post condition   |                 Supply and position of the item is known                 |
@@ -361,7 +358,7 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 ## Use case 4, UC4 Collect an item  
-| Actors Involved  |                Manager, Warehouse Worker, Product       |
+| Actors Involved  |           Manager, Warehouse Worker, Product            |
 | ---------------- | :-----------------------------------------------------: |
 | Precondition     |        User is logged, item's position is known         |
 | Post condition   |       The item is collected and ready to be moved       |
@@ -407,7 +404,7 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 ## Use case 5, UC5 Select a free position in which to stock a new item  
-| Actors Involved  |                              Warehouse Worker, Manager, Product                              |
+| Actors Involved  |                Warehouse Worker, Manager, Product                 |
 | ---------------- | :---------------------------------------------------------------: |
 | Precondition     |         User is logged, item's has already been collected         |
 | Post condition   |                     A free position is found                      |
@@ -463,59 +460,59 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 ## Use case 6, UC6 Issue a position replacement for an item
-| Actors Involved | Manager, Product |
-| --------------- | :-----: ||
-| Precondition     |       User is logged, item's ID is known, destination position is known      				|
-| Post condition   |                   The item has been moved to it's new position                    			|
-| Nominal Scenario | 	The two items which position has to be switched are selected, items are exchanged 		|
-| Variants         |    Destination position is empty, No available position in which to move the second item 	|
-| Exceptions       |    																		     			|
+| Actors Involved  |                                   Manager, Product                                    |
+| ---------------- | :-----------------------------------------------------------------------------------: |
+| Precondition     |           User is logged, item's ID is known, destination position is known           |
+| Post condition   |                     The item has been moved to it's new position                      |
+| Nominal Scenario |   The two items which position has to be switched are selected, items are exchanged   |
+| Variants         | Destination position is empty, No available position in which to move the second item |
+| Exceptions       |                                                                                       |
 
 
 ### Scenario 6.1
-| Scenario 6.1 | Position replacement for an item in a busy position |
-| ------------ | :-------------------------------------------------: ||
-| Precondition   |         User is logged, item's ID is known, destination position in which the item will be moved is known	|		    	
-| Post condition |         The item has been moved to it's new position            	     										|
-| Step#          |                               Description                                 									|
-| 1              |      	Position of first item in the warehouse is obtained by it's ID           	 						|
-| 2				 |     		The system checks if destination position is available or not 										|
-| 3				 |     		Destination position is not empty																	|
-| 4              |          First item is collected                    															|
-| 5              |          The system checks for an available position in which to stock the second item     					|
-| 6              | 			New position for second item is found 																|
-| 7              |          Second item is collected by a Warehouse worker														|
-| 8              |          First item is moved and stocked by a warehouse worker in it's destination position 					|
-| 9              |          Second item is moved and stocked by a warehouse worker in it's destination position 				|
+| Scenario 6.1   |                        Position replacement for an item in a busy position                        |
+| -------------- | :-----------------------------------------------------------------------------------------------: |
+| Precondition   | User is logged, item's ID is known, destination position in which the item will be moved is known |
+| Post condition |                           The item has been moved to it's new position                            |
+| Step#          |                                            Description                                            |
+| 1              |                  Position of first item in the warehouse is obtained by it's ID                   |
+| 2              |                   The system checks if destination position is available or not                   |
+| 3              |                                 Destination position is not empty                                 |
+| 4              |                                      First item is collected                                      |
+| 5              |           The system checks for an available position in which to stock the second item           |
+| 6              |                               New position for second item is found                               |
+| 7              |                          Second item is collected by a Warehouse worker                           |
+| 8              |        First item is moved and stocked by a warehouse worker in it's destination position         |
+| 9              |        Second item is moved and stocked by a warehouse worker in it's destination position        |
 
 
 
 ### Scenario 6.2
-| Scenario 6.2 | Position replacement for an item in an empty position |
-| ------------ | :---------------------------------------------------: ||
-| Precondition   |         User is logged, item's ID is known, destination position in which the item will be moved is known	|		    	
-| Post condition |         The item has been moved to it's new position            	     										|
-| Step#          |                               Description                                 									|
-| 1              |      	Position of first item in the warehouse is obtained by it's ID           	 						|
-| 2				 |     		The system checks if destination position is available or not 										|
-| 3				 |     		Destination position is empty																		|			
-| 4              |          First item is collected                    															|
-| 5              |          First item is moved and stocked by a warehouse worker in it's destination position 					|
+| Scenario 6.2   |                       Position replacement for an item in an empty position                       |
+| -------------- | :-----------------------------------------------------------------------------------------------: |
+| Precondition   | User is logged, item's ID is known, destination position in which the item will be moved is known |
+| Post condition |                           The item has been moved to it's new position                            |
+| Step#          |                                            Description                                            |
+| 1              |                  Position of first item in the warehouse is obtained by it's ID                   |
+| 2              |                   The system checks if destination position is available or not                   |
+| 3              |                                   Destination position is empty                                   |
+| 4              |                                      First item is collected                                      |
+| 5              |        First item is moved and stocked by a warehouse worker in it's destination position         |
 
 
 ### Scenario 6.3
-| Scenario 6.3 | No available new position for second item |
-| ------------ | :---------------------------------------: ||
-| Precondition   |         User is logged, item's ID is known, destination position in which the item will be moved is known	|		    	
-| Post condition |         The item will be stocked back in it's original position          	     							|
-| Step#          |                               Description                                 									|
-| 1              |      	Position of first item in the warehouse is obtained by it's ID           	 						|
-| 2				 |     		The system checks if destination position is available or not 										|
-| 3				 |     		Destination position is not empty																	|
-| 4              |          First item is collected                    															|
-| 5              |          The system checks for an available position in which to stock the second item     					|
-| 6              | 			No position for second item could be found 															|
-| 7              |          First item is stocked back in it's original position 												|
+| Scenario 6.3   |                             No available new position for second item                             |
+| -------------- | :-----------------------------------------------------------------------------------------------: |
+| Precondition   | User is logged, item's ID is known, destination position in which the item will be moved is known |
+| Post condition |                      The item will be stocked back in it's original position                      |
+| Step#          |                                            Description                                            |
+| 1              |                  Position of first item in the warehouse is obtained by it's ID                   |
+| 2              |                   The system checks if destination position is available or not                   |
+| 3              |                                 Destination position is not empty                                 |
+| 4              |                                      First item is collected                                      |
+| 5              |           The system checks for an available position in which to stock the second item           |
+| 6              |                            No position for second item could be found                             |
+| 7              |                       First item is stocked back in it's original position                        |
 
 											
 
@@ -524,7 +521,7 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 ## Use case 7, UC7 Prepare an item for delivery
-| Actors Involved  |                        Manager, Warehouse worker, Product                                   |
+| Actors Involved  |                         Manager, Warehouse worker, Product                         |
 | ---------------- | :--------------------------------------------------------------------------------: |
 | Precondition     |                      User is logged, item has been collected                       |
 | Post condition   |               The item is ready to be delivered to the pick-up area                |
@@ -534,567 +531,568 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 
 
 ### Scenario 7.1
-| Scenario 7.1   |                   Delivery of an item     											|
-| -------------- | :---------------------------------------------------------------------:   			|
-| Precondition   |         User is logged, item's ID is known, pickup area has been defined				|		    	
-| Post condition |         The item will be placed in the pickup area        	     					|
-| Step#          |                               Description                                 			|
-| 1              |      	Item located in the warehouse thourgh its ID and position           	 	|
-| 2				 |     		A warehouse worker collects the item 										|
-| 3				 |     		The warehouse worker prepares the item for delivery							|
-| 4              |          The item is moved to the pickup area               							|
-| 5              |          The item status is updated in "to be delivered"   							|
+| Scenario 7.1   |                       Delivery of an item                        |
+| -------------- | :--------------------------------------------------------------: |
+| Precondition   | User is logged, item's ID is known, pickup area has been defined |
+| Post condition |            The item will be placed in the pickup area            |
+| Step#          |                           Description                            |
+| 1              |    Item located in the warehouse thourgh its ID and position     |
+| 2              |               A warehouse worker collects the item               |
+| 3              |       The warehouse worker prepares the item for delivery        |
+| 4              |               The item is moved to the pickup area               |
+| 5              |         The item status is updated in "to be delivered"          |
 
 
 ### Scenario 7.2
-| Scenario 7.2   |                   Unable to delivery     													|
-| -------------- | :---------------------------------------------------------------------:   					|
-| Precondition   |         User is logged, item's ID is known, pickup area has been defined						|		    	
-| Post condition |         The item will be placed back in it's position     	     							|
-| Step#          |                               Description                                 					|
-| 1              |      	Position of the item in the warehouse is obtained by it's ID and position  			|
-| 2				 |     		A warehouse worker collects the item 												|			
-| 3				 |     		The warehouse worker prepares the item for delivery									|
-| 4              |          The item couldn't be prepared and it's placed back in it's original position        |
+| Scenario 7.2   |                              Unable to delivery                              |
+| -------------- | :--------------------------------------------------------------------------: |
+| Precondition   |       User is logged, item's ID is known, pickup area has been defined       |
+| Post condition |                The item will be placed back in it's position                 |
+| Step#          |                                 Description                                  |
+| 1              |  Position of the item in the warehouse is obtained by it's ID and position   |
+| 2              |                     A warehouse worker collects the item                     |
+| 3              |             The warehouse worker prepares the item for delivery              |
+| 4              | The item couldn't be prepared and it's placed back in it's original position |
 
 
 
 
 ## Use case 8, UC8 Elimination of an item from the warehouse
-| Actors Involved  |                     Manager, Warehouse worker         |
-| ---------------- | :---------------------------------------------------: |
-| Precondition     |                   User is logged                      |
-| Post condition   |    The item will no longer be inside the warehouse    |
-| Nominal Scenario |  The item is trashed hence it's position is freed up  |
-| Variants         |        Only the manager can delete items              |
-| Exceptions       |                                                       |
+| Actors Involved  |              Manager, Warehouse worker              |
+| ---------------- | :-------------------------------------------------: |
+| Precondition     |                   User is logged                    |
+| Post condition   |   The item will no longer be inside the warehouse   |
+| Nominal Scenario | The item is trashed hence it's position is freed up |
+| Variants         |          Only the manager can delete items          |
+| Exceptions       |                                                     |
 
-| Scenario 8.1   | Elimination of an item from the warehouse (normal user)  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's not the manager         |
-| Post condition |           The item is not deleted             |
-| Step#          |                  Description                  |
-| 1              |    The user selects the item                  |
-| 2              |   The user tries to delete the item by clicking on the "x" button	     |
-| 3              |  The user receives an error message           |
-| 4              | The item is not deleted                       |
+| Scenario 8.1   |     Elimination of an item from the warehouse (normal user)     |
+| -------------- | :-------------------------------------------------------------: |
+| Precondition   |              User is logged, he's not the manager               |
+| Post condition |                     The item is not deleted                     |
+| Step#          |                           Description                           |
+| 1              |                    The user selects the item                    |
+| 2              | The user tries to delete the item by clicking on the "x" button |
+| 3              |               The user receives an error message                |
+| 4              |                     The item is not deleted                     |
 
-| Scenario 8.2   | Elimination of an item from the warehouse (manager)  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the manager             |
-| Post condition |           The item is deleted                 |
-| Step#          |                  Description                  |
-| 1              |    The manager selects the item               |
-| 2              |   The manager tries to delete the item clicking on the "x" button		 |
-|3				 | The manager confirms the desire to delete the item|	
-| 4              | The item is deleted                       |
+| Scenario 8.2   |       Elimination of an item from the warehouse (manager)       |
+| -------------- | :-------------------------------------------------------------: |
+| Precondition   |                User is logged, he's the manager                 |
+| Post condition |                       The item is deleted                       |
+| Step#          |                           Description                           |
+| 1              |                  The manager selects the item                   |
+| 2              | The manager tries to delete the item clicking on the "x" button |
+| 3              |       The manager confirms the desire to delete the item        |
+| 4              |                       The item is deleted                       |
 
-| Scenario 8.3   | Elimination of an item from the warehouse, item not deleted (manager)  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the manager             |
-| Post condition |           The item is not deleted                 |
-| Step#          |                  Description                  |
-| 1              |    The manager selects the item               |
-| 2              |   The manager tries to delete the item clicking on the "x" button		 |
-|3				 | The manager aborts the action             |	
-| 4              | The item is not deleted                   |
+| Scenario 8.3   | Elimination of an item from the warehouse, item not deleted (manager) |
+| -------------- | :-------------------------------------------------------------------: |
+| Precondition   |                   User is logged, he's the manager                    |
+| Post condition |                        The item is not deleted                        |
+| Step#          |                              Description                              |
+| 1              |                     The manager selects the item                      |
+| 2              |    The manager tries to delete the item clicking on the "x" button    |
+| 3              |                     The manager aborts the action                     |
+| 4              |                        The item is not deleted                        |
 
 
 
 ## Use case 9, UC9 - Create User Account
-| Actors Involved  |                                         Manager, System Administrator, Warehouse Worker                                                                |
-| ---------------- | :-----------------------------------------------------------------------------------------------------------------------------------: |
-| Precondition     |                                                       Account U does not exist                                                        |
-| Post condition   |                                                     Account U added in the system                                                     |
-| Nominal Scenario |                                      Admin or manager creates a new account U and populates its fields.                                       |
+| Actors Involved  |                             Manager, System Administrator, Warehouse Worker                              |
+| ---------------- | :------------------------------------------------------------------------------------------------------: |
+| Precondition     |                                         Account U does not exist                                         |
+| Post condition   |                                      Account U added in the system                                       |
+| Nominal Scenario |                    Admin or manager creates a new account U and populates its fields.                    |
 | Variants         | Only the manager creates one account, this is checked through the email (one email, one account at most) |
-| Exceptions       |                                                       |
+| Exceptions       |                                                                                                          |
 
-| Scenario 9.1   | Creation of the account by a common user  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |    The user is a common user, subcribed or not |
-| Post condition |        The new user account is not created    |
-| Step#          |                  Description                  |
-| 1              |    The user tries to have access to the user administration area |
-| 2              |   The user is blocked |
+| Scenario 9.1   |           Creation of the account by a common user            |
+| -------------- | :-----------------------------------------------------------: |
+| Precondition   |          The user is a common user, subcribed or not          |
+| Post condition |              The new user account is not created              |
+| Step#          |                          Description                          |
+| 1              | The user tries to have access to the user administration area |
+| 2              |                      The user is blocked                      |
 
 
-| Scenario 9.2   | Creation of an already existing account by the admin  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |    The user is subscribed             |
-| Post condition |        The new user account is not created    |
-| Step#          |                  Description                  |
-| 1              |    The admin enters in the user administration area |
-| 2              |    The admin compiles the user form adding its informations              |
-| 3              |   The admin confirms and submits his informations |
-|4				 | The system checks if the user is aldready subscribed    |	
-| 5              | The user is subscribed, so the account is not created   |
+| Scenario 9.2   |   Creation of an already existing account by the admin   |
+| -------------- | :------------------------------------------------------: |
+| Precondition   |                  The user is subscribed                  |
+| Post condition |           The new user account is not created            |
+| Step#          |                       Description                        |
+| 1              |     The admin enters in the user administration area     |
+| 2              | The admin compiles the user form adding its informations |
+| 3              |     The admin confirms and submits his informations      |
+| 4              |   The system checks if the user is aldready subscribed   |
+| 5              |  The user is subscribed, so the account is not created   |
 
-| Scenario 9.3   | Creation of a new account by the admin  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |    The user is not subscribed             |
-| Post condition |        The new user account is created    |
-| Step#          |                  Description                  |
-| 1              |    The admin enters in the user administration area |
-| 2              |    The admin compiles the user form adding its informations              |
-| 3              |   The admin confirms and submits his informations |
-|4				 | The system checks if the user is aldready subscribed    |	
-| 5              | The user is not subscribed, so the account is created   |
+| Scenario 9.3   |          Creation of a new account by the admin          |
+| -------------- | :------------------------------------------------------: |
+| Precondition   |                The user is not subscribed                |
+| Post condition |             The new user account is created              |
+| Step#          |                       Description                        |
+| 1              |     The admin enters in the user administration area     |
+| 2              | The admin compiles the user form adding its informations |
+| 3              |     The admin confirms and submits his informations      |
+| 4              |   The system checks if the user is aldready subscribed   |
+| 5              |  The user is not subscribed, so the account is created   |
 
 ## Use case 10, UC10 - Modify user account
-| Actors Involved  |             Manager, System Administrator, Warehouse Worker                                      |
-| ---------------- | :----------------------------------------------------------------------------: |
-| Precondition     |                                Account U exists                                |
-| Post condition   |                                                                                |
-| Nominal Scenario |                The admin modifies one or more fields of account U                 |
-| Variants         |  Administrator can modify any account |
-| Exceptions       |                                                                   |
+| Actors Involved  |  Manager, System Administrator, Warehouse Worker   |
+| ---------------- | :------------------------------------------------: |
+| Precondition     |                  Account U exists                  |
+| Post condition   |                                                    |
+| Nominal Scenario | The admin modifies one or more fields of account U |
+| Variants         |        Administrator can modify any account        |
+| Exceptions       |                                                    |
 
-| Scenario 10.1   | Modification of an account by the admin  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |    The user is an admin, the account already exists |
-| Post condition |        The informations are updated   |
-| Step#          |                  Description                  |
-| 1              |    The admin enters in the user administration area |
-| 2              |    The admin selects the user account in the account list to be modified |
-| 3              |   The admin modifies the informations |
-|4				 | The admin is taken back to the user list    |
+| Scenario 10.1  |                Modification of an account by the admin                |
+| -------------- | :-------------------------------------------------------------------: |
+| Precondition   |           The user is an admin, the account already exists            |
+| Post condition |                     The informations are updated                      |
+| Step#          |                              Description                              |
+| 1              |           The admin enters in the user administration area            |
+| 2              | The admin selects the user account in the account list to be modified |
+| 3              |                  The admin modifies the informations                  |
+| 4              |               The admin is taken back to the user list                |
 
-| Scenario 10.2   | Modification of an account by a common user  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |    The user is a common user, the account already exists |
-| Post condition |        The informations are updated   |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the user administration area |
-| 2              |    The user is automatically redirected to its own informations|
-| 3              |   The user modifies the informations |
-|4				 | The informations are saved|
+| Scenario 10.2  |         Modification of an account by a common user          |
+| -------------- | :----------------------------------------------------------: |
+| Precondition   |    The user is a common user, the account already exists     |
+| Post condition |                 The informations are updated                 |
+| Step#          |                         Description                          |
+| 1              |       The user enters in the user administration area        |
+| 2              | The user is automatically redirected to its own informations |
+| 3              |              The user modifies the informations              |
+| 4              |                  The informations are saved                  |
 
 
 ## Use case 11, UC11 - Delete user account
-| Actors Involved  |             Manager, System Administrator                                      |
-| ---------------- | :----------------------------------------------------------------------------: |
-| Precondition     |                                Account U exists                                |
-| Post condition   |                       Account U deleted from the system                        |
-| Nominal Scenario |                    User selects an user account U to delete                    |
-| Variants         |  Only an administrator can delete an account |
+| Actors Involved  |        Manager, System Administrator        |
+| ---------------- | :-----------------------------------------: |
+| Precondition     |              Account U exists               |
+| Post condition   |      Account U deleted from the system      |
+| Nominal Scenario |  User selects an user account U to delete   |
+| Variants         | Only an administrator can delete an account |
 
 
-| Scenario 11.1   | Elimination of an existing user   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the admin, the account to be deleted exists             |
-| Post condition |           An account is deleted                 |
-| Step#          |                  Description                  |
-| 1              |    The admin enters in the user administration area |
-| 2              |    The admin selects the user account in the account list to be deleted |
-|3				 | The admin confirms the desire to delete the user|	
-| 4              | The user is deleted                       |
-| 5				 | The admin is taken back to the user list    |
+| Scenario 11.1  |                   Elimination of an existing user                    |
+| -------------- | :------------------------------------------------------------------: |
+| Precondition   |   User is logged, he's the admin, the account to be deleted exists   |
+| Post condition |                        An account is deleted                         |
+| Step#          |                             Description                              |
+| 1              |           The admin enters in the user administration area           |
+| 2              | The admin selects the user account in the account list to be deleted |
+| 3              |           The admin confirms the desire to delete the user           |
+| 4              |                         The user is deleted                          |
+| 5              |               The admin is taken back to the user list               |
 
-| Scenario 11.2   | Elimination of an existing user, user not deleted  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the admin, the account to be deleted exists      |
-| Post condition |           The user is not deleted                 |
-| Step#          |                  Description                  |
-| 1              |    The admin enters in the user administration area |
-| 2              |    The admin selects the user account in the account list to be deleted |
-| 3				 | The admin aborts the action             |	
-| 4              | The user is not deleted                   |
-| 5				 | The admin is taken back to the user list    |
+| Scenario 11.2  |          Elimination of an existing user, user not deleted           |
+| -------------- | :------------------------------------------------------------------: |
+| Precondition   |   User is logged, he's the admin, the account to be deleted exists   |
+| Post condition |                       The user is not deleted                        |
+| Step#          |                             Description                              |
+| 1              |           The admin enters in the user administration area           |
+| 2              | The admin selects the user account in the account list to be deleted |
+| 3              |                     The admin aborts the action                      |
+| 4              |                       The user is not deleted                        |
+| 5              |               The admin is taken back to the user list               |
 
-| Scenario 11.3   | Elimination of a non-existing user   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the admin, the account to be deleted doesn't exist             |
-| Post condition |           An account is deleted                 |
-| Step#          |                  Description                  |
-| 1              |    The admin enters in the user administration area |
-| 2              |    The admin searchs the user account in the account list to be deleted |
-| 3				 | The account doesn't exist, account is not deleted|	
+| Scenario 11.3  |                   Elimination of a non-existing user                    |
+| -------------- | :---------------------------------------------------------------------: |
+| Precondition   | User is logged, he's the admin, the account to be deleted doesn't exist |
+| Post condition |                          An account is deleted                          |
+| Step#          |                               Description                               |
+| 1              |            The admin enters in the user administration area             |
+| 2              |  The admin searchs the user account in the account list to be deleted   |
+| 3              |            The account doesn't exist, account is not deleted            |
 
 ## Use case 12, UC12 - An item is quality tested
-| Actors Involved  | Quality Office Worker                                                       |
-| ---------------- | :-----------------------------------------------------------: |
-| Precondition     |               Item is not tested, a test has been scheduled   |
-| Post condition   |                 Item is tested                                |
-| Nominal Scenario | A quality officier tests the quality of an item               |
-| Variants         |        Only quality officier makes tests                      |
-| Exceptions       |                                                               |
+| Actors Involved  |              Quality Office Worker              |
+| ---------------- | :---------------------------------------------: |
+| Precondition     |  Item is not tested, a test has been scheduled  |
+| Post condition   |                 Item is tested                  |
+| Nominal Scenario | A quality officier tests the quality of an item |
+| Variants         |        Only quality officier makes tests        |
+| Exceptions       |                                                 |
 
 ### Scenario 12.1
-| Scenario 12.1  |                      The item passes the quality test                            |
+| Scenario 12.1  |                         The item passes the quality test                         |
 | -------------- | :------------------------------------------------------------------------------: |
-| Precondition   |  A quality test has been scheduled for the item, the item passes the quality test|
-| Post condition |  A new positive test is recorded in test history                                 |
-| Step#          |                                Description                                       |
-| 1              |                      A quality test officer enters the test history section      |
-| 2              |                  The quality test officer adds a test                            |
+| Precondition   | A quality test has been scheduled for the item, the item passes the quality test |
+| Post condition |                 A new positive test is recorded in test history                  |
+| Step#          |                                   Description                                    |
+| 1              |              A quality test officer enters the test history section              |
+| 2              |                       The quality test officer adds a test                       |
 | 3              |                    The test is selected from scheduled tests                     |
-| 4              |                    The test informations are filled                              |
-| 5              |                      The test result is updated with a positive result           |
+| 4              |                         The test informations are filled                         |
+| 5              |                The test result is updated with a positive result                 |
 
 
 ### Scenario 12.2
 | Scenario 12.2  |                      The item doesn't pass the quality test                      |
 | -------------- | :------------------------------------------------------------------------------: |
-| Precondition   |  A quality test has been scheduled for the item, the item passes the quality test|
-| Post condition |  A new negative test is recorded in test history                                 |
-| Step#          |                                Description                                       |
-| 1              |                      A quality test officer enters the test history section      |
-| 2              |                  The quality test officer adds a test                            |
+| Precondition   | A quality test has been scheduled for the item, the item passes the quality test |
+| Post condition |                 A new negative test is recorded in test history                  |
+| Step#          |                                   Description                                    |
+| 1              |              A quality test officer enters the test history section              |
+| 2              |                       The quality test officer adds a test                       |
 | 3              |                    The test is selected from scheduled tests                     |
-| 4             |                    The test informations are filled                              |
-| 5              |                      The test result is updated with negative result           |
+| 4              |                         The test informations are filled                         |
+| 5              |                 The test result is updated with negative result                  |
 
 
-## Use case 13, UC13 - A test case is added
-| Actors Involved  |     Quality Office Worker                                             |
-| ---------------- | :-----------------------------------------------------: |
-| Precondition     |                The test case T does not exist                |
-| Post condition   |                    The test case T exists                    |
-| Nominal Scenario | The quality officer inserts the new test case in the system  |
-| Variants         |    Only quality officier insert test cases in the system     |
-| Exceptions       |                                                         |
+## Use case 13, UC13 - A test case is added
 
-| Scenario 13.1   | New non-existing test case added by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test case doesn't exist             |
-| Post condition |           A new test case is created                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test cases management area |
-| 3				 |                     The user creates the new test case|	
-| 4				 | The test case informations are filled and confirmed|	
-| 5				 | The system checks if the test case already exists  |
-| 6				 | The test case is created                           |	
-| 7              | The quality officer is redirected to the test cases managment area|
+| Actors Involved  |                    Quality Office Worker                    |
+| ---------------- | :---------------------------------------------------------: |
+| Precondition     |               The test case T does not exist                |
+| Post condition   |                   The test case T exists                    |
+| Nominal Scenario | The quality officer inserts the new test case in the system |
+| Variants         |    Only quality officier insert test cases in the system    |
+| Exceptions       |                                                             |
+
+| Scenario 13.1  |        New non-existing test case added by a quality officer        |
+| -------------- | :-----------------------------------------------------------------: |
+| Precondition   | User is logged, he's a quality officer, the test case doesn't exist |
+| Post condition |                     A new test case is created                      |
+| Step#          |                             Description                             |
+| 1              |                  The user enters in the test area                   |
+| 2              |           The user enters the test cases management area            |
+| 3              |                 The user creates the new test case                  |
+| 4              |         The test case informations are filled and confirmed         |
+| 5              |          The system checks if the test case already exists          |
+| 6              |                      The test case is created                       |
+| 7              | The quality officer is redirected to the test cases managment area  |
 
 
-| Scenario 13.2   | New existing test case added by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test case exists             |
-| Post condition |           A new test case is not created                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test cases management area |
-| 3				 |                     The user creates the new test case|	
-| 4				 | The test case informations are filled and confirmed|	
-| 5				 | The system checks if the test case already exists  |
-| 6				 | The test case is not created                           |	
-| 7              | The quality officer is redirected to the test cases managment area|
+| Scenario 13.2  |         New existing test case added by a quality officer          |
+| -------------- | :----------------------------------------------------------------: |
+| Precondition   |    User is logged, he's a quality officer, the test case exists    |
+| Post condition |                   A new test case is not created                   |
+| Step#          |                            Description                             |
+| 1              |                  The user enters in the test area                  |
+| 2              |           The user enters the test cases management area           |
+| 3              |                 The user creates the new test case                 |
+| 4              |        The test case informations are filled and confirmed         |
+| 5              |         The system checks if the test case already exists          |
+| 6              |                    The test case is not created                    |
+| 7              | The quality officer is redirected to the test cases managment area |
 
 
 ## Use case 14, UC14 - A test case is modified
-| Actors Involved  |           Quality Office Worker                                                   |
-| ---------------- | :------------------------------------------------------------------: |
-| Precondition     |                          The test case T exists                           |
-| Post condition   |                        The test case T is modified                        |
-| Nominal Scenario | The quality officer modifies the parameters of a test case in the system  |
-| Variants         |                                                                      |
-| Exceptions       |                                                                      |
+| Actors Involved  |                          Quality Office Worker                           |
+| ---------------- | :----------------------------------------------------------------------: |
+| Precondition     |                          The test case T exists                          |
+| Post condition   |                       The test case T is modified                        |
+| Nominal Scenario | The quality officer modifies the parameters of a test case in the system |
+| Variants         |                                                                          |
+| Exceptions       |                                                                          |
 
-| Scenario 14.1   | Modification of an existing test case by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test case exists             |
-| Post condition |           The test case informations are updated                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test cases management area |
-| 3				 |                     The user selects the test case|	
-| 4				 | The test case informations are filled and updated|
-| 5             | The quality officer is redirected to the test cases managment area|
+| Scenario 14.1  |     Modification of an existing test case by a quality officer     |
+| -------------- | :----------------------------------------------------------------: |
+| Precondition   |    User is logged, he's a quality officer, the test case exists    |
+| Post condition |               The test case informations are updated               |
+| Step#          |                            Description                             |
+| 1              |                  The user enters in the test area                  |
+| 2              |           The user enters the test cases management area           |
+| 3              |                   The user selects the test case                   |
+| 4              |         The test case informations are filled and updated          |
+| 5              | The quality officer is redirected to the test cases managment area |
 
 
 ## Use case 15, UC15 - A test case is removed
-| Actors Involved  |  Quality Office Worker                                           |
-| ---------------- | :--------------------------------------------------: |
-| Precondition     |                  The test case T exists              |
-| Post condition   |               The test case T doesn't exist          |
-| Nominal Scenario | The quality officer delete the test case T in the system  |
-| Variants         |  Only quality officer deletes test cases in the system    |
-| Exceptions       |                                                      |
+| Actors Involved  |                  Quality Office Worker                   |
+| ---------------- | :------------------------------------------------------: |
+| Precondition     |                  The test case T exists                  |
+| Post condition   |              The test case T doesn't exist               |
+| Nominal Scenario | The quality officer delete the test case T in the system |
+| Variants         |  Only quality officer deletes test cases in the system   |
+| Exceptions       |                                                          |
 
-| Scenario 15.1   | Elimination of an existing test case by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test case exists             |
-| Post condition |           The test case is removed               |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test cases management area |
-| 3				 |                     The user selects the test case|	
-| 4				 | The user comfirms the desire to delete the test case|
-| 5				 | The test case is deleted|
+| Scenario 15.1  |  Elimination of an existing test case by a quality officer   |
+| -------------- | :----------------------------------------------------------: |
+| Precondition   | User is logged, he's a quality officer, the test case exists |
+| Post condition |                   The test case is removed                   |
+| Step#          |                         Description                          |
+| 1              |               The user enters in the test area               |
+| 2              |        The user enters the test cases management area        |
+| 3              |                The user selects the test case                |
+| 4              |     The user comfirms the desire to delete the test case     |
+| 5              |                   The test case is deleted                   |
 
-| Scenario 15.2   | Elimination of an existing test case by a quality officer, test case not deleted   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test case exists             |
-| Post condition |           The test case is not removed              |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test cases management area |
-| 3				 |                     The user selects the test case|	
-| 4				 | The user aborts the desire to delete the test case|
-| 5				 | The test case is not deleted|
+| Scenario 15.2  | Elimination of an existing test case by a quality officer, test case not deleted |
+| -------------- | :------------------------------------------------------------------------------: |
+| Precondition   |           User is logged, he's a quality officer, the test case exists           |
+| Post condition |                           The test case is not removed                           |
+| Step#          |                                   Description                                    |
+| 1              |                         The user enters in the test area                         |
+| 2              |                  The user enters the test cases management area                  |
+| 3              |                          The user selects the test case                          |
+| 4              |                The user aborts the desire to delete the test case                |
+| 5              |                           The test case is not deleted                           |
 
 
 ## Use case 16, UC16 - A test is scheduled
-| Actors Involved  |   Quality Office Worker                                                         |
-| ---------------- | :---------------------------------------------------------------: |
-| Precondition     |     The item has to be tested, the test has not been scheduled yet|
-| Post condition   |               The test for a certain item is scheduled            |
-| Nominal Scenario | The quality officer schedules the test in the system              |
-| Variants         |  Only quality officer schedules tests in the system               |
-| Exceptions       |                                                                   |
+| Actors Involved  |                     Quality Office Worker                      |
+| ---------------- | :------------------------------------------------------------: |
+| Precondition     | The item has to be tested, the test has not been scheduled yet |
+| Post condition   |            The test for a certain item is scheduled            |
+| Nominal Scenario |      The quality officer schedules the test in the system      |
+| Variants         |       Only quality officer schedules tests in the system       |
+| Exceptions       |                                                                |
 
-| Scenario 16.1   | New non-existing test schedule added by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test case doesn't exist             |
-| Post condition |           A new test schedule is created                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test schedule area |
-| 3				 |                     The user creates the new test schedule|	
-| 4				 | The test case schedule are filled and confirmed|	
-| 5				 | The system checks if the test schedule already exists  |
-| 6				 | The test schedule is created                           |	
-| 7				 | A relative test log entry is automatically created in the test history area         |	
-| 8              | The quality officer is redirected to the test schedule area|
+| Scenario 16.1  |          New non-existing test schedule added by a quality officer          |
+| -------------- | :-------------------------------------------------------------------------: |
+| Precondition   |     User is logged, he's a quality officer, the test case doesn't exist     |
+| Post condition |                       A new test schedule is created                        |
+| Step#          |                                 Description                                 |
+| 1              |                      The user enters in the test area                       |
+| 2              |                   The user enters the test schedule area                    |
+| 3              |                   The user creates the new test schedule                    |
+| 4              |               The test case schedule are filled and confirmed               |
+| 5              |            The system checks if the test schedule already exists            |
+| 6              |                        The test schedule is created                         |
+| 7              | A relative test log entry is automatically created in the test history area |
+| 8              |         The quality officer is redirected to the test schedule area         |
 
 
-| Scenario 16.2   | New existing test schedule added by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test schedule exists             |
-| Post condition |           A new test schedule is not created                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test schedule area |
-| 3				 |                     The user creates the new test schedule|	
-| 4				 | The test schedule informations are filled and confirmed|	
-| 5				 | The system checks if the test schedule already exists  |
-| 6				 | The test schedule is not created                           |	
-| 7              | The quality officer is redirected to the test schedule area|
+| Scenario 16.2  |      New existing test schedule added by a quality officer       |
+| -------------- | :--------------------------------------------------------------: |
+| Precondition   | User is logged, he's a quality officer, the test schedule exists |
+| Post condition |                A new test schedule is not created                |
+| Step#          |                           Description                            |
+| 1              |                 The user enters in the test area                 |
+| 2              |              The user enters the test schedule area              |
+| 3              |              The user creates the new test schedule              |
+| 4              |     The test schedule informations are filled and confirmed      |
+| 5              |      The system checks if the test schedule already exists       |
+| 6              |                 The test schedule is not created                 |
+| 7              |   The quality officer is redirected to the test schedule area    |
 
 
 ## Use case 17, UC17 - A test schedule is modified
-| Actors Involved  |           Quality Office Worker                                                    |
-| ---------------- | :------------------------------------------------------------------: |
-| Precondition     |                          The test schedule T exists                           |
-| Post condition   |                        The test schedule T is modified                        |
-| Nominal Scenario | The quality officer modifies the parameters of a test schedule in the system  |
-| Variants         |                                                                      |
-| Exceptions       |                                                                      |
+| Actors Involved  |                            Quality Office Worker                             |
+| ---------------- | :--------------------------------------------------------------------------: |
+| Precondition     |                          The test schedule T exists                          |
+| Post condition   |                       The test schedule T is modified                        |
+| Nominal Scenario | The quality officer modifies the parameters of a test schedule in the system |
+| Variants         |                                                                              |
+| Exceptions       |                                                                              |
 
-| Scenario 17.1   | Modification of an existing test schedule by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test schedule exists             |
-| Post condition |           The test schedule informations are updated                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test schedule area |
-| 3				 |                     The user selects the test schedule|	
-| 4				 | The test schedule informations are filled and updated|	
-| 5              | The test log informations related to the test schedule are automatically updated |	
-| 6              | The quality officer is redirected to the test schedule area|
+| Scenario 17.1  |          Modification of an existing test schedule by a quality officer          |
+| -------------- | :------------------------------------------------------------------------------: |
+| Precondition   |         User is logged, he's a quality officer, the test schedule exists         |
+| Post condition |                    The test schedule informations are updated                    |
+| Step#          |                                   Description                                    |
+| 1              |                         The user enters in the test area                         |
+| 2              |                      The user enters the test schedule area                      |
+| 3              |                        The user selects the test schedule                        |
+| 4              |              The test schedule informations are filled and updated               |
+| 5              | The test log informations related to the test schedule are automatically updated |
+| 6              |           The quality officer is redirected to the test schedule area            |
 
-| Scenario 17.2   | Modification of a test schedule by a quality officer, changes are not saved   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test schedule exists             |
-| Post condition |           The test schedule informations are not updated                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test schedule area |
-| 3				 |                     The user selects the test schedule|	
-| 4				 | The test schedule informations are filled, then the user doesn'd save them|	
-| 5              | The test log informations related to the test schedule are not updated |	
-| 6              | The quality officer is redirected to the test schedule area|
+| Scenario 17.2  | Modification of a test schedule by a quality officer, changes are not saved |
+| -------------- | :-------------------------------------------------------------------------: |
+| Precondition   |      User is logged, he's a quality officer, the test schedule exists       |
+| Post condition |               The test schedule informations are not updated                |
+| Step#          |                                 Description                                 |
+| 1              |                      The user enters in the test area                       |
+| 2              |                   The user enters the test schedule area                    |
+| 3              |                     The user selects the test schedule                      |
+| 4              | The test schedule informations are filled, then the user doesn'd save them  |
+| 5              |   The test log informations related to the test schedule are not updated    |
+| 6              |         The quality officer is redirected to the test schedule area         |
 
 ## Use case 18, UC18 - A test schedule is removed
-| Actors Involved  |   Quality Office Worker                                            |
-| ---------------- | :--------------------------------------------------: |
-| Precondition     |                  The test schedule T exists              |
-| Post condition   |               The test schedule T doesn't exist          |
-| Nominal Scenario | The quality officer delete the test schedule T in the system  |
-| Variants         |  Only quality officer deletes test schedules in the system    |
-| Exceptions       |                                                      |
+| Actors Involved  |                    Quality Office Worker                     |
+| ---------------- | :----------------------------------------------------------: |
+| Precondition     |                  The test schedule T exists                  |
+| Post condition   |              The test schedule T doesn't exist               |
+| Nominal Scenario | The quality officer delete the test schedule T in the system |
+| Variants         |  Only quality officer deletes test schedules in the system   |
+| Exceptions       |                                                              |
 
-| Scenario 18.1   | Elimination of an existing test schedule by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test schedule exists             |
-| Post condition |           The test schedule is removed               |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test schedule area |
-| 3				 |                     The user selects the test schedule|	
-| 4				 | The user confirms the desire to delete the test schedule|
-| 5				 | The test schedule and the relative test log entry in test history are deleted |
+| Scenario 18.1  |         Elimination of an existing test schedule by a quality officer         |
+| -------------- | :---------------------------------------------------------------------------: |
+| Precondition   |       User is logged, he's a quality officer, the test schedule exists        |
+| Post condition |                         The test schedule is removed                          |
+| Step#          |                                  Description                                  |
+| 1              |                       The user enters in the test area                        |
+| 2              |                    The user enters the test schedule area                     |
+| 3              |                      The user selects the test schedule                       |
+| 4              |           The user confirms the desire to delete the test schedule            |
+| 5              | The test schedule and the relative test log entry in test history are deleted |
 
-| Scenario 18.2   | Elimination of an existing test schedule by a quality officer, test schedule not deleted   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test schedule exists             |
-| Post condition |           The test schedule is not removed              |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test schedule area |
-| 3				 |                     The user selects the test schedule|	
-| 4				 | The user aborts the desire to delete the test schedule|
-| 5				 | The test schedule is not deleted|
+| Scenario 18.2  | Elimination of an existing test schedule by a quality officer, test schedule not deleted |
+| -------------- | :--------------------------------------------------------------------------------------: |
+| Precondition   |             User is logged, he's a quality officer, the test schedule exists             |
+| Post condition |                             The test schedule is not removed                             |
+| Step#          |                                       Description                                        |
+| 1              |                             The user enters in the test area                             |
+| 2              |                          The user enters the test schedule area                          |
+| 3              |                            The user selects the test schedule                            |
+| 4              |                  The user aborts the desire to delete the test schedule                  |
+| 5              |                             The test schedule is not deleted                             |
 
 
 ## Use case 19, UC19 - A test log is modified
-| Actors Involved  |           Quality Office Worker                                                    |
-| ---------------- | :------------------------------------------------------------------: |
-| Precondition     |                          The test log T exists                           |
-| Post condition   |                        The test log T is modified                        |
-| Nominal Scenario | The quality officer modifies the parameters of a test log in the system  |
-| Variants         |                                                                      |
-| Exceptions       |                                                                      |
+| Actors Involved  |                          Quality Office Worker                          |
+| ---------------- | :---------------------------------------------------------------------: |
+| Precondition     |                          The test log T exists                          |
+| Post condition   |                       The test log T is modified                        |
+| Nominal Scenario | The quality officer modifies the parameters of a test log in the system |
+| Variants         |                                                                         |
+| Exceptions       |                                                                         |
 
-| Scenario 19.1   | Modification of an existing test log by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test log exists             |
-| Post condition |           The test log informations are updated                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test history area |
-| 3				 |                     The user selects the test log|	
-| 4				 | The test log informations are filled and updated|	
-| 5              | The test schedule informations related to the test log are automatically updated |	
-| 6              | The quality officer is redirected to the test history area|
+| Scenario 19.1  |            Modification of an existing test log by a quality officer             |
+| -------------- | :------------------------------------------------------------------------------: |
+| Precondition   |           User is logged, he's a quality officer, the test log exists            |
+| Post condition |                      The test log informations are updated                       |
+| Step#          |                                   Description                                    |
+| 1              |                         The user enters in the test area                         |
+| 2              |                      The user enters the test history area                       |
+| 3              |                          The user selects the test log                           |
+| 4              |                 The test log informations are filled and updated                 |
+| 5              | The test schedule informations related to the test log are automatically updated |
+| 6              |            The quality officer is redirected to the test history area            |
 
-| Scenario 19.2   | Modification of a test log by a quality officer, changes are not saved   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test log exists             |
-| Post condition |           The test schedule informations are not updated                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test history area |
-| 3				 |                     The user selects the test log|	
-| 4				 | The test log informations are filled, then the user doesn't save them|	
-| 5              | The test schedule informations related to the test log are not updated |	
-| 6              | The quality officer is redirected to the test history area|
+| Scenario 19.2  | Modification of a test log by a quality officer, changes are not saved |
+| -------------- | :--------------------------------------------------------------------: |
+| Precondition   |      User is logged, he's a quality officer, the test log exists       |
+| Post condition |             The test schedule informations are not updated             |
+| Step#          |                              Description                               |
+| 1              |                    The user enters in the test area                    |
+| 2              |                 The user enters the test history area                  |
+| 3              |                     The user selects the test log                      |
+| 4              | The test log informations are filled, then the user doesn't save them  |
+| 5              | The test schedule informations related to the test log are not updated |
+| 6              |       The quality officer is redirected to the test history area       |
 
 ## Use case 20, UC20 - A test log is removed
-| Actors Involved  |   Quality Office Worker                                            |
-| ---------------- | :--------------------------------------------------: |
-| Precondition     |                  The test log T exists              |
-| Post condition   |               The test log T doesn't exist          |
-| Nominal Scenario | The quality officer delete the test log T in the system  |
-| Variants         |  Only quality officer deletes test logs in the system    |
-| Exceptions       |                                                      |
+| Actors Involved  |                  Quality Office Worker                  |
+| ---------------- | :-----------------------------------------------------: |
+| Precondition     |                  The test log T exists                  |
+| Post condition   |              The test log T doesn't exist               |
+| Nominal Scenario | The quality officer delete the test log T in the system |
+| Variants         |  Only quality officer deletes test logs in the system   |
+| Exceptions       |                                                         |
 
-| Scenario 20.1   | Elimination of an existing test log by a quality officer   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test log exists             |
-| Post condition |           The test log is removed               |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test history area |
-| 3				 |                     The user selects the test log|	
-| 4				 | The user confirms the desire to delete the test log|
-| 5				 | The test log and the relative test schedule entry are deleted |
+| Scenario 20.1  |   Elimination of an existing test log by a quality officer    |
+| -------------- | :-----------------------------------------------------------: |
+| Precondition   |  User is logged, he's a quality officer, the test log exists  |
+| Post condition |                    The test log is removed                    |
+| Step#          |                          Description                          |
+| 1              |               The user enters in the test area                |
+| 2              |             The user enters the test history area             |
+| 3              |                 The user selects the test log                 |
+| 4              |      The user confirms the desire to delete the test log      |
+| 5              | The test log and the relative test schedule entry are deleted |
 
-| Scenario 20.2   | Elimination of an existing test log by a quality officer, test log not deleted   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's a quality officer, the test log exists             |
-| Post condition |           The test schedule is not removed              |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the test area |
-| 2              |    The user enters the test log area |
-| 3				 |                     The user selects the test log|	
-| 4				 | The user aborts the desire to delete the test log|
-| 5				 | The test log is not deleted|
+| Scenario 20.2  | Elimination of an existing test log by a quality officer, test log not deleted |
+| -------------- | :----------------------------------------------------------------------------: |
+| Precondition   |          User is logged, he's a quality officer, the test log exists           |
+| Post condition |                        The test schedule is not removed                        |
+| Step#          |                                  Description                                   |
+| 1              |                        The user enters in the test area                        |
+| 2              |                       The user enters the test log area                        |
+| 3              |                         The user selects the test log                          |
+| 4              |               The user aborts the desire to delete the test log                |
+| 5              |                          The test log is not deleted                           |
 
 
 
 ## Use case 21, UC21 - A  supplier is added 
-| Actors Involved  |   Manager, Administrator                                                         |
-| ---------------- | :---------------------------------------------------------------: |
-| Precondition     |     The supplier is not present                                   |
-| Post condition   |               The supplier becomes an available supplier          |
-| Nominal Scenario | The manager records the new supplier and his informations         |
-| Variants         |  Only the manager can add new suppliers                           |
-| Exceptions       |                                                                   |
+| Actors Involved  |                  Manager, Administrator                   |
+| ---------------- | :-------------------------------------------------------: |
+| Precondition     |                The supplier is not present                |
+| Post condition   |        The supplier becomes an available supplier         |
+| Nominal Scenario | The manager records the new supplier and his informations |
+| Variants         |          Only the manager can add new suppliers           |
+| Exceptions       |                                                           |
 
-| Scenario 21.1   | New non-existing supplier added by the manager   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the manager, the supplier doesn't exist             |
-| Post condition |           A new supplier is created                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the order area |
-| 2              |    The user enters the supplier list area |
-| 3				 |                     The user creates the new supplier|	
-| 4				 | The supplier informations are filled and confirmed|	
-| 5				 | The system checks if the supplier already exists  |
-| 6				 | The supplier is created                           |	
-| 7              | The manager is redirected to the supplier list area|
+| Scenario 21.1  |        New non-existing supplier added by the manager        |
+| -------------- | :----------------------------------------------------------: |
+| Precondition   | User is logged, he's the manager, the supplier doesn't exist |
+| Post condition |                  A new supplier is created                   |
+| Step#          |                         Description                          |
+| 1              |              The user enters in the order area               |
+| 2              |            The user enters the supplier list area            |
+| 3              |              The user creates the new supplier               |
+| 4              |      The supplier informations are filled and confirmed      |
+| 5              |       The system checks if the supplier already exists       |
+| 6              |                   The supplier is created                    |
+| 7              |     The manager is redirected to the supplier list area      |
 
 
-| Scenario 21.2   | New existing supplier added by the manager  |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the manager, the supplier exists             |
-| Post condition |           A new supplier is not created                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the order area |
-| 2              |    The user enters the supplier list area |
-| 3				 |                     The user creates the new supplier|	
-| 4				 | The supplier informations are filled and confirmed|	
-| 5				 | The system checks if the supplier already exists  |
-| 6				 | The supplier is not created                           |	
-| 7              | The manager is redirected to the supplier list area|
+| Scenario 21.2  |      New existing supplier added by the manager       |
+| -------------- | :---------------------------------------------------: |
+| Precondition   | User is logged, he's the manager, the supplier exists |
+| Post condition |             A new supplier is not created             |
+| Step#          |                      Description                      |
+| 1              |           The user enters in the order area           |
+| 2              |        The user enters the supplier list area         |
+| 3              |           The user creates the new supplier           |
+| 4              |  The supplier informations are filled and confirmed   |
+| 5              |   The system checks if the supplier already exists    |
+| 6              |              The supplier is not created              |
+| 7              |  The manager is redirected to the supplier list area  |
 
 
 ## Use case 22, UC22 - A supplier is updated 
-| Actors Involved  |   Manager, Administrator                                                         |
-| ---------------- | :---------------------------------------------------------------: |
-| Precondition     |     The supplier is in the supplier's list of the warehouse       |
-| Post condition   |            The supplier informations are updated                  |
-| Nominal Scenario | The manager updates the supplier infromations				       |
-| Variants         |  Only the manager can modify suppliers                            |
-| Exceptions       |                                                                   |
+| Actors Involved  |                 Manager, Administrator                  |
+| ---------------- | :-----------------------------------------------------: |
+| Precondition     | The supplier is in the supplier's list of the warehouse |
+| Post condition   |          The supplier informations are updated          |
+| Nominal Scenario |      The manager updates the supplier infromations      |
+| Variants         |          Only the manager can modify suppliers          |
+| Exceptions       |                                                         |
 
-| Scenario 22.1   | Modification of an existing supplier by the manager   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the manager, the supplier exists             |
-| Post condition |           The supplier informations are updated                |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the order area |
-| 2              |    The user enters the supplier list area |
-| 3				 |                     The user selects the supplier|	
-| 4				 | The supplier informations are filled and updated|	
-| 5              | The manager is redirected to the supplier list area|
+| Scenario 22.1  |  Modification of an existing supplier by the manager  |
+| -------------- | :---------------------------------------------------: |
+| Precondition   | User is logged, he's the manager, the supplier exists |
+| Post condition |         The supplier informations are updated         |
+| Step#          |                      Description                      |
+| 1              |           The user enters in the order area           |
+| 2              |        The user enters the supplier list area         |
+| 3              |             The user selects the supplier             |
+| 4              |   The supplier informations are filled and updated    |
+| 5              |  The manager is redirected to the supplier list area  |
 
 
 ## Use case 23, UC23 - A supplier is deleted
-| Actors Involved  |   Manager, Administrator                                                         |
+| Actors Involved  |                      Manager, Administrator                       |
 | ---------------- | :---------------------------------------------------------------: |
-| Precondition     |     The supplier is in the supplier's list of the warehouse       |
-| Post condition   |    The supplier is no longer in the supplier's list of the warehouse               |
-| Nominal Scenario | The manager deletes the supplier 				       |
-| Variants         |  Only the manager can modify suppliers                            |
+| Precondition     |      The supplier is in the supplier's list of the warehouse      |
+| Post condition   | The supplier is no longer in the supplier's list of the warehouse |
+| Nominal Scenario |                 The manager deletes the supplier                  |
+| Variants         |               Only the manager can modify suppliers               |
 | Exceptions       |                                                                   |
 
 
-| Scenario 23.1   | Elimination of an existing supplier by the manager   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the manager, the supplier exists             |
-| Post condition |           The supplier is removed               |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the order area |
-| 2              |    The user enters the supplier list area |
-| 3				 |                     The user selects the supplier|	
-| 4				 | The user confirms the desire to delete the supplier|
-| 5				 | The supplier is deleted |
-| 6              | The user is redirected to the supplier list area|
+| Scenario 23.1  |  Elimination of an existing supplier by the manager   |
+| -------------- | :---------------------------------------------------: |
+| Precondition   | User is logged, he's the manager, the supplier exists |
+| Post condition |                The supplier is removed                |
+| Step#          |                      Description                      |
+| 1              |           The user enters in the order area           |
+| 2              |        The user enters the supplier list area         |
+| 3              |             The user selects the supplier             |
+| 4              |  The user confirms the desire to delete the supplier  |
+| 5              |                The supplier is deleted                |
+| 6              |   The user is redirected to the supplier list area    |
 
-| Scenario 23.2   | Elimination of an existing supplier by the manager, supplier not deleted   |
-| -------------- | :-------------------------------------------: |
-| Precondition   |  User is logged, he's the manager, the supplier exists |
-| Post condition |           The test schedule is not removed              |
-| Step#          |                  Description                  |
-| 1              |    The user enters in the order area |
-| 2              |    The user enters the supplier list area |
-| 3				 |                     The user selects the supplier|	
-| 4				 | The user aborts the desire to delete the supplier|
-| 5				 | The supplier is not deleted|
+| Scenario 23.2  | Elimination of an existing supplier by the manager, supplier not deleted |
+| -------------- | :----------------------------------------------------------------------: |
+| Precondition   |          User is logged, he's the manager, the supplier exists           |
+| Post condition |                     The test schedule is not removed                     |
+| Step#          |                               Description                                |
+| 1              |                    The user enters in the order area                     |
+| 2              |                  The user enters the supplier list area                  |
+| 3              |                      The user selects the supplier                       |
+| 4              |            The user aborts the desire to delete the supplier             |
+| 5              |                       The supplier is not deleted                        |
 
 
 ## Use case 24, UC24 Update status of an item
@@ -1149,6 +1147,15 @@ Albert is an old man, but he still works in the warehouse since he is part of a 
 | 1              | The warehouse manager receives an internal order that includes an item that is stored into the warehouse |
 | 2              |              The manager checks if the item can be delivered (conditions, test passed, etc)              |
 | 3              |              The item can be delivered; the manager changes its status on "to be delivered"              |
+
+## Use case 25, UC25 User Login
+| Actors Involved  |                   All users                    |
+| ---------------- | :--------------------------------------------: |
+| Precondition     |       A user is not logged in the system       |
+| Post condition   |         A user is logged in the system         |
+| Nominal Scenario | User inserts his credentials in order to login |
+| Variants         |          User forgets his credentials          |
+| Exceptions       |             The user doesn't exist             |
 
 
 # Glossary
