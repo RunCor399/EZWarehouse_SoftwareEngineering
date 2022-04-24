@@ -2908,7 +2908,7 @@
 											"top": 1085,
 											"width": 298.80322265625,
 											"height": 13,
-											"text": "+products: Map",
+											"text": "+products: Map <SKUItem; quantity>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -11788,32 +11788,6 @@
 							"width": 25,
 							"height": 25,
 							"text": "*"
-						},
-						{
-							"_type": "UMLNoteView",
-							"_id": "AAAAAAGAVcc8EoPOfJs=",
-							"_parent": {
-								"$ref": "AAAAAAFF+qBtyKM79qY="
-							},
-							"font": "Arial;13;0",
-							"left": 2088,
-							"top": 1912,
-							"width": 145,
-							"height": 90,
-							"text": "Add Warehouse class with List<Position> ?"
-						},
-						{
-							"_type": "UMLNoteView",
-							"_id": "AAAAAAGAVcewcY3LO7U=",
-							"_parent": {
-								"$ref": "AAAAAAFF+qBtyKM79qY="
-							},
-							"font": "Arial;13;0",
-							"left": 2136,
-							"top": 1240,
-							"width": 89,
-							"height": 77,
-							"text": "Add inventory with List<SKU> ?"
 						}
 					]
 				},
@@ -13722,7 +13696,7 @@
 								"$ref": "AAAAAAGAR+TvMXfWmxE="
 							},
 							"name": "products",
-							"type": "Map"
+							"type": "Map <SKUItem; quantity>"
 						}
 					],
 					"operations": [
@@ -15742,6 +15716,22 @@
 							]
 						}
 					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "AAAAAAGAWqsMZMzUhec=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Class4"
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "AAAAAAGAWqsRBs38oCc=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Class5"
 				}
 			]
 		}
