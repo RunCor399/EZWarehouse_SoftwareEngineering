@@ -35,9 +35,9 @@ The design must satisfy the Official Requirements document, notably functional a
 <for each package in high level design, report class diagram. Each class should detail attributes and operations>
 
 
-<img src="images/LogicClassDiagram.png" alt="LogicClassDiagram" width="600"/>
+<img src="images/LogicClassDiagram.png" alt="LogicClassDiagram" width="800"/>
 
-<img src="images/DataClassDiagram.png" alt="DataClassDiagram" width="600"/>
+<img src="images/DataClassDiagram.png" alt="DataClassDiagram" width="800"/>
 
 
 
