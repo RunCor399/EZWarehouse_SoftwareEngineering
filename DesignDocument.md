@@ -62,7 +62,7 @@ The design must satisfy the Official Requirements document, notably functional a
 
 <img src="images/3_1_SequenceDiagram.png" alt="3_1_SequenceDiagram" width="600"/>
 
-<img src="images/4_1_SequenceDiagram.png" alt="4_1_SequenceDiagram" width="600"/>
+<img src="images/SequenceDiagramScenario_4.1.jpg" alt="4_1_SequenceDiagram" width="600"/>
 
 <img src="images/SequenceDiagramScenario_5.1.1_def.png" alt="5_1_1_SequenceDiagram" width="600"/>
 
@@ -70,7 +70,7 @@ The design must satisfy the Official Requirements document, notably functional a
 
 <img src="images/6_1_SequenceDiagram.png" alt="6_1_SequenceDiagram" width="600"/>
 
-<img src="images/9_1_SequenceDiagram.png" alt="9_1_SequenceDiagram" width="600"/>
+<img src="images/SequenceDiagramScenario_9.1.jpg" alt="9_1_SequenceDiagram" width="600"/>
 
 <img src="images/SequenceDiagramScenario_12.1_def.png" alt="12_1_SequenceDiagram" width="600"/>
 
