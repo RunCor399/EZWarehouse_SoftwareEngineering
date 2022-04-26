@@ -1,12 +1,13 @@
 # Design Document 
 
 
-Authors: 
+Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto Giovanna
 
-Date:
 
-Version:
-
+| Version number | Change                           |
+| -------------- | :------------------------------- |
+| 1.0            | First drafts of Design Document  |
+| 2.0            | Final version of Design Document |
 
 # Contents
 
@@ -15,8 +16,8 @@ Version:
 - [Instructions](#instructions)
 - [High level design](#high-level-design)
 - [Low level design](#low-level-design)
-  - [Logic Class Diagram](#logic-class-diagram)
   - [Data Class Diagram](#data-class-diagram)
+  - [Logic Class Diagram](#logic-class-diagram)
 - [Verification traceability matrix](#verification-traceability-matrix)
 - [Verification sequence diagrams](#verification-sequence-diagrams)
   - [Sequence Diagram 1.1](#sequence-diagram-11)
@@ -34,23 +35,26 @@ The design must satisfy the Official Requirements document, notably functional a
 
 # High level design 
 
-<discuss architectural styles used, if any>
-<report package diagram, if needed>
+The architectural pattern adopted for the design of EasyWarehouse is the Client-Server pattern.
+
+For this reason the team has decided to show both fronted and backend macro-packages in the package diagram, even though the frontend one wasn't required from the specifics.
+
+The backend package is divided in a data package that provides all the data structures required by the application, and a logic package that provides the operations to manage data.
+
 
 <img src="images/PackageDiagram.png" alt="PackageDiagram" width="600"/>
 
 
 # Low level design
 
-<for each package in high level design, report class diagram. Each class should detail attributes and operations>
-
-
-## Logic Class Diagram
-<img src="images/LogicClassDiagram.png" alt="LogicClassDiagram" width="800"/>
 
 ## Data Class Diagram
 <img src="images/DataClassDiagram.png" alt="DataClassDiagram" width="800"/>
 
+
+The team has designed the logic package using a Controller composed of many sub-controllers in order to make easier the implementation and the decoupling between the different kind of operations.
+## Logic Class Diagram
+<img src="images/LogicClassDiagram.png" alt="LogicClassDiagram" width="800"/>
 
 
 
