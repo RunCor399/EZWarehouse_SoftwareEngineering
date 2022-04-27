@@ -37,9 +37,9 @@ The design must satisfy the Official Requirements document, notably functional a
 
 The architectural pattern adopted for the design of EasyWarehouse is the Client-Server pattern.
 
-For this reason the team has decided to show both fronted and backend macro-packages in the package diagram, even though the frontend one wasn't required from the specifics.
+This is the reason why the team has decided to show in the package diagram both frontend and backend macro-packages even though the frontend one wasn't required from the specifics.
 
-The backend package is divided in a data package that provides all the data structures required by the application, and a logic package that provides the operations to manage data.
+The backend package is divided in a data package that provides all the data structures required by the application and a logic package that provides the operations to manage the data.
 
 
 <img src="images/PackageDiagram.png" alt="PackageDiagram" width="600"/>
@@ -52,7 +52,13 @@ The backend package is divided in a data package that provides all the data stru
 <img src="images/DataClassDiagram.png" alt="DataClassDiagram" width="800"/>
 
 
-The team has designed the logic package using a Controller composed of many sub-controllers in order to make easier the implementation and the decoupling between the different kind of operations.
+The team has designed the logic package using a Controller composed of many sub-controllers that make it easier to implement and decouple the different kind of operations.
+
+The Resolver, placed in the Logic Class Diagram, is the component in charge of:
+1. Receiving the API Requests 
+2. Parse them in order to understand by which specific Controller they need to be evaluated
+3. Return an HTTP Response to the Frontend
+   
 ## Logic Class Diagram
 <img src="images/LogicClassDiagram.png" alt="LogicClassDiagram" width="800"/>
 
@@ -64,14 +70,12 @@ The team has designed the logic package using a Controller composed of many sub-
 
 # Verification traceability matrix
 
-\<for each functional requirement from the requirement document, list which classes concur to implement it>
 
 
 <img src="images/TraceabilityMatrix.png" alt="TraceabilityMatrix" width="600"/>
 
 
 # Verification sequence diagrams 
-\<select key scenarios from the requirement document. For each of them define a sequence diagram showing that the scenario can be implemented by the classes and methods in the design>
 
 ## Sequence Diagram 1.1
 
