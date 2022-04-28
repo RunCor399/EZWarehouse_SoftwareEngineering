@@ -1,6 +1,5 @@
 # Graphical User Interface Prototype  
 
-<<<<<<< HEAD
 Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto Giovanna
 
 
@@ -268,14 +267,3 @@ With this Alert Dialog Window is asked confirm for the delete of an item
 
 <img src="gui_images/warehouse_mobile.png" alt="Warehouse Area - Mobile Version" width="600"/>
 
-This is a mobile version of the whole Warehouse Area
-=======
-Authors:
-
-Date:
-
-Version:
-
-\<Report here the GUI that you propose. You are free to organize it as you prefer. A suggested presentation matches the Use cases and scenarios defined in the Requirement document. The GUI can be shown as a sequence of graphical files (jpg, png)  >
-
->>>>>>> master
