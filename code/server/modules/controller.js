@@ -14,11 +14,33 @@ class Controller{
         this.skuController = new SkuController();
         this.testController = new TestController();
         this.orderController = new OrderController();
-        this.ItemController = new ItemController();
+        this.itemController = new ItemController();
         console.log("general Controller started");
     }
     
+    getUserController(){
+        return this.userController;
+    }
+
+    getPositionController(){
+        return this.positionController;
+    }
+
+    getSkuController(){
+        return this.skuController;
+    }
+
+    getTestController(){
+        return this.testController;
+    }
+
+    getOrderController(){
+        return this.orderController;
+    }
     
+    getItemController(){
+        return this.itemController;
+    }
 }
 
 module.exports = Controller;
