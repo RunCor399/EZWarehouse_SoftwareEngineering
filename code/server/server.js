@@ -4,7 +4,11 @@ const express = require('express');
 const app = new express();
 const port = 3001;
 
+//Routers
+const restockOrderRouter = require('./routers/restockOrderRouter');
+
 app.use(express.json());
+app.use('/', restockOrderRouter);
 
 //GET /api/test
 app.get('/api/hello', (req,res)=>{
@@ -13,6 +17,7 @@ app.get('/api/hello', (req,res)=>{
   }
   return res.status(200).json(message);
 });
+
 
 // activate the server
 app.listen(port, () => {
