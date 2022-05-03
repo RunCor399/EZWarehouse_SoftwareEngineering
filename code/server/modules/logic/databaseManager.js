@@ -6,7 +6,7 @@ class DBManager {
     constructor() {
         const db = new sqlite.Database('./db.sqlite', (err) => {
             if (err) {
-                console.log("error "+ err);
+                console.log("error " + err);
                 throw err;
             }
         });
@@ -15,7 +15,6 @@ class DBManager {
 
     }
 
-    //SOLO TEMPORANEAMENTE
     genericSqlRun(istruzione) {
         return new Promise((resolve, reject) => {
             db.run(istruzione, (err) => {
@@ -26,6 +25,17 @@ class DBManager {
         })
     }
 
+    genericGetSql(istruzione) {
+        return new Promise((resolve, reject) => {
+            db.all(sql, (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(true)
+                }
+            })
+        })
+    }
 }
 
 module.exports = DBManager;

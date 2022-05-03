@@ -20,7 +20,7 @@ router.route('/api/returnOrders/:id')
         }
         return res.status(200).json(message);
     });
-    
+     
 
 
 router.route('/api/returnOrder')
@@ -28,6 +28,12 @@ router.route('/api/returnOrder')
         let message = {
             message: 'POST /api/returnOrder'
           }
+
+
+          const returnDate = req.body["returnDate"];
+          const products = req.body["products"];
+          const restockOrderId = req.body["restockOrderId"];
+        
           return res.status(200).json(message);
     });
 

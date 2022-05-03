@@ -13,6 +13,7 @@ router.get('/api/testDescriptors', (req,res)=>{
   
   //GET /api/testDescriptors/:id
   router.get('/api/testDescriptors/:id', (req,res)=>{
+    const param = req.params.id;
     let message = {
       message: '/api/testDescriptors/:id'
     }
@@ -24,24 +25,42 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/testDescriptor'
     }
+
+    const name = req.body["name"];
+    const procedureDescription = req.body["procedureDescription"];
+    const idSKU = req.body["idSKU"];
+
     return res.status(200).json(message);
   });
   
   //PUT /api/testDescriptor/:id
   router.put('/api/testDescriptor/:id', (req,res)=>{
+    const param = req.params.id;
     let message = {
       message: '/api/testDescriptor/:id'
     }
+
+    const newName = req.body["newName"];
+    const newProcedureDescription = req.body["newProcedureDescription"];
+    const newIdSKU = req.body["newIdSKU"];
+
+
     return res.status(200).json(message);
   });
   
   //DELETE /api/testDescriptor/:id
   router.delete('/api/testDescriptor/:id', (req,res)=>{
+    const param = req.params.id;
     let message = {
       message: '/api/testDescriptor/:id'
     }
     return res.status(200).json(message);
   });
+
+
+
+
+
   
   //TEST RESULT
   //GET /api/skuitems/:rfid/testResults
@@ -65,6 +84,12 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/skuitems/testResult'
     }
+
+    const rfid = req.body["rfid"];
+    const idTestDesciptor = req.body["idTestDescriptor"];
+    const Date = req.body["Date"];
+    const Result = req.body["Result"];
+
     return res.status(200).json(message);
   });
   
@@ -73,6 +98,11 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/skuitems/:rfid/testResult/:id'
     }
+
+    const newIdTestDesciptor = req.body["newIdTestDescriptor"];
+    const newDate = req.body["newDate"];
+    const newResult = req.body["newResult"];
+
     return res.status(200).json(message);
   });
   
