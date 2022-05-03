@@ -7,6 +7,10 @@ router.get('/api/items', (req,res)=>{
     let message = {
       message: '/api/items'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -16,6 +20,10 @@ router.get('/api/items', (req,res)=>{
     let message = {
       message: '/api/items/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -24,6 +32,9 @@ router.get('/api/items', (req,res)=>{
     let message = {
       message: '/api/item'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
 
     const description = req.body["description"];
     const price = req.body["price"];
@@ -40,6 +51,9 @@ router.get('/api/items', (req,res)=>{
       message: '/api/sku/:id'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+
     const newDescription = req.body["newDescription"];
     const newPrice = req.body["newPrice"];
 
@@ -53,6 +67,10 @@ router.get('/api/items', (req,res)=>{
     let message = {
       message: '/api/items/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+    
     return res.status(200).json(message);
   });
 

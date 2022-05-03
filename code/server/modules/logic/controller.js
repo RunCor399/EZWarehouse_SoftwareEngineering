@@ -43,6 +43,11 @@ class Controller{
     getItemController(){
         return this.itemController;
     }
+
+    print(){
+        console.log("Test");
+    }
+
 }
 
 module.exports = Controller;

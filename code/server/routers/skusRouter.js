@@ -7,6 +7,10 @@ router.get('/api/skus', (req,res)=>{
     let message = {
       message: '/api/skus'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -16,6 +20,10 @@ router.get('/api/skus', (req,res)=>{
     let message = {
       message: '/api/skus/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -24,6 +32,9 @@ router.get('/api/skus', (req,res)=>{
     let message = {
       message: '/api/sku'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
 
     const description = req.body["description"];
     const weight = req.body["weight"];
@@ -41,6 +52,9 @@ router.get('/api/skus', (req,res)=>{
     let message = {
       message: '/api/sku/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
 
     const newDescription = req.body["newDescription"];
     const newWeight = req.body["newWeight"];
@@ -60,6 +74,9 @@ router.get('/api/skus', (req,res)=>{
       message: '/api/sku/:id/position'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+
     const position = req.body["position"];
 
     return res.status(200).json(message);
@@ -71,6 +88,10 @@ router.get('/api/skus', (req,res)=>{
     let message = {
       message: '/api/sku/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+    
     return res.status(200).json(message);
   });
 

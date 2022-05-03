@@ -12,6 +12,10 @@ router.get('/api/skuitems', (req,res)=>{
     let message = {
       message: '/api/skuitems'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -21,6 +25,10 @@ router.get('/api/skuitems', (req,res)=>{
     let message = {
       message: '/api/skuitems/sku/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -31,6 +39,9 @@ router.get('/api/skuitems', (req,res)=>{
       message: '/api/skuitems/:rfid'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -39,6 +50,9 @@ router.get('/api/skuitems', (req,res)=>{
     let message = {
       message: '/api/skuitem'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
 
     const RFID = req.body["RFID"];
     const SKUId = req.body["SKUId"];
@@ -54,6 +68,9 @@ router.get('/api/skuitems', (req,res)=>{
       message: '/api/skuitems/:rfid'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+
     const newRFID = req.body["newRFID"];
     const newSKUId = req.body["newSKUId"];
     const newDateOfStock = req.body["newDateOfStock"];
@@ -67,6 +84,10 @@ router.get('/api/skuitems', (req,res)=>{
     let message = {
       message: '/api/skuitems/:rfid'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+    
     return res.status(200).json(message);
   });
 

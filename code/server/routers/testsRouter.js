@@ -8,6 +8,10 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/testDescriptors'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -17,6 +21,10 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/testDescriptors/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -25,6 +33,8 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/testDescriptor'
     }
+    const controller = req.app.get("controller");
+    controller.print();
 
     const name = req.body["name"];
     const procedureDescription = req.body["procedureDescription"];
@@ -40,6 +50,9 @@ router.get('/api/testDescriptors', (req,res)=>{
       message: '/api/testDescriptor/:id'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+    
     const newName = req.body["newName"];
     const newProcedureDescription = req.body["newProcedureDescription"];
     const newIdSKU = req.body["newIdSKU"];
@@ -54,6 +67,10 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/testDescriptor/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -68,6 +85,10 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/skuitems/:rfid/testResults'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -76,6 +97,10 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/skuitems/:rfid/testResults/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -84,6 +109,9 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/skuitems/testResult'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
 
     const rfid = req.body["rfid"];
     const idTestDesciptor = req.body["idTestDescriptor"];
@@ -99,6 +127,9 @@ router.get('/api/testDescriptors', (req,res)=>{
       message: '/api/skuitems/:rfid/testResult/:id'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+
     const newIdTestDesciptor = req.body["newIdTestDescriptor"];
     const newDate = req.body["newDate"];
     const newResult = req.body["newResult"];
@@ -111,6 +142,10 @@ router.get('/api/testDescriptors', (req,res)=>{
     let message = {
       message: '/api/skuitems/:rfid/testResult/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+    
     return res.status(200).json(message);
   });
 

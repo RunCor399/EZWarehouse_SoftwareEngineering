@@ -9,6 +9,10 @@ router.route('/api/restockOrders')
     let message = {
       message: 'GET Restock Orders'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -18,6 +22,8 @@ router.route('/api/restockOrder')
     let message = {
       message: '/api/restockOrder'
     }
+    const controller = req.app.get("controller");
+    controller.print();
 
     const issueDate = req.body["issueDate"];
     const products = req.body["products"];
@@ -33,6 +39,10 @@ router.route('/api/restockOrder')
       let message = {
         message: "GET: "+param
       }
+
+      const controller = req.app.get("controller");
+      controller.print();
+
       return res.status(200).json(message);
     });
     
@@ -43,6 +53,9 @@ router.route('/api/restockOrder')
         message: "PUT /api/restockOrder/: "+param
       }
 
+      const controller = req.app.get("controller");
+      controller.print();
+
       const newState = req.body["newState"];
 
       return res.status(200).json(message);
@@ -52,6 +65,10 @@ router.route('/api/restockOrder')
       let message = {
         message: "DELETE /api/restockOrder/: "+param
       }
+
+      const controller = req.app.get("controller");
+      controller.print();
+
       return res.status(200).json(message);
     });
 
@@ -61,6 +78,10 @@ router.route('/api/restockOrder')
       let message = {
         message: "/api/restockOrdersIssued"
       }
+
+      const controller = req.app.get("controller");
+      controller.print();
+
       return res.status(200).json(message);
     });
 
@@ -71,6 +92,10 @@ router.route('/api/restockOrder')
       let message = {
         message: "/api/restockOrders/:id/returnItems"
       }
+
+      const controller = req.app.get("controller");
+      controller.print();
+
       return res.status(200).json(message);
     });
 
@@ -81,6 +106,10 @@ router.route('/api/restockOrder')
       let message = {
         message: "PUT /api/restockOrder/id/skuItems: "+param
       }
+      
+      const controller = req.app.get("controller");
+      controller.print();
+
       return res.status(200).json(message);
     });
 
@@ -91,6 +120,9 @@ router.route('/api/restockOrder')
       let message = {
         message: "PUT /api/restockOrder/id/transportNote: "+param
       }
+
+      const controller = req.app.get("controller");
+      controller.print();
 
       const transportNote = req.body["transportNote"];
 

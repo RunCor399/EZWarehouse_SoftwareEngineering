@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+ 
 
 //USER
 //GET /api/userinfo
@@ -9,6 +9,8 @@ router.get('/api/userinfo', (req,res)=>{
       message: '/api/userinfo'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
 
     return res.status(200).json(message);
   });
@@ -18,6 +20,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/suppliers'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -26,6 +32,10 @@ router.get('/api/userinfo', (req,res)=>{
         let message = {
           message: '/api/users'
         }
+
+        const controller = req.app.get("controller");
+        controller.print();
+
         return res.status(200).json(message);
       });
   
@@ -34,6 +44,9 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/newUser'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
 
     const username = req.body["username"];
     const name = req.body["name"];
@@ -49,6 +62,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/managerSessions'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -57,6 +74,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/customerSessions'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -65,6 +86,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/supplierSessions'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -73,6 +98,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/clerkSessions'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -81,6 +110,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/qualityEmployeeSessions'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -89,6 +122,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/deliveryEmployeeSessions'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
 
@@ -97,6 +134,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/logout'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+
     return res.status(200).json(message);
   });
   
@@ -108,6 +149,9 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/user/:username'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
 
     const oldType = req.body["oldType"];
     const newType = req.body["newType"];
@@ -122,6 +166,10 @@ router.get('/api/userinfo', (req,res)=>{
     let message = {
       message: '/api/user/:username/:type'
     }
+
+    const controller = req.app.get("controller");
+    controller.print();
+    
     return res.status(200).json(message);
   });
 

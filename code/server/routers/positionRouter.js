@@ -10,7 +10,8 @@ router.get('/api/positions', (req,res)=>{
       message: '/api/positions'
     }
 
-    controller.getPositionController().getAllPositions();
+    const controller = req.app.get("controller");
+    controller.print();
 
     return res.status(200).json(message);
   });
@@ -21,6 +22,9 @@ router.get('/api/positions', (req,res)=>{
       message: '/api/position'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+
     const positionID = req.body["positionID"];
     const aisleID = req.body["aisleID"];
     const row = req.body["row"];
@@ -28,8 +32,8 @@ router.get('/api/positions', (req,res)=>{
     const maxWeight = req.body["maxWeight"];
     const maxVolume = req.body["maxVolume"];
 
-    controller.getPositionController().createPosition();
 
+    
     return res.status(200).json(message);
   });
   
@@ -40,13 +44,15 @@ router.get('/api/positions', (req,res)=>{
       message: '/api/position/:positionID'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
+
     const newAisleID = req.body["newAisleID"];
     const newRow = req.body["newRow"];
     const newCol = req.body["newCol"];
     const newMaxWeight = req.body["newMaxWeight"];
     const newMaxVolume = req.body["newMaxVolume"];
 
-    controller.getPositionController().editPosition();
 
     return res.status(200).json(message);
   });
@@ -58,10 +64,11 @@ router.get('/api/positions', (req,res)=>{
       message: '/api/position/:positionID/changeID'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
     
     const newPositionID = req.body["newPositionID"];
 
-    console.log(req.body)
 
     return res.status(200).json(message);
   });
@@ -73,8 +80,10 @@ router.get('/api/positions', (req,res)=>{
       message: '/api/position/:positionID'
     }
 
+    const controller = req.app.get("controller");
+    controller.print();
 
-    controller.getPositionController().deletePosition();
+
     return res.status(200).json(message);
   });
 
