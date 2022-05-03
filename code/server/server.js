@@ -12,6 +12,7 @@ const restockOrderRouter = require('./routers/restockOrderRouter');
 const skusRouter = require('./routers/skusRouter');
 const skuItemsRouter = require('./routers/skuItemsRouter');
 const positionRouter = require('./routers/positionRouter');
+const returnOrderRouter = require('./routers/returnOrderRouter');
 
 //Controller
 const controller = new Controller();
@@ -21,6 +22,7 @@ app.use('/', restockOrderRouter);
 app.use('/', skusRouter);
 app.use('/', skuItemsRouter);
 app.use('/', positionRouter);
+app.use('/', returnOrderRouter);
 
 //GET /api/test
 app.get('/api/hello', (req,res)=>{
