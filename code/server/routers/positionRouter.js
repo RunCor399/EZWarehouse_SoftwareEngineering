@@ -1,5 +1,6 @@
+const { application } = require('express');
 const express = require('express')
-const router = express.Router()
+const router = express.Router
 
 
 //POSITION
@@ -8,6 +9,9 @@ router.get('/api/positions', (req,res)=>{
     let message = {
       message: '/api/positions'
     }
+
+    controller.getPositionController().getAllPositions();
+
     return res.status(200).json(message);
   });
   
@@ -16,6 +20,9 @@ router.get('/api/positions', (req,res)=>{
     let message = {
       message: '/api/position'
     }
+
+    controller.getPositionController().createPosition();
+
     return res.status(200).json(message);
   });
   
@@ -24,6 +31,9 @@ router.get('/api/positions', (req,res)=>{
     let message = {
       message: '/api/position/:positionID'
     }
+
+    controller.getPositionController().editPosition();
+
     return res.status(200).json(message);
   });
   
@@ -32,6 +42,8 @@ router.get('/api/positions', (req,res)=>{
     let message = {
       message: '/api/position/:positionID/changeID'
     }
+    controller.getPositionController().editPosition();
+
     return res.status(200).json(message);
   });
   
@@ -40,6 +52,8 @@ router.get('/api/positions', (req,res)=>{
     let message = {
       message: '/api/position/:positionID'
     }
+
+    controller.getPositionController().deletePosition();
     return res.status(200).json(message);
   });
 
