@@ -1,7 +1,7 @@
 'use strict'
 
 class TestController{
-    constructor() {
+    constructor(controller) {
         this.controller = controller;
         this.dbManager = controller.getDBManager();
         

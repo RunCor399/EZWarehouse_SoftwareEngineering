@@ -5,13 +5,16 @@ const router = express.Router()
 //USER
 //GET /api/userinfo
 router.get('/api/userinfo', (req,res)=>{
-    let message = {
-      message: '/api/userinfo'
-    }
+    
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-  controller.getUserController().getUser();
+  const session = controller.getUserController().getUser();
+
+  let message = {
+    username: session.username,
+    type: session.type
+  }
 
     return res.status(200).json(message);
   });

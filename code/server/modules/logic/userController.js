@@ -1,8 +1,10 @@
 'use strict'
 
+let session = { username: "", type: "" };
+
 
 class UserController{
-    constructor() {
+    constructor(controller) {
         this.controller = controller;
         this.dbManager = controller.getDBManager();
         
@@ -12,7 +14,7 @@ class UserController{
     }
     
     getUser(){
-        return undefined;
+        return session;
     }
 
     getAllSuppliers(){
@@ -30,7 +32,9 @@ class UserController{
     }
     
     
-    loginManager(username, password){
+    loginManager(username, password) {
+        session.username = username;
+        session.type = "manager"
         return undefined;
     }
     
