@@ -3,6 +3,9 @@
 
 class UserController{
     constructor() {
+        this.controller = controller;
+        this.dbManager = controller.getDBManager();
+        
         console.log("testController started");
      
         

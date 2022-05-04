@@ -3,82 +3,82 @@ const router = express.Router()
 
 //SKU
 //GET /api/items
-router.get('/api/items', (req,res)=>{
-    let message = {
-      message: '/api/items'
-    }
+router.get('/api/items',  (req, res) => {
+  let message = {
+    message: '/api/items'
+  }
 
-    const controller = req.app.get("controller");
+  const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getItemController().getAllItems();
+  const items = controller.getItemController().getAllItems();
 
-    return res.status(200).json(message);
-  });
-  
-  //GET /api/items/:id
-  router.get('/api/items/:id', (req,res)=>{
-    const param = req.params.id;
-    let message = {
-      message: '/api/items/:id'
-    }
+  return res.status(200).json(message);
+});
 
-    const controller = req.app.get("controller");
-    controller.testPrint(req.url);
-    controller.getItemController().getItem(param);
+//GET /api/items/:id
+router.get('/api/items/:id', (req, res) => {
+  const param = req.params.id;
+  let message = {
+    message: '/api/items/:id'
+  }
 
-    return res.status(200).json(message);
-  });
-  
-  //POST /api/item
-  router.post('/api/item', (req,res)=>{
-    let message = {
-      message: '/api/item'
-    }
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+  const item = controller.getItemController().getItem(param);
 
-    const controller = req.app.get("controller");
-controller.testPrint(req.url);
+  return res.status(200).json(message);
+});
 
-const description = req.body["description"];
-const price = req.body["price"];
-const SKUid = req.body["SKUId"]
-const supplierId = req.body["supplierID"];
+//POST /api/item
+router.post('/api/item', (req, res) => {
+  let message = {
+    message: '/api/item'
+  }
 
-    controller.getItemController().createItem(description, price, SKUid, supplierId);
-    
-    return res.status(200).json(message);
-  });
-  
-  //PUT /api/item/:id
-  router.put('/api/sku/:id', (req,res)=>{
-    const param = req.params.id;
-    let message = {
-      message: '/api/sku/:id'
-    }
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
 
-    const controller = req.app.get("controller");
-    controller.testPrint(req.url);
-    
-    const newDescription = req.body["newDescription"];
-    const newPrice = req.body["newPrice"];
-    
-    controller.getItemController().editItem(param, newDescription, newPrice);
+  const description = req.body["description"];
+  const price = req.body["price"];
+  const SKUid = req.body["SKUId"]
+  const supplierId = req.body["supplierID"];
 
-    return res.status(200).json(message);
-  });
-  
-  //DELETE /api/items/:id
-  router.delete('/api/items/:id', (req,res)=>{
-    const param = req.params.id;
-    let message = {
-      message: '/api/items/:id'
-    }
+  controller.getItemController().createItem(description, price, SKUid, supplierId);
 
-    const controller = req.app.get("controller");
-controller.testPrint(req.url);
-    controller.getItemController().deleteItem(param);
-    
-    return res.status(200).json(message);
-  });
+  return res.status(200).json(message);
+});
+
+//PUT /api/item/:id
+router.put('/api/sku/:id', (req, res) => {
+  const param = req.params.id;
+  let message = {
+    message: '/api/sku/:id'
+  }
+
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+
+  const newDescription = req.body["newDescription"];
+  const newPrice = req.body["newPrice"];
+
+  controller.getItemController().editItem(param, newDescription, newPrice);
+
+  return res.status(200).json(message);
+});
+
+//DELETE /api/items/:id
+router.delete('/api/items/:id', (req, res) => {
+  const param = req.params.id;
+  let message = {
+    message: '/api/items/:id'
+  }
+
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+  controller.getItemController().deleteItem(param);
+
+  return res.status(200).json(message);
+});
 
 
 module.exports = router

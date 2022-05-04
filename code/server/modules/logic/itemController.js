@@ -1,16 +1,35 @@
 'use strict'
 
+const DBManager = require("./databaseManager");
 class ItemController{
-    constructor() {
-        console.log("orderController started");
-    }
-    
-    getAllItems(){
-        return undefined;
+    constructor(controller) {
+        this.controller = controller;
+        this.dbManager = controller.getDBManager();
+        console.log("itemController started");
     }
 
-    getItem(id){
-        return undefined;
+    setController(controller) {
+        
+    }
+    
+    getAllItems() {
+        const sqlInstruction = "SELECT * FROM ITEM";
+        try {
+            const rows =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log(error);
+        }
+        return rows.map((row) => row);
+    }
+
+    getItem(id) {
+        const sqlInstruction = "SELECT *  FROM ITEM WHERE id=" + id;
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return item;
     }
 
     createItem(description, price, SKUid, supplierId){

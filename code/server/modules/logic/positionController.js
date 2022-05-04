@@ -2,6 +2,8 @@
 
 class PositionController{
     constructor() {
+        this.controller = controller;
+        this.dbManager = controller.getDBManager();
         console.log("positionController started");
     }
     
