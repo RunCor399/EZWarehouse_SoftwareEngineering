@@ -15,7 +15,7 @@ class ItemController{
     getAllItems() {
         const sqlInstruction = "SELECT * FROM ITEM";
         try {
-            const rows =  dbManager.genericSqlGet(sqlInstruction);
+            const rows = await dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -25,7 +25,7 @@ class ItemController{
     getItem(id) {
         const sqlInstruction = "SELECT *  FROM ITEM WHERE id=" + id;
         try {
-            const item =  dbManager.genericSqlGet(sqlInstruction);
+            const item =  await dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
