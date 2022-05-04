@@ -11,7 +11,8 @@ router.route('/api/restockOrders')
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getOrderController().getAllRestockOrders();
 
     return res.status(200).json(message);
   });
@@ -23,11 +24,12 @@ router.route('/api/restockOrder')
       message: '/api/restockOrder'
     }
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
     const issueDate = req.body["issueDate"];
     const products = req.body["products"];
     const supplierId = req.body["supplierId"]
+    
+    controller.getOrderController().createRestockOrder("");
 
     return res.status(200).json(message);
   });
@@ -41,7 +43,8 @@ router.route('/api/restockOrder')
       }
 
       const controller = req.app.get("controller");
-      controller.print();
+      controller.testPrint(req.url);
+      controller.getOrderController().getRestockOrder(param);
 
       return res.status(200).json(message);
     });
@@ -54,9 +57,10 @@ router.route('/api/restockOrder')
       }
 
       const controller = req.app.get("controller");
-      controller.print();
-
+      controller.testPrint(req.url);
+      
       const newState = req.body["newState"];
+      controller.getOrderController().editRestockOrder(param, newState)
 
       return res.status(200).json(message);
     })
@@ -67,7 +71,8 @@ router.route('/api/restockOrder')
       }
 
       const controller = req.app.get("controller");
-      controller.print();
+      controller.testPrint(req.url);
+      controller.getOrderController().deleteRestockOrder(param);
 
       return res.status(200).json(message);
     });
@@ -80,7 +85,8 @@ router.route('/api/restockOrder')
       }
 
       const controller = req.app.get("controller");
-      controller.print();
+      controller.testPrint(req.url);
+      controller.getOrderController().getIssuedRestockOrders();
 
       return res.status(200).json(message);
     });
@@ -94,8 +100,9 @@ router.route('/api/restockOrder')
       }
 
       const controller = req.app.get("controller");
-      controller.print();
-
+controller.testPrint(req.url);
+      controller.getOrderController().getRestockOrderToBeReturned(param);
+      
       return res.status(200).json(message);
     });
 
@@ -108,7 +115,10 @@ router.route('/api/restockOrder')
       }
       
       const controller = req.app.get("controller");
-      controller.print();
+      controller.testPrint(req.url);
+
+      const skuItems = req.body["skuItems"];
+      controller.getOrderController().addSkuItemsToRestockOrder(param, skuItems);
 
       return res.status(200).json(message);
     });
@@ -122,9 +132,10 @@ router.route('/api/restockOrder')
       }
 
       const controller = req.app.get("controller");
-      controller.print();
-
+      controller.testPrint(req.url);
       const transportNote = req.body["transportNote"];
+      
+      controller.getOrderController().addTransportNote(param, transportNote);
 
       return res.status(200).json(message);
     });

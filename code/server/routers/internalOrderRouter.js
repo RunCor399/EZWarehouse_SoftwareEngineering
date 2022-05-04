@@ -105,7 +105,7 @@ router.route('/api/internalOrder/:id')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getOrderController().deleteInternalOrder();
+    controller.getOrderController().deleteInternalOrder(param);
 
     return res.status(200).json(message);
   });

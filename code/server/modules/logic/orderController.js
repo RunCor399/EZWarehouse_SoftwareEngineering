@@ -25,7 +25,7 @@ class OrderController{
         return undefined;
     }
 
-    editRestockOrder(id){
+    editRestockOrder(id, newState){
         return undefined;
     }
 

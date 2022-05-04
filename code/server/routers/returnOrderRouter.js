@@ -10,7 +10,8 @@ router.route('/api/returnOrders')
         }
 
         const controller = req.app.get("controller");
-        controller.print();
+        controller.testPrint(req.url);
+        controller.getOrderController().getAllReturnOrders();
 
         return res.status(200).json(message);
     });
@@ -24,7 +25,8 @@ router.route('/api/returnOrders/:id')
         }
 
         const controller = req.app.get("controller");
-        controller.print();
+        controller.testPrint(req.url);
+        controller.getOrderController().getReturnOrder(param);
 
         return res.status(200).json(message);
     });
@@ -38,12 +40,12 @@ router.route('/api/returnOrder')
         }
 
         const controller = req.app.get("controller");
-        controller.print();
-
+        controller.testPrint(req.url);
         const returnDate = req.body["returnDate"];
         const products = req.body["products"];
         const restockOrderId = req.body["restockOrderId"];
-
+        
+        controller.getOrderController().createReturnOrder("");
         return res.status(200).json(message);
     });
 
@@ -55,7 +57,8 @@ router.route('/api/returnOrder/:id')
         }
 
         const controller = req.app.get("controller");
-        controller.print();
+        controller.testPrint(req.url);
+        controller.getOrderController().deleteReturnOrder(param);
         
         return res.status(200).json(message);
     });
