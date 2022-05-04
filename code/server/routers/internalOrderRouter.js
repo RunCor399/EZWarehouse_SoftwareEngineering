@@ -68,7 +68,7 @@ router.route('/api/internalOrder')
 
     const issueDate = req.body["issueDate"];
     const products = req.body["products"];
-    const customerId = req.body["supplierId"]
+    const customerId = req.body["customerId"]
 
     controller.getOrderController().createInternalOrder("");
 

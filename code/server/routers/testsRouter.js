@@ -10,7 +10,8 @@ router.get('/api/testDescriptors', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+  controller.testPrint(req.url);
+  controller.getTestController().getAllTestDescriptors();
 
     return res.status(200).json(message);
   });
@@ -23,7 +24,8 @@ router.get('/api/testDescriptors', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getTestController().getTestDescriptor(param);
 
     return res.status(200).json(message);
   });
@@ -34,8 +36,9 @@ router.get('/api/testDescriptors', (req,res)=>{
       message: '/api/testDescriptor'
     }
     const controller = req.app.get("controller");
-    controller.print();
-
+ controller.testPrint(req.url);
+    controller.getTestController().createTestDescriptor(param);
+    
     const name = req.body["name"];
     const procedureDescription = req.body["procedureDescription"];
     const idSKU = req.body["idSKU"];
@@ -51,12 +54,12 @@ router.get('/api/testDescriptors', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-    
+    controller.testPrint(req.url);
     const newName = req.body["newName"];
     const newProcedureDescription = req.body["newProcedureDescription"];
     const newIdSKU = req.body["newIdSKU"];
-
+    
+    controller.getTestController().editTestDescriptor("");    
 
     return res.status(200).json(message);
   });
@@ -69,7 +72,8 @@ router.get('/api/testDescriptors', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getTestController().deleteTestDescriptor(param);
 
     return res.status(200).json(message);
   });
@@ -81,26 +85,30 @@ router.get('/api/testDescriptors', (req,res)=>{
   
   //TEST RESULT
   //GET /api/skuitems/:rfid/testResults
-  router.get('/api/skuitems/:rfid/testResults', (req,res)=>{
+router.get('/api/skuitems/:rfid/testResults', (req, res) => {
+  const param = req.params.rfid;
     let message = {
       message: '/api/skuitems/:rfid/testResults'
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+  controller.getTestController().getTestResults(param);
 
     return res.status(200).json(message);
   });
   
   //GET /api/skuitems/:rfid/testResults/:id
-  router.get('/api/skuitems/:rfid/testResults/:id', (req,res)=>{
+router.get('/api/skuitems/:rfid/testResults/:id', (req, res) => {
+  const paramRfid = req.params.rfid;
+  const paramId = req.params.id;
     let message = {
       message: '/api/skuitems/:rfid/testResults/:id'
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+  controller.getTestController().getTestResult(paramRfid, paramId);
     return res.status(200).json(message);
   });
   
@@ -111,41 +119,46 @@ router.get('/api/testDescriptors', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
 
     const rfid = req.body["rfid"];
     const idTestDesciptor = req.body["idTestDescriptor"];
     const Date = req.body["Date"];
     const Result = req.body["Result"];
-
+    
+    controller.getTestController().createTestResult("");
     return res.status(200).json(message);
   });
   
   //PUT /api/skuitems/:rfid/testResult/:id
-  router.put('/api/skuitems/:rfid/testResult/:id', (req,res)=>{
+router.put('/api/skuitems/:rfid/testResult/:id', (req, res) => {
+  const paramRfid = req.params.rfid;
+  const paramId = req.params.id;
     let message = {
       message: '/api/skuitems/:rfid/testResult/:id'
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
     const newIdTestDesciptor = req.body["newIdTestDescriptor"];
     const newDate = req.body["newDate"];
     const newResult = req.body["newResult"];
-
+    
+  controller.getTestController().editTestResult(paramRfid, paramId, "");
     return res.status(200).json(message);
   });
   
   //DELETE /api/skuitems/:rfid/testResult/:id
-  router.delete('/api/skuitems/:rfid/testResult/:id', (req,res)=>{
+router.delete('/api/skuitems/:rfid/testResult/:id', (req, res) => {
+  const paramRfid = req.params.rfid;
+  const paramId = req.params.id;
     let message = {
       message: '/api/skuitems/:rfid/testResult/:id'
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-    
+    controller.testPrint(req.url);
+  controller.getTestController().deleteTestResult(paramRfid, paramId);
     return res.status(200).json(message);
   });
 

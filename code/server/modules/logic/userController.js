@@ -12,21 +12,20 @@ class UserController{
         return undefined;
     }
 
+    getAllSuppliers(){
+        return undefined;
+    }
+
     getAllUsers(){
         return undefined;
     }
+
+    
 
     createUser(body){
         return undefined;
     }
     
-    getAllSuppliers(){
-        return undefined;
-    }
-
-    loginClerk(username, password){
-        return undefined;
-    }
     
     loginManager(username, password){
         return undefined;
@@ -39,8 +38,16 @@ class UserController{
     loginSupplier(username, password){
         return undefined;
     }
+
+    loginClerk(username, password){
+        return undefined;
+    }
     
     loginQualityEmployee(username, password){
+        return undefined;
+    }
+
+    loginDeliveryEmployee(username, password){
         return undefined;
     }
 
@@ -52,7 +59,7 @@ class UserController{
         return undefined;
     }
 
-    deleteUser(username, body){
+    deleteUser(username, type){
         return undefined;
     }
 

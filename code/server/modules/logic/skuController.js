@@ -45,7 +45,7 @@ class SkuController{
         return undefined;
     }
 
-    editSkuItem(rfid){
+    editSkuItem(rfid, body){
         return undefined;
     }
 

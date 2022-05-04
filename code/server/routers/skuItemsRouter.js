@@ -14,8 +14,9 @@ router.get('/api/skuitems', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+  controller.getSkuController().getAllSkuItems();
+  
     return res.status(200).json(message);
   });
   
@@ -27,7 +28,8 @@ router.get('/api/skuitems', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getSkuController().getSkuItems(param);
 
     return res.status(200).json(message);
   });
@@ -40,8 +42,9 @@ router.get('/api/skuitems', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+controller.testPrint(req.url);
+    controller.getSkuController().getSkuItem(param);
+    
     return res.status(200).json(message);
   });
   
@@ -52,11 +55,13 @@ router.get('/api/skuitems', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+    
     const RFID = req.body["RFID"];
     const SKUId = req.body["SKUId"];
     const DateOfStock = req.body["DateOfStock"];
+    
+    controller.getSkuController().createSkuItem("");
 
     return res.status(200).json(message);
   });
@@ -69,12 +74,14 @@ router.get('/api/skuitems', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+controller.testPrint(req.url);
 
-    const newRFID = req.body["newRFID"];
-    const newSKUId = req.body["newSKUId"];
-    const newDateOfStock = req.body["newDateOfStock"];
+const newRFID = req.body["newRFID"];
+const newSKUId = req.body["newSKUId"];
+const newDateOfStock = req.body["newDateOfStock"];
 
+    controller.getSkuController().editSkuItem(param, "")
+    
     return res.status(200).json(message);
   });
   
@@ -86,7 +93,8 @@ router.get('/api/skuitems', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getSkuController().deleteSkuItem(param);
     
     return res.status(200).json(message);
   });

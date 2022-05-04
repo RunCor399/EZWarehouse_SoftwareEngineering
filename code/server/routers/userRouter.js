@@ -10,7 +10,8 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+  controller.getUserController().getUser();
 
     return res.status(200).json(message);
   });
@@ -22,7 +23,8 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getUserController().getAllSuppliers();
 
     return res.status(200).json(message);
   });
@@ -34,8 +36,9 @@ router.get('/api/userinfo', (req,res)=>{
         }
 
         const controller = req.app.get("controller");
-        controller.print();
-
+        controller.testPrint(req.url);
+      controller.getUserController().getAllUsers();
+      
         return res.status(200).json(message);
       });
   
@@ -46,13 +49,15 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+    
     const username = req.body["username"];
     const name = req.body["name"];
     const surname = req.body["surname"];
     const password = req.body["password"];
     const type = req.body["type"];
+    
+    controller.getUserController().createUser("");
 
     return res.status(200).json(message);
   });
@@ -64,8 +69,13 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+   controller.testPrint(req.url);
+   
+   const username = req.body["username"];
+   const password = req.body["password"];
 
+   controller.getUserController().loginManager(username, password);
+   
     return res.status(200).json(message);
   });
   
@@ -76,8 +86,12 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+   
+    const username = req.body["username"];
+    const password = req.body["password"];
+ 
+    controller.getUserController().loginCustomer(username, password);
     return res.status(200).json(message);
   });
 
@@ -88,8 +102,12 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+   
+    const username = req.body["username"];
+    const password = req.body["password"];
+ 
+    controller.getUserController().loginSupplier(username, password);
     return res.status(200).json(message);
   });
 
@@ -100,8 +118,12 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+   
+    const username = req.body["username"];
+    const password = req.body["password"];
+ 
+    controller.getUserController().loginClerk(username, password);
     return res.status(200).json(message);
   });
 
@@ -112,8 +134,12 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+   
+    const username = req.body["username"];
+    const password = req.body["password"];
+ 
+    controller.getUserController().loginQualityEmployee(username, password);
     return res.status(200).json(message);
   });
 
@@ -124,8 +150,12 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+   
+    const username = req.body["username"];
+    const password = req.body["password"];
+ 
+    controller.getUserController().loginDeliveryEmployee(username, password);
     return res.status(200).json(message);
   });
 
@@ -136,8 +166,9 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+     controller.getUserController().logout();
+     
     return res.status(200).json(message);
   });
   
@@ -151,10 +182,12 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+    
     const oldType = req.body["oldType"];
     const newType = req.body["newType"];
+    
+    controller.getUserController().editUser(param, "");
 
     return res.status(200).json(message);
   });
@@ -168,7 +201,8 @@ router.get('/api/userinfo', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getUserController().deleteUser(paramUsername, paramType);
     
     return res.status(200).json(message);
   });
