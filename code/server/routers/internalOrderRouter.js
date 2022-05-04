@@ -102,7 +102,7 @@ router.route('/api/internalOrder/:id')
   .delete((req, res) => {
     const param = req.params.id;
     let message = {
-      message: "DELETE /api/restockOrder/: " + param
+      message: "DELETE /api/internalOrder/: " + param
     }
 
     const controller = req.app.get("controller");
