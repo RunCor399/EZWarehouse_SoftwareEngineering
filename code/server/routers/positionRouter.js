@@ -32,7 +32,7 @@ router.get('/api/positions', (req,res)=>{
     const maxWeight = req.body["maxWeight"];
     const maxVolume = req.body["maxVolume"];
     
-    controller.getPositionController().createPosition("");
+    controller.getPositionController().createPosition(positionID, aisleID, row, col, maxWeight, maxVolume);
     
     
     return res.status(200).json(message);
@@ -53,7 +53,7 @@ router.get('/api/positions', (req,res)=>{
     const newMaxWeight = req.body["newMaxWeight"];
     const newMaxVolume = req.body["newMaxVolume"];
     
-    controller.getPositionController().editPosition(param, "")
+    controller.getPositionController().editPosition(param, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume)
 
     return res.status(200).json(message);
   });

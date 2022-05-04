@@ -37,13 +37,14 @@ router.get('/api/items', (req,res)=>{
 
     const controller = req.app.get("controller");
 controller.testPrint(req.url);
-    controller.getItemController().createItem("");
-    
-    const description = req.body["description"];
-    const price = req.body["price"];
-    const SKUid = req.body["SKUId"]
-    const supplierId = req.body["supplierID"];
 
+const description = req.body["description"];
+const price = req.body["price"];
+const SKUid = req.body["SKUId"]
+const supplierId = req.body["supplierID"];
+
+    controller.getItemController().createItem(description, price, SKUid, supplierId);
+    
     return res.status(200).json(message);
   });
   
@@ -56,11 +57,11 @@ controller.testPrint(req.url);
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getItemController().editItem(param, "");
-
+    
     const newDescription = req.body["newDescription"];
     const newPrice = req.body["newPrice"];
-
+    
+    controller.getItemController().editItem(param, newDescription, newPrice);
 
     return res.status(200).json(message);
   });

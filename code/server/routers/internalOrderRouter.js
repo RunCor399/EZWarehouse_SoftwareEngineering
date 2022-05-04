@@ -70,7 +70,7 @@ router.route('/api/internalOrder')
     const products = req.body["products"];
     const customerId = req.body["customerId"]
 
-    controller.getOrderController().createInternalOrder("");
+    controller.getOrderController().createInternalOrder(issueDate, products, customerId);
 
 
     return res.status(200).json(message);
@@ -90,9 +90,11 @@ router.route('/api/internalOrder/:id')
 
     if (newState === "COMPLETED") {
       const products = req.body["products"];
+      controller.getOrderController().editIntenalOrder(param, newState, products);
     }
+    else controller.getOrderController().editIntenalOrder(param, newState);
 
-    controller.getOrderController().editIntenalOrder(param, "");
+
 
 
     return res.status(200).json(message);

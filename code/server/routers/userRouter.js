@@ -57,7 +57,8 @@ router.get('/api/userinfo', (req,res)=>{
     const password = req.body["password"];
     const type = req.body["type"];
     
-    controller.getUserController().createUser("");
+    controller.getUserController().createUser(username, name,
+    surname, password, type);
 
     return res.status(200).json(message);
   });
@@ -187,7 +188,7 @@ router.get('/api/userinfo', (req,res)=>{
     const oldType = req.body["oldType"];
     const newType = req.body["newType"];
     
-    controller.getUserController().editUser(param, "");
+    controller.getUserController().editUser(param, oldType, newType);
 
     return res.status(200).json(message);
   });

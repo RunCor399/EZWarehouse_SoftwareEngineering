@@ -29,7 +29,7 @@ router.route('/api/restockOrder')
     const products = req.body["products"];
     const supplierId = req.body["supplierId"]
     
-    controller.getOrderController().createRestockOrder("");
+    controller.getOrderController().createRestockOrder(issueDate, products, supplierId);
 
     return res.status(200).json(message);
   });

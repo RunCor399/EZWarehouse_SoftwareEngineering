@@ -45,7 +45,7 @@ router.route('/api/returnOrder')
         const products = req.body["products"];
         const restockOrderId = req.body["restockOrderId"];
         
-        controller.getOrderController().createReturnOrder("");
+        controller.getOrderController().createReturnOrder(returnDate, products, restockOrderId);
         return res.status(200).json(message);
     });
 

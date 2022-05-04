@@ -59,9 +59,9 @@ controller.testPrint(req.url);
     
     const RFID = req.body["RFID"];
     const SKUId = req.body["SKUId"];
-    const DateOfStock = req.body["DateOfStock"];
+    const dateOfStock = req.body["DateOfStock"];
     
-    controller.getSkuController().createSkuItem("");
+    controller.getSkuController().createSkuItem(RFID, SKUId, dateOfStock);
 
     return res.status(200).json(message);
   });
@@ -80,7 +80,7 @@ const newRFID = req.body["newRFID"];
 const newSKUId = req.body["newSKUId"];
 const newDateOfStock = req.body["newDateOfStock"];
 
-    controller.getSkuController().editSkuItem(param, "")
+    controller.getSkuController().editSkuItem(param, newRFID, newSKUId, newDateOfStock)
     
     return res.status(200).json(message);
   });

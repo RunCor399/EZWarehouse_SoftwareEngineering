@@ -9,15 +9,15 @@ class PositionController{
         return undefined;
     }
 
-    createPosition(body){
+    createPosition(positionID, aisleID, row, col, maxWeight, maxVolume){
+        return undefined;
+    }
+    
+    editPosition(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume){
         return undefined;
     }
 
     editPosition(oldId, newId){
-        return undefined;
-    }
-    
-    editPosition(id, body){
         return undefined;
     }
 

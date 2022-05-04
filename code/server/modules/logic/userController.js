@@ -22,7 +22,7 @@ class UserController{
 
     
 
-    createUser(body){
+    createUser(username, name, surname, password, type){
         return undefined;
     }
     
@@ -55,7 +55,7 @@ class UserController{
         return undefined;
     }
 
-    editUser(username, body){
+    editUser(username, oldType, newType){
         return undefined;
     }
 

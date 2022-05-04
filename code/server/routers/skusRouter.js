@@ -45,7 +45,7 @@ router.post('/api/sku', (req, res) => {
   const price = req.body["price"];
   const availableQuantity = req.body["availableQuantity"];
 
-  controller.getSkuController().createSku("");
+  controller.getSkuController().createSku(description, weight, volume, notes, price, availableQuantity);
   return res.status(200).json(message);
 });
 
@@ -65,7 +65,7 @@ router.put('/api/sku/:id', (req, res) => {
   const newPrice = req.body["newPrice"];
   const newAvailableQuantity = req.body["newAvailableQuantity"];
 
-  controller.getSkuController().editSku(param, "");
+  controller.getSkuController().editSku(param, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity);
 
   return res.status(200).json(message);
 });
@@ -82,7 +82,7 @@ router.put('/api/sku/:id', (req, res) => {
 
   const position = req.body["position"];
 
-  controller.getSkuController().setPosition(param, "");
+  controller.getSkuController().setPosition(param, position);
   return res.status(200).json(message);
 });
 
