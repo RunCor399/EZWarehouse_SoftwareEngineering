@@ -11,8 +11,9 @@ router.get('/api/positions', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+  controller.getPositionController().getAllPositions();
+  
     return res.status(200).json(message);
   });
   
@@ -23,16 +24,16 @@ router.get('/api/positions', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
     const positionID = req.body["positionID"];
     const aisleID = req.body["aisleID"];
     const row = req.body["row"];
     const col = req.body["col"];
     const maxWeight = req.body["maxWeight"];
     const maxVolume = req.body["maxVolume"];
-
-
+    
+    controller.getPositionController().createPosition("");
+    
     
     return res.status(200).json(message);
   });
@@ -45,14 +46,14 @@ router.get('/api/positions', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
     const newAisleID = req.body["newAisleID"];
     const newRow = req.body["newRow"];
     const newCol = req.body["newCol"];
     const newMaxWeight = req.body["newMaxWeight"];
     const newMaxVolume = req.body["newMaxVolume"];
-
+    
+    controller.getPositionController().editPosition(param, "")
 
     return res.status(200).json(message);
   });
@@ -65,9 +66,9 @@ router.get('/api/positions', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-    
+    controller.testPrint(req.url);
     const newPositionID = req.body["newPositionID"];
+    controller.getPositionController().editPosition(param, newPositionID);    
 
 
     return res.status(200).json(message);
@@ -81,8 +82,8 @@ router.get('/api/positions', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+    controller.testPrint(req.url);
+    controller.getPositionController().deletePosition(param);
 
     return res.status(200).json(message);
   });

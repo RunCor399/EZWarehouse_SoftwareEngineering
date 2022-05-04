@@ -44,8 +44,12 @@ class Controller{
         return this.itemController;
     }
 
-    print(){
-        console.log("Test");
+    testPrint(string){
+        console.log(string);
+    }
+
+    print() {
+        console.log("Test"); //DEPRECATED
     }
 
 }

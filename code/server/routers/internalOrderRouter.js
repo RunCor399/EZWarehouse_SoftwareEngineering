@@ -11,7 +11,8 @@ router.route('/api/internalOrders')
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getOrderController().getAllInternalOrders();
 
     return res.status(200).json(message);
   });
@@ -23,7 +24,8 @@ router.route('/api/internalOrdersIssued')
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getOrderController().getIssuedInternalOrders();
 
     return res.status(200).json(message);
   });
@@ -35,7 +37,8 @@ router.route('/api/internalOrdersAccepted')
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getOrderController().getAcceptedInternalOrders();
 
     return res.status(200).json(message);
   });
@@ -48,7 +51,8 @@ router.route('/api/internalOrders/:id')
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getOrderController().getInternalOrder(param);
 
     return res.status(200).json(message);
   });
@@ -60,10 +64,14 @@ router.route('/api/internalOrder')
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+
     const issueDate = req.body["issueDate"];
     const products = req.body["products"];
     const customerId = req.body["supplierId"]
+
+    controller.getOrderController().createInternalOrder("");
+
 
     return res.status(200).json(message);
   });
@@ -76,13 +84,15 @@ router.route('/api/internalOrder/:id')
       message: "PUT /api/internalOrder/: " + param
     }
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
 
     const newState = req.body["newState"];
 
     if (newState === "COMPLETED") {
       const products = req.body["products"];
     }
+
+    controller.getOrderController().editIntenalOrder(param, "");
 
 
     return res.status(200).json(message);
@@ -94,7 +104,8 @@ router.route('/api/internalOrder/:id')
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getOrderController().deleteInternalOrder();
 
     return res.status(200).json(message);
   });

@@ -13,7 +13,7 @@ class PositionController{
         return undefined;
     }
 
-    editPosition(id){
+    editPosition(oldId, newId){
         return undefined;
     }
     

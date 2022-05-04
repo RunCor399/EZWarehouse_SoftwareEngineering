@@ -9,7 +9,8 @@ router.get('/api/items', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+  controller.testPrint(req.url);
+  controller.getItemController().getAllItems();
 
     return res.status(200).json(message);
   });
@@ -22,7 +23,8 @@ router.get('/api/items', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getItemController().getItem(param);
 
     return res.status(200).json(message);
   });
@@ -34,8 +36,9 @@ router.get('/api/items', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
-
+controller.testPrint(req.url);
+    controller.getItemController().createItem("");
+    
     const description = req.body["description"];
     const price = req.body["price"];
     const SKUid = req.body["SKUId"]
@@ -52,7 +55,8 @@ router.get('/api/items', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+    controller.testPrint(req.url);
+    controller.getItemController().editItem(param, "");
 
     const newDescription = req.body["newDescription"];
     const newPrice = req.body["newPrice"];
@@ -69,7 +73,8 @@ router.get('/api/items', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.print();
+controller.testPrint(req.url);
+    controller.getItemController().deleteItem(param);
     
     return res.status(200).json(message);
   });
