@@ -43,6 +43,15 @@ class Controller{
     getItemController(){
         return this.itemController;
     }
+
+    testPrint(string){
+        console.log(string);
+    }
+
+    print() {
+        console.log("Test"); //DEPRECATED
+    }
+
 }
 
 module.exports = Controller;

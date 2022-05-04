@@ -10,8 +10,10 @@ router.get('/api/positions', (req,res)=>{
       message: '/api/positions'
     }
 
-    controller.getPositionController().getAllPositions();
-
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+  controller.getPositionController().getAllPositions();
+  
     return res.status(200).json(message);
   });
   
@@ -21,39 +23,68 @@ router.get('/api/positions', (req,res)=>{
       message: '/api/position'
     }
 
-    controller.getPositionController().createPosition();
-
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    const positionID = req.body["positionID"];
+    const aisleID = req.body["aisleID"];
+    const row = req.body["row"];
+    const col = req.body["col"];
+    const maxWeight = req.body["maxWeight"];
+    const maxVolume = req.body["maxVolume"];
+    
+    controller.getPositionController().createPosition(positionID, aisleID, row, col, maxWeight, maxVolume);
+    
+    
     return res.status(200).json(message);
   });
   
   //PUT /api/position/:positionID
   router.put('/api/position/:positionID', (req,res)=>{
+    const param = req.params.positionID;
     let message = {
       message: '/api/position/:positionID'
     }
 
-    controller.getPositionController().editPosition();
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    const newAisleID = req.body["newAisleID"];
+    const newRow = req.body["newRow"];
+    const newCol = req.body["newCol"];
+    const newMaxWeight = req.body["newMaxWeight"];
+    const newMaxVolume = req.body["newMaxVolume"];
+    
+    controller.getPositionController().editPosition(param, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume)
 
     return res.status(200).json(message);
   });
   
   //PUT /api/position/:positionID/changeID
   router.put('/api/position/:positionID/changeID', (req,res)=>{
+    const param = req.params.positionID;
     let message = {
       message: '/api/position/:positionID/changeID'
     }
-    controller.getPositionController().editPosition();
+
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    const newPositionID = req.body["newPositionID"];
+    controller.getPositionController().editPosition(param, newPositionID);    
+
 
     return res.status(200).json(message);
   });
   
   //DELETE /api/position/:positionID
   router.delete('/api/position/:positionID', (req,res)=>{
+    const param = req.params.positionID;
     let message = {
       message: '/api/position/:positionID'
     }
 
-    controller.getPositionController().deletePosition();
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    controller.getPositionController().deletePosition(param);
+
     return res.status(200).json(message);
   });
 

@@ -13,15 +13,15 @@ class SkuController{
         return undefined;
     }
 
-    createSku(body){
+    createSku(description, weight, volume, notes, price, availableQuantity){
         return undefined;
     }
 
-    editSku(body){
+    editSku(id, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity){
         return undefined;
     }
 
-    setPosition(id, body){
+    setPosition(id, position){
         return undefined;
     }
 
@@ -41,11 +41,11 @@ class SkuController{
         return undefined;
     }
 
-    createSkuItem(body){
+    createSkuItem(RFID, SKUId, dateOfStock){
         return undefined;
     }
 
-    editSkuItem(rfid){
+    editSkuItem(oldRFID, newRFID, newSKUId, newDateOfStock){
         return undefined;
     }
 

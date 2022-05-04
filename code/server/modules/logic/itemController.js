@@ -13,11 +13,11 @@ class ItemController{
         return undefined;
     }
 
-    createItem(body){
+    createItem(description, price, SKUid, supplierId){
         return undefined;
     }
 
-    editItem(id, body){
+    editItem(id, newDescription, newPrice){
         return undefined;
     }
 
