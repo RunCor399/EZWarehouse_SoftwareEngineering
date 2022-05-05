@@ -1,3 +1,4 @@
+const MD5 = require("crypto-js/md5")
 const express = require('express')
 const router = express.Router()
 
@@ -56,8 +57,8 @@ router.get('/api/userinfo', (req,res)=>{
     const username = req.body["username"];
     const name = req.body["name"];
     const surname = req.body["surname"];
-    const password = req.body["password"]; //to be hashed
-    
+    const password = MD5(req.body["password"]).toString();
+
     const type = req.body["type"];
     
     controller.getUserController().createUser(username, name,
@@ -76,8 +77,7 @@ router.get('/api/userinfo', (req,res)=>{
    controller.testPrint(req.url);
    
    const username = req.body["username"];
-   const password = req.body["password"]; //to be hashed
-    
+   const password = MD5(req.body["password"]).toString(); 
 
    controller.getUserController().loginManager(username, password);
    
@@ -94,8 +94,7 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"]; //to be hashed
-    
+const password = MD5(req.body["password"]).toString();    
  
     controller.getUserController().loginCustomer(username, password);
     return res.status(200).json(message);
@@ -111,8 +110,7 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"]; //to be hashed
-    
+    const password = MD5(req.body["password"]).toString();    
  
     controller.getUserController().loginSupplier(username, password);
     return res.status(200).json(message);
@@ -128,8 +126,7 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"]; //to be hashed
-    
+    const password = MD5(req.body["password"]).toString();    
  
     controller.getUserController().loginClerk(username, password);
     return res.status(200).json(message);
@@ -145,8 +142,7 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"]; //to be hashed
-    
+    const password = MD5(req.body["password"]).toString();    
 
     controller.getUserController().loginQualityEmployee(username, password);
     return res.status(200).json(message);
@@ -162,8 +158,7 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"]; //to be hashed
-    
+    const password = MD5(req.body["password"]).toString();    
  
     controller.getUserController().loginDeliveryEmployee(username, password);
     return res.status(200).json(message);
