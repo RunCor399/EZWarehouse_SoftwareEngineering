@@ -58,6 +58,10 @@ class Controller{
         console.log("Test"); //DEPRECATED
     }
 
+    getSession() {
+        return this.userController.getSession();
+    }
+
 }
 
 module.exports = Controller;

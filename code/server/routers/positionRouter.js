@@ -11,7 +11,13 @@ router.get('/api/positions', (req,res)=>{
     }
 
     const controller = req.app.get("controller");
-    controller.testPrint(req.url);
+  controller.testPrint(req.url);
+  
+  const session = controller.getSession();
+  controller.testPrint(session.username);
+  controller.testPrint(session.type);
+
+
     controller.getPositionController().getAllPositions();
   
   return res.status(200).json(message);
