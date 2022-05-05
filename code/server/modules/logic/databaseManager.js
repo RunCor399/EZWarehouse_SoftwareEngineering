@@ -27,7 +27,7 @@ class DBManager {
 
     genericSqlGet(istruzione) {
         return new Promise((resolve, reject) => {
-            db.all(sql, (err, rows) => {
+            db.all(istruzione, (err, rows) => {
                 if (err) {
                     reject(err);
                 } else {

@@ -6,9 +6,6 @@ class ItemController{
         console.log("itemController started");
     }
 
-    setController(controller) {
-        
-    }
     
     getAllItems() {
         const sqlInstruction = "SELECT * FROM ITEM";
