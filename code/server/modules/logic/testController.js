@@ -11,11 +11,23 @@ class TestController{
     }
 
     getAllTestDescriptors(){
-        return undefined;
+        const sqlInstruction = "SELECT * FROM TESTDESCRIPTOR";
+        try {
+            const rows =   dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log(error);
+        }
+        return rows.map((row) => row);
     }
 
     getTestDesciptor(id){
-        return undefined;
+        const sqlInstruction = "SELECT *  FROM TESTDESCRIPTOR WHERE id=" + id;
+        try {
+            const testDescriptor =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return testDescriptor;
     }
     
     createTestDescriptor(name, procedureDescription, idSKU){
@@ -27,7 +39,13 @@ class TestController{
     }
 
     deleteTestDescriptor(id){
-        return undefined;
+        const sqlInstruction = "DELETE FROM TESTDESCRIPTOR WHERE id=" + id;
+        try {
+            const testDescriptor =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return testDescriptor;
     }
 
     getTestResults(rfid){
