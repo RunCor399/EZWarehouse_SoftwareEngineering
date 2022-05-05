@@ -8,19 +8,15 @@ router.get('/api/skus', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const session = controller.getSession();
-  if (session.type !== "" && (session.type === "manager" || session.type === "customer" || session.type === "clerk")) {
+
+  try {
     controller.getSkuController().getAllSku();
-    return res.status(200).json({ message: '/api/skus' });
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
-  else {
-    return res.status(401).json({ message: "error" });
-  }
 
-
-  //Internal server error
-  //return res.status(500)
-
+  return res.status(200).json({ message: '/api/skus' });
 });
 
 //GET /api/skus/:id
@@ -29,24 +25,16 @@ router.get('/api/skus/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const session = controller.getSession();
-  if (session.type !== "" && session.type === "manager") {
+
+  try {
     controller.getSkuController().getSku(param);
-    return res.status(200).json({ message: '/api/skus/:id' });
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
-  else {
-    return res.status(401).json({ message: "error" });
-  }
 
+  return res.status(200).json({ message: '/api/skus/:id' });
 
-  //not found
-  //return res.status(404);
-
-  //unprocessable entity
-  //return res.status(422);
-
-  //Internal server error
-  //return res.status(500)
 });
 
 //POST /api/sku
@@ -61,14 +49,17 @@ router.post('/api/sku', (req, res) => {
   const price = req.body["price"];
   const availableQuantity = req.body["availableQuantity"];
 
-  const session = controller.getSession();
-  if (session.type !== "" && session.type === "manager" ) {
+
+  try {
     controller.getSkuController().createSku(description, weight, volume, notes, price, availableQuantity);
-    return res.status(200).json({ message: '/api/sku' });
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
-  else {
-    return res.status(401).json({ message: "error" });
-  }
+
+  return res.status(200).json({ message: '/api/sku' });
+
+
 
   //unprocessable entity
   //return res.status(422);
@@ -93,23 +84,15 @@ router.put('/api/sku/:id', (req, res) => {
   const newPrice = req.body["newPrice"];
   const newAvailableQuantity = req.body["newAvailableQuantity"];
 
-  const session = controller.getSession();
-  if (session.type !== "" && session.type === "manager") {
+
+  try {
     controller.getSkuController().editSku(param, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity);
-    return res.status(200).json({ message: '/api/sku/:id' });
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
-  else {
-    return res.status(401).json({ message: "error" });
-  }
+  return res.status(200).json({ message: '/api/sku/:id' });
 
-  //not found
-  //return res.status(404);
-
-  //unprocessable entity
-  //return res.status(422);
-
-  //service unavalaible
-  //return res.status(503)
 });
 
 //PUT /api/sku/:id/position
@@ -123,24 +106,15 @@ router.put('/api/sku/:id', (req, res) => {
   controller.testPrint(req.url);
 
   const position = req.body["position"];
-  const session = controller.getSession();
-  if (session.type !== "" && session.type === "manager") {
+
+
+  try {
     controller.getSkuController().setPosition(param, position);
-    return res.status(200).json({ message: '/api/sku/:id' });
+
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
-  else {
-    return res.status(401).json({ message: "error" });
-  }
-
-
-  //not found
-  //return res.status(404);
-
-  //unprocessable entity
-  //return res.status(422);
-
-  //service unavailable
-  //return res.status(503)
 
 
 });
@@ -156,20 +130,15 @@ router.delete('/api/sku/:id', (req, res) => {
   controller.testPrint(req.url);
   const session = controller.getSession();
 
-  if (session.type !== "" && session.type === "manager") {
+  try {
     controller.getSkuController().deleteSku(param);
-    return res.status(204).json({ message: '/api/sku/:id' });
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
-  else {
-    return res.status(401).json({ message: "error" });
-  }
 
+  return res.status(204).json({ message: '/api/sku/:id' });
 
-  //unprocessable entity
-  //return res.status(422);
-
-  //service unavailable
-  //return res.status(503)
 });
 
 

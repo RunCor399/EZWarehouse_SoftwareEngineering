@@ -14,10 +14,8 @@ router.get('/api/userinfo', (req, res) => {
   try {
     const session = controller.getUserController().getUser();
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   let message = {
@@ -39,10 +37,8 @@ router.get('/api/suppliers', (req, res) => {
   try {
     const supplier = controller.getUserController().getAllSuppliers();
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   let message = {
@@ -69,10 +65,8 @@ router.get('/api/users', (req, res) => {
   try {
     controller.getUserController().getAllUsers();
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(200).json(message);
@@ -98,17 +92,8 @@ router.post('/api/newUser', (req, res) => {
     controller.getUserController().createUser(username, name,
       surname, password, type);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message409)
-      return res.status(409).send(Exceptions.message409)
-
-    else if (error.message === Exceptions.message422)
-      return res.status(422).send(Exceptions.message409)
-
-    else if (error.message === Exceptions.message503)
-      return res.status(503).send(Exceptions.message503)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(201).json(message);
@@ -129,11 +114,8 @@ router.post('/api/managerSessions', (req, res) => {
   try {
     controller.getUserController().loginManager(username, password);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(200).json(message);
@@ -151,17 +133,13 @@ router.post('/api/customerSessions', (req, res) => {
   const username = req.body["username"];
   const password = MD5(req.body["password"]).toString();
 
-
-
   try {
     controller.getUserController().loginCustomer(username, password);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
+
   return res.status(200).json(message);
 });
 
@@ -181,11 +159,8 @@ router.post('/api/supplierSessions', (req, res) => {
   try {
     controller.getUserController().loginSupplier(username, password);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(200).json(message);
@@ -207,11 +182,8 @@ router.post('/api/clerkSessions', (req, res) => {
   try {
     controller.getUserController().loginClerk(username, password);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(200).json(message);
@@ -233,11 +205,8 @@ router.post('/api/qualityEmployeeSessions', (req, res) => {
   try {
     controller.getUserController().loginQualityEmployee(username, password);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(200).json(message);
@@ -259,11 +228,8 @@ router.post('/api/deliveryEmployeeSessions', (req, res) => {
   try {
     controller.getUserController().loginDeliveryEmployee(username, password);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message500)
-      return res.status(500).send(Exceptions.message500)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(200).json(message);
@@ -309,17 +275,8 @@ router.put('/api/user/:username', (req, res) => {
   try {
     controller.getUserController().editUser(param, oldType, newType);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message404)
-      return res.status(404).send(Exceptions.message404);
-
-    else if (error.message === Exceptions.message422)
-      return res.status(422).send(Exceptions.message422);
-
-    else if (error.message === Exceptions.message503)
-      return res.status(503).send(Exceptions.message503)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
   return res.status(200).json(message);
 });
@@ -338,14 +295,8 @@ router.delete('/api/user/:username/:type', (req, res) => {
   try {
     controller.getUserController().deleteUser(paramUsername, paramType);
   } catch (error) {
-    if (error.message === Exceptions.message401)
-      return res.status(401).send(Exceptions.message401);
-
-    else if (error.message === Exceptions.message422)
-      return res.status(422).send(Exceptions.message422);
-
-    else if (error.message === Exceptions.message503)
-      return res.status(503).send(Exceptions.message503)
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
   }
 
   return res.status(200).json(message);

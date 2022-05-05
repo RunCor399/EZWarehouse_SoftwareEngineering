@@ -8,161 +8,157 @@ router.use('/', testsRouter);
 //SKU ITEM
 
 //GET /api/skuitems
-router.get('/api/skuitems', (req,res)=>{
-    let message = {
-      message: '/api/skuitems'
-    }
+router.get('/api/skuitems', (req, res) => {
+  let message = {
+    message: '/api/skuitems'
+  }
 
-    const controller = req.app.get("controller");
-    controller.testPrint(req.url);
-  controller.getSkuController().getAllSkuItems();
-  
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+
+
+  try {
+
+    controller.getSkuController().getAllSkuItems();
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
+
   return res.status(200).json(message);
-  
-  //unauthorized
-  //return res.status(401);
+});
 
-  //Internal server error
-  //return res.status(500)
-  });
-  
-  //GET /api/skuitems/sku/:id
-  router.get('/api/skuitems/sku/:id', (req,res)=>{
-    const param = req.params.id;
-    let message = {
-      message: '/api/skuitems/sku/:id'
-    }
+//GET /api/skuitems/sku/:id
+router.get('/api/skuitems/sku/:id', (req, res) => {
+  const param = req.params.id;
+  let message = {
+    message: '/api/skuitems/sku/:id'
+  }
 
-    const controller = req.app.get("controller");
-    controller.testPrint(req.url);
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+
+
+  try {
     controller.getSkuController().getSkuItems(param);
 
-    return res.status(200).json(message);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
-    //unauthorized
-  //return res.status(401);
 
-  //not found
-  //return res.status(404);
+  return res.status(200).json(message);
 
-  //unprocessable entity
-  //return res.status(422);
 
-  //Internal server error
-  //return res.status(500)
-    
-  });
-  
-  //GET /api/skuitems/:rfid
-  router.get('/api/skuitems/:rfid', (req,res)=>{
-    const param = req.params.rfid;
-    let message = {
-      message: '/api/skuitems/:rfid'
-    }
 
-    const controller = req.app.get("controller");
-controller.testPrint(req.url);
+});
+
+//GET /api/skuitems/:rfid
+router.get('/api/skuitems/:rfid', (req, res) => {
+  const param = req.params.rfid;
+  let message = {
+    message: '/api/skuitems/:rfid'
+  }
+
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+
+
+  try {
     controller.getSkuController().getSkuItem(param);
-    
-    return res.status(200).json(message);
 
-    //unauthorized
-  //return res.status(401);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
-  //not found
-  //return res.status(404);
 
-  //unprocessable entity
-  //return res.status(422);
+  return res.status(200).json(message);
 
-  //Internal server error
-  //return res.status(500)
-  });
-  
-  //POST /api/skuitem
-  router.post('/api/skuitem', (req,res)=>{
-    let message = {
-      message: '/api/skuitem'
-    }
 
-    const controller = req.app.get("controller");
-    controller.testPrint(req.url);
-    
-    const RFID = req.body["RFID"];
-    const SKUId = req.body["SKUId"];
-    const dateOfStock = req.body["DateOfStock"];
-    
+});
+
+//POST /api/skuitem
+router.post('/api/skuitem', (req, res) => {
+  let message = {
+    message: '/api/skuitem'
+  }
+
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+
+  const RFID = req.body["RFID"];
+  const SKUId = req.body["SKUId"];
+  const dateOfStock = req.body["DateOfStock"];
+
+
+  try {
     controller.getSkuController().createSkuItem(RFID, SKUId, dateOfStock);
 
-    return res.status(201).json(message);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
-    //unauthorized
-  //return res.status(401);
 
-  //not found
-  //return res.status(404);
+  return res.status(201).json(message);
 
-  //unprocessable entity
-  //return res.status(422);
 
-  //Service Unavailable
-  //return res.status(503)
-  });
-  
-  //PUT /api/skuitems/:rfid
-  router.put('/api/skuitems/:rfid', (req,res)=>{
-    const param = req.params.rfid;
-    let message = {
-      message: '/api/skuitems/:rfid'
-    }
+});
 
-    const controller = req.app.get("controller");
-controller.testPrint(req.url);
+//PUT /api/skuitems/:rfid
+router.put('/api/skuitems/:rfid', (req, res) => {
+  const param = req.params.rfid;
+  let message = {
+    message: '/api/skuitems/:rfid'
+  }
 
-const newRFID = req.body["newRFID"];
-const newSKUId = req.body["newSKUId"];
-const newDateOfStock = req.body["newDateOfStock"];
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+
+  const newRFID = req.body["newRFID"];
+  const newSKUId = req.body["newSKUId"];
+  const newDateOfStock = req.body["newDateOfStock"];
+
+
+
+  try {
 
     controller.getSkuController().editSkuItem(param, newRFID, newSKUId, newDateOfStock)
-    
-    return res.status(200).json(message);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
-     //unauthorized
-  //return res.status(401);
+  return res.status(200).json(message);
 
-  //not found
-  //return res.status(404);
 
-  //unprocessable entity
-  //return res.status(422);
+});
 
-  //Service Unavailable
-  //return res.status(503)
-  });
-  
-  //DELETE /api/skuitems/:rfid
-  router.delete('/api/skuitems/:rfid', (req,res)=>{
-    const param = req.params.rfid;
-    let message = {
-      message: '/api/skuitems/:rfid'
-    }
+//DELETE /api/skuitems/:rfid
+router.delete('/api/skuitems/:rfid', (req, res) => {
+  const param = req.params.rfid;
+  let message = {
+    message: '/api/skuitems/:rfid'
+  }
 
-    const controller = req.app.get("controller");
-    controller.testPrint(req.url);
+  const controller = req.app.get("controller");
+  controller.testPrint(req.url);
+
+
+  try {
+
     controller.getSkuController().deleteSkuItem(param);
-    
-    return res.status(204).json(message);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
-     //unauthorized
-  //return res.status(401);
+  return res.status(204).json(message);
 
 
-  //unprocessable entity
-  //return res.status(422);
-
-  //Service Unavailable
-  //return res.status(503)
-  });
+});
 
 
 
