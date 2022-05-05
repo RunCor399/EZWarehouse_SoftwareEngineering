@@ -1,9 +1,11 @@
 'use strict'
 
+const CompanyPerson = require("../data/companyPerson");
+
 
 
 class UserController{
-
+    #id = 1;
     #session = { username: "", type: "" };
 
     constructor(controller) {
@@ -28,6 +30,7 @@ class UserController{
     
 
     createUser(username, name, surname, password, type){
+        
         return undefined;
     }
     
@@ -35,8 +38,8 @@ class UserController{
     loginManager(username, password) {
 
         if(true){
-            session.username = username;
-            session.type = "manager"
+            this.#session.username = username;
+            this.#session.type = "manager"
         }
         else{
             throw new Error("Invalid Login");

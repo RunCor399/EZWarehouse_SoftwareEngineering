@@ -65,4 +65,3 @@ class Controller{
 }
 
 module.exports = Controller;
-export {Controller};
