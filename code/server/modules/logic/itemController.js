@@ -28,15 +28,33 @@ class ItemController{
     }
 
     createItem(description, price, SKUid, supplierId){
-        return undefined;
+        const sqlInstruction = "INSERT INTO ITEM (description, price, SKUid, supplierId) VALUES (?, ?, ?, ?);";
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return item;    /*item returned just to test the function*/
     }
 
     editItem(id, newDescription, newPrice){
-        return undefined;
+        const sqlInstruction = "UPDATE ITEM SET description=" + newDescription + " AND price=" + newPrice + " WHERE SKUid=" + id;
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return item;
     }
 
     deleteItem(id){
-        return undefined;
+        const sqlInstruction = "DELETE FROM ITEM WHERE id=" + id;
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return item;
     }
     
 }
