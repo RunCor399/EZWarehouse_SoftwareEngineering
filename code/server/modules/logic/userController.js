@@ -1,8 +1,6 @@
 'use strict'
 
-const CompanyPerson = require("../data/companyPerson");
-
-
+const Exceptions = require('../../routers/exceptions');
 
 class UserController{
     #controller;
@@ -17,7 +15,8 @@ class UserController{
      
     }
     
-    getUser(){
+    getUser() {
+        throw new Error(Exceptions.message401);
         return this.#session;
     }
 
@@ -39,7 +38,7 @@ class UserController{
     
     loginManager(username, password) {
 
-        if(true){
+        if(false){
             this.#session.username = username;
             this.#session.type = "manager"
         }

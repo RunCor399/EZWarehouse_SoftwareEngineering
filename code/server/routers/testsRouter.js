@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Exceptions = require('./exceptions')
 
 
 //TEST DESCRIPTOR
@@ -11,7 +12,15 @@ router.get('/api/testDescriptors', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().getAllTestDescriptors();
+
+  try {
+    controller.getTestController().getAllTestDescriptors();
+  } catch (error) {
+    if (error.message === Exceptions.message401)
+      return res.status(401).send(Exceptions.message401);
+    else if (error.message === Exceptions.message500)
+      return res.status(500).send(Exceptions.message500);
+  } 
 
   return res.status(200).json(message);
 });
@@ -25,7 +34,22 @@ router.get('/api/testDescriptors/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().getTestDescriptor(param);
+
+  try {
+    controller.getTestController().getTestDescriptor(param);
+  } catch (error) {
+    if (error.message === Exceptions.message401)
+      return res.status(401).send(Exceptions.message401);
+    
+      else if (error.message === Exceptions.message404)
+      return res.status(404).send(Exceptions.message404);
+
+      else if (error.message === Exceptions.message422)
+      return res.status(422).send(Exceptions.message422);
+      
+    else if (error.message === Exceptions.message500)
+      return res.status(500).send(Exceptions.message500);
+  } 
 
   return res.status(200).json(message);
 });
