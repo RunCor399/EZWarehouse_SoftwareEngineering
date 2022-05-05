@@ -4,18 +4,17 @@ const sqlite = require('sqlite3');
 
 class DBManager {
     constructor() {
-        const db = new sqlite.Database('./db.sqlite', (err) => {
+        this.db = new sqlite.Database('./db.sqlite', (err) => {
             if (err) {
-                console.log("error "+ err);
+                console.log("error " + err);
                 throw err;
             }
         });
 
-        console.log("DB started");
+        console.log("DBManager started");
 
     }
 
-    //SOLO TEMPORANEAMENTE
     genericSqlRun(istruzione) {
         return new Promise((resolve, reject) => {
             db.run(istruzione, (err) => {
@@ -26,6 +25,17 @@ class DBManager {
         })
     }
 
+    genericSqlGet(istruzione) {
+        return new Promise((resolve, reject) => {
+            db.all(istruzione, (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows)
+                }
+            })
+        })
+    }
 }
 
 module.exports = DBManager;

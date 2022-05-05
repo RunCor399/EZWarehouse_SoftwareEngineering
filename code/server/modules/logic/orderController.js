@@ -1,7 +1,9 @@
 'use strict'
 
 class OrderController{
-    constructor() {
+    constructor(controller) {
+        this.controller = controller;
+        this.dbManager = controller.getDBManager();
         console.log("orderController started");
     }
     
@@ -21,19 +23,19 @@ class OrderController{
         return undefined;
     }
 
-    createRestockOrder(body){
+    createRestockOrder(issueDate, products, supplierId){
         return undefined;
     }
 
-    editRestockOrder(id){
+    editRestockOrder(id, newState){
         return undefined;
     }
 
-    addSkuItemsToRestockOrder(id, body){
+    addSkuItemsToRestockOrder(id, skuItems){
         return undefined;
     }
     
-    addTransportNote(id, body){
+    addTransportNote(id, transportNote){
         return undefined;
     }
 
@@ -49,7 +51,7 @@ class OrderController{
         return undefined;
     }
 
-    createReturnOrder(body){
+    createReturnOrder(returnDate, products, restockOrderId){
         return undefined;
     }
     
@@ -73,11 +75,15 @@ class OrderController{
         return undefined;
     }
 
-    createInternalOrder(body){
+    createInternalOrder(issueDate, products, customerId){
         return undefined;
     }
 
-    editInternalOrder(id, body){
+    editInternalOrder(id, newState){
+        return undefined;
+    }
+
+    editInternalOrder(id, newState, products){
         return undefined;
     }
 

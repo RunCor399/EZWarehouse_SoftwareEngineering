@@ -12,23 +12,71 @@ router.get('/api/skuitems', (req,res)=>{
     let message = {
       message: '/api/skuitems'
     }
-    return res.status(200).json(message);
+
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+  controller.getSkuController().getAllSkuItems();
+  
+  return res.status(200).json(message);
+  
+  //unauthorized
+  //return res.status(401);
+
+  //Internal server error
+  //return res.status(500)
   });
   
   //GET /api/skuitems/sku/:id
   router.get('/api/skuitems/sku/:id', (req,res)=>{
+    const param = req.params.id;
     let message = {
       message: '/api/skuitems/sku/:id'
     }
+
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    controller.getSkuController().getSkuItems(param);
+
     return res.status(200).json(message);
+
+    //unauthorized
+  //return res.status(401);
+
+  //not found
+  //return res.status(404);
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Internal server error
+  //return res.status(500)
+    
   });
   
   //GET /api/skuitems/:rfid
   router.get('/api/skuitems/:rfid', (req,res)=>{
+    const param = req.params.rfid;
     let message = {
       message: '/api/skuitems/:rfid'
     }
+
+    const controller = req.app.get("controller");
+controller.testPrint(req.url);
+    controller.getSkuController().getSkuItem(param);
+    
     return res.status(200).json(message);
+
+    //unauthorized
+  //return res.status(401);
+
+  //not found
+  //return res.status(404);
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Internal server error
+  //return res.status(500)
   });
   
   //POST /api/skuitem
@@ -36,23 +84,84 @@ router.get('/api/skuitems', (req,res)=>{
     let message = {
       message: '/api/skuitem'
     }
-    return res.status(200).json(message);
+
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    
+    const RFID = req.body["RFID"];
+    const SKUId = req.body["SKUId"];
+    const dateOfStock = req.body["DateOfStock"];
+    
+    controller.getSkuController().createSkuItem(RFID, SKUId, dateOfStock);
+
+    return res.status(201).json(message);
+
+    //unauthorized
+  //return res.status(401);
+
+  //not found
+  //return res.status(404);
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Service Unavailable
+  //return res.status(503)
   });
   
   //PUT /api/skuitems/:rfid
   router.put('/api/skuitems/:rfid', (req,res)=>{
+    const param = req.params.rfid;
     let message = {
       message: '/api/skuitems/:rfid'
     }
+
+    const controller = req.app.get("controller");
+controller.testPrint(req.url);
+
+const newRFID = req.body["newRFID"];
+const newSKUId = req.body["newSKUId"];
+const newDateOfStock = req.body["newDateOfStock"];
+
+    controller.getSkuController().editSkuItem(param, newRFID, newSKUId, newDateOfStock)
+    
     return res.status(200).json(message);
+
+     //unauthorized
+  //return res.status(401);
+
+  //not found
+  //return res.status(404);
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Service Unavailable
+  //return res.status(503)
   });
   
   //DELETE /api/skuitems/:rfid
   router.delete('/api/skuitems/:rfid', (req,res)=>{
+    const param = req.params.rfid;
     let message = {
       message: '/api/skuitems/:rfid'
     }
-    return res.status(200).json(message);
+
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    controller.getSkuController().deleteSkuItem(param);
+    
+    return res.status(204).json(message);
+
+     //unauthorized
+  //return res.status(401);
+
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Service Unavailable
+  //return res.status(503)
   });
 
 

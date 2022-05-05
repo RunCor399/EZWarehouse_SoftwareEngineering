@@ -1,7 +1,9 @@
 'use strict'
 
 class PositionController{
-    constructor() {
+    constructor(controller) {
+        this.controller = controller;
+        this.dbManager = controller.getDBManager();
         console.log("positionController started");
     }
     
@@ -9,15 +11,15 @@ class PositionController{
         return undefined;
     }
 
-    createPosition(body){
-        return undefined;
-    }
-
-    editPosition(id){
+    createPosition(positionID, aisleID, row, col, maxWeight, maxVolume){
         return undefined;
     }
     
-    editPosition(id, body){
+    editPosition(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume){
+        return undefined;
+    }
+
+    editPosition(oldId, newId){
         return undefined;
     }
 

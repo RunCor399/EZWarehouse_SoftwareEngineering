@@ -10,15 +10,17 @@ const DBManager = require("./databaseManager");
 
 class Controller{
     constructor() {
-        this.userController = new UserController();
-        this.positionController = new PositionController();
-        this.skuController = new SkuController();
-        this.testController = new TestController();
-        this.orderController = new OrderController();
-        this.itemController = new ItemController();
+        this.itemController = new ItemController(this);
+        this.userController = new UserController(this);
+        this.positionController = new PositionController(this);
+        this.skuController = new SkuController(this);
+        this.testController = new TestController(this);
+        this.orderController = new OrderController(this);
         this.dbManager = new DBManager();
         console.log("general Controller started");
     }
+    
+
     
     getUserController(){
         return this.userController;
@@ -43,6 +45,23 @@ class Controller{
     getItemController(){
         return this.itemController;
     }
+
+    getDBManager() {
+        return this.dbManager;
+    }
+
+    testPrint(string){
+        console.log(string);
+    }
+
+    print() {
+        console.log("Test"); //DEPRECATED
+    }
+
+    getSession() {
+        return this.userController.getSession();
+    }
+
 }
 
 module.exports = Controller;

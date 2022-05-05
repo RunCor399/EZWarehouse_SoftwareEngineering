@@ -1,14 +1,23 @@
 'use strict'
 
+let session = { username: "", type: "" };
+
 
 class UserController{
-    constructor() {
+    constructor(controller) {
+        this.controller = controller;
+        this.dbManager = controller.getDBManager();
+        
         console.log("testController started");
      
         
     }
     
     getUser(){
+        return session;
+    }
+
+    getAllSuppliers(){
         return undefined;
     }
 
@@ -16,19 +25,16 @@ class UserController{
         return undefined;
     }
 
-    createUser(body){
-        return undefined;
-    }
     
-    getAllSuppliers(){
-        return undefined;
-    }
 
-    loginClerk(username, password){
+    createUser(username, name, surname, password, type){
         return undefined;
     }
     
-    loginManager(username, password){
+    
+    loginManager(username, password) {
+        session.username = username;
+        session.type = "manager"
         return undefined;
     }
     
@@ -39,8 +45,16 @@ class UserController{
     loginSupplier(username, password){
         return undefined;
     }
+
+    loginClerk(username, password){
+        return undefined;
+    }
     
     loginQualityEmployee(username, password){
+        return undefined;
+    }
+
+    loginDeliveryEmployee(username, password){
         return undefined;
     }
 
@@ -48,11 +62,11 @@ class UserController{
         return undefined;
     }
 
-    editUser(username, body){
+    editUser(username, oldType, newType){
         return undefined;
     }
 
-    deleteUser(username, body){
+    deleteUser(username, type){
         return undefined;
     }
 

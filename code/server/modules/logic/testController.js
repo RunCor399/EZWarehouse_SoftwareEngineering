@@ -1,7 +1,10 @@
 'use strict'
 
 class TestController{
-    constructor() {
+    constructor(controller) {
+        this.controller = controller;
+        this.dbManager = controller.getDBManager();
+        
         console.log("testController started");
     }
 
@@ -13,11 +16,11 @@ class TestController{
         return undefined;
     }
     
-    createTestDescriptor(body){
+    createTestDescriptor(name, procedureDescription, idSKU){
         return undefined;
     }
 
-    editTestDesciptor(id){
+    editTestDesciptor(id, newName, newProcedureDescription, newIdSKU){
         return undefined;
     }
 
@@ -33,11 +36,11 @@ class TestController{
         return undefined;
     }
 
-    createTestResult(body){
+    createTestResult(rfid, idTestDesciptor, date, result){
         return undefined;
     }
 
-    editTestResult(rfid, id, body){
+    editTestResult(rfid, id, newIdTestDesciptor, newDate, newResult){
         return undefined;
     }
 
