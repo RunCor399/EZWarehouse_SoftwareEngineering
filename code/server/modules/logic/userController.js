@@ -1,16 +1,16 @@
 'use strict'
 
-let session = { username: "", type: "" };
 
 
 class UserController{
+
+    #session = { username: "", type: "" };
+
     constructor(controller) {
         this.controller = controller;
         this.dbManager = controller.getDBManager();
-        
         console.log("testController started");
      
-        
     }
     
     getUser(){
@@ -33,29 +33,65 @@ class UserController{
     
     
     loginManager(username, password) {
-        session.username = username;
-        session.type = "manager"
-        return undefined;
+
+        if(true){
+            session.username = username;
+            session.type = "manager"
+        }
+        else{
+            throw new Error("Invalid Login");
+        }
+       
     }
     
     loginCustomer(username, password){
-        return undefined;
+        if(true){
+            session.username = username;
+            session.type = "customer"
+        }
+        else{
+            throw new Error("Invalid Login");
+        }
     }
     
     loginSupplier(username, password){
-        return undefined;
+        if(true){
+            session.username = username;
+            session.type = "supplier"
+        }
+        else{
+            throw new Error("Invalid Login");
+        }
     }
 
     loginClerk(username, password){
-        return undefined;
+        if(true){
+            session.username = username;
+            session.type = "clerk"
+        }
+        else{
+            throw new Error("Invalid Login");
+        }
     }
     
     loginQualityEmployee(username, password){
-        return undefined;
+        if(true){
+            session.username = username;
+            session.type = "qualityEmployee"
+        }
+        else{
+            throw new Error("Invalid Login");
+        }
     }
 
     loginDeliveryEmployee(username, password){
-        return undefined;
+        if(true){
+            session.username = username;
+            session.type = "deliveryEmployee"
+        }
+        else{
+            throw new Error("Invalid Login");
+        }
     }
 
     logout(){

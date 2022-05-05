@@ -59,9 +59,10 @@ class Controller{
     }
 
     getSession() {
-        return this.userController.getSession();
+        return this.userController.getUser();
     }
 
 }
 
 module.exports = Controller;
+export {Controller};
