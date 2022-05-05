@@ -1,9 +1,11 @@
 'use strict'
 
 class OrderController{
+    #controller;
+    #dbManager;
     constructor(controller) {
-        this.controller = controller;
-        this.dbManager = controller.getDBManager();
+        this.#controller = controller;
+        this.#dbManager = controller.getDBManager();
         console.log("orderController started");
     }
     

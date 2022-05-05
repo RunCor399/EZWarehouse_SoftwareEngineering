@@ -5,18 +5,20 @@ const CompanyPerson = require("../data/companyPerson");
 
 
 class UserController{
+    #controller;
+    #dbManager;
     #id = 1;
     #session = { username: "", type: "" };
 
     constructor(controller) {
-        this.controller = controller;
-        this.dbManager = controller.getDBManager();
+        this.#controller = controller;
+        this.#dbManager = controller.getDBManager();
         console.log("testController started");
      
     }
     
     getUser(){
-        return session;
+        return this.#session;
     }
 
     getAllSuppliers(){

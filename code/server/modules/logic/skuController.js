@@ -1,9 +1,11 @@
 'use strict'
 
 class SkuController{
+    #controller;
+    #dbManager;
     constructor(controller) {
-        this.controller = controller;
-        this.dbManager = controller.getDBManager();
+        this.#controller = controller;
+        this.#dbManager = controller.getDBManager();
         
         console.log("skuController started");
     }

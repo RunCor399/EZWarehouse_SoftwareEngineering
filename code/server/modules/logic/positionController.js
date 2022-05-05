@@ -1,6 +1,8 @@
 'use strict'
 
 class PositionController{
+    #controller;
+    #dbManager;
     constructor(controller) {
         this.controller = controller;
         this.dbManager = controller.getDBManager();
