@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
- 
 
 //USER
 //GET /api/userinfo
@@ -57,7 +56,8 @@ router.get('/api/userinfo', (req,res)=>{
     const username = req.body["username"];
     const name = req.body["name"];
     const surname = req.body["surname"];
-    const password = req.body["password"];
+    const password = req.body["password"]; //to be hashed
+    
     const type = req.body["type"];
     
     controller.getUserController().createUser(username, name,
@@ -76,7 +76,8 @@ router.get('/api/userinfo', (req,res)=>{
    controller.testPrint(req.url);
    
    const username = req.body["username"];
-   const password = req.body["password"];
+   const password = req.body["password"]; //to be hashed
+    
 
    controller.getUserController().loginManager(username, password);
    
@@ -93,7 +94,8 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"];
+    const password = req.body["password"]; //to be hashed
+    
  
     controller.getUserController().loginCustomer(username, password);
     return res.status(200).json(message);
@@ -109,7 +111,8 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"];
+    const password = req.body["password"]; //to be hashed
+    
  
     controller.getUserController().loginSupplier(username, password);
     return res.status(200).json(message);
@@ -125,7 +128,8 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"];
+    const password = req.body["password"]; //to be hashed
+    
  
     controller.getUserController().loginClerk(username, password);
     return res.status(200).json(message);
@@ -141,8 +145,9 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"];
- 
+    const password = req.body["password"]; //to be hashed
+    
+
     controller.getUserController().loginQualityEmployee(username, password);
     return res.status(200).json(message);
   });
@@ -157,7 +162,8 @@ router.get('/api/userinfo', (req,res)=>{
     controller.testPrint(req.url);
    
     const username = req.body["username"];
-    const password = req.body["password"];
+    const password = req.body["password"]; //to be hashed
+    
  
     controller.getUserController().loginDeliveryEmployee(username, password);
     return res.status(200).json(message);
