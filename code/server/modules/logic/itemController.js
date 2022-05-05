@@ -1,6 +1,4 @@
 'use strict'
-
-const DBManager = require("./databaseManager");
 class ItemController{
     constructor(controller) {
         this.controller = controller;
@@ -15,7 +13,7 @@ class ItemController{
     getAllItems() {
         const sqlInstruction = "SELECT * FROM ITEM";
         try {
-            const rows = await dbManager.genericSqlGet(sqlInstruction);
+            const rows =   dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -25,7 +23,7 @@ class ItemController{
     getItem(id) {
         const sqlInstruction = "SELECT *  FROM ITEM WHERE id=" + id;
         try {
-            const item =  await dbManager.genericSqlGet(sqlInstruction);
+            const item =  dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
