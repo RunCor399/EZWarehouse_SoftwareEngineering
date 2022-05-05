@@ -12,9 +12,15 @@ router.get('/api/positions', (req,res)=>{
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-  controller.getPositionController().getAllPositions();
+    controller.getPositionController().getAllPositions();
   
-    return res.status(200).json(message);
+  return res.status(200).json(message);
+  
+   //unauthorized
+  //return res.status(401);
+
+  //Internal Server Error
+  //return res.status(500)
   });
   
   //POST /api/position
@@ -35,7 +41,19 @@ router.get('/api/positions', (req,res)=>{
     controller.getPositionController().createPosition(positionID, aisleID, row, col, maxWeight, maxVolume);
     
     
-    return res.status(200).json(message);
+    return res.status(201).json(message);
+
+     //unauthorized
+  //return res.status(401);
+
+  //not found
+  //return res.status(404);
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Service Unavailable
+  //return res.status(503)
   });
   
   //PUT /api/position/:positionID
@@ -56,6 +74,18 @@ router.get('/api/positions', (req,res)=>{
     controller.getPositionController().editPosition(param, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume)
 
     return res.status(200).json(message);
+
+     //unauthorized
+  //return res.status(401);
+
+  //not found
+  //return res.status(404);
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Service Unavailable
+  //return res.status(503)
   });
   
   //PUT /api/position/:positionID/changeID
@@ -72,6 +102,18 @@ router.get('/api/positions', (req,res)=>{
 
 
     return res.status(200).json(message);
+
+     //unauthorized
+  //return res.status(401);
+
+  //not found
+  //return res.status(404);
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Service Unavailable
+  //return res.status(503)
   });
   
   //DELETE /api/position/:positionID
@@ -85,7 +127,16 @@ router.get('/api/positions', (req,res)=>{
     controller.testPrint(req.url);
     controller.getPositionController().deletePosition(param);
 
-    return res.status(200).json(message);
+    return res.status(204).json(message);
+     //unauthorized
+  //return res.status(401);
+
+
+  //unprocessable entity
+  //return res.status(422);
+
+  //Service Unavailable
+  //return res.status(503)
   });
 
 module.exports = router
