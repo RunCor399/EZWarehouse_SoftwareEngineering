@@ -9,8 +9,9 @@ class PositionController{
         console.log("positionController started");
     }
     
+    /*MODIFIED */
     getAllPositions(){
-        const sqlInstruction = "SELECT * FROM POSITIONS";
+        const sqlInstruction = "SELECT * FROM Position";
         try {
             const rows =   dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -19,20 +20,43 @@ class PositionController{
         return rows.map((row) => row);
     }
 
+    /*NEW - can occupiedWeight and occupiedVolume be initialized at zero? */
     createPosition(positionID, aisleID, row, col, maxWeight, maxVolume){
-        return undefined;
+        const sqlInstruction = "INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column) VALUES (?, ?, ?, ?, ?, ?);";
+        try {
+            const position =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return position; 
     }
     
+    /*NEW */
     editPosition(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume){
-        return undefined;
+        const sqlInstruction = "UPDATE Position SET maxVolume=" + newMaxVolume + " AND maxWeight=" + newMaxWeight + " AND aisle=" + newAisleID + " AND row=" + newRow + " AND column=" + newCol + " WHERE ID=" + id;
+        try {
+            const position =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return position;
     }
 
+    /*NEW */
     editPosition(oldId, newId){
-        return undefined;
+        const sqlInstruction = "UPDATE SKU SET ID=" + newId + " WHERE ID=" + oldId;
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return position;
     }
 
+
+    /*MODIFIED */
     deletePosition(id){
-        const sqlInstruction = "DELETE FROM POSITION WHERE id=" + id;
+        const sqlInstruction = "DELETE FROM Position WHERE ID=" + id;
         try {
             const sku =  dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
