@@ -45,13 +45,14 @@ class UserController {
         const username = body["username"];
         const name = body["name"];
         const surname = body["surname"];
-        const password = MD5(body["password"]).toString();
+        const password = body["password"];
         const type = body["type"];
 
         if (username === undefined || name === undefined || surname === undefined
             || password === undefined || type === undefined)
             throw new Error(Exceptions.message422);
 
+        const hashedPassword = MD5(password).toString();
 
         return;
     }
