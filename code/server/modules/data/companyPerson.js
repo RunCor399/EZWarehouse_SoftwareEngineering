@@ -1,14 +1,14 @@
 
 class CompanyPerson{
     #ID;
-    #role;
+    #type;
     #name;
     #surname;
     #privilegeLevel;
 
-    constructor(ID, role, name, surname, privilegeLevel){
+    constructor(ID, type, name, surname, privilegeLevel){
         this.#ID = ID;
-        this.#role = role;
+        this.#type = type;
         this.#name = name;
         this.#surname = surname;
         this.#privilegeLevel = privilegeLevel;
@@ -18,8 +18,8 @@ class CompanyPerson{
         return this.#ID;
     }
 
-    getRole(){
-        return this.#role;
+    getType(){
+        return this.#type;
     }
 
     getName(){
@@ -38,8 +38,8 @@ class CompanyPerson{
         this.#ID = ID;
     }
 
-    setRole(role){
-        this.#role = role;
+    setType(role){
+        this.#type = role;
     }
 
     setName(name){

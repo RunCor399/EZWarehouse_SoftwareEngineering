@@ -1,42 +1,38 @@
 'use strict'
 
 const Exceptions = require('../../routers/exceptions');
+const CompanyPerson = require('../data/companyPerson');
 
 class UserController {
     #controller;
     #dbManager;
-    #id = 1;
-    #session = {
-        id: 0,
-        username: "",
-        name: "",
-        surname: "",
-        type: ""
-    };
+    #id;
+    #user = undefined;
 
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = controller.getDBManager();
         console.log("testController started");
-
+        //get first available id
+        //#id = query;
     }
 
     getUser() {
-        if (this.#session.username === "")
+        if (this.#user === undefined)
             throw new Error(Exceptions.message401);
-        else return this.#session;
+        else return this.#user;
     }
 
     getAllSuppliers() {
-        if (this.#session.username === "" ||
-            this.#session.type !== "manager")
+        if (this.#user === undefined ||
+            this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         else return undefined;
     }
 
     getAllUsers() {
-        if (this.#session.username === "" ||
-            this.#session.type !== "manager")
+        if (this.#user === undefined ||
+            this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         return undefined;
     }
@@ -44,8 +40,8 @@ class UserController {
 
 
     createUser(username, name, surname, password, type) {
-        if (this.#session.username === "" ||
-            this.#session.type !== "manager")
+        if (this.#user === undefined ||
+            this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         else if (true) //errore409//
             throw new Error(Exceptions.message404);
@@ -59,8 +55,8 @@ class UserController {
     loginManager(username, password) {
 
         if (false) {
-            this.#session.username = username;
-            this.#session.type = "manager"
+            let row = undefined; //sql query 
+            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
         }
         else {
             throw new Error(Exceptions.message401);
@@ -69,9 +65,9 @@ class UserController {
     }
 
     loginCustomer(username, password) {
-        if (true) {
-            session.username = username;
-            session.type = "customer"
+        if (false) {
+            let row = undefined; //sql query 
+            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
         }
         else {
             throw new Error(Exceptions.message401);
@@ -79,9 +75,9 @@ class UserController {
     }
 
     loginSupplier(username, password) {
-        if (true) {
-            session.username = username;
-            session.type = "supplier"
+        if (false) {
+            let row = undefined; //sql query 
+            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
         }
         else {
             throw new Error(Exceptions.message401);
@@ -89,9 +85,9 @@ class UserController {
     }
 
     loginClerk(username, password) {
-        if (true) {
-            session.username = username;
-            session.type = "clerk"
+        if (false) {
+            let row = undefined; //sql query 
+            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
         }
         else {
             throw new Error(Exceptions.message401);
@@ -99,9 +95,9 @@ class UserController {
     }
 
     loginQualityEmployee(username, password) {
-        if (true) {
-            session.username = username;
-            session.type = "qualityEmployee"
+        if (false) {
+            let row = undefined; //sql query 
+            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
         }
         else {
             throw new Error(Exceptions.message401);
@@ -109,9 +105,9 @@ class UserController {
     }
 
     loginDeliveryEmployee(username, password) {
-        if (true) {
-            session.username = username;
-            session.type = "deliveryEmployee"
+        if (false) {
+            let row = undefined; //sql query 
+            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
         }
         else {
             throw new Error(Exceptions.message401);
@@ -119,17 +115,15 @@ class UserController {
     }
 
     logout() {
-        if (this.#session.username === "" ||
-            this.#session.type === "")
+        if (this.#user === undefined)
             throw new Error(Exceptions.message500);//already logged out
-        this.#session.username = "";
-        this.#session.type = "";
+        this.#user = undefined;
         return;
     }
 
     editUser(username, oldType, newType) {
-        if (this.#session.username === "" ||
-            this.#session.type !== "manager")
+        if (this.#user === undefined ||
+            this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         return undefined;
     }

@@ -6,7 +6,7 @@ const UserController = require("./userController");
 const TestController = require("./testController");
 const OrderController = require("./orderController");
 const ItemController = require("./itemController");
-const DBManager = require("./databaseManager");
+const DBManager = require("../database/databaseManager");
 
 class Controller {
 
