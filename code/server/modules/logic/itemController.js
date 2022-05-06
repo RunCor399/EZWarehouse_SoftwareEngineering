@@ -32,7 +32,13 @@ class ItemController {
     }
 
     /*MODIFIED - the description is missing in the table! */
-    createItem(description, price, SKUid, supplierId) {
+    createItem(body) {
+
+        const description = body["description"];
+        const price = body["price"];
+        const SKUid = body["SKUId"]
+        const supplierId = body["supplierID"];
+
         const sqlInstruction = "INSERT INTO Item (ID, SKUid) VALUES (?, ?); INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (?, ?);";
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
@@ -43,7 +49,12 @@ class ItemController {
     }
 
     /*NOT MODIFIED - both the description and the price are missing in the Item table! */
-    editItem(id, newDescription, newPrice) {
+    editItem(id, body) {
+
+        const newDescription = body["newDescription"];
+        const newPrice = body["newPrice"];
+
+
         const sqlInstruction = "UPDATE ITEM SET description=" + newDescription + " AND price=" + newPrice + " WHERE SKUid=" + id;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);

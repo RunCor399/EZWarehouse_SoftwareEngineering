@@ -47,7 +47,12 @@ class OrderController {
     }
 
     /*NEW - products are missing in the table! Can the state be initialized? */
-    createRestockOrder(issueDate, products, supplierId) {
+    createRestockOrder(body) {
+
+        const issueDate = body["issueDate"];
+        const products = body["products"];
+        const supplierId = body["supplierId"]
+
         const sqlInstruction = "INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (?, ?, ?);";
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
@@ -58,7 +63,11 @@ class OrderController {
     }
 
     /*NEW */
-    editRestockOrder(id, newState) {
+    editRestockOrder(id, body) {
+
+        const newState = body["newState"];
+
+
         const sqlInstruction = "UPDATE RestockOrder SET state=" + newState + " WHERE ID=" + id;
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
@@ -68,12 +77,18 @@ class OrderController {
         return restockOrder;
     }
 
-    addSkuItemsToRestockOrder(id, skuItems) {
+    addSkuItemsToRestockOrder(id, body) {
+
+        const skuItems = body["skuItems"];
+
         return undefined;
     }
 
     /*Transport Note is missing in the DB */
-    addTransportNote(id, transportNote) {
+    addTransportNote(id, body) {
+
+        const transportNote = body["transportNote"];
+
         return undefined;
     }
 
@@ -111,7 +126,12 @@ class OrderController {
     }
 
     /*NEW - products are missing in the table, while managerID and supplierID are missing in the function */
-    createReturnOrder(returnDate, products, restockOrderId) {
+    createReturnOrder(body) {
+
+        const returnDate = body["returnDate"];
+        const products = body["products"];
+        const restockOrderId = body["restockOrderId"];
+
         const sqlInstruction = "INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (?, ?, ?);";
         try {
             const returnOrder = dbManager.genericSqlGet(sqlInstruction);
@@ -177,7 +197,12 @@ class OrderController {
     }
 
     /*NEW - products and issueDate are missing in the table */
-    createInternalOrder(issueDate, products, customerId) {
+    createInternalOrder(body) {
+
+        const issueDate = body["issueDate"];
+        const products = body["products"];
+        const customerId = body["customerId"]
+
         const sqlInstruction = "INSERT INTO InternalOrder (ID, customerId) VALUES (?, ?);";
         try {
             const internalOrder = dbManager.genericSqlGet(sqlInstruction);
@@ -188,20 +213,27 @@ class OrderController {
     }
 
     /*NEW */
-    editInternalOrder(id, newState) {
-        const sqlInstruction = "UPDATE InternalOrder SET state=" + newState + " WHERE ID=" + id;
-        try {
-            const internalOrder = dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            console.log("error");
+    editInternalOrder(id, body) {
+
+        const newState = body["newState"];
+
+        if(newState === "COMPLETED"){
+            const products = body["products"];
+            //query
+            return internalOrder;
         }
-        return internalOrder;
+        else{
+            const sqlInstruction = "UPDATE InternalOrder SET state=" + newState + " WHERE ID=" + id;
+            try {
+                const internalOrder = dbManager.genericSqlGet(sqlInstruction);
+            } catch (error) {
+                console.log("error");
+            }
+            return internalOrder;
+        }
+        
     }
 
-    /*products are missing in the table */
-    editInternalOrder(id, newState, products) {
-        return undefined;
-    }
 
     /*NEW */
     deleteInternalOrder(id) {

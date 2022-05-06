@@ -88,13 +88,8 @@ router.post('/api/skuitem', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const RFID = req.body["RFID"];
-  const SKUId = req.body["SKUId"];
-  const dateOfStock = req.body["DateOfStock"];
-
-
   try {
-    controller.getSkuController().createSkuItem(RFID, SKUId, dateOfStock);
+    controller.getSkuController().createSkuItem(req.body);
 
   } catch (error) {
     let responseParams = Exceptions.handle(error);
@@ -116,16 +111,9 @@ router.put('/api/skuitems/:rfid', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-
-  const newRFID = req.body["newRFID"];
-  const newSKUId = req.body["newSKUId"];
-  const newDateOfStock = req.body["newDateOfStock"];
-
-
-
   try {
 
-    controller.getSkuController().editSkuItem(param, newRFID, newSKUId, newDateOfStock)
+    controller.getSkuController().editSkuItem(param, req.body)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

@@ -32,15 +32,9 @@ router.post('/api/position', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const positionID = req.body["positionID"];
-  const aisleID = req.body["aisleID"];
-  const row = req.body["row"];
-  const col = req.body["col"];
-  const maxWeight = req.body["maxWeight"];
-  const maxVolume = req.body["maxVolume"];
 
   try {
-    controller.getPositionController().createPosition(positionID, aisleID, row, col, maxWeight, maxVolume);
+    controller.getPositionController().createPosition(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -60,14 +54,10 @@ router.put('/api/position/:positionID', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const newAisleID = req.body["newAisleID"];
-  const newRow = req.body["newRow"];
-  const newCol = req.body["newCol"];
-  const newMaxWeight = req.body["newMaxWeight"];
-  const newMaxVolume = req.body["newMaxVolume"];
+
 
   try {
-    controller.getPositionController().editPosition(param, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume)
+    controller.getPositionController().editPosition(param, req.body)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -87,10 +77,9 @@ router.put('/api/position/:positionID/changeID', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const newPositionID = req.body["newPositionID"];
 
   try {
-    controller.getPositionController().editPosition(param, newPositionID);
+    controller.getPositionController().editPosition(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

@@ -51,13 +51,9 @@ router.post('/api/testDescriptor', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const name = req.body["name"];
-  const procedureDescription = req.body["procedureDescription"];
-  const idSKU = req.body["idSKU"];
-
 
   try {
-    controller.getTestController().createTestDescriptor(name, procedureDescription, idSKU);
+    controller.getTestController().createTestDescriptor(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -75,12 +71,9 @@ router.put('/api/testDescriptor/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const newName = req.body["newName"];
-  const newProcedureDescription = req.body["newProcedureDescription"];
-  const newIdSKU = req.body["newIdSKU"];
-
+ 
   try {
-    controller.getTestController().editTestDescriptor(param, newName, newProcedureDescription, newIdSKU);
+    controller.getTestController().editTestDescriptor(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -164,13 +157,8 @@ router.post('/api/skuitems/testResult', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const rfid = req.body["rfid"];
-  const idTestDesciptor = req.body["idTestDescriptor"];
-  const date = req.body["Date"];
-  const result = req.body["Result"];
-
   try {
-    controller.getTestController().createTestResult(rfid, idTestDesciptor, date, result);
+    controller.getTestController().createTestResult(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -188,12 +176,9 @@ router.put('/api/skuitems/:rfid/testResult/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const newIdTestDesciptor = req.body["newIdTestDescriptor"];
-  const newDate = req.body["newDate"];
-  const newResult = req.body["newResult"];
   
   try {
-    controller.getTestController().editTestResult(paramRfid, paramId, newIdTestDesciptor, newDate, newResult);
+    controller.getTestController().editTestResult(paramRfid, paramId, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

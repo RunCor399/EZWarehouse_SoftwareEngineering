@@ -31,13 +31,9 @@ router.route('/api/restockOrder')
     }
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    const issueDate = req.body["issueDate"];
-    const products = req.body["products"];
-    const supplierId = req.body["supplierId"]
-
 
     try {
-      controller.getOrderController().createRestockOrder(issueDate, products, supplierId);
+      controller.getOrderController().createRestockOrder(req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -77,10 +73,8 @@ router.route('/api/restockOrder/:id')
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
 
-    const newState = req.body["newState"];
-
     try {
-      controller.getOrderController().editRestockOrder(param, newState);
+      controller.getOrderController().editRestockOrder(param, req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -159,10 +153,9 @@ router.route('/api/restockOrder/:id/skuItems')
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
 
-    const skuItems = req.body["skuItems"];
 
     try {
-      controller.getOrderController().addSkuItemsToRestockOrder(param, skuItems);
+      controller.getOrderController().addSkuItemsToRestockOrder(param, req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -181,10 +174,9 @@ router.route('/api/restockOrder/:id/transportNote')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    const transportNote = req.body["transportNote"];
 
     try {
-      controller.getOrderController().addTransportNote(param, transportNote);
+      controller.getOrderController().addTransportNote(param, req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);

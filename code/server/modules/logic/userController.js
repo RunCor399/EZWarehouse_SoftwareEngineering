@@ -2,6 +2,7 @@
 
 const Exceptions = require('../../routers/exceptions');
 const CompanyPerson = require('../data/companyPerson');
+const MD5 = require("crypto-js/md5")
 
 class UserController {
     #controller;
@@ -39,7 +40,15 @@ class UserController {
 
 
 
-    createUser(username, name, surname, password, type) {
+    createUser(body) {
+
+
+        const username = body["username"];
+        const name = body["name"];
+        const surname = body["surname"];
+        const password = MD5(body["password"]).toString();
+        const type = body["type"];
+
         if (this.#user === undefined ||
             this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
@@ -51,60 +60,11 @@ class UserController {
         return;
     }
 
+    login(body, type) {
 
-    loginManager(username, password) {
+        const username = body["username"];
+        const password = MD5(body["password"]).toString();
 
-        if (false) {
-            let row = undefined; //sql query 
-            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
-        }
-        else {
-            throw new Error(Exceptions.message401);
-        }
-
-    }
-
-    loginCustomer(username, password) {
-        if (false) {
-            let row = undefined; //sql query 
-            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
-        }
-        else {
-            throw new Error(Exceptions.message401);
-        }
-    }
-
-    loginSupplier(username, password) {
-        if (false) {
-            let row = undefined; //sql query 
-            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
-        }
-        else {
-            throw new Error(Exceptions.message401);
-        }
-    }
-
-    loginClerk(username, password) {
-        if (false) {
-            let row = undefined; //sql query 
-            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
-        }
-        else {
-            throw new Error(Exceptions.message401);
-        }
-    }
-
-    loginQualityEmployee(username, password) {
-        if (false) {
-            let row = undefined; //sql query 
-            this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);
-        }
-        else {
-            throw new Error(Exceptions.message401);
-        }
-    }
-
-    loginDeliveryEmployee(username, password) {
         if (false) {
             let row = undefined; //sql query 
             this.#user = new CompanyPerson(row.id, row.type, row.name, row.surname, row.privilegeLevel);

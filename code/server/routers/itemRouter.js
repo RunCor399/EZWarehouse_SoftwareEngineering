@@ -50,13 +50,8 @@ router.post('/api/item', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const description = req.body["description"];
-  const price = req.body["price"];
-  const SKUid = req.body["SKUId"]
-  const supplierId = req.body["supplierID"];
-
   try {
-    controller.getItemController().createItem(description, price, SKUid, supplierId);
+    controller.getItemController().createItem(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -76,11 +71,9 @@ router.put('/api/sku/:id', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const newDescription = req.body["newDescription"];
-  const newPrice = req.body["newPrice"];
-
+  
   try {
-    controller.getItemController().editItem(param, newDescription, newPrice);
+    controller.getItemController().editItem(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

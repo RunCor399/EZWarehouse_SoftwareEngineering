@@ -1,6 +1,6 @@
 'use strict'
 
-class PositionController{
+class PositionController {
     #controller;
     #dbManager;
     constructor(controller) {
@@ -8,12 +8,12 @@ class PositionController{
         this.dbManager = controller.getDBManager();
         console.log("positionController started");
     }
-    
+
     /*MODIFIED */
-    getAllPositions(){
+    getAllPositions() {
         const sqlInstruction = "SELECT * FROM Position";
         try {
-            const rows =   dbManager.genericSqlGet(sqlInstruction);
+            const rows = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -21,21 +21,18 @@ class PositionController{
     }
 
     /*NEW - can occupiedWeight and occupiedVolume be initialized at zero? */
-    createPosition(positionID, aisleID, row, col, maxWeight, maxVolume){
+    createPosition(body) {
+
+        const positionID = body["positionID"];
+        const aisleID = body["aisleID"];
+        const row = body["row"];
+        const col = body["col"];
+        const maxWeight = body["maxWeight"];
+        const maxVolume = body["maxVolume"];
+
         const sqlInstruction = "INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column) VALUES (?, ?, ?, ?, ?, ?);";
         try {
-            const position =  dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            console.log("error");
-        }
-        return position; 
-    }
-    
-    /*NEW */
-    editPosition(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume){
-        const sqlInstruction = "UPDATE Position SET maxVolume=" + newMaxVolume + " AND maxWeight=" + newMaxWeight + " AND aisle=" + newAisleID + " AND row=" + newRow + " AND column=" + newCol + " WHERE ID=" + id;
-        try {
-            const position =  dbManager.genericSqlGet(sqlInstruction);
+            const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -43,10 +40,32 @@ class PositionController{
     }
 
     /*NEW */
-    editPosition(oldId, newId){
-        const sqlInstruction = "UPDATE SKU SET ID=" + newId + " WHERE ID=" + oldId;
+    editPosition(id, body) {
+
+        const newAisleID = body["newAisleID"];
+        const newRow = body["newRow"];
+        const newCol = body["newCol"];
+        const newMaxWeight = body["newMaxWeight"];
+        const newMaxVolume = body["newMaxVolume"];
+
+        const sqlInstruction = "UPDATE Position SET maxVolume=" + newMaxVolume + " AND maxWeight=" + newMaxWeight + " AND aisle=" + newAisleID + " AND row=" + newRow + " AND column=" + newCol + " WHERE ID=" + id;
         try {
-            const position =  dbManager.genericSqlGet(sqlInstruction);
+            const position = dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return position;
+    }
+
+    /*NEW */
+    editPosition(oldId, body) {
+
+        const newPositionID = body["newPositionID"];
+
+
+        const sqlInstruction = "UPDATE SKU SET ID=" + newPositionID + " WHERE ID=" + oldId;
+        try {
+            const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -55,10 +74,10 @@ class PositionController{
 
 
     /*MODIFIED */
-    deletePosition(id){
+    deletePosition(id) {
         const sqlInstruction = "DELETE FROM Position WHERE ID=" + id;
         try {
-            const position =  dbManager.genericSqlGet(sqlInstruction);
+            const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

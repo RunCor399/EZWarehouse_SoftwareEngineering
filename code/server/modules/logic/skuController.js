@@ -32,7 +32,15 @@ class SkuController {
     }
 
     /*availableQuantity is missing in the SKU table */
-    createSku(description, weight, volume, notes, price, availableQuantity) {
+    createSku(body) {
+
+        const description = body["description"];
+        const weight = body["weight"];
+        const volume = body["volume"];
+        const notes = body["notes"];
+        const price = body["price"];
+        const availableQuantity = body["availableQuantity"];
+
         const sqlInstruction = "INSERT INTO SKU (ID, weight, volume, price, notes, description) VALUES (?, ?, ?, ?, ?, ?);";
         try {
             const sku = dbManager.genericSqlGet(sqlInstruction);
@@ -43,7 +51,15 @@ class SkuController {
     }
 
     /*availableQuantity is missing in the SKU table */
-    editSku(id, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity) {
+    editSku(id, body) {
+
+        const newDescription = body["newDescription"];
+        const newWeight = body["newWeight"];
+        const newVolume = body["newVolume"];
+        const newNotes = body["newNotes"];
+        const newPrice = body["newPrice"];
+        const newAvailableQuantity = req.body["newAvailableQuantity"];
+
         const sqlInstruction = "UPDATE SKU SET weight=" + newWeight + " AND volume=" + newVolume + " AND price=" + newPrice + " AND notes=" + newNotes + " AND description=" + newDescription + " WHERE ID=" + id;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
@@ -75,6 +91,9 @@ class SkuController {
         return sku; /*sku returned to test it*/
     }
 
+
+
+
     /*MODIFED*/
     getAllSkuItems() {
         const sqlInstruction = "SELECT * FROM SKUItem";
@@ -102,7 +121,12 @@ class SkuController {
     }
 
     /*MODIFIED - how is the position updated? It's in the StockInfo table but here is missing*/
-    createSkuItem(RFID, SKUId, dateOfStock) {
+    createSkuItem(body) {
+
+        const RFID = body["RFID"];
+        const SKUId = body["SKUId"];
+        const dateOfStock = body["DateOfStock"];
+
         const sqlInstruction = "INSERT INTO SKUItem (ID) VALUES (?);";
         try {
             const skuItem = dbManager.genericSqlGet(sqlInstruction);
@@ -112,7 +136,12 @@ class SkuController {
         return skuItem;    /*item returned just to test the function*/
     }
 
-    editSkuItem(oldRFID, newRFID, newSKUId, newDateOfStock) {
+    editSkuItem(oldRFID, body) {
+
+        const newRFID = body["newRFID"];
+        const newSKUId = body["newSKUId"];
+        const newDateOfStock = body["newDateOfStock"];
+
         return undefined;
     }
 

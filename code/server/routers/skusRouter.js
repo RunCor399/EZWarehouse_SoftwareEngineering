@@ -42,16 +42,8 @@ router.post('/api/sku', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const description = req.body["description"];
-  const weight = req.body["weight"];
-  const volume = req.body["volume"];
-  const notes = req.body["notes"];
-  const price = req.body["price"];
-  const availableQuantity = req.body["availableQuantity"];
-
-
   try {
-    controller.getSkuController().createSku(description, weight, volume, notes, price, availableQuantity);
+    controller.getSkuController().createSku(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -77,16 +69,9 @@ router.put('/api/sku/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const newDescription = req.body["newDescription"];
-  const newWeight = req.body["newWeight"];
-  const newVolume = req.body["newVolume"];
-  const newNotes = req.body["newNotes"];
-  const newPrice = req.body["newPrice"];
-  const newAvailableQuantity = req.body["newAvailableQuantity"];
-
 
   try {
-    controller.getSkuController().editSku(param, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity);
+    controller.getSkuController().editSku(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -128,7 +113,6 @@ router.delete('/api/sku/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const session = controller.getSession();
 
   try {
     controller.getSkuController().deleteSku(param);

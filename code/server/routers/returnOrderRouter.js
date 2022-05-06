@@ -53,12 +53,9 @@ router.route('/api/returnOrder')
 
         const controller = req.app.get("controller");
         controller.testPrint(req.url);
-        const returnDate = req.body["returnDate"];
-        const products = req.body["products"];
-        const restockOrderId = req.body["restockOrderId"];
-
+        
         try {
-            controller.getOrderController().createReturnOrder(returnDate, products, restockOrderId);
+            controller.getOrderController().createReturnOrder(req.body);
         } catch (error) {
             let responseParams = Exceptions.handle(error);
             return res.status(responseParams.code).send(responseParams.message);

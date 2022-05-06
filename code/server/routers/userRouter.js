@@ -1,4 +1,3 @@
-const MD5 = require("crypto-js/md5")
 const express = require('express')
 const router = express.Router()
 const Exceptions = require('./exceptions')
@@ -81,16 +80,8 @@ router.post('/api/newUser', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const username = req.body["username"];
-  const name = req.body["name"];
-  const surname = req.body["surname"];
-  const password = MD5(req.body["password"]).toString();
-
-  const type = req.body["type"];
-
   try {
-    controller.getUserController().createUser(username, name,
-      surname, password, type);
+    controller.getUserController().createUser(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -108,11 +99,9 @@ router.post('/api/managerSessions', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const username = req.body["username"];
-  const password = MD5(req.body["password"]).toString();
 
   try {
-    controller.getUserController().loginManager(username, password);
+    controller.getUserController().login(req.body, "manager");
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -130,11 +119,8 @@ router.post('/api/customerSessions', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const username = req.body["username"];
-  const password = MD5(req.body["password"]).toString();
-
   try {
-    controller.getUserController().loginCustomer(username, password);
+    controller.getUserController().login(req.body, "customer")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -152,12 +138,8 @@ router.post('/api/supplierSessions', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const username = req.body["username"];
-  const password = MD5(req.body["password"]).toString();
-
-
   try {
-    controller.getUserController().loginSupplier(username, password);
+    controller.getUserController().login(req.body, "supplier")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -175,12 +157,8 @@ router.post('/api/clerkSessions', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const username = req.body["username"];
-  const password = MD5(req.body["password"]).toString();
-
-
   try {
-    controller.getUserController().loginClerk(username, password);
+    controller.getUserController().login(req.body, "clerk")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -198,12 +176,8 @@ router.post('/api/qualityEmployeeSessions', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const username = req.body["username"];
-  const password = MD5(req.body["password"]).toString();
-
-
   try {
-    controller.getUserController().loginQualityEmployee(username, password);
+    controller.getUserController().login(req.body, "qualityEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -221,12 +195,8 @@ router.post('/api/deliveryEmployeeSessions', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const username = req.body["username"];
-  const password = MD5(req.body["password"]).toString();
-
-
   try {
-    controller.getUserController().loginDeliveryEmployee(username, password);
+    controller.getUserController().login(req.body, "deliveryEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
