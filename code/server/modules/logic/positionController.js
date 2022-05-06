@@ -46,7 +46,7 @@ class PositionController{
     editPosition(oldId, newId){
         const sqlInstruction = "UPDATE SKU SET ID=" + newId + " WHERE ID=" + oldId;
         try {
-            const item =  dbManager.genericSqlGet(sqlInstruction);
+            const position =  dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -58,7 +58,7 @@ class PositionController{
     deletePosition(id){
         const sqlInstruction = "DELETE FROM Position WHERE ID=" + id;
         try {
-            const sku =  dbManager.genericSqlGet(sqlInstruction);
+            const position =  dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
