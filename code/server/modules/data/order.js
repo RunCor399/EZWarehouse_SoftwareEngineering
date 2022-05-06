@@ -29,24 +29,25 @@ class Order{
 
     /* (SKUItem) */
     removeProduct(item){
-        if(this.#products.has(item)){
-            this.#products.delete(item);
-            return 0;
+        //search for id;
+        for (const [key, value] of Object.entries(object)) {
+            if(key.getRFID() === item.getRFID()){
+                return this.#products.delete(key)
+            }
         }
-        else{
-            return -1;
-        }
-        
+
+        return -1;        
     }
 
     changeProductQuantity(item, quantity){
-        if(this.#products.has(item)){
-            this.#products.set(item, quantity);
-            return 0;
+        //search for id
+        for (const [key, value] of Object.entries(object)) {
+            if(key.getRFID() === item.getRFID()){
+                return this.#products.set(key, value);
+            }
         }
-        else{
-            return -1;
-        }
+
+        return -1;
     }
 }
 

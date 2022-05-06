@@ -1,7 +1,19 @@
+const StatefulOrder = require("./Order");
 
 class StatefulOrder extends Order {
-    constructor(){
+    #state;
 
+    constructor(ID, products, state){
+        super(ID, products);
+        this.#state = state;
+    }
+
+    getState(){
+        return this.#state;
+    }
+
+    setState(state){
+        this.#state = state;
     }
 }
 
