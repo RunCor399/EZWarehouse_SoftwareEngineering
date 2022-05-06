@@ -1,8 +1,10 @@
 'use strict'
 class ItemController{
+    #controller;
+    #dbManager;
     constructor(controller) {
-        this.controller = controller;
-        this.dbManager = controller.getDBManager();
+        this.#controller = controller;
+        this.#dbManager = controller.getDBManager();
         console.log("itemController started");
     }
 
@@ -10,7 +12,7 @@ class ItemController{
     getAllItems() {
         const sqlInstruction = "SELECT * FROM ITEM";
         try {
-            const rows =   dbManager.genericSqlGet(sqlInstruction);
+            const rows =   this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -20,7 +22,7 @@ class ItemController{
     getItem(id) {
         const sqlInstruction = "SELECT *  FROM ITEM WHERE id=" + id;
         try {
-            const item =  dbManager.genericSqlGet(sqlInstruction);
+            const item =  this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -28,15 +30,33 @@ class ItemController{
     }
 
     createItem(description, price, SKUid, supplierId){
-        return undefined;
+        const sqlInstruction = "INSERT INTO ITEM (description, price, SKUid, supplierId) VALUES (?, ?, ?, ?);";
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return item;    /*item returned just to test the function*/
     }
 
     editItem(id, newDescription, newPrice){
-        return undefined;
+        const sqlInstruction = "UPDATE ITEM SET description=" + newDescription + " AND price=" + newPrice + " WHERE SKUid=" + id;
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return item;
     }
 
     deleteItem(id){
-        return undefined;
+        const sqlInstruction = "DELETE FROM ITEM WHERE id=" + id;
+        try {
+            const item =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return item;
     }
     
 }

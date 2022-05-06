@@ -1,20 +1,23 @@
 'use strict'
 
-
+const Exceptions = require('../../routers/exceptions');
 
 class UserController{
-
+    #controller;
+    #dbManager;
+    #id = 1;
     #session = { username: "", type: "" };
 
     constructor(controller) {
-        this.controller = controller;
-        this.dbManager = controller.getDBManager();
+        this.#controller = controller;
+        this.#dbManager = controller.getDBManager();
         console.log("testController started");
      
     }
     
-    getUser(){
-        return session;
+    getUser() {
+        throw new Error(Exceptions.message401);
+        return this.#session;
     }
 
     getAllSuppliers(){
@@ -28,15 +31,16 @@ class UserController{
     
 
     createUser(username, name, surname, password, type){
+        
         return undefined;
     }
     
     
     loginManager(username, password) {
 
-        if(true){
-            session.username = username;
-            session.type = "manager"
+        if(false){
+            this.#session.username = username;
+            this.#session.type = "manager"
         }
         else{
             throw new Error("Invalid Login");

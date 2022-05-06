@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Exceptions = require('./exceptions')
 
 
 //TEST DESCRIPTOR
@@ -11,7 +12,13 @@ router.get('/api/testDescriptors', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().getAllTestDescriptors();
+
+  try {
+    controller.getTestController().getAllTestDescriptors();
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });
@@ -25,7 +32,13 @@ router.get('/api/testDescriptors/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().getTestDescriptor(param);
+
+  try {
+    controller.getTestController().getTestDescriptor(param);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });
@@ -37,13 +50,20 @@ router.post('/api/testDescriptor', (req, res) => {
   }
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  
+
   const name = req.body["name"];
   const procedureDescription = req.body["procedureDescription"];
   const idSKU = req.body["idSKU"];
-  
-  controller.getTestController().createTestDescriptor(name, procedureDescription, idSKU);
-  return res.status(200).json(message);
+
+
+  try {
+    controller.getTestController().createTestDescriptor(name, procedureDescription, idSKU);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
+
+  return res.status(201).json(message);
 });
 
 //PUT /api/testDescriptor/:id
@@ -59,7 +79,12 @@ router.put('/api/testDescriptor/:id', (req, res) => {
   const newProcedureDescription = req.body["newProcedureDescription"];
   const newIdSKU = req.body["newIdSKU"];
 
-  controller.getTestController().editTestDescriptor(param, newName, newProcedureDescription, newIdSKU);
+  try {
+    controller.getTestController().editTestDescriptor(param, newName, newProcedureDescription, newIdSKU);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });
@@ -73,9 +98,14 @@ router.delete('/api/testDescriptor/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().deleteTestDescriptor(param);
 
-  return res.status(200).json(message);
+  try {
+    controller.getTestController().deleteTestDescriptor(param);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
+  return res.status(204).json(message);
 });
 
 
@@ -93,7 +123,13 @@ router.get('/api/skuitems/:rfid/testResults', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().getTestResults(param);
+
+  try {
+    controller.getTestController().getTestResults(param);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });
@@ -108,7 +144,14 @@ router.get('/api/skuitems/:rfid/testResults/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().getTestResult(paramRfid, paramId);
+
+  try {
+    controller.getTestController().getTestResult(paramRfid, paramId);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
+
   return res.status(200).json(message);
 });
 
@@ -126,7 +169,12 @@ router.post('/api/skuitems/testResult', (req, res) => {
   const date = req.body["Date"];
   const result = req.body["Result"];
 
-  controller.getTestController().createTestResult(rfid, idTestDesciptor, date, result);
+  try {
+    controller.getTestController().createTestResult(rfid, idTestDesciptor, date, result);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
   return res.status(200).json(message);
 });
 
@@ -143,8 +191,13 @@ router.put('/api/skuitems/:rfid/testResult/:id', (req, res) => {
   const newIdTestDesciptor = req.body["newIdTestDescriptor"];
   const newDate = req.body["newDate"];
   const newResult = req.body["newResult"];
-
-  controller.getTestController().editTestResult(paramRfid, paramId, newIdTestDesciptor, newDate, newResult);
+  
+  try {
+    controller.getTestController().editTestResult(paramRfid, paramId, newIdTestDesciptor, newDate, newResult);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
   return res.status(200).json(message);
 });
 
@@ -158,7 +211,13 @@ router.delete('/api/skuitems/:rfid/testResult/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getTestController().deleteTestResult(paramRfid, paramId);
+
+  try {
+    controller.getTestController().deleteTestResult(paramRfid, paramId);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
   return res.status(200).json(message);
 });
 

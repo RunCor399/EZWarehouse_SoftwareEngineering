@@ -1,6 +1,8 @@
 'use strict'
 
 class PositionController{
+    #controller;
+    #dbManager;
     constructor(controller) {
         this.controller = controller;
         this.dbManager = controller.getDBManager();
@@ -8,7 +10,13 @@ class PositionController{
     }
     
     getAllPositions(){
-        return undefined;
+        const sqlInstruction = "SELECT * FROM POSITIONS";
+        try {
+            const rows =   dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log(error);
+        }
+        return rows.map((row) => row);
     }
 
     createPosition(positionID, aisleID, row, col, maxWeight, maxVolume){
@@ -24,7 +32,13 @@ class PositionController{
     }
 
     deletePosition(id){
-        return undefined;
+        const sqlInstruction = "DELETE FROM POSITION WHERE id=" + id;
+        try {
+            const sku =  dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return position; /*position returned to test it*/
     }
 
 }
