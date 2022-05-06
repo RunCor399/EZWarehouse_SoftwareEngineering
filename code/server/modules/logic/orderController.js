@@ -53,6 +53,9 @@ class OrderController {
         const products = body["products"];
         const supplierId = body["supplierId"]
 
+        if (issueDate === undefined || products === undefined || supplierId === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (?, ?, ?);";
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
@@ -66,6 +69,9 @@ class OrderController {
     editRestockOrder(id, body) {
 
         const newState = body["newState"];
+
+        if (newState === undefined)
+            throw new Error(Exceptions.message422);
 
 
         const sqlInstruction = "UPDATE RestockOrder SET state=" + newState + " WHERE ID=" + id;
@@ -81,6 +87,9 @@ class OrderController {
 
         const skuItems = body["skuItems"];
 
+        if (skuItems === undefined)
+            throw new Error(Exceptions.message422);
+
         return undefined;
     }
 
@@ -88,7 +97,8 @@ class OrderController {
     addTransportNote(id, body) {
 
         const transportNote = body["transportNote"];
-
+        if (transportNote === undefined)
+            throw new Error(Exceptions.message422);
         return undefined;
     }
 
@@ -131,6 +141,9 @@ class OrderController {
         const returnDate = body["returnDate"];
         const products = body["products"];
         const restockOrderId = body["restockOrderId"];
+
+        if (returnDate === undefined || products === undefined || restockOrderId === undefined)
+            throw new Error(Exceptions.message422);
 
         const sqlInstruction = "INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (?, ?, ?);";
         try {
@@ -203,6 +216,9 @@ class OrderController {
         const products = body["products"];
         const customerId = body["customerId"]
 
+        if (issueDate === undefined || products === undefined || customerId === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "INSERT INTO InternalOrder (ID, customerId) VALUES (?, ?);";
         try {
             const internalOrder = dbManager.genericSqlGet(sqlInstruction);
@@ -217,12 +233,19 @@ class OrderController {
 
         const newState = body["newState"];
 
-        if(newState === "COMPLETED"){
+        if (newState === undefined)
+            throw new Error(Exceptions.message422);
+
+        if (newState === "COMPLETED") {
             const products = body["products"];
+
+            if (products === undefined)
+                throw new Error(Exceptions.message422);
+
             //query
             return internalOrder;
         }
-        else{
+        else {
             const sqlInstruction = "UPDATE InternalOrder SET state=" + newState + " WHERE ID=" + id;
             try {
                 const internalOrder = dbManager.genericSqlGet(sqlInstruction);
@@ -231,7 +254,7 @@ class OrderController {
             }
             return internalOrder;
         }
-        
+
     }
 
 

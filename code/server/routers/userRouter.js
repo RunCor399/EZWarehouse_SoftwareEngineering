@@ -237,13 +237,8 @@ router.put('/api/user/:username', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const oldType = req.body["oldType"];
-  const newType = req.body["newType"];
-
-
-
   try {
-    controller.getUserController().editUser(param, oldType, newType);
+    controller.getUserController().editUser(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

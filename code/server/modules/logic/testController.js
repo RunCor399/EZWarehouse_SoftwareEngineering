@@ -39,6 +39,10 @@ class TestController {
         const procedureDescription = body["procedureDescription"];
         const idSKU = body["idSKU"];
 
+        if (name === undefined || procedureDescription === undefined || idSKU === undefined)
+            throw new Error(Exceptions.message422);
+
+
         const sqlInstruction = "INSERT INTO TestDescriptor (ID, name, procedureDescription) VALUES (?, ?, ?); INSERT INTO TestDescriptorOwnership (testDescID, SKUID) VALUES (?, ?);";
         try {
             const testDesc = dbManager.genericSqlGet(sqlInstruction);
@@ -54,6 +58,9 @@ class TestController {
         const newName = body["newName"];
         const newProcedureDescription = body["newProcedureDescription"];
         const newIdSKU = body["newIdSKU"];
+
+        if (newName === undefined || newProcedureDescription === undefined || newIdSKU === undefined)
+            throw new Error(Exceptions.message422);
 
         const sqlInstruction = "UPDATE TestDescriptor SET name=" + newName + " AND description=" + newProcedureDescription + " WHERE ID=" + id;
         try {
@@ -105,6 +112,9 @@ class TestController {
         const date = body["Date"];
         const result = body["Result"];
 
+        if (rfid === undefined || idTestDesciptor === undefined || date === undefined || result === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "INSERT INTO TestResult (testDescID, SKUItemID, date, result) VALUES (?, ?, ?, ?);";
         try {
             const testRes = dbManager.genericSqlGet(sqlInstruction);
@@ -120,6 +130,9 @@ class TestController {
         const newIdTestDesciptor = body["newIdTestDescriptor"];
         const newDate = body["newDate"];
         const newResult = body["newResult"];
+
+        if (newIdTestDesciptor === undefined || newDate === undefined || newResult === undefined)
+            throw new Error(Exceptions.message422);
 
         const sqlInstruction = "UPDATE TestDescriptor SET testDescID=" + newIdTestDesciptor + " AND date=" + newDate + " AND result=" + newResult + " WHERE testDescID=" + id + " AND SKUItemID" + rfid;
         try {

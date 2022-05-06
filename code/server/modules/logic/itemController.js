@@ -1,4 +1,7 @@
 'use strict'
+
+const Exceptions = require('../../routers/exceptions');
+
 class ItemController {
     #controller;
     #dbManager;
@@ -22,6 +25,7 @@ class ItemController {
 
     /*MODIFIED */
     getItem(id) {
+        
         const sqlInstruction = "SELECT *  FROM Item WHERE ID=" + id;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
@@ -39,6 +43,9 @@ class ItemController {
         const SKUid = body["SKUId"]
         const supplierId = body["supplierID"];
 
+        if(description === undefined || price === undefined || SKUid === undefined || supplierId === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "INSERT INTO Item (ID, SKUid) VALUES (?, ?); INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (?, ?);";
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
@@ -54,6 +61,8 @@ class ItemController {
         const newDescription = body["newDescription"];
         const newPrice = body["newPrice"];
 
+        if(newDescription === undefined || newPrice === undefined)
+            throw new Error(Exceptions.message422);
 
         const sqlInstruction = "UPDATE ITEM SET description=" + newDescription + " AND price=" + newPrice + " WHERE SKUid=" + id;
         try {

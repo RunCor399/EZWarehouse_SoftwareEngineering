@@ -42,28 +42,30 @@ class UserController {
 
     createUser(body) {
 
-
         const username = body["username"];
         const name = body["name"];
         const surname = body["surname"];
         const password = MD5(body["password"]).toString();
         const type = body["type"];
 
-        if (this.#user === undefined ||
-            this.#user.getType() !== "manager")
-            throw new Error(Exceptions.message401);
-        else if (true) //errore409//
-            throw new Error(Exceptions.message404);
-        else if (type === "manager")
+        if (username === undefined || name === undefined || surname === undefined
+            || password === undefined || type === undefined)
             throw new Error(Exceptions.message422);
-        //execute query
+
+
         return;
     }
 
     login(body, type) {
 
         const username = body["username"];
-        const password = MD5(body["password"]).toString();
+        const password = body["password"];
+
+        if (username === undefined || password === undefined)
+            throw new Error(Exceptions.message422);
+
+        const hashedPassword = MD5(password).toString();
+
 
         if (false) {
             let row = undefined; //sql query 
@@ -81,14 +83,20 @@ class UserController {
         return;
     }
 
-    editUser(username, oldType, newType) {
-        if (this.#user === undefined ||
-            this.#user.getType() !== "manager")
-            throw new Error(Exceptions.message401);
-        return undefined;
+    editUser(username, body) {
+
+        const oldType = body["oldType"];
+        const newType = body["newType"];
+
+        if (username === undefined || oldType === undefined || newType === undefined)
+            throw new Error(Exceptions.message422);
     }
 
     deleteUser(username, type) {
+
+        if (username === undefined || type === undefined)
+            throw new Error(Exceptions.message422);
+
         return undefined;
     }
 

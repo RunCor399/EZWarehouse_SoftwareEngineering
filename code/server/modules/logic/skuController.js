@@ -41,6 +41,10 @@ class SkuController {
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
 
+        if (description === undefined || weight === undefined || volume === undefined || notes === undefined
+            || price === undefined || availableQuantity === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "INSERT INTO SKU (ID, weight, volume, price, notes, description) VALUES (?, ?, ?, ?, ?, ?);";
         try {
             const sku = dbManager.genericSqlGet(sqlInstruction);
@@ -60,6 +64,10 @@ class SkuController {
         const newPrice = body["newPrice"];
         const newAvailableQuantity = req.body["newAvailableQuantity"];
 
+        if (newDescription === undefined || newWeight === undefined || newVolume === undefined ||
+            newNotes === undefined || newPrice === undefined || newAvailableQuantity === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "UPDATE SKU SET weight=" + newWeight + " AND volume=" + newVolume + " AND price=" + newPrice + " AND notes=" + newNotes + " AND description=" + newDescription + " WHERE ID=" + id;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
@@ -70,7 +78,13 @@ class SkuController {
     }
 
     /*NEW */
-    setPosition(id, position) {
+    setPosition(id, body) {
+
+        const position = body["position"];
+
+        if (position === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "UPDATE SKUStorage SET positionID=" + position + " WHERE SKUID=" + id;
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
@@ -127,6 +141,9 @@ class SkuController {
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
 
+        if (RFID === undefined || SKUId === undefined || dateOfStock === undefined)
+            throw new Error(Exceptions.message422);
+
         const sqlInstruction = "INSERT INTO SKUItem (ID) VALUES (?);";
         try {
             const skuItem = dbManager.genericSqlGet(sqlInstruction);
@@ -141,6 +158,11 @@ class SkuController {
         const newRFID = body["newRFID"];
         const newSKUId = body["newSKUId"];
         const newDateOfStock = body["newDateOfStock"];
+
+
+        if (newRFID === undefined || newSKUId === undefined || newDateOfStock === undefined)
+            throw new Error(Exceptions.message422);
+
 
         return undefined;
     }

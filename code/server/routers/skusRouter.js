@@ -90,11 +90,9 @@ router.put('/api/sku/:id', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-  const position = req.body["position"];
-
 
   try {
-    controller.getSkuController().setPosition(param, position);
+    controller.getSkuController().setPosition(param, req.body);
 
   } catch (error) {
     let responseParams = Exceptions.handle(error);
