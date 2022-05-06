@@ -1,4 +1,4 @@
-const StatefulOrder = require("./Order");
+import Order from "./Order";
 
 class ReturnOrder extends Order {
     #date;

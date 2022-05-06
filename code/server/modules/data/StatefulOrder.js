@@ -1,4 +1,4 @@
-const StatefulOrder = require("./Order");
+const Order = require("./Order");
 
 class StatefulOrder extends Order {
     #state;

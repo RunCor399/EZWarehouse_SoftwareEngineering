@@ -1,6 +1,6 @@
-const SKU = require("./SKU");
 
-class SKUItem extends SKU{
+
+class SKUItem {
     #RFID;
 
     constructor(ID, description, weight, volume, price, notes, RFID){
