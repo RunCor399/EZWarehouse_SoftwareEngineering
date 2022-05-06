@@ -12,7 +12,13 @@ router.route('/api/restockOrders')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getOrderController().getAllRestockOrders();
+
+    try {
+      controller.getOrderController().getAllRestockOrders();
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   });
@@ -28,116 +34,163 @@ router.route('/api/restockOrder')
     const issueDate = req.body["issueDate"];
     const products = req.body["products"];
     const supplierId = req.body["supplierId"]
-    
-    controller.getOrderController().createRestockOrder(issueDate, products, supplierId);
+
+
+    try {
+      controller.getOrderController().createRestockOrder(issueDate, products, supplierId);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   });
 
 
-  router.route('/api/restockOrders/:id')
-    .get((req, res) => {
-      const param = req.params.id;
-      let message = {
-        message: "GET: "+param
-      }
+router.route('/api/restockOrders/:id')
+  .get((req, res) => {
+    const param = req.params.id;
+    let message = {
+      message: "GET: " + param
+    }
 
-      const controller = req.app.get("controller");
-      controller.testPrint(req.url);
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+
+    try {
       controller.getOrderController().getRestockOrder(param);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
-      return res.status(200).json(message);
-    });
-    
-  router.route('/api/restockOrder/:id')
-    .put((req, res) => {
-      const param = req.params.id;
-      let message = {
-        message: "PUT /api/restockOrder/: "+param
-      }
+    return res.status(200).json(message);
+  });
 
-      const controller = req.app.get("controller");
-      controller.testPrint(req.url);
-      
-      const newState = req.body["newState"];
-      controller.getOrderController().editRestockOrder(param, newState)
+router.route('/api/restockOrder/:id')
+  .put((req, res) => {
+    const param = req.params.id;
+    let message = {
+      message: "PUT /api/restockOrder/: " + param
+    }
 
-      return res.status(200).json(message);
-    })
-    .delete((req, res) => {
-      const param = req.params.id;
-      let message = {
-        message: "DELETE /api/restockOrder/: "+param
-      }
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
 
-      const controller = req.app.get("controller");
-      controller.testPrint(req.url);
+    const newState = req.body["newState"];
+
+    try {
+      controller.getOrderController().editRestockOrder(param, newState);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
+
+    return res.status(200).json(message);
+  })
+  .delete((req, res) => {
+    const param = req.params.id;
+    let message = {
+      message: "DELETE /api/restockOrder/: " + param
+    }
+
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+
+    try {
       controller.getOrderController().deleteRestockOrder(param);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
-      return res.status(200).json(message);
-    });
+    return res.status(200).json(message);
+  });
 
 
-  router.route('/api/restockOrdersIssued')
-    .get((req, res) => {
-      let message = {
-        message: "/api/restockOrdersIssued"
-      }
+router.route('/api/restockOrdersIssued')
+  .get((req, res) => {
+    let message = {
+      message: "/api/restockOrdersIssued"
+    }
 
-      const controller = req.app.get("controller");
-      controller.testPrint(req.url);
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+
+    try {
       controller.getOrderController().getIssuedRestockOrders();
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
-      return res.status(200).json(message);
-    });
+    return res.status(200).json(message);
+  });
 
 
-  router.route('/api/restockOrders/:id/returnItems')
-    .get((req, res) => {
-      const param = req.params.id;
-      let message = {
-        message: "/api/restockOrders/:id/returnItems"
-      }
+router.route('/api/restockOrders/:id/returnItems')
+  .get((req, res) => {
+    const param = req.params.id;
+    let message = {
+      message: "/api/restockOrders/:id/returnItems"
+    }
 
-      const controller = req.app.get("controller");
-controller.testPrint(req.url);
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+
+    try {
       controller.getOrderController().getRestockOrderToBeReturned(param);
-      
-      return res.status(200).json(message);
-    });
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
+
+    return res.status(200).json(message);
+  });
 
 
-  router.route('/api/restockOrder/:id/skuItems')
-    .put((req, res) => {
-      const param = req.params.id;
-      let message = {
-        message: "PUT /api/restockOrder/id/skuItems: "+param
-      }
-      
-      const controller = req.app.get("controller");
-      controller.testPrint(req.url);
+router.route('/api/restockOrder/:id/skuItems')
+  .put((req, res) => {
+    const param = req.params.id;
+    let message = {
+      message: "PUT /api/restockOrder/id/skuItems: " + param
+    }
 
-      const skuItems = req.body["skuItems"];
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+
+    const skuItems = req.body["skuItems"];
+
+    try {
       controller.getOrderController().addSkuItemsToRestockOrder(param, skuItems);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
-      return res.status(200).json(message);
-    });
+    return res.status(200).json(message);
+  });
 
 
-    router.route('/api/restockOrder/:id/transportNote')
-    .put((req, res) => {
-      const param = req.params.id;
-      let message = {
-        message: "PUT /api/restockOrder/id/transportNote: "+param
-      }
+router.route('/api/restockOrder/:id/transportNote')
+  .put((req, res) => {
+    const param = req.params.id;
+    let message = {
+      message: "PUT /api/restockOrder/id/transportNote: " + param
+    }
 
-      const controller = req.app.get("controller");
-      controller.testPrint(req.url);
-      const transportNote = req.body["transportNote"];
-      
+    const controller = req.app.get("controller");
+    controller.testPrint(req.url);
+    const transportNote = req.body["transportNote"];
+
+    try {
       controller.getOrderController().addTransportNote(param, transportNote);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
-      return res.status(200).json(message);
-    });
+    return res.status(200).json(message);
+  });
 
-  module.exports = router
+module.exports = router

@@ -11,7 +11,13 @@ router.route('/api/returnOrders')
 
         const controller = req.app.get("controller");
         controller.testPrint(req.url);
-        controller.getOrderController().getAllReturnOrders();
+
+        try {
+            controller.getOrderController().getAllReturnOrders();
+        } catch (error) {
+            let responseParams = Exceptions.handle(error);
+            return res.status(responseParams.code).send(responseParams.message);
+        }
 
         return res.status(200).json(message);
     });
@@ -26,7 +32,13 @@ router.route('/api/returnOrders/:id')
 
         const controller = req.app.get("controller");
         controller.testPrint(req.url);
-        controller.getOrderController().getReturnOrder(param);
+
+        try {
+            controller.getOrderController().getReturnOrder(param);
+        } catch (error) {
+            let responseParams = Exceptions.handle(error);
+            return res.status(responseParams.code).send(responseParams.message);
+        }
 
         return res.status(200).json(message);
     });
@@ -44,8 +56,13 @@ router.route('/api/returnOrder')
         const returnDate = req.body["returnDate"];
         const products = req.body["products"];
         const restockOrderId = req.body["restockOrderId"];
-        
-        controller.getOrderController().createReturnOrder(returnDate, products, restockOrderId);
+
+        try {
+            controller.getOrderController().createReturnOrder(returnDate, products, restockOrderId);
+        } catch (error) {
+            let responseParams = Exceptions.handle(error);
+            return res.status(responseParams.code).send(responseParams.message);
+        }
         return res.status(200).json(message);
     });
 
@@ -58,8 +75,14 @@ router.route('/api/returnOrder/:id')
 
         const controller = req.app.get("controller");
         controller.testPrint(req.url);
-        controller.getOrderController().deleteReturnOrder(param);
-        
+
+        try {
+            controller.getOrderController().deleteReturnOrder(param);
+        } catch (error) {
+            let responseParams = Exceptions.handle(error);
+            return res.status(responseParams.code).send(responseParams.message);
+        }
+
         return res.status(200).json(message);
     });
 

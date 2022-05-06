@@ -10,7 +10,13 @@ router.get('/api/items',  (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const items = controller.getItemController().getAllItems();
+
+  try {
+    const items = controller.getItemController().getAllItems();
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });
@@ -24,7 +30,13 @@ router.get('/api/items/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  const item = controller.getItemController().getItem(param);
+  
+  try {
+    const item = controller.getItemController().getItem(param);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });
@@ -43,7 +55,13 @@ router.post('/api/item', (req, res) => {
   const SKUid = req.body["SKUId"]
   const supplierId = req.body["supplierID"];
 
-  controller.getItemController().createItem(description, price, SKUid, supplierId);
+  try {
+    controller.getItemController().createItem(description, price, SKUid, supplierId);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
+
 
   return res.status(200).json(message);
 });
@@ -61,7 +79,12 @@ router.put('/api/sku/:id', (req, res) => {
   const newDescription = req.body["newDescription"];
   const newPrice = req.body["newPrice"];
 
-  controller.getItemController().editItem(param, newDescription, newPrice);
+  try {
+    controller.getItemController().editItem(param, newDescription, newPrice);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });
@@ -75,7 +98,13 @@ router.delete('/api/items/:id', (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-  controller.getItemController().deleteItem(param);
+  
+  try {
+    controller.getItemController().deleteItem(param);
+  } catch (error) {
+    let responseParams = Exceptions.handle(error);
+    return res.status(responseParams.code).send(responseParams.message);
+  }
 
   return res.status(200).json(message);
 });

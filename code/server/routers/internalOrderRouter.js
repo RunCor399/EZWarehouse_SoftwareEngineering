@@ -12,7 +12,13 @@ router.route('/api/internalOrders')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getOrderController().getAllInternalOrders();
+
+    try {
+      controller.getOrderController().getAllInternalOrders();
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   });
@@ -25,7 +31,13 @@ router.route('/api/internalOrdersIssued')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getOrderController().getIssuedInternalOrders();
+
+    try {
+      controller.getOrderController().getIssuedInternalOrders();
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   });
@@ -38,7 +50,13 @@ router.route('/api/internalOrdersAccepted')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getOrderController().getAcceptedInternalOrders();
+
+    try {
+      controller.getOrderController().getAcceptedInternalOrders();
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   });
@@ -52,7 +70,13 @@ router.route('/api/internalOrders/:id')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getOrderController().getInternalOrder(param);
+
+    try {
+      controller.getOrderController().getInternalOrder(param);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   });
@@ -70,7 +94,13 @@ router.route('/api/internalOrder')
     const products = req.body["products"];
     const customerId = req.body["customerId"]
 
-    controller.getOrderController().createInternalOrder(issueDate, products, customerId);
+    try {
+      controller.getOrderController().createInternalOrder(issueDate, products, customerId);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
+
 
 
     return res.status(200).json(message);
@@ -90,12 +120,19 @@ router.route('/api/internalOrder/:id')
 
     if (newState === "COMPLETED") {
       const products = req.body["products"];
-      controller.getOrderController().editIntenalOrder(param, newState, products);
+      try {
+        controller.getOrderController().editIntenalOrder(param, newState, products);
+      } catch (error) {
+        let responseParams = Exceptions.handle(error);
+        return res.status(responseParams.code).send(responseParams.message);
+      }
     }
-    else controller.getOrderController().editIntenalOrder(param, newState);
-
-
-
+    else try {
+      controller.getOrderController().editIntenalOrder(param, newState);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   })
@@ -107,7 +144,13 @@ router.route('/api/internalOrder/:id')
 
     const controller = req.app.get("controller");
     controller.testPrint(req.url);
-    controller.getOrderController().deleteInternalOrder(param);
+    
+    try {
+      controller.getOrderController().deleteInternalOrder(param);
+    } catch (error) {
+      let responseParams = Exceptions.handle(error);
+      return res.status(responseParams.code).send(responseParams.message);
+    }
 
     return res.status(200).json(message);
   });
