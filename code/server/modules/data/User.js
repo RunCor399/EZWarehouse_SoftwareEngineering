@@ -1,10 +1,10 @@
 
-class CompanyPerson{
+class User{
     #ID;
     #type;
     #name;
     #surname;
-    #privilegeLevel;
+    //#privilegeLevel;
 
     constructor(ID, type, name, surname, privilegeLevel){
         this.#ID = ID;
@@ -30,9 +30,9 @@ class CompanyPerson{
         return this.#surname;
     }
 
-    getPrivilegeLevel(){
+    /*getPrivilegeLevel(){
         return this.#privilegeLevel;
-    }
+    }*/
 
     setID(ID){
         this.#ID = ID;
@@ -50,10 +50,10 @@ class CompanyPerson{
         this.#surname = surname;
     }
 
-    setPrivilegeLevel(privilegeLevel){
+    /*setPrivilegeLevel(privilegeLevel){
         this.#privilegeLevel = privilegeLevel;
-    }
+    }*/
 
 }
 
-module.exports = CompanyPerson;
+module.exports = User;
