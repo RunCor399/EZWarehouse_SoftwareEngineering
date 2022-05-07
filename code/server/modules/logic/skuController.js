@@ -68,7 +68,8 @@ class SkuController {
             newNotes === undefined || newPrice === undefined || newAvailableQuantity === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "UPDATE SKU SET weight=" + newWeight + " AND volume=" + newVolume + " AND price=" + newPrice + " AND notes=" + newNotes + " AND description=" + newDescription + " WHERE ID=" + id;
+        const sqlInstruction = `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
+        AND notes= ${newNotes} AND description= ${newDescription} WHERE ID=${id};`;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -85,7 +86,7 @@ class SkuController {
         if (position === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "UPDATE SKUStorage SET positionID=" + position + " WHERE SKUID=" + id;
+        const sqlInstruction = `UPDATE SKUStorage SET positionID= ${position} WHERE SKUID= ${id};`;
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -96,7 +97,7 @@ class SkuController {
 
     /*MODIFIED */
     deleteSku(id) {
-        const sqlInstruction = "DELETE FROM SKU WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
         try {
             const sku = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -125,7 +126,7 @@ class SkuController {
 
     /*MODIFIED */
     getSkuItem(rfid) {
-        const sqlInstruction = "SELECT *  FROM SKUItem WHERE ID=" + rfid;
+        const sqlInstruction = `SELECT *  FROM SKUItem WHERE ID= ${rfid};`;
         try {
             const skuItem = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -169,7 +170,7 @@ class SkuController {
 
     /*MODIFIED */
     deleteSkuItem(rfid) {
-        const sqlInstruction = "DELETE FROM SKU WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM SKU WHERE ID= ${rfid};`;
         try {
             const skuItem = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
