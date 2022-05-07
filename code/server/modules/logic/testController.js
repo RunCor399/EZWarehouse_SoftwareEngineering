@@ -62,7 +62,9 @@ class TestController {
         if (newName === undefined || newProcedureDescription === undefined || newIdSKU === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "UPDATE TestDescriptor SET name=" + newName + " AND description=" + newProcedureDescription + " WHERE ID=" + id;
+        const sqlInstruction = `UPDATE TestDescriptor SET name= ${newName}
+        AND description= ${newProcedureDescription} WHERE ID= ${id}`;
+
         try {
             const testDesc = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -73,7 +75,7 @@ class TestController {
 
     /*MODIFIED */
     deleteTestDescriptor(id) {
-        const sqlInstruction = "DELETE FROM TestDescriptor WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM TestDescriptor WHERE ID=  ${id}`
         try {
             const testDescriptor = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -84,7 +86,7 @@ class TestController {
 
     /*NEW */
     getTestResults(rfid) {
-        const sqlInstruction = "SELECT *  FROM TestResult WHERE SKUItemID=" + rfid;
+        const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID=" ${rfid};`;
         try {
             const testRes = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -95,7 +97,7 @@ class TestController {
 
     /*NEW */
     getTestResult(rfid, id) {
-        const sqlInstruction = "SELECT *  FROM TestResult WHERE SKUItemID=" + rfid + " AND testDescID=" + id;
+        const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= + ${rfid} AND testDescID= ${id};`;
         try {
             const testRes = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -134,7 +136,9 @@ class TestController {
         if (newIdTestDesciptor === undefined || newDate === undefined || newResult === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "UPDATE TestDescriptor SET testDescID=" + newIdTestDesciptor + " AND date=" + newDate + " AND result=" + newResult + " WHERE testDescID=" + id + " AND SKUItemID" + rfid;
+        const sqlInstruction = `UPDATE TestDescriptor SET testDescID= ${newIdTestDesciptor} AND date= ${newDate} 
+        AND result= ${newResult} WHERE testDescID= ${id} AND SKUItemID = ${rfid};`;
+
         try {
             const testRes = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -145,7 +149,8 @@ class TestController {
 
     /*NEW */
     deleteTestResult(rfid, id) {
-        const sqlInstruction = "DELETE FROM ITEM WHERE testDescID=" + id + " AND SKUItemID=" + rfid;
+        const sqlInstruction = `DELETE FROM ITEM WHERE testDescID= ${id} AND SKUItemID= ${rfid};`;
+        
         try {
             const testRes = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

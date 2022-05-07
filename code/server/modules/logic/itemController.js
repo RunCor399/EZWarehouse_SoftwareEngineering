@@ -26,7 +26,7 @@ class ItemController {
     /*MODIFIED */
     getItem(id) {
         
-        const sqlInstruction = "SELECT *  FROM Item WHERE ID=" + id;
+        const sqlInstruction = `SELECT *  FROM Item WHERE ID= ${id};`;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -64,7 +64,7 @@ class ItemController {
         if(newDescription === undefined || newPrice === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "UPDATE ITEM SET description=" + newDescription + " AND price=" + newPrice + " WHERE SKUid=" + id;
+        const sqlInstruction = `UPDATE ITEM SET description= ${newDescription} AND price= ${newPrice} WHERE SKUid= ${id};`;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -75,7 +75,7 @@ class ItemController {
 
     /*MODIFIED */
     deleteItem(id) {
-        const sqlInstruction = "DELETE FROM Item WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

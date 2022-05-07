@@ -56,7 +56,9 @@ class PositionController {
             || newMaxWeight === undefined || newMaxVolume === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "UPDATE Position SET maxVolume=" + newMaxVolume + " AND maxWeight=" + newMaxWeight + " AND aisle=" + newAisleID + " AND row=" + newRow + " AND column=" + newCol + " WHERE ID=" + id;
+        const sqlInstruction = `UPDATE Position SET maxVolume= ${newMaxVolume} AND maxWeight= ${newMaxWeight} 
+        AND aisle= ${newAisleID} AND row= ${newRow} AND column= ${newCol} WHERE ID= ${id};`;
+
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -72,7 +74,7 @@ class PositionController {
         if (newPositionID === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "UPDATE SKU SET ID=" + newPositionID + " WHERE ID=" + oldId;
+        const sqlInstruction = `UPDATE SKU SET ID= ${newPositionID} WHERE ID= ${oldId};`;
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -84,7 +86,7 @@ class PositionController {
 
     /*MODIFIED */
     deletePosition(id) {
-        const sqlInstruction = "DELETE FROM Position WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
