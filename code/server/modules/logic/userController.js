@@ -108,7 +108,8 @@ class UserController {
 
         const hashedPassword = MD5(password).toString();
 
-        const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U WHERE username=${username} AND password=${hashedPassword}`;
+        const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
+        WHERE username=${username} AND password=${hashedPassword}`;
 
         try {
             const row = dbManager.genericSqlGet(sqlInstruction);

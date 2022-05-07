@@ -33,7 +33,7 @@ class OrderController {
 
     /*NEW */
     getRestockOrder(id) {
-        const sqlInstruction = "SELECT * FROM RestockOrder WHERE ID=" + id;
+        const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -74,7 +74,7 @@ class OrderController {
             throw new Error(Exceptions.message422);
 
 
-        const sqlInstruction = "UPDATE RestockOrder SET state=" + newState + " WHERE ID=" + id;
+        const sqlInstruction = `UPDATE RestockOrder SET state = ${newState} WHERE ID= ${id};`;
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -104,7 +104,7 @@ class OrderController {
 
     /*NEW */
     deleteRestockOrder(id) {
-        const sqlInstruction = "DELETE FROM RestockOrder WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -126,7 +126,7 @@ class OrderController {
 
     /*NEW */
     getReturnOrder(id) {
-        const sqlInstruction = "SELECT * FROM ReturnOrder WHERE ID=" + id;
+        const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
         try {
             const returnOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -156,7 +156,7 @@ class OrderController {
 
     /*NEW */
     deleteReturnOrder(id) {
-        const sqlInstruction = "DELETE FROM ReturnOrder WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
         try {
             const returnOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -200,7 +200,7 @@ class OrderController {
 
     /*NEW */
     getInternalOrder(id) {
-        const sqlInstruction = "SELECT * FROM InternalOrder WHERE ID=" + id;
+        const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
         try {
             const internalOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -246,7 +246,7 @@ class OrderController {
             return internalOrder;
         }
         else {
-            const sqlInstruction = "UPDATE InternalOrder SET state=" + newState + " WHERE ID=" + id;
+            const sqlInstruction = `UPDATE InternalOrder SET state=  ${newState} WHERE ID= ${id}`;
             try {
                 const internalOrder = dbManager.genericSqlGet(sqlInstruction);
             } catch (error) {
@@ -260,7 +260,7 @@ class OrderController {
 
     /*NEW */
     deleteInternalOrder(id) {
-        const sqlInstruction = "DELETE FROM InternalOrder WHERE ID=" + id;
+        const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
             const internalOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

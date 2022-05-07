@@ -22,7 +22,7 @@ class SkuController {
 
     /*MODIFIED*/
     getSku(id) {
-        const sqlInstruction = "SELECT *  FROM SKU WHERE ID=" + id;
+        const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
         try {
             const sku = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
