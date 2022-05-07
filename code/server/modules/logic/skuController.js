@@ -34,6 +34,14 @@ class SkuController {
     /*availableQuantity is missing in the SKU table */
     createSku(body) {
 
+        const sqlGetCount = 'SELECT COUNT(*) FROM SKUS'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
+
         const description = body["description"];
         const weight = body["weight"];
         const volume = body["volume"];
@@ -45,7 +53,7 @@ class SkuController {
             || price === undefined || availableQuantity === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO SKU (ID, weight, volume, price, notes, description) VALUES (?, ?, ?, ?, ?, ?);";
+        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description) VALUES (${id+1}, ${weight}, ${volume}, ${price}, ${notes}, ${description});`;
         try {
             const sku = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -138,6 +146,15 @@ class SkuController {
     /*MODIFIED - how is the position updated? It's in the StockInfo table but here is missing*/
     createSkuItem(body) {
 
+        const sqlGetCount = 'SELECT COUNT(*) FROM SKUitems'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
+
+
         const RFID = body["RFID"];
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
@@ -145,7 +162,7 @@ class SkuController {
         if (RFID === undefined || SKUId === undefined || dateOfStock === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO SKUItem (ID) VALUES (?);";
+        const sqlInstruction = `INSERT INTO SKUItem (ID) VALUES (${id});`;
         try {
             const skuItem = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

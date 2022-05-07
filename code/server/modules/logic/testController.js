@@ -109,6 +109,14 @@ class TestController {
     /*NEW */
     createTestResult(body) {
 
+        const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
+
         const rfid = body["rfid"];
         const idTestDesciptor = body["idTestDescriptor"];
         const date = body["Date"];
@@ -117,7 +125,7 @@ class TestController {
         if (rfid === undefined || idTestDesciptor === undefined || date === undefined || result === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO TestResult (testDescID, SKUItemID, date, result) VALUES (?, ?, ?, ?);";
+        const sqlInstruction = `INSERT INTO TestResult (testDescID, SKUItemID, date, result) VALUES (${id+1}, ${rfid}, ${date}, ${result});`;
         try {
             const testRes = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

@@ -23,6 +23,15 @@ class PositionController {
     /*NEW - can occupiedWeight and occupiedVolume be initialized at zero? */
     createPosition(body) {
 
+
+        const sqlGetCount = 'SELECT COUNT(*) FROM POSITIONS'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
+
         const positionID = body["positionID"];
         const aisleID = body["aisleID"];
         const row = body["row"];
@@ -34,7 +43,7 @@ class PositionController {
             col === undefined || maxWeight === undefined || maxVolume === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column) VALUES (?, ?, ?, ?, ?, ?);";
+        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column) VALUES (${id+1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col});`;
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

@@ -37,6 +37,14 @@ class ItemController {
 
     /*MODIFIED - the description is missing in the table! */
     createItem(body) {
+        
+        const sqlGetCount = 'SELECT COUNT(*) FROM POSITIONS'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
 
         const description = body["description"];
         const price = body["price"];
@@ -46,7 +54,7 @@ class ItemController {
         if(description === undefined || price === undefined || SKUid === undefined || supplierId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO Item (ID, SKUid) VALUES (?, ?); INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (?, ?);";
+        const sqlInstruction = `INSERT INTO Item (ID, SKUid) VALUES (${id+1}, ${SKUid}); INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id+1}, ${supplierId});`;
         try {
             const item = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

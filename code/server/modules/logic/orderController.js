@@ -49,6 +49,14 @@ class OrderController {
     /*NEW - products are missing in the table! Can the state be initialized? */
     createRestockOrder(body) {
 
+        const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
+
         const issueDate = body["issueDate"];
         const products = body["products"];
         const supplierId = body["supplierId"]
@@ -56,7 +64,7 @@ class OrderController {
         if (issueDate === undefined || products === undefined || supplierId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (?, ?, ?);";
+        const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id+1}, ${supplierId}, ${issueDate});`;
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -138,6 +146,14 @@ class OrderController {
     /*NEW - products are missing in the table, while managerID and supplierID are missing in the function */
     createReturnOrder(body) {
 
+        const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
+
         const returnDate = body["returnDate"];
         const products = body["products"];
         const restockOrderId = body["restockOrderId"];
@@ -145,7 +161,7 @@ class OrderController {
         if (returnDate === undefined || products === undefined || restockOrderId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (?, ?, ?);";
+        const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (${id+1}, ${returnDate}, ${restockOrderId});`;
         try {
             const returnOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -212,6 +228,14 @@ class OrderController {
     /*NEW - products and issueDate are missing in the table */
     createInternalOrder(body) {
 
+        const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
+
+        try {
+            const id = dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            console.log("error");
+        }
+
         const issueDate = body["issueDate"];
         const products = body["products"];
         const customerId = body["customerId"]
@@ -219,7 +243,7 @@ class OrderController {
         if (issueDate === undefined || products === undefined || customerId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = "INSERT INTO InternalOrder (ID, customerId) VALUES (?, ?);";
+        const sqlInstruction = `INSERT INTO InternalOrder (ID, customerId) VALUES (${id+1}, ${customerId});`;
         try {
             const internalOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

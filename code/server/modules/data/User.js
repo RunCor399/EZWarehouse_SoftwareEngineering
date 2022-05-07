@@ -6,12 +6,11 @@ class User{
     #surname;
     //#privilegeLevel;
 
-    constructor(ID, type, name, surname, privilegeLevel){
+    constructor(ID, type, name, surname){
         this.#ID = ID;
         this.#type = type;
         this.#name = name;
         this.#surname = surname;
-        this.#privilegeLevel = privilegeLevel;
     }
 
     getID(){
