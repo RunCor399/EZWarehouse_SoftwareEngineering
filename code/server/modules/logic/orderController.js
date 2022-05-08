@@ -92,7 +92,7 @@ class OrderController {
         } catch (error) {
             console.log("error");
         }
-        return restockOrder;
+        
     }
 
     /*TODO */
