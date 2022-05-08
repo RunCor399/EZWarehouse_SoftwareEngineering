@@ -12,7 +12,7 @@ class ItemController {
     }
 
 
-    /*MODIFIED */
+    /*getter function to retreive all the items*/
     getAllItems() {
         const sqlInstruction = "SELECT * FROM Item";
         try {
@@ -23,7 +23,7 @@ class ItemController {
         return rows.map((row) => row);
     }
 
-    /*MODIFIED */
+    /*getter function to retreive a single item given its ID*/
     getItem(id) {
         
         const sqlInstruction = `SELECT *  FROM Item WHERE ID= ${id};`;
@@ -35,10 +35,10 @@ class ItemController {
         return item;
     }
 
-    /*MODIFIED - the description is missing in the table! */
+    /*TODO: JOIN BETWEEN Item AND SKU  - slightly modified*/
     createItem(body) {
         
-        const sqlGetCount = 'SELECT COUNT(*) FROM POSITIONS'
+        const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
             const id = dbManager.genericSqlGet(sqlGetCount);
@@ -54,21 +54,32 @@ class ItemController {
         if(description === undefined || price === undefined || SKUid === undefined || supplierId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO Item (ID, SKUid) VALUES (${id+1}, ${SKUid}); INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id+1}, ${supplierId});`;
+        /*description and price are missing inside the Item table*/
+        const sqlInsert1 = `INSERT INTO Item (ID, SKUID) VALUES (${id+1}, ${SKUid});`; 
         try {
-            const item = dbManager.genericSqlGet(sqlInstruction);
+            const insert1 = dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
-        return item;    /*item returned just to test the function*/
+
+        /*here there should be the join(?)*/
+
+        const sqlInsert2 = `INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id+1}, ${supplierId});`; 
+        try {
+            const insert2 = dbManager.genericSqlGet(sqlInsert1);
+        } catch (error) {
+            console.log("error");
+        }
+
     }
 
-    /*NOT MODIFIED - both the description and the price are missing in the Item table! */
+    /*function to edit the properties of a specific item, given its ID*/
     editItem(id, body) {
 
         const newDescription = body["newDescription"];
         const newPrice = body["newPrice"];
 
+        /*description and price are missing inside the Item table*/
         if(newDescription === undefined || newPrice === undefined)
             throw new Error(Exceptions.message422);
 
@@ -81,7 +92,7 @@ class ItemController {
         return item;
     }
 
-    /*MODIFIED */
+    /*delete function to remove an item from the table, given its ID*/
     deleteItem(id) {
         const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
         try {
