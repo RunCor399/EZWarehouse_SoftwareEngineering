@@ -19,13 +19,15 @@ class Controller {
     #dbManager;
 
     constructor() {
+        this.#dbManager = new DBManager();
+
+
         this.#itemController = new ItemController(this);
         this.#userController = new UserController(this);
         this.#positionController = new PositionController(this);
         this.#skuController = new SkuController(this);
         this.#testController = new TestController(this);
         this.#orderController = new OrderController(this);
-        this.#dbManager = new DBManager();
         console.log("general Controller started");
     }
 
