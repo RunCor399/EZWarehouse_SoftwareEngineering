@@ -9,7 +9,7 @@ class PositionController {
         console.log("positionController started");
     }
 
-    /*MODIFIED */
+    /*getter function to retreive all positions*/
     getAllPositions() {
         const sqlInstruction = "SELECT * FROM Position";
         try {
@@ -20,11 +20,10 @@ class PositionController {
         return rows.map((row) => row);
     }
 
-    /*NEW - can occupiedWeight and occupiedVolume be initialized at zero? */
+    /*creation of a new position inside the warehouse*/
     createPosition(body) {
 
-
-        const sqlGetCount = 'SELECT COUNT(*) FROM POSITIONS'
+        const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
             const id = dbManager.genericSqlGet(sqlGetCount);
@@ -43,16 +42,16 @@ class PositionController {
             col === undefined || maxWeight === undefined || maxVolume === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column) VALUES (${id+1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col});`;
+        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) VALUES (${id+1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
-        return position;
+
     }
 
-    /*NEW */
+    /*function to edit the properties of a specific position, given its ID*/
     editPosition(id, body) {
 
         const newAisleID = body["newAisleID"];
@@ -76,14 +75,14 @@ class PositionController {
         return position;
     }
 
-    /*NEW */
+    /*function to edit the ID of a specific position, given its older ID*/
     editPosition(oldId, body) {
 
         const newPositionID = body["newPositionID"];
         if (newPositionID === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE SKU SET ID= ${newPositionID} WHERE ID= ${oldId};`;
+        const sqlInstruction = `UPDATE Position SET ID= ${newPositionID} WHERE ID= ${oldId};`;
         try {
             const position = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -92,8 +91,7 @@ class PositionController {
         return position;
     }
 
-
-    /*MODIFIED */
+    /*delete function to remove an item from the table, given its ID*/
     deletePosition(id) {
         const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
         try {
@@ -101,7 +99,7 @@ class PositionController {
         } catch (error) {
             console.log("error");
         }
-        return position; /*position returned to test it*/
+        return position;
     }
 
 }
