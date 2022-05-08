@@ -10,6 +10,7 @@ class SkuController {
         console.log("skuController started");
     }
 
+    /*getter function to retreive all the SKUs*/
     getAllSku() {
         const sqlInstruction = "SELECT * FROM SKU";
         try {
@@ -20,7 +21,7 @@ class SkuController {
         return rows.map((row) => row);
     }
 
-    /*MODIFIED*/
+    /*getter function to retreive a single SKU, given its ID*/
     getSku(id) {
         const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
         try {
@@ -31,10 +32,10 @@ class SkuController {
         return sku;
     }
 
-    /*availableQuantity is missing in the SKU table */
+    /*TODO - availableQuantity is missing in the SKU table */
     createSku(body) {
 
-        const sqlGetCount = 'SELECT COUNT(*) FROM SKUS'
+        const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
 
         try {
             const id = dbManager.genericSqlGet(sqlGetCount);
@@ -62,7 +63,7 @@ class SkuController {
         return sku;    /*item returned just to test the function*/
     }
 
-    /*availableQuantity is missing in the SKU table */
+    /*TODO - availableQuantity is missing in the SKU table */
     editSku(id, body) {
 
         const newDescription = body["newDescription"];
@@ -86,7 +87,7 @@ class SkuController {
         return item;
     }
 
-    /*NEW */
+    /*TO CHECK */
     setPosition(id, body) {
 
         const position = body["position"];
@@ -103,7 +104,7 @@ class SkuController {
         return position;
     }
 
-    /*MODIFIED */
+    /*delete function to remove an SKU from the table, given its ID */
     deleteSku(id) {
         const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
         try {
@@ -114,10 +115,7 @@ class SkuController {
         return sku; /*sku returned to test it*/
     }
 
-
-
-
-    /*MODIFED*/
+    /*TO CHECK - getter function to retreive all the SKUItems*/
     getAllSkuItems() {
         const sqlInstruction = "SELECT * FROM SKUItem";
         try {
@@ -128,13 +126,14 @@ class SkuController {
         return rows.map((row) => row);
     }
 
+    /*TODO */
     getSkuItems(id) {
         return undefined;
     }
 
-    /*MODIFIED */
+    /*TO CHECK - getter function to retreive a single SKUItem, given its ID */
     getSkuItem(rfid) {
-        const sqlInstruction = `SELECT *  FROM SKUItem WHERE ID= ${rfid};`;
+        const sqlInstruction = `SELECT * FROM SKUItem WHERE ID= ${rfid};`;
         try {
             const skuItem = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -143,7 +142,7 @@ class SkuController {
         return skuItem;
     }
 
-    /*MODIFIED - how is the position updated? It's in the StockInfo table but here is missing*/
+    /*TODO - how is the position updated? It's in the StockInfo table but here is missing*/
     createSkuItem(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM SKUitems'
@@ -171,6 +170,7 @@ class SkuController {
         return skuItem;    /*item returned just to test the function*/
     }
 
+    /*TODO */
     editSkuItem(oldRFID, body) {
 
         const newRFID = body["newRFID"];
@@ -185,9 +185,9 @@ class SkuController {
         return undefined;
     }
 
-    /*MODIFIED */
+    /*delete function to remove an SKUItem from the table, given its ID */
     deleteSkuItem(rfid) {
-        const sqlInstruction = `DELETE FROM SKU WHERE ID= ${rfid};`;
+        const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
         try {
             const skuItem = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
