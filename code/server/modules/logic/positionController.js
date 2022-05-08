@@ -91,7 +91,7 @@ class PositionController {
         return position;
     }
 
-    /*delete function to remove an item from the table, given its ID*/
+    /*delete function to remove a position from the table, given its ID*/
     deletePosition(id) {
         const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
         try {
