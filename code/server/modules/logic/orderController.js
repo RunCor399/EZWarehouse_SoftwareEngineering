@@ -9,7 +9,7 @@ class OrderController {
         console.log("orderController started");
     }
 
-    /*NEW */
+    /*getter function to retreive all the restock orders*/
     getAllRestockOrders() {
         const sqlInstruction = "SELECT * FROM RestockOrder;";
         try {
@@ -20,7 +20,7 @@ class OrderController {
         return rows.map((row) => row);
     }
 
-    /*NEW*/
+    /*getter function to retreive all the issued restock orders*/
     getIssuedRestockOrders() {
         const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
         try {
@@ -31,7 +31,7 @@ class OrderController {
         return rows.map((row) => row);
     }
 
-    /*NEW */
+    /*getter function to retreive a single restock order, given its ID*/
     getRestockOrder(id) {
         const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
         try {
@@ -42,11 +42,12 @@ class OrderController {
         return restockOrder;
     }
 
+    /*TODO */
     getRestockOrderToBeReturned(id) {
         return undefined;
     }
 
-    /*NEW - products are missing in the table! Can the state be initialized? */
+    /*TO BE COMPLETED*/
     createRestockOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
@@ -64,16 +65,19 @@ class OrderController {
         if (issueDate === undefined || products === undefined || supplierId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id+1}, ${supplierId}, ${issueDate});`;
+        const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1}, ${supplierId}, ${issueDate});`;
         try {
             const restockOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
+
+        /*products to be added into ItemsPerOrder*/
+
         return restockOrder;
     }
 
-    /*NEW */
+    /*function to edit a state of a restock order, given its ID*/
     editRestockOrder(id, body) {
 
         const newState = body["newState"];
@@ -91,6 +95,7 @@ class OrderController {
         return restockOrder;
     }
 
+    /*TODO */
     addSkuItemsToRestockOrder(id, body) {
 
         const skuItems = body["skuItems"];
@@ -98,6 +103,8 @@ class OrderController {
         if (skuItems === undefined)
             throw new Error(Exceptions.message422);
 
+        /*join between ItemsPerOrder and RestockOrder*/
+        /*loop to save insert each new item into ItemsPerOrder */
         return undefined;
     }
 
@@ -110,7 +117,7 @@ class OrderController {
         return undefined;
     }
 
-    /*NEW */
+    /*delete function to remove a restock order from the table, given its ID*/
     deleteRestockOrder(id) {
         const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
         try {
@@ -121,7 +128,7 @@ class OrderController {
         return restockOrder;
     }
 
-    /*NEW */
+    /*getter function to retreive all the return orders*/
     getAllReturnOrders() {
         const sqlInstruction = "SELECT * FROM ReturnOrder;";
         try {
@@ -132,7 +139,7 @@ class OrderController {
         return rows.map((row) => row);
     }
 
-    /*NEW */
+    /*getter function to retreive a single return order, given its ID*/
     getReturnOrder(id) {
         const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
         try {
@@ -143,7 +150,7 @@ class OrderController {
         return returnOrder;
     }
 
-    /*NEW - products are missing in the table, while managerID and supplierID are missing in the function */
+    /*TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
     createReturnOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
@@ -161,16 +168,19 @@ class OrderController {
         if (returnDate === undefined || products === undefined || restockOrderId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (${id+1}, ${returnDate}, ${restockOrderId});`;
+        const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
         try {
             const returnOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
+
+        /*join between SKUItemsInReturnOrder and ReturnOrder */
+
         return returnOrder;
     }
 
-    /*NEW */
+    /*delete function to remove a return order from the table, given its ID*/
     deleteReturnOrder(id) {
         const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
         try {
@@ -181,7 +191,7 @@ class OrderController {
         return returnOrder;
     }
 
-    /*NEW */
+    /*getter function to retreive all the internal orders*/
     getAllInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder;";
         try {
@@ -192,7 +202,7 @@ class OrderController {
         return rows.map((row) => row);
     }
 
-    /*NEW */
+    /*getter function to retreive all the issued internal orders*/
     getIssuedInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
         try {
@@ -203,7 +213,7 @@ class OrderController {
         return rows.map((row) => row);
     }
 
-    /*NEW */
+    /*getter function to retreive all the accepted internal orders*/
     getAcceptedInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
         try {
@@ -214,7 +224,7 @@ class OrderController {
         return rows.map((row) => row);
     }
 
-    /*NEW */
+    /*getter function to retreive a single internal order, given its ID*/
     getInternalOrder(id) {
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
         try {
@@ -225,7 +235,7 @@ class OrderController {
         return internalOrder;
     }
 
-    /*NEW - products and issueDate are missing in the table */
+    /*TODO - products and issueDate are missing in the table */
     createInternalOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
@@ -243,16 +253,19 @@ class OrderController {
         if (issueDate === undefined || products === undefined || customerId === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO InternalOrder (ID, customerId) VALUES (${id+1}, ${customerId});`;
+        const sqlInstruction = `INSERT INTO InternalOrder (ID, customerId) VALUES (${id + 1}, ${customerId});`;
         try {
             const internalOrder = dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
+
+        /*join between SKUItemsInInternalOrder and InternalOrder */
+
         return internalOrder;
     }
 
-    /*NEW */
+    /*TODO*/
     editInternalOrder(id, body) {
 
         const newState = body["newState"];
@@ -267,6 +280,7 @@ class OrderController {
                 throw new Error(Exceptions.message422);
 
             //query
+            /*join between SKUItemsInInternalOrder and InternalOrder */
             return internalOrder;
         }
         else {
@@ -282,7 +296,7 @@ class OrderController {
     }
 
 
-    /*NEW */
+    /*delete function to remove an internal order from the table, given its ID */
     deleteInternalOrder(id) {
         const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
@@ -292,8 +306,6 @@ class OrderController {
         }
         return internalOrder;
     }
-
-
 
 }
 
