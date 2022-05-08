@@ -10,8 +10,9 @@ class UserController {
 
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
         console.log("testController started");
+
         //get first available id
         //#id = query;
     }
@@ -29,7 +30,7 @@ class UserController {
             this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }
@@ -48,7 +49,7 @@ class UserController {
             this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }

@@ -5,7 +5,7 @@ const sqlite = require('sqlite3');
 class DBManager {
     #db;
     constructor() {
-        this.#db = new sqlite.Database('./db.sqlite', (err) => {
+        this.#db = new sqlite.Database('./modules/database/db.sqlite', (err) => {
             if (err) {
                 console.log("error " + err);
                 throw err;
