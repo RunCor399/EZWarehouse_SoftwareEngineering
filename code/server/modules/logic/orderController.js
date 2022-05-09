@@ -13,7 +13,7 @@ class OrderController {
     getAllRestockOrders() {
         const sqlInstruction = "SELECT * FROM RestockOrder;";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -24,7 +24,7 @@ class OrderController {
     getIssuedRestockOrders() {
         const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -35,7 +35,7 @@ class OrderController {
     getRestockOrder(id) {
         const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
         try {
-            const restockOrder = dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -53,7 +53,7 @@ class OrderController {
         const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -67,7 +67,7 @@ class OrderController {
 
         const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1}, ${supplierId}, ${issueDate});`;
         try {
-            const restockOrder = dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -88,7 +88,7 @@ class OrderController {
 
         const sqlInstruction = `UPDATE RestockOrder SET state = ${newState} WHERE ID= ${id};`;
         try {
-            const restockOrder = dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -121,7 +121,7 @@ class OrderController {
     deleteRestockOrder(id) {
         const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
         try {
-            const restockOrder = dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -132,7 +132,7 @@ class OrderController {
     getAllReturnOrders() {
         const sqlInstruction = "SELECT * FROM ReturnOrder;";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -143,7 +143,7 @@ class OrderController {
     getReturnOrder(id) {
         const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
         try {
-            const returnOrder = dbManager.genericSqlGet(sqlInstruction);
+            const returnOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -156,7 +156,7 @@ class OrderController {
         const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -170,7 +170,7 @@ class OrderController {
 
         const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
         try {
-            const returnOrder = dbManager.genericSqlGet(sqlInstruction);
+            const returnOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -184,7 +184,7 @@ class OrderController {
     deleteReturnOrder(id) {
         const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
         try {
-            const returnOrder = dbManager.genericSqlGet(sqlInstruction);
+            const returnOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -195,7 +195,7 @@ class OrderController {
     getAllInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder;";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -206,7 +206,7 @@ class OrderController {
     getIssuedInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -217,7 +217,7 @@ class OrderController {
     getAcceptedInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -228,7 +228,7 @@ class OrderController {
     getInternalOrder(id) {
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
         try {
-            const internalOrder = dbManager.genericSqlGet(sqlInstruction);
+            const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -241,7 +241,7 @@ class OrderController {
         const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -255,7 +255,7 @@ class OrderController {
 
         const sqlInstruction = `INSERT INTO InternalOrder (ID, customerId) VALUES (${id + 1}, ${customerId});`;
         try {
-            const internalOrder = dbManager.genericSqlGet(sqlInstruction);
+            const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -286,7 +286,7 @@ class OrderController {
         else {
             const sqlInstruction = `UPDATE InternalOrder SET state=  ${newState} WHERE ID= ${id}`;
             try {
-                const internalOrder = dbManager.genericSqlGet(sqlInstruction);
+                const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
             } catch (error) {
                 console.log("error");
             }
@@ -300,7 +300,7 @@ class OrderController {
     deleteInternalOrder(id) {
         const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
-            const internalOrder = dbManager.genericSqlGet(sqlInstruction);
+            const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

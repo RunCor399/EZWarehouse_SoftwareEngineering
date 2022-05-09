@@ -13,7 +13,7 @@ class PositionController {
     getAllPositions() {
         const sqlInstruction = "SELECT * FROM Position";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -26,7 +26,7 @@ class PositionController {
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -44,7 +44,7 @@ class PositionController {
 
         const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) VALUES (${id+1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
         try {
-            const position = dbManager.genericSqlGet(sqlInstruction);
+            const position = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -68,7 +68,7 @@ class PositionController {
         AND aisle= ${newAisleID} AND row= ${newRow} AND column= ${newCol} WHERE ID= ${id};`;
 
         try {
-            const position = dbManager.genericSqlGet(sqlInstruction);
+            const position = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -84,7 +84,7 @@ class PositionController {
 
         const sqlInstruction = `UPDATE Position SET ID= ${newPositionID} WHERE ID= ${oldId};`;
         try {
-            const position = dbManager.genericSqlGet(sqlInstruction);
+            const position = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -95,7 +95,7 @@ class PositionController {
     deletePosition(id) {
         const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
         try {
-            const position = dbManager.genericSqlGet(sqlInstruction);
+            const position = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

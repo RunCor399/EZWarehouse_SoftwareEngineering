@@ -14,7 +14,7 @@ class SkuController {
     getAllSku() {
         const sqlInstruction = "SELECT * FROM SKU";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -25,7 +25,7 @@ class SkuController {
     getSku(id) {
         const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
         try {
-            const sku = dbManager.genericSqlGet(sqlInstruction);
+            const sku = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -38,7 +38,7 @@ class SkuController {
         const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -56,7 +56,7 @@ class SkuController {
 
         const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description) VALUES (${id+1}, ${weight}, ${volume}, ${price}, ${notes}, ${description});`;
         try {
-            const sku = dbManager.genericSqlGet(sqlInstruction);
+            const sku = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -80,7 +80,7 @@ class SkuController {
         const sqlInstruction = `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
         AND notes= ${newNotes} AND description= ${newDescription} WHERE ID=${id};`;
         try {
-            const item = dbManager.genericSqlGet(sqlInstruction);
+            const item = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -97,7 +97,7 @@ class SkuController {
 
         const sqlInstruction = `UPDATE SKUStorage SET positionID= ${position} WHERE SKUID= ${id};`;
         try {
-            const position = dbManager.genericSqlGet(sqlInstruction);
+            const position = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -108,7 +108,7 @@ class SkuController {
     deleteSku(id) {
         const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
         try {
-            const sku = dbManager.genericSqlGet(sqlInstruction);
+            const sku = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -119,7 +119,7 @@ class SkuController {
     getAllSkuItems() {
         const sqlInstruction = "SELECT * FROM SKUItem";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -135,7 +135,7 @@ class SkuController {
     getSkuItem(rfid) {
         const sqlInstruction = `SELECT * FROM SKUItem WHERE ID= ${rfid};`;
         try {
-            const skuItem = dbManager.genericSqlGet(sqlInstruction);
+            const skuItem = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -148,7 +148,7 @@ class SkuController {
         const sqlGetCount = 'SELECT COUNT(*) FROM SKUitems'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -163,7 +163,7 @@ class SkuController {
 
         const sqlInstruction = `INSERT INTO SKUItem (ID) VALUES (${id});`;
         try {
-            const skuItem = dbManager.genericSqlGet(sqlInstruction);
+            const skuItem = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -189,7 +189,7 @@ class SkuController {
     deleteSkuItem(rfid) {
         const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
         try {
-            const skuItem = dbManager.genericSqlGet(sqlInstruction);
+            const skuItem = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

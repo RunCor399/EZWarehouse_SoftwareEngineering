@@ -14,7 +14,7 @@ class TestController {
     getAllTestDescriptors() {
         const sqlInstruction = "SELECT * FROM TestDescriptor;";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -25,7 +25,7 @@ class TestController {
     getTestDesciptor(id) {
         const sqlInstruction = `SELECT * FROM TestDescriptor WHERE ID= ${id};`;
         try {
-            const testDescriptor = dbManager.genericSqlGet(sqlInstruction);
+            const testDescriptor = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -38,7 +38,7 @@ class TestController {
         const sqlGetCount = 'SELECT COUNT(*) FROM TestDescriptor;'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -52,14 +52,14 @@ class TestController {
 
         const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, description, passRate) VALUES (${id + 1}, ${name}, ${procedureDescription}, 0);`;
         try {
-            const insert1 = dbManager.genericSqlGet(sqlInsert1);
+            const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
 
         const sqlInsert2 = `INSERT INTO TestDescriptorOwnership(testDescID, SKUID) VALUES (${id + 1}, ${idSKU});`;
         try {
-            const insert2 = dbManager.genericSqlGet(sqlInsert2);
+            const insert2 = this.#dbManager.genericSqlGet(sqlInsert2);
         } catch (error) {
             console.log("error");
         }
@@ -80,7 +80,7 @@ class TestController {
         AND description= ${newProcedureDescription} WHERE ID= ${id};`;
 
         try {
-            const update1 = dbManager.genericSqlGet(sqlUpdate1);
+            const update1 = this.#dbManager.genericSqlGet(sqlUpdate1);
         } catch (error) {
             console.log("error");
         }
@@ -88,7 +88,7 @@ class TestController {
         const sqlUpdate2 = `UPDATE TestDescriptorOwnership SET SKUID= ${newIdSKU} WHERE testDescID= ${id};`;
 
         try {
-            const update2 = dbManager.genericSqlGet(sqlUpdate2);
+            const update2 = this.#dbManager.genericSqlGet(sqlUpdate2);
         } catch (error) {
             console.log("error");
         }
@@ -98,7 +98,7 @@ class TestController {
     deleteTestDescriptor(id) {
         const sqlInstruction = `DELETE FROM TestDescriptor WHERE ID= ${id};`
         try {
-            const testDescriptor = dbManager.genericSqlGet(sqlInstruction);
+            const testDescriptor = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -109,7 +109,7 @@ class TestController {
     getTestResults(rfid) {
         const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= ${rfid};`;
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -120,7 +120,7 @@ class TestController {
     getTestResult(rfid, id) {
         const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= ${rfid} AND testDescID= ${id};`;
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -133,7 +133,7 @@ class TestController {
         const sqlGetCount = 'SELECT COUNT(*) FROM TestResult;'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -148,7 +148,7 @@ class TestController {
 
         const sqlInstruction = `INSERT INTO TestResult (testDescID, SKUItemID, date, result) VALUES (${id + 1}, ${rfid}, ${date}, ${result});`;
         try {
-            const testRes = dbManager.genericSqlGet(sqlInstruction);
+            const testRes = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -168,7 +168,7 @@ class TestController {
         const sqlInstruction = `UPDATE TestDescriptor SET testDescID= ${newIdTestDesciptor} AND date= ${newDate} AND result= ${newResult} WHERE testDescID= ${id} AND SKUItemID = ${rfid};`;
 
         try {
-            const testRes = dbManager.genericSqlGet(sqlInstruction);
+            const testRes = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -180,7 +180,7 @@ class TestController {
         const sqlInstruction = `DELETE FROM TestResult WHERE testDescID= ${id} AND SKUItemID= ${rfid};`;
 
         try {
-            const testRes = dbManager.genericSqlGet(sqlInstruction);
+            const testRes = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

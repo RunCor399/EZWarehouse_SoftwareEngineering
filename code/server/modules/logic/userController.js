@@ -67,7 +67,7 @@ class UserController {
         const sqlGetCount = 'SELECT COUNT(*) FROM USERS'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             throw (Exceptions.message500);
         }
@@ -90,7 +90,7 @@ class UserController {
                     ${surname}. ${hashedPassword}, ${type});`;
 
         try {
-            dbManager.genericSqlRun(sqlInstruction);
+            this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }
@@ -113,7 +113,7 @@ class UserController {
         WHERE username=${username} AND password=${hashedPassword}`;
 
         try {
-            const row = dbManager.genericSqlGet(sqlInstruction);
+            const row = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }
@@ -148,7 +148,7 @@ class UserController {
 
         const sqlInstruction = `UPDATE USERS SET type=${newType} WHERE type=${oldType};`;
         try {
-            dbManager.genericSqlRun(sqlInstruction);
+            this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }
@@ -162,7 +162,7 @@ class UserController {
 
         const sqlInstruction = `DELETE FROM USERS WHERE username=${username} AND type=${type};`;
         try {
-            dbManager.genericSqlRun(sqlInstruction);
+            this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }

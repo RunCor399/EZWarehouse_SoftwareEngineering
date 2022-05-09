@@ -16,7 +16,7 @@ class ItemController {
     getAllItems() {
         const sqlInstruction = "SELECT * FROM Item";
         try {
-            const rows = dbManager.genericSqlGet(sqlInstruction);
+            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -28,7 +28,7 @@ class ItemController {
         
         const sqlInstruction = `SELECT *  FROM Item WHERE ID= ${id};`;
         try {
-            const item = dbManager.genericSqlGet(sqlInstruction);
+            const item = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -41,7 +41,7 @@ class ItemController {
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
-            const id = dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -57,7 +57,7 @@ class ItemController {
         /*description and price are missing inside the Item table*/
         const sqlInsert1 = `INSERT INTO Item (ID, SKUID) VALUES (${id+1}, ${SKUid});`; 
         try {
-            const insert1 = dbManager.genericSqlGet(sqlInsert1);
+            const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
@@ -66,7 +66,7 @@ class ItemController {
 
         const sqlInsert2 = `INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id+1}, ${supplierId});`; 
         try {
-            const insert2 = dbManager.genericSqlGet(sqlInsert1);
+            const insert2 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
@@ -85,7 +85,7 @@ class ItemController {
 
         const sqlInstruction = `UPDATE ITEM SET description= ${newDescription} AND price= ${newPrice} WHERE SKUid= ${id};`;
         try {
-            const item = dbManager.genericSqlGet(sqlInstruction);
+            const item = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -96,7 +96,7 @@ class ItemController {
     deleteItem(id) {
         const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
         try {
-            const item = dbManager.genericSqlGet(sqlInstruction);
+            const item = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
