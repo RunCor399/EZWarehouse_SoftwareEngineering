@@ -35,9 +35,11 @@ class ItemController {
         return item;
     }
 
-    /*TODO: JOIN BETWEEN Item AND SKU  - slightly modified*/
+    /*TO CHECK - some attributes are missing in the table!
+    creation of a new item in the table*/
     async createItem(body) {
 
+        /* unuseful: the id is given in the body
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
@@ -45,35 +47,38 @@ class ItemController {
         } catch (error) {
             console.log("error");
         }
+        */
 
+        const id = body["id"];
         const description = body["description"];
         const price = body["price"];
         const SKUid = body["SKUId"]
         const supplierId = body["supplierID"];
 
-        if (!description || !price || !SKUid || !supplierId)
+        if (!id || !description || !price || !SKUid || !supplierId)
             throw new Error(Exceptions.message422);
 
-        /*description and price are missing inside the Item table*/
-        const sqlInsert1 = `INSERT INTO Item (ID, SKUID) VALUES (${id + 1}, ${SKUid});`;
+        /*description, price and supplierId are missing inside the Item table*/
+        const sqlInsert1 = `INSERT INTO Item (ID, description, price, SKUId, supplierId) VALUES (${id}, ${description}, ${price}, ${SKUid}, ${supplierId});`;
         try {
             const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
 
-        /*here there should be the join(?)*/
-
+        /* ItemSoldPerSupplier can be deleted
         const sqlInsert2 = `INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id + 1}, ${supplierId});`;
         try {
             const insert2 = await this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
+        */
 
     }
 
-    /*function to edit the properties of a specific item, given its ID*/
+    /*TO CHECK - some attributes are missing in the table! 
+    function to edit the properties of a specific item, given its ID*/
     async editItem(id, body) {
 
         const newDescription = body["newDescription"];
