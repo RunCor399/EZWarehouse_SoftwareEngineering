@@ -145,11 +145,12 @@ const sqlInstructions = [createSKU, createTestDescriptor, createSKUItem, createT
 
 const dbManager = new DBManager();
 
+
 sqlInstructions.forEach((sql) => {
     try {
         dbManager.genericSqlRun(sql);
     } catch (error) {
         console.log("error");       
     }
-}
-)
+}) 
+

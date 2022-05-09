@@ -1,4 +1,4 @@
-`CREATE TABLE SKU(
+CREATE TABLE SKU(
     ID INT,
     weight FLOAT,
     volume FLOAT,
@@ -174,6 +174,3 @@ CREATE TABLE SKUItemsPerInternalOrder(
     FOREIGN KEY(SKUItemID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(orderID) REFERENCES ReturnOrder(ID)
 )
-
-
-`
