@@ -32,7 +32,7 @@ class SkuController {
         return sku;
     }
 
-    /*TODO - availableQuantity is missing in the SKU table */
+    /*TO CHECK - availableQuantity is missing in the SKU table */
     async createSku(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
@@ -53,7 +53,7 @@ class SkuController {
         if (!description || !weight || !volume || !notes || !price || !availableQuantity)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description) VALUES (${id + 1}, ${weight}, ${volume}, ${price}, ${notes}, ${description});`;
+        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity) VALUES (${id + 1}, ${weight}, ${volume}, ${price}, ${notes}, ${description}, ${availableQuantity});`;
         try {
             const sku = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -62,7 +62,7 @@ class SkuController {
         return sku;    /*item returned just to test the function*/
     }
 
-    /*TODO - availableQuantity is missing in the SKU table */
+    /*TO CHECK - availableQuantity is missing in the SKU table */
     async editSku(id, body) {
 
         const newDescription = body["newDescription"];
@@ -76,7 +76,7 @@ class SkuController {
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
-        AND notes= ${newNotes} AND description= ${newDescription} WHERE ID=${id};`;
+        AND notes= ${newNotes} AND description= ${newDescription} AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -85,7 +85,7 @@ class SkuController {
         return item;
     }
 
-    /*TO CHECK */
+    /*TO CHECK IF IT'S CORRECT*/
     async setPosition(id, body) {
 
         const position = body["position"];
@@ -99,6 +99,16 @@ class SkuController {
         } catch (error) {
             console.log("error");
         }
+
+        /*
+        const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${Position.occupiedWeight + SKU.weight} AND occupiedVolume = ${Position.occupiedVolume + SKU.volume} WHERE SKU.ID= ${id} AND Position.ID= ${position}`;
+        try {
+            const update2 = this.#dbManager.genericSqlGet(sqlUpdate2);
+        } catch (error) {
+            console.log("error");
+        }
+         */
+
         return position;
     }
 
@@ -124,14 +134,20 @@ class SkuController {
         return rows.map((row) => row);
     }
 
-    /*TODO */
+    /*TO CHECK - getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
     async getSkuItems(id) {
-        return undefined;
+        const sqlInstruction = `SELECT * FROM SKUItem WHERE SKUId= ${id};`;
+        try {
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+        } catch (error) {
+            console.log("error");
+        }
+        return rows.map((row) => row);
     }
 
-    /*TO CHECK - getter function to retreive a single SKUItem, given its ID */
+    /*TO CHECK - getter function to retreive a single SKUItem, given its RFID */
     async getSkuItem(rfid) {
-        const sqlInstruction = `SELECT * FROM SKUItem WHERE ID= ${rfid};`;
+        const sqlInstruction = `SELECT * FROM SKUItem WHERE RFID= ${rfid};`;
         try {
             const skuItem = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -140,17 +156,18 @@ class SkuController {
         return skuItem;
     }
 
-    /*TODO - how is the position updated? It's in the StockInfo table but here is missing*/
+    /*TO CHECK*/
     async createSkuItem(body) {
 
+        /* useless?
         const sqlGetCount = 'SELECT COUNT(*) FROM SKUitems'
 
         try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
-
+        */
 
         const RFID = body["RFID"];
         const SKUId = body["SKUId"];
@@ -159,7 +176,7 @@ class SkuController {
         if (!RFID || !SKUId || !dateOfStock)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO SKUItem (ID) VALUES (${id});`;
+        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (${RFID}, ${SKUId}, 0, ${dateOfStock});`;
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -172,15 +189,19 @@ class SkuController {
     async editSkuItem(oldRFID, body) {
 
         const newRFID = body["newRFID"];
-        const newSKUId = body["newSKUId"];
+        const newAvailable = body["newAvailable"];
         const newDateOfStock = body["newDateOfStock"];
 
 
-        if (!newRFID  || !newSKUId  || !newDateOfStock )
+        if (!newRFID || !newSKUId || !newDateOfStock)
             throw new Error(Exceptions.message422);
 
-
-        return undefined;
+        const sqlUpdate = `UPDATE SKUItem SET RFID= ${newRFID} AND Available= ${newAvailable} AND DateOfStock= ${newDateOfStock} WHERE RFID= ${oldRFID};`;
+        try {
+            const skuItem = await this.#dbManager.genericSqlGet(sqlUpdate);
+        } catch (error) {
+            console.log("error");
+        }
     }
 
     /*delete function to remove an SKUItem from the table, given its ID */
