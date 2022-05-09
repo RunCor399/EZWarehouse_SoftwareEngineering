@@ -13,10 +13,10 @@ class ItemController {
 
 
     /*getter function to retreive all the items*/
-    getAllItems() {
+    async getAllItems() {
         const sqlInstruction = "SELECT * FROM Item";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -24,11 +24,11 @@ class ItemController {
     }
 
     /*getter function to retreive a single item given its ID*/
-    getItem(id) {
+    async getItem(id) {
         
         const sqlInstruction = `SELECT *  FROM Item WHERE ID= ${id};`;
         try {
-            const item = this.#dbManager.genericSqlGet(sqlInstruction);
+            const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -36,12 +36,12 @@ class ItemController {
     }
 
     /*TODO: JOIN BETWEEN Item AND SKU  - slightly modified*/
-    createItem(body) {
+   async createItem(body) {
         
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -66,7 +66,7 @@ class ItemController {
 
         const sqlInsert2 = `INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id+1}, ${supplierId});`; 
         try {
-            const insert2 = this.#dbManager.genericSqlGet(sqlInsert1);
+            const insert2 = await  this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
@@ -74,7 +74,7 @@ class ItemController {
     }
 
     /*function to edit the properties of a specific item, given its ID*/
-    editItem(id, body) {
+    async editItem(id, body) {
 
         const newDescription = body["newDescription"];
         const newPrice = body["newPrice"];
@@ -85,7 +85,7 @@ class ItemController {
 
         const sqlInstruction = `UPDATE ITEM SET description= ${newDescription} AND price= ${newPrice} WHERE SKUid= ${id};`;
         try {
-            const item = this.#dbManager.genericSqlGet(sqlInstruction);
+            const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -93,10 +93,10 @@ class ItemController {
     }
 
     /*delete function to remove an item from the table, given its ID*/
-    deleteItem(id) {
+    async deleteItem(id) {
         const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
         try {
-            const item = this.#dbManager.genericSqlGet(sqlInstruction);
+            const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

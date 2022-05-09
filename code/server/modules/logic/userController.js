@@ -42,14 +42,14 @@ class UserController {
 
     }
 
-    getAllUsers() {
+    async getAllUsers() {
         const sqlInstruction = "SELECT * FROM USERS U";
 
         if (this.#user === undefined ||
             this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }

@@ -9,13 +9,13 @@ class ReturnOrderController {
         console.log("returnOrderController started");
     }
 
-  
+
 
     /*getter function to retreive all the return orders*/
-    getAllReturnOrders() {
+    async getAllReturnOrders() {
         const sqlInstruction = "SELECT * FROM ReturnOrder;";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -23,10 +23,10 @@ class ReturnOrderController {
     }
 
     /*getter function to retreive a single return order, given its ID*/
-    getReturnOrder(id) {
+    async getReturnOrder(id) {
         const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
         try {
-            const returnOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -34,12 +34,12 @@ class ReturnOrderController {
     }
 
     /*TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
-    createReturnOrder(body) {
+   async createReturnOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
 
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -53,7 +53,7 @@ class ReturnOrderController {
 
         const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
         try {
-            const returnOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -64,10 +64,10 @@ class ReturnOrderController {
     }
 
     /*delete function to remove a return order from the table, given its ID*/
-    deleteReturnOrder(id) {
+    async deleteReturnOrder(id) {
         const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
         try {
-            const returnOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const returnOrder =await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

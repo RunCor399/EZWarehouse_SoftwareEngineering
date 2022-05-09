@@ -10,14 +10,14 @@ class RestockOrderController {
         console.log("restockOrderController started");
     }
 
-  
+
 
 
     /*getter function to retreive all the restock orders*/
-    getAllRestockOrders() {
+    async getAllRestockOrders() {
         const sqlInstruction = "SELECT * FROM RestockOrder;";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -25,10 +25,10 @@ class RestockOrderController {
     }
 
     /*getter function to retreive all the issued restock orders*/
-    getIssuedRestockOrders() {
+    async getIssuedRestockOrders() {
         const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -36,10 +36,10 @@ class RestockOrderController {
     }
 
     /*getter function to retreive a single restock order, given its ID*/
-    getRestockOrder(id) {
+    async getRestockOrder(id) {
         const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
         try {
-            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -47,17 +47,17 @@ class RestockOrderController {
     }
 
     /*TODO */
-    getRestockOrderToBeReturned(id) {
+    async getRestockOrderToBeReturned(id) {
         return undefined;
     }
 
     /*TO BE COMPLETED*/
-    createRestockOrder(body) {
+    async createRestockOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
 
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -71,7 +71,7 @@ class RestockOrderController {
 
         const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1}, ${supplierId}, ${issueDate});`;
         try {
-            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -82,7 +82,7 @@ class RestockOrderController {
     }
 
     /*function to edit a state of a restock order, given its ID*/
-    editRestockOrder(id, body) {
+    async editRestockOrder(id, body) {
 
         const newState = body["newState"];
 
@@ -92,15 +92,15 @@ class RestockOrderController {
 
         const sqlInstruction = `UPDATE RestockOrder SET state = ${newState} WHERE ID= ${id};`;
         try {
-            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
-    
+
     }
 
     /*TODO */
-    addSkuItemsToRestockOrder(id, body) {
+    async addSkuItemsToRestockOrder(id, body) {
 
         const skuItems = body["skuItems"];
 
@@ -113,7 +113,7 @@ class RestockOrderController {
     }
 
     /*Transport Note is missing in the DB */
-    addTransportNote(id, body) {
+   async addTransportNote(id, body) {
 
         const transportNote = body["transportNote"];
         if (transportNote === undefined)
@@ -122,10 +122,10 @@ class RestockOrderController {
     }
 
     /*delete function to remove a restock order from the table, given its ID*/
-    deleteRestockOrder(id) {
+    async deleteRestockOrder(id) {
         const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
         try {
-            const restockOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

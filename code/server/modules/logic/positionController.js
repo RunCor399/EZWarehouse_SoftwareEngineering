@@ -10,10 +10,10 @@ class PositionController {
     }
 
     /*getter function to retreive all positions*/
-    getAllPositions() {
+    async getAllPositions() {
         const sqlInstruction = "SELECT * FROM Position";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -21,12 +21,12 @@ class PositionController {
     }
 
     /*creation of a new position inside the warehouse*/
-    createPosition(body) {
+    async createPosition(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -42,9 +42,9 @@ class PositionController {
             col === undefined || maxWeight === undefined || maxVolume === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) VALUES (${id+1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
+        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) VALUES (${id + 1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
         try {
-            const position = this.#dbManager.genericSqlGet(sqlInstruction);
+            const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -52,7 +52,7 @@ class PositionController {
     }
 
     /*function to edit the properties of a specific position, given its ID*/
-    editPosition(id, body) {
+    async editPosition(id, body) {
 
         const newAisleID = body["newAisleID"];
         const newRow = body["newRow"];
@@ -68,7 +68,7 @@ class PositionController {
         AND aisle= ${newAisleID} AND row= ${newRow} AND column= ${newCol} WHERE ID= ${id};`;
 
         try {
-            const position = this.#dbManager.genericSqlGet(sqlInstruction);
+            const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -76,7 +76,7 @@ class PositionController {
     }
 
     /*function to edit the ID of a specific position, given its older ID*/
-    editPosition(oldId, body) {
+    async editPosition(oldId, body) {
 
         const newPositionID = body["newPositionID"];
         if (newPositionID === undefined)
@@ -84,7 +84,7 @@ class PositionController {
 
         const sqlInstruction = `UPDATE Position SET ID= ${newPositionID} WHERE ID= ${oldId};`;
         try {
-            const position = this.#dbManager.genericSqlGet(sqlInstruction);
+            const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -92,10 +92,10 @@ class PositionController {
     }
 
     /*delete function to remove a position from the table, given its ID*/
-    deletePosition(id) {
+    async deletePosition(id) {
         const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
         try {
-            const position = this.#dbManager.genericSqlGet(sqlInstruction);
+            const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

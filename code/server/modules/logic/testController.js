@@ -11,10 +11,10 @@ class TestController {
     }
 
     /*getter function to retreive all test descriptors*/
-    getAllTestDescriptors() {
+    async getAllTestDescriptors() {
         const sqlInstruction = "SELECT * FROM TestDescriptor;";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -22,10 +22,10 @@ class TestController {
     }
 
     /*getter function to retreive a single test descriptor given its ID*/
-    getTestDesciptor(id) {
+    async getTestDesciptor(id) {
         const sqlInstruction = `SELECT * FROM TestDescriptor WHERE ID= ${id};`;
         try {
-            const testDescriptor = this.#dbManager.genericSqlGet(sqlInstruction);
+            const testDescriptor = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -33,12 +33,12 @@ class TestController {
     }
 
     /*creation of a new test descriptor*/
-    createTestDescriptor(body) {
+    async createTestDescriptor(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM TestDescriptor;'
 
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -52,14 +52,14 @@ class TestController {
 
         const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, description, passRate) VALUES (${id + 1}, ${name}, ${procedureDescription}, 0);`;
         try {
-            const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
+            const insert1 = await this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
 
         const sqlInsert2 = `INSERT INTO TestDescriptorOwnership(testDescID, SKUID) VALUES (${id + 1}, ${idSKU});`;
         try {
-            const insert2 = this.#dbManager.genericSqlGet(sqlInsert2);
+            const insert2 = await this.#dbManager.genericSqlGet(sqlInsert2);
         } catch (error) {
             console.log("error");
         }
@@ -67,7 +67,7 @@ class TestController {
     }
 
     /*function to edit a test descriptor, given its ID*/
-    editTestDesciptor(id, body) {
+    async editTestDesciptor(id, body) {
 
         const newName = body["newName"];
         const newProcedureDescription = body["newProcedureDescription"];
@@ -80,7 +80,7 @@ class TestController {
         AND description= ${newProcedureDescription} WHERE ID= ${id};`;
 
         try {
-            const update1 = this.#dbManager.genericSqlGet(sqlUpdate1);
+            const update1 = await this.#dbManager.genericSqlGet(sqlUpdate1);
         } catch (error) {
             console.log("error");
         }
@@ -88,17 +88,17 @@ class TestController {
         const sqlUpdate2 = `UPDATE TestDescriptorOwnership SET SKUID= ${newIdSKU} WHERE testDescID= ${id};`;
 
         try {
-            const update2 = this.#dbManager.genericSqlGet(sqlUpdate2);
+            const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
         } catch (error) {
             console.log("error");
         }
     }
 
     /*delete function to remove a test descriptor from the table, given its ID*/
-    deleteTestDescriptor(id) {
+    async deleteTestDescriptor(id) {
         const sqlInstruction = `DELETE FROM TestDescriptor WHERE ID= ${id};`
         try {
-            const testDescriptor = this.#dbManager.genericSqlGet(sqlInstruction);
+            const testDescriptor = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -106,10 +106,10 @@ class TestController {
     }
 
     /*getter function to retreive all test results related to an SKUItem, given its RFID - more than a single test*/
-    getTestResults(rfid) {
+    async getTestResults(rfid) {
         const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= ${rfid};`;
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -117,10 +117,10 @@ class TestController {
     }
 
     /*getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test descriptor - more than a single test*/
-    getTestResult(rfid, id) {
+    async getTestResult(rfid, id) {
         const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= ${rfid} AND testDescID= ${id};`;
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -128,12 +128,12 @@ class TestController {
     }
 
     /*creation of a new test result*/
-    createTestResult(body) {
+    async createTestResult(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM TestResult;'
 
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -148,7 +148,7 @@ class TestController {
 
         const sqlInstruction = `INSERT INTO TestResult (testDescID, SKUItemID, date, result) VALUES (${id + 1}, ${rfid}, ${date}, ${result});`;
         try {
-            const testRes = this.#dbManager.genericSqlGet(sqlInstruction);
+            const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -156,7 +156,7 @@ class TestController {
     }
 
     /*function to edit the properties of a SKUItem's test result, given its RFID and the ID of the test descriptor*/
-    editTestResult(rfid, id, body) {
+    async editTestResult(rfid, id, body) {
 
         const newIdTestDesciptor = body["newIdTestDescriptor"];
         const newDate = body["newDate"];
@@ -168,7 +168,7 @@ class TestController {
         const sqlInstruction = `UPDATE TestDescriptor SET testDescID= ${newIdTestDesciptor} AND date= ${newDate} AND result= ${newResult} WHERE testDescID= ${id} AND SKUItemID = ${rfid};`;
 
         try {
-            const testRes = this.#dbManager.genericSqlGet(sqlInstruction);
+            const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -176,11 +176,11 @@ class TestController {
     }
 
     /*delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
-    deleteTestResult(rfid, id) {
+    async deleteTestResult(rfid, id) {
         const sqlInstruction = `DELETE FROM TestResult WHERE testDescID= ${id} AND SKUItemID= ${rfid};`;
 
         try {
-            const testRes = this.#dbManager.genericSqlGet(sqlInstruction);
+            const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

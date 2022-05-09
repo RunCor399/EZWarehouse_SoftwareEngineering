@@ -9,12 +9,12 @@ class InternalOrderController {
         console.log("internalOrderController started");
     }
 
-  
+
     /*getter function to retreive all the internal orders*/
-    getAllInternalOrders() {
+    async getAllInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder;";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -22,10 +22,10 @@ class InternalOrderController {
     }
 
     /*getter function to retreive all the issued internal orders*/
-    getIssuedInternalOrders() {
+    async getIssuedInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -33,10 +33,10 @@ class InternalOrderController {
     }
 
     /*getter function to retreive all the accepted internal orders*/
-    getAcceptedInternalOrders() {
+    async getAcceptedInternalOrders() {
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -44,10 +44,10 @@ class InternalOrderController {
     }
 
     /*getter function to retreive a single internal order, given its ID*/
-    getInternalOrder(id) {
+    async getInternalOrder(id) {
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
         try {
-            const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log(error);
         }
@@ -55,12 +55,12 @@ class InternalOrderController {
     }
 
     /*TODO - products and issueDate are missing in the table */
-    createInternalOrder(body) {
+    async createInternalOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
 
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
             console.log("error");
         }
@@ -74,7 +74,7 @@ class InternalOrderController {
 
         const sqlInstruction = `INSERT INTO InternalOrder (ID, customerId) VALUES (${id + 1}, ${customerId});`;
         try {
-            const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
@@ -85,7 +85,7 @@ class InternalOrderController {
     }
 
     /*TODO*/
-    editInternalOrder(id, body) {
+    async editInternalOrder(id, body) {
 
         const newState = body["newState"];
 
@@ -105,7 +105,7 @@ class InternalOrderController {
         else {
             const sqlInstruction = `UPDATE InternalOrder SET state=  ${newState} WHERE ID= ${id}`;
             try {
-                const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+                const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
             } catch (error) {
                 console.log("error");
             }
@@ -116,10 +116,10 @@ class InternalOrderController {
 
 
     /*delete function to remove an internal order from the table, given its ID */
-    deleteInternalOrder(id) {
+    async deleteInternalOrder(id) {
         const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
-            const internalOrder = this.#dbManager.genericSqlGet(sqlInstruction);
+            const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
