@@ -15,7 +15,7 @@ class PositionController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -28,7 +28,7 @@ class PositionController {
         try {
             const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const positionID = body["positionID"];
@@ -46,7 +46,7 @@ class PositionController {
         try {
             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
     }
@@ -71,7 +71,7 @@ class PositionController {
         try {
             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return position;
     }
@@ -87,7 +87,7 @@ class PositionController {
         try {
             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return position;
     }
@@ -98,7 +98,7 @@ class PositionController {
         try {
             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return position;
     }

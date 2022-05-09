@@ -18,7 +18,7 @@ class ItemController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -30,7 +30,7 @@ class ItemController {
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return item;
     }
@@ -63,7 +63,7 @@ class ItemController {
         try {
             const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         /* ItemSoldPerSupplier can be deleted
@@ -92,7 +92,7 @@ class ItemController {
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return item;
     }
@@ -103,7 +103,7 @@ class ItemController {
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return item;
     }

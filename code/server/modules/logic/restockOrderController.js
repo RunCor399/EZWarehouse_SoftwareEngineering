@@ -16,7 +16,7 @@ class RestockOrderController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -27,7 +27,7 @@ class RestockOrderController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -38,7 +38,7 @@ class RestockOrderController {
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return restockOrder;
     }
@@ -56,7 +56,7 @@ class RestockOrderController {
         try {
             const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const issueDate = body["issueDate"];
@@ -70,7 +70,7 @@ class RestockOrderController {
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         /*products to be added into ItemsPerOrder*/
@@ -91,7 +91,7 @@ class RestockOrderController {
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
     }
@@ -124,7 +124,7 @@ class RestockOrderController {
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return restockOrder;
     }

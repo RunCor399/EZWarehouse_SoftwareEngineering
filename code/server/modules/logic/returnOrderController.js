@@ -17,7 +17,7 @@ class ReturnOrderController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -28,7 +28,7 @@ class ReturnOrderController {
         try {
             const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return returnOrder;
     }
@@ -41,7 +41,7 @@ class ReturnOrderController {
         try {
             const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const returnDate = body["returnDate"];
@@ -55,7 +55,7 @@ class ReturnOrderController {
         try {
             const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         /*join between SKUItemsInReturnOrder and ReturnOrder */
@@ -69,7 +69,7 @@ class ReturnOrderController {
         try {
             const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return returnOrder;
     }
