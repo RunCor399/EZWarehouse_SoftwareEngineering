@@ -26,7 +26,7 @@ class ItemController {
     /*getter function to retreive a single item given its ID*/
     async getItem(id) {
 
-        const sqlInstruction = `SELECT *  FROM Item WHERE ID= ${id};`;
+        const sqlInstruction = `SELECT * FROM Item WHERE ID= ${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -59,7 +59,8 @@ class ItemController {
             throw new Error(Exceptions.message422);
 
         /*description, price and supplierId are missing inside the Item table*/
-        const sqlInsert1 = `INSERT INTO Item (ID, description, price, SKUId, supplierId) VALUES (${id}, ${description}, ${price}, ${SKUid}, ${supplierId});`;
+        const sqlInsert1 = `INSERT INTO Item (ID, description, price, SKUId, supplierId) 
+        VALUES (${id}, "${description}", ${price}, ${SKUid}, ${supplierId});`;
         try {
             const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
@@ -88,7 +89,8 @@ class ItemController {
         if (!newDescription || !newPrice)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE ITEM SET description= ${newDescription} AND price= ${newPrice} WHERE SKUid= ${id};`;
+        const sqlInstruction = `UPDATE ITEM SET description= "${newDescription}"
+        AND price= ${newPrice} WHERE SKUid= ${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

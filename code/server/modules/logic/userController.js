@@ -75,8 +75,7 @@ class UserController {
         const sqlGetCount = 'SELECT COUNT(*) FROM USERS'
         let id = 0;
         try {
-            const result = await this.#dbManager.genericSqlGet(sqlGetCount);
-            id = result[0]["COUNT(*)"];
+            id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
             console.log(id);
         } catch (error) {
             console.log("error", error);

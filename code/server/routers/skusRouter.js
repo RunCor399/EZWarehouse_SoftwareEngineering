@@ -3,14 +3,13 @@ const router = express.Router()
 
 //SKU
 //GET /api/skus
-router.get('/api/skus', (req, res) => {
+router.get('/api/skus', async (req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
-
   try {
-    controller.getSkuController().getAllSku();
+    await controller.getSkuController().getAllSku();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -20,14 +19,14 @@ router.get('/api/skus', (req, res) => {
 });
 
 //GET /api/skus/:id
-router.get('/api/skus/:id', (req, res) => {
+router.get('/api/skus/:id', async (req, res) => {
   const param = req.params.id;
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
   try {
-    controller.getSkuController().getSku(param);
+    await controller.getSkuController().getSku(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -38,12 +37,12 @@ router.get('/api/skus/:id', (req, res) => {
 });
 
 //POST /api/sku
-router.post('/api/sku', (req, res) => {
+router.post('/api/sku', async (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
   try {
-    controller.getSkuController().createSku(req.body);
+    await controller.getSkuController().createSku(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -61,7 +60,7 @@ router.post('/api/sku', (req, res) => {
 });
 
 //PUT /api/sku/:id
-router.put('/api/sku/:id', (req, res) => {
+router.put('/api/sku/:id', async (req, res) => {
   const param = req.params.id;
   let message = {
     message: '/api/sku/:id'
@@ -71,7 +70,7 @@ router.put('/api/sku/:id', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getSkuController().editSku(param, req.body);
+    await controller.getSkuController().editSku(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -81,7 +80,7 @@ router.put('/api/sku/:id', (req, res) => {
 });
 
 //PUT /api/sku/:id/position
-router.put('/api/sku/:id', (req, res) => {
+router.put('/api/sku/:id', async (req, res) => {
   const param = req.params.id;
   let message = {
     message: '/api/sku/:id/position'
@@ -92,8 +91,7 @@ router.put('/api/sku/:id', (req, res) => {
 
 
   try {
-    controller.getSkuController().setPosition(param, req.body);
-
+    await controller.getSkuController().setPosition(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -103,7 +101,7 @@ router.put('/api/sku/:id', (req, res) => {
 });
 
 //DELETE /api/sku/:id
-router.delete('/api/sku/:id', (req, res) => {
+router.delete('/api/sku/:id', async (req, res) => {
   const param = req.params.id;
   let message = {
     message: '/api/sku/:id'
@@ -113,7 +111,7 @@ router.delete('/api/sku/:id', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getSkuController().deleteSku(param);
+    await controller.getSkuController().deleteSku(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

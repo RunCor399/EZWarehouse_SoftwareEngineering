@@ -34,11 +34,11 @@ class SkuController {
 
     /*TO CHECK - availableQuantity is missing in the SKU table */
     async createSku(body) {
-
+        let id;
         const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
 
         try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+             id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
         } catch (error) {
             new Error(Exceptions.message500);
         }
@@ -53,7 +53,8 @@ class SkuController {
         if (!description || !weight || !volume || !notes || !price || !availableQuantity)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity) VALUES (${id + 1}, ${weight}, ${volume}, ${price}, ${notes}, ${description}, ${availableQuantity});`;
+        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity)
+         VALUES (${id + 1}, ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
         try {
             const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -76,7 +77,7 @@ class SkuController {
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
-        AND notes= ${newNotes} AND description= ${newDescription} AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
+        AND notes= "${newNotes}" AND description= "${newDescription}" AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

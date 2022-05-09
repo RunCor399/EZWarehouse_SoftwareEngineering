@@ -39,7 +39,7 @@ class ReturnOrderController {
         const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
 
         try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
         } catch (error) {
             new Error(Exceptions.message500);
         }
@@ -51,7 +51,8 @@ class ReturnOrderController {
         if (!returnDate || !products || !restockOrderId)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
+        const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) 
+        VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
         try {
             const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

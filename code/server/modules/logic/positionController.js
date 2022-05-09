@@ -26,7 +26,7 @@ class PositionController {
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+            const id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
         } catch (error) {
             new Error(Exceptions.message500);
         }
@@ -42,7 +42,8 @@ class PositionController {
             !col || !maxWeight || !maxVolume)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) VALUES (${id + 1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
+        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) 
+        VALUES (${id + 1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
         try {
             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {

@@ -50,14 +50,16 @@ class TestDescriptorController {
         if (!name || !procedureDescription || !idSKU )
             throw new Error(Exceptions.message422);
 
-        const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, description, passRate) VALUES (${id + 1}, ${name}, ${procedureDescription}, 0);`;
+        const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, description, passRate) 
+        VALUES (${id + 1}, "${name}", "${procedureDescription}", 0);`;
         try {
             const insert1 = await this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             new Error(Exceptions.message500);
         }
 
-        const sqlInsert2 = `INSERT INTO TestDescriptorOwnership(testDescID, SKUID) VALUES (${id + 1}, ${idSKU});`;
+        const sqlInsert2 = `INSERT INTO TestDescriptorOwnership(testDescID, SKUID) 
+        VALUES (${id + 1}, ${idSKU});`;
         try {
             const insert2 = await this.#dbManager.genericSqlGet(sqlInsert2);
         } catch (error) {
@@ -76,8 +78,8 @@ class TestDescriptorController {
         if (!newName || !newProcedureDescription  || !newIdSKU )
             throw new Error(Exceptions.message422);
 
-        const sqlUpdate1 = `UPDATE TestDescriptor SET name= ${newName}
-        AND description= ${newProcedureDescription} WHERE ID= ${id};`;
+        const sqlUpdate1 = `UPDATE TestDescriptor SET name= "${newName}"
+        AND description= "${newProcedureDescription}" WHERE ID= ${id};`;
 
         try {
             const update1 = await this.#dbManager.genericSqlGet(sqlUpdate1);
@@ -85,7 +87,8 @@ class TestDescriptorController {
             new Error(Exceptions.message500);
         }
 
-        const sqlUpdate2 = `UPDATE TestDescriptorOwnership SET SKUID= ${newIdSKU} WHERE testDescID= ${id};`;
+        const sqlUpdate2 = `UPDATE TestDescriptorOwnership 
+        SET SKUID= ${newIdSKU} WHERE testDescID= ${id};`;
 
         try {
             const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);

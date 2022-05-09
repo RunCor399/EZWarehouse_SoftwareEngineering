@@ -8,7 +8,7 @@ router.use('/', testsRouter);
 //SKU ITEM
 
 //GET /api/skuitems
-router.get('/api/skuitems', (req, res) => {
+router.get('/api/skuitems', async (req, res) => {
   let message = {
     message: '/api/skuitems'
   }
@@ -18,8 +18,7 @@ router.get('/api/skuitems', (req, res) => {
 
 
   try {
-
-    controller.getSkuItemController().getAllSkuItems();
+    await controller.getSkuItemController().getAllSkuItems();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -29,7 +28,7 @@ router.get('/api/skuitems', (req, res) => {
 });
 
 //GET /api/skuitems/sku/:id
-router.get('/api/skuitems/sku/:id', (req, res) => {
+router.get('/api/skuitems/sku/:id', async (req, res) => {
   const param = req.params.id;
   let message = {
     message: '/api/skuitems/sku/:id'
@@ -40,8 +39,7 @@ router.get('/api/skuitems/sku/:id', (req, res) => {
 
 
   try {
-    controller.getSkuItemController().getSkuItems(param);
-
+    await controller.getSkuItemController().getSkuItems(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -55,7 +53,7 @@ router.get('/api/skuitems/sku/:id', (req, res) => {
 });
 
 //GET /api/skuitems/:rfid
-router.get('/api/skuitems/:rfid', (req, res) => {
+router.get('/api/skuitems/:rfid', async (req, res) => {
   const param = req.params.rfid;
   let message = {
     message: '/api/skuitems/:rfid'
@@ -66,8 +64,7 @@ router.get('/api/skuitems/:rfid', (req, res) => {
 
 
   try {
-    controller.getSkuItemController().getSkuItem(param);
-
+    await controller.getSkuItemController().getSkuItem(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -80,7 +77,7 @@ router.get('/api/skuitems/:rfid', (req, res) => {
 });
 
 //POST /api/skuitem
-router.post('/api/skuitem', (req, res) => {
+router.post('/api/skuitem', async (req, res) => {
   let message = {
     message: '/api/skuitem'
   }
@@ -89,8 +86,7 @@ router.post('/api/skuitem', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getSkuItemController().createSkuItem(req.body);
-
+    await controller.getSkuItemController().createSkuItem(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -103,7 +99,7 @@ router.post('/api/skuitem', (req, res) => {
 });
 
 //PUT /api/skuitems/:rfid
-router.put('/api/skuitems/:rfid', (req, res) => {
+router.put('/api/skuitems/:rfid', async (req, res) => {
   const param = req.params.rfid;
   let message = {
     message: '/api/skuitems/:rfid'
@@ -112,8 +108,7 @@ router.put('/api/skuitems/:rfid', (req, res) => {
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
   try {
-
-    controller.getSkuItemController().editSkuItem(param, req.body)
+    await controller.getSkuItemController().editSkuItem(param, req.body)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -125,7 +120,7 @@ router.put('/api/skuitems/:rfid', (req, res) => {
 });
 
 //DELETE /api/skuitems/:rfid
-router.delete('/api/skuitems/:rfid', (req, res) => {
+router.delete('/api/skuitems/:rfid', async (req, res) => {
   const param = req.params.rfid;
   let message = {
     message: '/api/skuitems/:rfid'
@@ -136,8 +131,7 @@ router.delete('/api/skuitems/:rfid', (req, res) => {
 
 
   try {
-
-    controller.getSkuItemController().deleteSkuItem(param);
+    await controller.getSkuItemController().deleteSkuItem(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

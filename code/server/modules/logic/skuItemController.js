@@ -35,7 +35,7 @@ class SkuItemController {
 
     /*getter function to retreive a single SKUItem, given its RFID */
     async getSkuItem(rfid) {
-        const sqlInstruction = `SELECT * FROM SKUItem WHERE RFID= ${rfid};`;
+        const sqlInstruction = `SELECT * FROM SKUItem WHERE RFID= "${rfid}";`;
         try {
             const skuItem = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -54,7 +54,8 @@ class SkuItemController {
         if (!RFID || !SKUId || !dateOfStock)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (${RFID}, ${SKUId}, 0, ${dateOfStock});`;
+        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
+        VALUES ("${RFID}", ${SKUId}, 0, ${dateOfStock});`;
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -74,7 +75,8 @@ class SkuItemController {
         if (!newRFID || !newSKUId || !newDateOfStock)
             throw new Error(Exceptions.message422);
 
-        const sqlUpdate = `UPDATE SKUItem SET RFID= ${newRFID} AND Available= ${newAvailable} AND DateOfStock= ${newDateOfStock} WHERE RFID= ${oldRFID};`;
+        const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}" AND Available= ${newAvailable} 
+        AND DateOfStock= ${newDateOfStock} WHERE RFID= "${oldRFID}";`;
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlUpdate);
         } catch (error) {

@@ -57,10 +57,11 @@ class InternalOrderController {
     /*TODO - products and issueDate are missing in the table */
     async createInternalOrder(body) {
 
+        let id;
         const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
 
         try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+            id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];;
         } catch (error) {
             new Error(Exceptions.message500);
         }
@@ -72,7 +73,8 @@ class InternalOrderController {
         if (!issueDate || !products || !customerId)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) VALUES (${id + 1}, ${issueDate}, "ISSUED", ${customerId});`;
+        const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
+        VALUES (${id + 1}, "${issueDate}", "ISSUED", "${customerId}");`;
         try {
             const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -103,7 +105,7 @@ class InternalOrderController {
             return internalOrder;
         }
         else {
-            const sqlInstruction = `UPDATE InternalOrder SET state=  ${newState} WHERE ID= ${id}`;
+            const sqlInstruction = `UPDATE InternalOrder SET state= "${newState}" WHERE ID= ${id}`;
             try {
                 const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
             } catch (error) {

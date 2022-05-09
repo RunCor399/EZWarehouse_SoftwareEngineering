@@ -66,7 +66,8 @@ class RestockOrderController {
         if (!issueDate  || !products || !supplierId )
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1}, ${supplierId}, ${issueDate});`;
+        const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1},
+             ${supplierId}, ${issueDate});`;
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -87,7 +88,7 @@ class RestockOrderController {
             throw new Error(Exceptions.message422);
 
 
-        const sqlInstruction = `UPDATE RestockOrder SET state = ${newState} WHERE ID= ${id};`;
+        const sqlInstruction = `UPDATE RestockOrder SET state = "${newState}" WHERE ID= ${id};`;
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
