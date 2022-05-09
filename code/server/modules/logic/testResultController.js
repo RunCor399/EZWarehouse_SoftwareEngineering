@@ -21,9 +21,9 @@ class TestResultController {
         return rows.map((row) => row);
     }
 
-    /*getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test descriptor - more than a single test*/
+    /*getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test*/
     async getTestResult(rfid, id) {
-        const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= ${rfid} AND testDescID= ${id};`;
+        const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= ${rfid} AND ID= ${id};`;
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -48,10 +48,10 @@ class TestResultController {
         const date = body["Date"];
         const result = body["Result"];
 
-        if (!rfid  || !idTestDesciptor  || !date  || !result )
+        if (!rfid || !idTestDesciptor || !date || !result)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO TestResult (testDescID, SKUItemID, date, result) VALUES (${id + 1}, ${rfid}, ${date}, ${result});`;
+        const sqlInstruction = `INSERT INTO TestResult (ID, testDescID,  SKUItemID, date, result) VALUES (${id + 1}, ${idTestDesciptor}, ${rfid}, ${date}, ${result});`;
         try {
             const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -60,17 +60,17 @@ class TestResultController {
         return testRes;
     }
 
-    /*function to edit the properties of a SKUItem's test result, given its RFID and the ID of the test descriptor*/
+    /*function to edit the properties of a SKUItem's test result, given its RFID and the ID of the test result*/
     async editTestResult(rfid, id, body) {
 
         const newIdTestDesciptor = body["newIdTestDescriptor"];
         const newDate = body["newDate"];
         const newResult = body["newResult"];
 
-        if (!newIdTestDesciptor || !newDate  || !newResult )
+        if (!newIdTestDesciptor || !newDate || !newResult)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE TestDescriptor SET testDescID= ${newIdTestDesciptor} AND date= ${newDate} AND result= ${newResult} WHERE testDescID= ${id} AND SKUItemID = ${rfid};`;
+        const sqlInstruction = `UPDATE TestResult SET testDescID= ${newIdTestDesciptor} AND date= ${newDate} AND result= ${newResult} WHERE ID= ${id} AND SKUItemID = ${rfid};`;
 
         try {
             const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
@@ -82,7 +82,7 @@ class TestResultController {
 
     /*delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
     async deleteTestResult(rfid, id) {
-        const sqlInstruction = `DELETE FROM TestResult WHERE testDescID= ${id} AND SKUItemID= ${rfid};`;
+        const sqlInstruction = `DELETE FROM TestResult WHERE ID= ${id} AND SKUItemID= ${rfid};`;
 
         try {
             const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
