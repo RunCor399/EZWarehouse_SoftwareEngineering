@@ -9,7 +9,8 @@ class SkuItemController {
 
         console.log("skuItemController started");
     }
-    /*TO CHECK - getter function to retreive all the SKUItems*/
+
+    /*getter function to retreive all the SKUItems*/
     async getAllSkuItems() {
         const sqlInstruction = "SELECT * FROM SKUItem";
         try {
@@ -20,7 +21,8 @@ class SkuItemController {
         return rows.map((row) => row);
     }
 
-    /*TO CHECK - getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
+
+    /*getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
     async getSkuItems(id) {
         const sqlInstruction = `SELECT * FROM SKUItem WHERE SKUId= ${id};`;
         try {
@@ -31,7 +33,7 @@ class SkuItemController {
         return rows.map((row) => row);
     }
 
-    /*TO CHECK - getter function to retreive a single SKUItem, given its RFID */
+    /*getter function to retreive a single SKUItem, given its RFID */
     async getSkuItem(rfid) {
         const sqlInstruction = `SELECT * FROM SKUItem WHERE RFID= ${rfid};`;
         try {
@@ -42,7 +44,7 @@ class SkuItemController {
         return skuItem;
     }
 
-    /*TO CHECK*/
+    /*creation of an SKUItem*/
     async createSkuItem(body) {
 
         const RFID = body["RFID"];
@@ -58,10 +60,10 @@ class SkuItemController {
         } catch (error) {
             console.log("error");
         }
-        return skuItem;    /*item returned just to test the function*/
+        return skuItem;
     }
 
-    /*TODO */
+    /*function to edit an SKUItem*/
     async editSkuItem(oldRFID, body) {
 
         const newRFID = body["newRFID"];
