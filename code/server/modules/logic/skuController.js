@@ -59,7 +59,7 @@ class SkuController {
         } catch (error) {
             console.log("error");
         }
-        return sku;    /*item returned just to test the function*/
+        return sku;
     }
 
     /*TO CHECK - availableQuantity is missing in the SKU table */
@@ -82,10 +82,25 @@ class SkuController {
         } catch (error) {
             console.log("error");
         }
-        return item;
+
+        if (!this.getSku(id).position) {
+            SKUweight = this.getSku(id).weight;
+            SKUvolume = this.getSku(id).volume;
+            SKUposition = this.getSku(id).position;
+            //SKUweight = getSku(id).getWeight();
+            //SKUvolume = getSku(id).getVolume();
+
+            const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${occupiedWeight + SKUweight} AND occupiedVolume = ${Position.occupiedVolume + SKUvolume} WHERE ID= ${SKUposition};`;
+            try {
+                const update2 = this.#dbManager.genericSqlGet(sqlUpdate2);
+            } catch (error) {
+                console.log("error");
+            }
+        }
+
     }
 
-    /*TO CHECK IF IT'S CORRECT*/
+    /*TO CHECK - which way of getting the volume and the weight is the right one?*/
     async setPosition(id, body) {
 
         const position = body["position"];
@@ -93,23 +108,35 @@ class SkuController {
         if (!position)
             throw new Error(Exceptions.message422);
 
+        const sqlUpdate1 = `UPDATE SKU SET position= ${position} WHERE ID= ${id};`;
+        try {
+            const update1 = await this.#dbManager.genericSqlGet(sqlUpdate1);
+        } catch (error) {
+            console.log("error");
+        }
+
+        /*the SKUStorage table can be deleted
+
         const sqlInstruction = `UPDATE SKUStorage SET positionID= ${position} WHERE SKUID= ${id};`;
         try {
             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }
+        */
 
-        /*
-        const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${Position.occupiedWeight + SKU.weight} AND occupiedVolume = ${Position.occupiedVolume + SKU.volume} WHERE SKU.ID= ${id} AND Position.ID= ${position}`;
+        SKUweight = this.getSku(id).weight;
+        SKUvolume = this.getSku(id).volume;
+        //SKUweight = getSku(id).getWeight();
+        //SKUvolume = getSku(id).getVolume();
+
+        const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${occupiedWeight + SKUweight} AND occupiedVolume = ${Position.occupiedVolume + SKUvolume} WHERE ID= ${position}`;
         try {
             const update2 = this.#dbManager.genericSqlGet(sqlUpdate2);
         } catch (error) {
             console.log("error");
         }
-         */
 
-        return position;
     }
 
     /*delete function to remove an SKU from the table, given its ID */
