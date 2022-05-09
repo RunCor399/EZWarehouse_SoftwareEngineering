@@ -1,48 +1,21 @@
-CREATE TABLE DeliveryEmployee(
-    ID INT,
-    name VARCHAR(100),
-    surname VARCHAR(100),
-    privilegeLevel INT,
-    PRIMARY KEY (ID)
-);
-
-CREATE TABLE QualityCheckEmployee(
-    ID INT,
-    name VARCHAR(100),
-    surname VARCHAR(100),
-    privilegeLevel INT,
-    PRIMARY KEY (ID)
-);
-
-CREATE TABLE Manager(
-    ID INT,
-    name VARCHAR(100),
-    surname VARCHAR(100),
-    privilegeLevel INT,
-    PRIMARY KEY (ID)
-);
-
-CREATE TABLE Clerk(
-    ID INT,
-    name VARCHAR(100),
-    surname VARCHAR(100),
-    privilegeLevel INT,
-    PRIMARY KEY (ID)
-);
 
 CREATE TABLE TestDescriptor(
     ID INT,
     name VARCHAR(100),
     description VARCHAR(250),
     passRate FLOAT,
-    addedByEmployee INT,
+    SKUID INT,
     PRIMARY KEY (ID),
-    FOREIGN KEY(addedByEmployee) REFERENCES QualityCheckEmployee(ID)
+    FOREIGN KEY (SKUID) REFERENCES SKU(ID)
 );
 
 CREATE TABLE SKUItem(
-    ID INT,
-    PRIMARY KEY (ID)
+    RFID INT,
+    SKUID INT, 
+    dateOfStock DATE,
+    available BOOLEAN,
+    PRIMARY KEY (RFID),
+    FOREIGN KEY (SKUID) REFERENCES SKU(ID)
 );
 
 CREATE TABLE SKU(
@@ -52,16 +25,10 @@ CREATE TABLE SKU(
     price FLOAT,
     notes VARCHAR(250),
     description VARCHAR(250),
+    positionID INT,
+    FOREIGN KEY(positionID) REFERENCES Position(ID),
     PRIMARY KEY (ID)
 )
-
-CREATE TABLE TestDescriptorOwnership(
-    testDescID INT,
-    SKUID INT,
-    PRIMARY KEY (testDescID, SKUID),
-    FOREIGN KEY(testDescID) REFERENCES TestDescriptor(ID),
-    FOREIGN KEY (SKUID) REFERENCES SKU(ID)
-);
 
 CREATE TABLE TestResult(
     testDescID INT,
@@ -77,7 +44,7 @@ CREATE TABLE Position(
     ID INT,
     maxVolume FLOAT,
     maxWeight FLOAT,
-    aisle VARCHAR(250),
+    aisle INT,
     row INT,
     column INT,
     occupiedWeight FLOAT,
@@ -94,33 +61,27 @@ CREATE TABLE StockInfo(
     FOREIGN KEY (SKUItemID) REFERENCES SKUItem(ID)
 );
 
-CREATE TABLE SKUStorage(
-    positionID INT,
-    SKUID INT,
-    PRIMARY KEY (positionID, SKUItemID),
-    FOREIGN KEY(positionID) REFERENCES Position(ID),
-    FOREIGN KEY (SKUID) REFERENCES SKU(ID)
-);
 
 CREATE TABLE Item(
     ID INT,
     SKUID INT,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (SKUID) REFERENCES SKU(ID)
-);
-
-CREATE TABLE Supplier(
-    ID INT,
-    name VARCHAR(250),
-    PRIMARY KEY (ID)
-);
-
-CREATE TABLE ItemsSoldPerSupplier(
-    itemID INT,
     supplierID INT,
-    PRIMARY KEY (itemID, supplierID),
-    FOREIGN KEY (itemID) REFERENCES Item(ID),
-    FOREIGN KEY (supplierID) REFERENCES Supplier(ID),
+    price INT,
+    description VARCHAR(250),
+    PRIMARY KEY (ID),
+    FOREIGN KEY (SKUID) REFERENCES SKU(ID),
+    FOREIGN KEY (supplierID) REFERENCES Users(ID),
+    CONSTRAINT SS_Item UNIQUE(SKUID, supplierID)
+);
+
+CREATE TABLE Users(
+    ID INT,
+    name VARCHAR(100),
+    surname VARCHAR(100),
+    email VARCHAR(250),
+    type VARCHAR(100),
+    password VARCHAR(250),
+    PRIMARY KEY (ID)
 );
 
 CREATE TABLE Order(
@@ -135,7 +96,7 @@ CREATE TABLE RestockOrder(
     shipmentDate DATE, 
     state VARCHAR(250),
     PRIMARY KEY(ID),
-    FOREIGN KEY(supplierID) REFERENCES Supplier(ID),
+    FOREIGN KEY(supplierID) REFERENCES Users(ID),
     FOREIGN KEY(ID) REFERENCES Order(ID)
 );
 
@@ -143,50 +104,51 @@ CREATE TABLE  ReturnOrder(
     ID INT,
     returnDate DATE,
     supplierID INT, 
-    managerID INT,
     restockOrderID INT,
     PRIMARY KEY(ID),
-    FOREIGN KEY(supplierID) REFERENCES Supplier(ID),
-    FOREIGN KEY(managerID) REFERENCES Manager(ID),
+    FOREIGN KEY(supplierID) REFERENCES Users(ID),
     FOREIGN KEY(restockOrderID) REFERENCES RestockOrder(ID),
     FOREIGN KEY(ID) REFERENCES Order(ID)
 );
 
-CREATE TABLE SKUItemsReturnedPerOrder(
-    returnOrderID INT,
-    SKUItemID INT,
-    PRIMARY KEY(returnOrderID, SKUItemID),
-    FOREIGN KEY(SKUItemID) REFERENCES SKUItem(ID),
-    FOREIGN KEY(returnOrderID) REFERENCES ReturnOrder(ID)
-);
 
 
-CREATE TABLE InternalCustomer(
-    ID INT,
-    name VARCHAR(250),
-    surname VARCHAR(250),
-    PRIMARY KEY(ID)
-);
-
-CREATE TABLE ItemsPerOrder(
+CREATE TABLE ItemsPerRestockOrder(
     orderID INT,
     SKUID INT,
     quantity INT, 
     PRIMARY KEY(orderID, SKUID),
     FOREIGN KEY(SKUID) REFERENCES SKU(ID),
-    FOREIGN KEY(orderID) REFERENCES Order(ID)
+    FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
+)
 
+CREATE TABLE ItemsPerReturnOrder(
+    orderID INT,
+    SKUID INT,
+    quantity INT, 
+    PRIMARY KEY(orderID, SKUID),
+    FOREIGN KEY(SKUID) REFERENCES SKU(ID),
+    FOREIGN KEY(orderID) REFERENCES ReturnOrder(ID)
 )
 
 CREATE TABLE InternalOrder(
     ID INT,
     state VARCHAR(250), 
     internalCustomerID INT,
+    issueDate DATE,
     PRIMARY KEY(ID),
-    FOREIGN KEY(internalCustomerID) REFERENCES InternalCustomer(ID),
+    FOREIGN KEY(internalCustomerID) REFERENCES Users(ID),
     FOREIGN KEY(ID) REFERENCES Order(ID);
 )
 
+CREATE TABLE ItemsPerInternalOrder(
+    orderID INT,
+    SKUID INT,
+    quantity INT, 
+    PRIMARY KEY(orderID, SKUID),
+    FOREIGN KEY(SKUID) REFERENCES SKU(ID),
+    FOREIGN KEY(orderID) REFERENCES InternalOrder(ID)
+)
 
 
 
