@@ -16,7 +16,7 @@ class TestDescriptorController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -27,7 +27,7 @@ class TestDescriptorController {
         try {
             const testDescriptor = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return testDescriptor;
     }
@@ -40,7 +40,7 @@ class TestDescriptorController {
         try {
             const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const name = body["name"];
@@ -54,14 +54,14 @@ class TestDescriptorController {
         try {
             const insert1 = await this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const sqlInsert2 = `INSERT INTO TestDescriptorOwnership(testDescID, SKUID) VALUES (${id + 1}, ${idSKU});`;
         try {
             const insert2 = await this.#dbManager.genericSqlGet(sqlInsert2);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
     }
@@ -82,7 +82,7 @@ class TestDescriptorController {
         try {
             const update1 = await this.#dbManager.genericSqlGet(sqlUpdate1);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const sqlUpdate2 = `UPDATE TestDescriptorOwnership SET SKUID= ${newIdSKU} WHERE testDescID= ${id};`;
@@ -90,7 +90,7 @@ class TestDescriptorController {
         try {
             const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
     }
 
@@ -100,7 +100,7 @@ class TestDescriptorController {
         try {
             const testDescriptor = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return testDescriptor;
     }

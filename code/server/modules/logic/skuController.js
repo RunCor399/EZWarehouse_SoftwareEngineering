@@ -16,7 +16,7 @@ class SkuController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -27,7 +27,7 @@ class SkuController {
         try {
             const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return sku;
     }
@@ -40,7 +40,7 @@ class SkuController {
         try {
             const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const description = body["description"];
@@ -55,9 +55,9 @@ class SkuController {
 
         const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity) VALUES (${id + 1}, ${weight}, ${volume}, ${price}, ${notes}, ${description}, ${availableQuantity});`;
         try {
-            const sku = this.#dbManager.genericSqlGet(sqlInstruction);
+            const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return sku;
     }
@@ -80,7 +80,7 @@ class SkuController {
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         if (!this.getSku(id).position) {
@@ -92,9 +92,9 @@ class SkuController {
 
             const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${occupiedWeight + SKUweight} AND occupiedVolume = ${Position.occupiedVolume + SKUvolume} WHERE ID= ${SKUposition};`;
             try {
-                const update2 = this.#dbManager.genericSqlGet(sqlUpdate2);
+                const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
             } catch (error) {
-                console.log("error");
+                new Error(Exceptions.message500);
             }
         }
 
@@ -112,7 +112,7 @@ class SkuController {
         try {
             const update1 = await this.#dbManager.genericSqlGet(sqlUpdate1);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         /*the SKUStorage table can be deleted
@@ -132,9 +132,9 @@ class SkuController {
 
         const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${occupiedWeight + SKUweight} AND occupiedVolume = ${Position.occupiedVolume + SKUvolume} WHERE ID= ${position}`;
         try {
-            const update2 = this.#dbManager.genericSqlGet(sqlUpdate2);
+            const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
     }
@@ -145,7 +145,7 @@ class SkuController {
         try {
             const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return sku; /*sku returned to test it*/
     }

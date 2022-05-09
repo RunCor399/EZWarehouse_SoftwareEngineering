@@ -16,7 +16,7 @@ class InternalOrderController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -27,7 +27,7 @@ class InternalOrderController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -38,7 +38,7 @@ class InternalOrderController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -49,7 +49,7 @@ class InternalOrderController {
         try {
             const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return internalOrder;
     }
@@ -62,7 +62,7 @@ class InternalOrderController {
         try {
             const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const issueDate = body["issueDate"];
@@ -76,7 +76,7 @@ class InternalOrderController {
         try {
             const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         /*join between SKUItemsInInternalOrder and InternalOrder */
@@ -107,7 +107,7 @@ class InternalOrderController {
             try {
                 const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
             } catch (error) {
-                console.log("error");
+                new Error(Exceptions.message500);
             }
             return internalOrder;
         }
@@ -121,7 +121,7 @@ class InternalOrderController {
         try {
             const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return internalOrder;
     }

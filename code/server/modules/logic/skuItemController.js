@@ -16,7 +16,7 @@ class SkuItemController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log(error);
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -28,7 +28,7 @@ class SkuItemController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -39,7 +39,7 @@ class SkuItemController {
         try {
             const skuItem = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return skuItem;
     }
@@ -58,7 +58,7 @@ class SkuItemController {
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return skuItem;
     }
@@ -78,7 +78,7 @@ class SkuItemController {
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlUpdate);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
     }
 
@@ -88,7 +88,7 @@ class SkuItemController {
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return skuItem; /*skuItem returned to test it*/
     }

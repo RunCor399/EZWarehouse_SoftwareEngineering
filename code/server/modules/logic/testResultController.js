@@ -16,7 +16,7 @@ class TestResultController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -27,7 +27,7 @@ class TestResultController {
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return rows.map((row) => row);
     }
@@ -40,7 +40,7 @@ class TestResultController {
         try {
             const id = await this.#dbManager.genericSqlGet(sqlGetCount);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
 
         const rfid = body["rfid"];
@@ -55,7 +55,7 @@ class TestResultController {
         try {
             const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return testRes;
     }
@@ -75,7 +75,7 @@ class TestResultController {
         try {
             const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return testRes;
     }
@@ -87,7 +87,7 @@ class TestResultController {
         try {
             const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
-            console.log("error");
+            new Error(Exceptions.message500);
         }
         return testRes;
     }
