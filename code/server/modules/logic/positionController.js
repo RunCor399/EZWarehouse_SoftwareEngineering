@@ -59,12 +59,14 @@ class PositionController {
         const newCol = body["newCol"];
         const newMaxWeight = body["newMaxWeight"];
         const newMaxVolume = body["newMaxVolume"];
+        const newOccupiedWeight = body["newOccupiedWeight"];
+        const newOccupiedVolume = body["newOccupiedVolume"];
 
-        if (!newAisleID || !newRow || !newCol || !newMaxWeight || !newMaxVolume)
+        if (!newAisleID || !newRow || !newCol || !newMaxWeight || !newMaxVolume || !newOccupiedWeight || !newOccupiedVolume)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE Position SET maxVolume= ${newMaxVolume} AND maxWeight= ${newMaxWeight} 
-        AND aisle= ${newAisleID} AND row= ${newRow} AND column= ${newCol} WHERE ID= ${id};`;
+        AND aisle= ${newAisleID} AND row= ${newRow} AND column= ${newCol} AND occupiedWeight= ${newOccupiedWeight} AND occupiedVolume= ${newOccupiedVolume} WHERE ID= ${id};`;
 
         try {
             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
