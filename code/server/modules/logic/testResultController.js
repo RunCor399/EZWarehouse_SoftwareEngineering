@@ -48,7 +48,7 @@ class TestResultController {
         const date = body["Date"];
         const result = body["Result"];
 
-        if (rfid === undefined || idTestDesciptor === undefined || date === undefined || result === undefined)
+        if (!rfid  || !idTestDesciptor  || !date  || !result )
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `INSERT INTO TestResult (testDescID, SKUItemID, date, result) VALUES (${id + 1}, ${rfid}, ${date}, ${result});`;
@@ -67,7 +67,7 @@ class TestResultController {
         const newDate = body["newDate"];
         const newResult = body["newResult"];
 
-        if (newIdTestDesciptor === undefined || newDate === undefined || newResult === undefined)
+        if (!newIdTestDesciptor || !newDate  || !newResult )
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE TestDescriptor SET testDescID= ${newIdTestDesciptor} AND date= ${newDate} AND result= ${newResult} WHERE testDescID= ${id} AND SKUItemID = ${rfid};`;

@@ -14,7 +14,7 @@ router.get('/api/testDescriptors', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getTestController().getAllTestDescriptors();
+    controller.getTestDescriptorController().getAllTestDescriptors();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -34,7 +34,7 @@ router.get('/api/testDescriptors/:id', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getTestController().getTestDescriptor(param);
+    controller.getTestDescriptorController().getTestDescriptor(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -53,7 +53,7 @@ router.post('/api/testDescriptor', (req, res) => {
 
 
   try {
-    controller.getTestController().createTestDescriptor(req.body);
+    controller.getTestDescriptorController().createTestDescriptor(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -73,7 +73,7 @@ router.put('/api/testDescriptor/:id', (req, res) => {
   controller.testPrint(req.url);
  
   try {
-    controller.getTestController().editTestDescriptor(param, req.body);
+    controller.getTestDescriptorController().editTestDescriptor(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -93,7 +93,7 @@ router.delete('/api/testDescriptor/:id', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getTestController().deleteTestDescriptor(param);
+    controller.getTestDescriptorController().deleteTestDescriptor(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -118,7 +118,7 @@ router.get('/api/skuitems/:rfid/testResults', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getTestController().getTestResults(param);
+    controller.getTestResultController().getTestResults(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -139,7 +139,7 @@ router.get('/api/skuitems/:rfid/testResults/:id', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getTestController().getTestResult(paramRfid, paramId);
+    controller.getTestResultController().getTestResult(paramRfid, paramId);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -158,7 +158,7 @@ router.post('/api/skuitems/testResult', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getTestController().createTestResult(req.body);
+    controller.getTestResultController().createTestResult(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -178,7 +178,7 @@ router.put('/api/skuitems/:rfid/testResult/:id', (req, res) => {
   controller.testPrint(req.url);
   
   try {
-    controller.getTestController().editTestResult(paramRfid, paramId, req.body);
+    controller.getTestResultController().editTestResult(paramRfid, paramId, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -198,7 +198,7 @@ router.delete('/api/skuitems/:rfid/testResult/:id', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getTestController().deleteTestResult(paramRfid, paramId);
+    controller.getTestResultController().deleteTestResult(paramRfid, paramId);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

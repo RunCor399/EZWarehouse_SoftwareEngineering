@@ -47,7 +47,7 @@ class TestDescriptorController {
         const procedureDescription = body["procedureDescription"];
         const idSKU = body["idSKU"];
 
-        if (name === undefined || procedureDescription === undefined || idSKU === undefined)
+        if (!name || !procedureDescription || !idSKU )
             throw new Error(Exceptions.message422);
 
         const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, description, passRate) VALUES (${id + 1}, ${name}, ${procedureDescription}, 0);`;
@@ -73,7 +73,7 @@ class TestDescriptorController {
         const newProcedureDescription = body["newProcedureDescription"];
         const newIdSKU = body["newIdSKU"];
 
-        if (newName === undefined || newProcedureDescription === undefined || newIdSKU === undefined)
+        if (!newName || !newProcedureDescription  || !newIdSKU )
             throw new Error(Exceptions.message422);
 
         const sqlUpdate1 = `UPDATE TestDescriptor SET name= ${newName}

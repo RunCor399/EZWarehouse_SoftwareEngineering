@@ -18,7 +18,7 @@ class UserController {
     }
 
     getUser() {
-        if (this.#user === undefined)
+        if (!this.#user)
             throw new Error(Exceptions.message401);
         else return this.#user;
     }
@@ -26,8 +26,7 @@ class UserController {
     getAllSuppliers() {
         const sqlInstruction = "SELECT * FROM USERS U WHERE TYPE='supplier'";;
 
-        if (this.#user === undefined ||
-            this.#user.getType() !== "manager")
+        if (!this.#user || this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         try {
             const rows = this.#dbManager.genericSqlGet(sqlInstruction);
@@ -35,7 +34,7 @@ class UserController {
             throw (Exceptions.message500);
         }
 
-        if (rows === undefined)
+        if (!rows)
             throw (Exceptions.message404);
 
         else return rows;
@@ -45,8 +44,7 @@ class UserController {
     async getAllUsers() {
         const sqlInstruction = "SELECT * FROM USERS U";
 
-        if (this.#user === undefined ||
-            this.#user.getType() !== "manager")
+        if (!this.#user || this.#user.getType() !== "manager")
             throw new Error(Exceptions.message401);
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
@@ -54,7 +52,7 @@ class UserController {
             throw (Exceptions.message500);
         }
 
-        if (rows === undefined)
+        if (!rows)
             throw (Exceptions.message404);
 
         else return rows;
