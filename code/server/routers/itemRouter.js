@@ -3,7 +3,7 @@ const router = express.Router()
 
 //SKU
 //GET /api/items
-router.get('/api/items',  (req, res) => {
+router.get('/api/items', async (req, res) => {
   let message = {
     message: '/api/items'
   }
@@ -12,7 +12,7 @@ router.get('/api/items',  (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    const items = controller.getItemController().getAllItems();
+    const items = await controller.getItemController().getAllItems();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -22,7 +22,7 @@ router.get('/api/items',  (req, res) => {
 });
 
 //GET /api/items/:id
-router.get('/api/items/:id', (req, res) => {
+router.get('/api/items/:id', async (req, res) => {
   const param = req.params.id;
   let message = {
     message: '/api/items/:id'
@@ -32,7 +32,7 @@ router.get('/api/items/:id', (req, res) => {
   controller.testPrint(req.url);
   
   try {
-    const item = controller.getItemController().getItem(param);
+    const item = await controller.getItemController().getItem(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -42,7 +42,7 @@ router.get('/api/items/:id', (req, res) => {
 });
 
 //POST /api/item
-router.post('/api/item', (req, res) => {
+router.post('/api/item',async (req, res) => {
   let message = {
     message: '/api/item'
   }
@@ -51,7 +51,7 @@ router.post('/api/item', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getItemController().createItem(req.body);
+    await controller.getItemController().createItem(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -62,7 +62,7 @@ router.post('/api/item', (req, res) => {
 });
 
 //PUT /api/item/:id
-router.put('/api/sku/:id', (req, res) => {
+router.put('/api/sku/:id', async (req, res) => {
   const param = req.params.id;
   let message = {
     message: '/api/sku/:id'
@@ -73,7 +73,7 @@ router.put('/api/sku/:id', (req, res) => {
 
   
   try {
-    controller.getItemController().editItem(param, req.body);
+    await controller.getItemController().editItem(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -83,7 +83,7 @@ router.put('/api/sku/:id', (req, res) => {
 });
 
 //DELETE /api/items/:id
-router.delete('/api/items/:id', (req, res) => {
+router.delete('/api/items/:id', async(req, res) => {
   const param = req.params.id;
   let message = {
     message: '/api/items/:id'
@@ -93,7 +93,7 @@ router.delete('/api/items/:id', (req, res) => {
   controller.testPrint(req.url);
   
   try {
-    controller.getItemController().deleteItem(param);
+    await controller.getItemController().deleteItem(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

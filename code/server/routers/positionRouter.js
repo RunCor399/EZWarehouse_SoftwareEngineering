@@ -5,7 +5,7 @@ const router = express.Router();
 
 //POSITION
 //GET /api/positions
-router.get('/api/positions', (req, res) => {
+router.get('/api/positions', async(req, res) => {
   let message = {
     message: '/api/positions'
   }
@@ -14,7 +14,7 @@ router.get('/api/positions', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getPositionController().getAllPositions();
+    await controller.getPositionController().getAllPositions();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -25,7 +25,7 @@ router.get('/api/positions', (req, res) => {
 });
 
 //POST /api/position
-router.post('/api/position', (req, res) => {
+router.post('/api/position', async (req, res) => {
   let message = {
     message: '/api/position'
   }
@@ -34,7 +34,7 @@ router.post('/api/position', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getPositionController().createPosition(req.body);
+    await controller.getPositionController().createPosition(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -46,7 +46,7 @@ router.post('/api/position', (req, res) => {
 });
 
 //PUT /api/position/:positionID
-router.put('/api/position/:positionID', (req, res) => {
+router.put('/api/position/:positionID', async (req, res) => {
   const param = req.params.positionID;
   let message = {
     message: '/api/position/:positionID'
@@ -57,7 +57,7 @@ router.put('/api/position/:positionID', (req, res) => {
 
 
   try {
-    controller.getPositionController().editPosition(param, req.body)
+   await controller.getPositionController().editPosition(param, req.body)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -69,7 +69,7 @@ router.put('/api/position/:positionID', (req, res) => {
 });
 
 //PUT /api/position/:positionID/changeID
-router.put('/api/position/:positionID/changeID', (req, res) => {
+router.put('/api/position/:positionID/changeID', async (req, res) => {
   const param = req.params.positionID;
   let message = {
     message: '/api/position/:positionID/changeID'
@@ -79,7 +79,7 @@ router.put('/api/position/:positionID/changeID', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getPositionController().editPosition(param, req.body);
+    await controller.getPositionController().editPosition(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -91,7 +91,7 @@ router.put('/api/position/:positionID/changeID', (req, res) => {
 });
 
 //DELETE /api/position/:positionID
-router.delete('/api/position/:positionID', (req, res) => {
+router.delete('/api/position/:positionID', async (req, res) => {
   const param = req.params.positionID;
   let message = {
     message: '/api/position/:positionID'
@@ -101,7 +101,7 @@ router.delete('/api/position/:positionID', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getPositionController().deletePosition(param);
+   await controller.getPositionController().deletePosition(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
