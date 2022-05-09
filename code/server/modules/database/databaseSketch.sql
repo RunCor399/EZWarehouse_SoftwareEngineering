@@ -37,7 +37,7 @@ CREATE TABLE TestResult(
     result BOOLEAN,
     PRIMARY KEY (testDescID, SKUItemID, date),
     FOREIGN KEY(testDescID) REFERENCES TestDescriptor(ID),
-    FOREIGN KEY (SKUItemID) REFERENCES SKUItem(ID)
+    FOREIGN KEY (SKUItemID) REFERENCES SKUItem(RFID)
 );
 
 CREATE TABLE Position(
@@ -58,7 +58,7 @@ CREATE TABLE StockInfo(
     stockDate DATE,
     PRIMARY KEY (positionID, SKUItemID, stockDate),
     FOREIGN KEY(positionID) REFERENCES Position(ID),
-    FOREIGN KEY (SKUItemID) REFERENCES SKUItem(ID)
+    FOREIGN KEY (SKUItemID) REFERENCES SKUItem(RFID)
 );
 
 
@@ -113,7 +113,7 @@ CREATE TABLE  ReturnOrder(
 
 
 
-CREATE TABLE ItemsPerRestockOrder(
+CREATE TABLE SKUPerRestockOrder(
     orderID INT,
     SKUID INT,
     quantity INT, 
@@ -122,7 +122,7 @@ CREATE TABLE ItemsPerRestockOrder(
     FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
 )
 
-CREATE TABLE ItemsPerReturnOrder(
+CREATE TABLE SKUPerReturnOrder(
     orderID INT,
     SKUID INT,
     quantity INT, 
@@ -141,7 +141,7 @@ CREATE TABLE InternalOrder(
     FOREIGN KEY(ID) REFERENCES Order(ID);
 )
 
-CREATE TABLE ItemsPerInternalOrder(
+CREATE TABLE SKUPerInternalOrder(
     orderID INT,
     SKUID INT,
     quantity INT, 
@@ -150,5 +150,29 @@ CREATE TABLE ItemsPerInternalOrder(
     FOREIGN KEY(orderID) REFERENCES InternalOrder(ID)
 )
 
+CREATE TABLE SKUItemsPerRestockOrder(
+    orderID INT,
+    SKUItemID INT,
+    PRIMARY KEY(orderID, SKUID),
+    FOREIGN KEY(SKUItemID) REFERENCES SKUItem(RFID),
+    FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
+)
+
+CREATE TABLE SKUItemsPerReturnOrder(
+    orderID INT,
+    SKUItemID INT,
+    PRIMARY KEY(orderID, SKUID),
+    FOREIGN KEY(SKUItemID) REFERENCES SKUItem(RFID),
+    FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
+)
+
+
+CREATE TABLE SKUItemsPerInternalOrder(
+    orderID INT,
+    SKUItemID INT,
+    PRIMARY KEY(orderID, SKUID),
+    FOREIGN KEY(SKUItemID) REFERENCES SKUItem(RFID),
+    FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
+)
 
 
