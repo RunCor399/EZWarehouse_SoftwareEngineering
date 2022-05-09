@@ -4,7 +4,9 @@ const PositionController = require("./positionController");
 const SkuController = require("./skuController");
 const UserController = require("./userController");
 const TestController = require("./testController");
-const OrderController = require("./orderController");
+const InternalOrderController = require("./internalOrderController");
+const RestockOrderController = require("./restockOrderController");
+const ReturnOrderController = require("./returnOrderController");
 const ItemController = require("./itemController");
 const DBManager = require("../database/databaseManager");
 
@@ -15,7 +17,9 @@ class Controller {
     #positionController;
     #skuController;
     #testController;
-    #orderController;
+    #restockOrderController;
+    #returnOrderController;
+    #internalOrderController;
     #dbManager;
 
     constructor() {
@@ -27,7 +31,9 @@ class Controller {
         this.#positionController = new PositionController(this);
         this.#skuController = new SkuController(this);
         this.#testController = new TestController(this);
-        this.#orderController = new OrderController(this);
+        this.#restockOrderController = new RestockOrderController(this);
+        this.#returnOrderController = new ReturnOrderController(this);
+        this.#internalOrderController = new InternalOrderController(this);
         console.log("general Controller started");
     }
 
@@ -49,8 +55,16 @@ class Controller {
         return this.#testController;
     }
 
-    getOrderController() {
-        return this.#orderController;
+    getRestockOrderController() {
+        return this.#restockOrderController;
+    }
+
+    getReturnOrderController() {
+        return this.#returnOrderController;
+    }
+
+    getInternalOrderController() {
+        return this.#internalOrderController;
     }
 
     getItemController() {
@@ -63,10 +77,6 @@ class Controller {
 
     testPrint(string) {
         console.log(string);
-    }
-
-    print() {
-        console.log("Test"); //DEPRECATED
     }
 
     getSession() {

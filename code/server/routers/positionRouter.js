@@ -110,4 +110,4 @@ router.delete('/api/position/:positionID', (req, res) => {
   return res.status(204).json(message);
 });
 
-module.exports = router
+module.exports = router;

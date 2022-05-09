@@ -13,7 +13,7 @@ router.route('/api/returnOrders')
         controller.testPrint(req.url);
 
         try {
-            controller.getOrderController().getAllReturnOrders();
+            controller.getReturnOrderController().getAllReturnOrders();
         } catch (error) {
             let responseParams = Exceptions.handle(error);
             return res.status(responseParams.code).send(responseParams.message);
@@ -34,7 +34,7 @@ router.route('/api/returnOrders/:id')
         controller.testPrint(req.url);
 
         try {
-            controller.getOrderController().getReturnOrder(param);
+            controller.getReturnOrderController().getReturnOrder(param);
         } catch (error) {
             let responseParams = Exceptions.handle(error);
             return res.status(responseParams.code).send(responseParams.message);
@@ -55,7 +55,7 @@ router.route('/api/returnOrder')
         controller.testPrint(req.url);
         
         try {
-            controller.getOrderController().createReturnOrder(req.body);
+            controller.getReturnOrderController().createReturnOrder(req.body);
         } catch (error) {
             let responseParams = Exceptions.handle(error);
             return res.status(responseParams.code).send(responseParams.message);
@@ -74,7 +74,7 @@ router.route('/api/returnOrder/:id')
         controller.testPrint(req.url);
 
         try {
-            controller.getOrderController().deleteReturnOrder(param);
+            controller.getReturnOrderController().deleteReturnOrder(param);
         } catch (error) {
             let responseParams = Exceptions.handle(error);
             return res.status(responseParams.code).send(responseParams.message);

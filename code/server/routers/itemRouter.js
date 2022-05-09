@@ -102,5 +102,4 @@ router.delete('/api/items/:id', (req, res) => {
   return res.status(200).json(message);
 });
 
-
-module.exports = router
+module.exports = router;

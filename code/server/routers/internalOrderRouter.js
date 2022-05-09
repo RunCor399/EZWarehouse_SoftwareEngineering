@@ -14,7 +14,7 @@ router.route('/api/internalOrders')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getAllInternalOrders();
+      controller.getInternalOrderController().getAllInternalOrders();
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -33,7 +33,7 @@ router.route('/api/internalOrdersIssued')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getIssuedInternalOrders();
+      controller.getInternalOrderController().getIssuedInternalOrders();
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -52,7 +52,7 @@ router.route('/api/internalOrdersAccepted')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getAcceptedInternalOrders();
+      controller.getInternalOrderController().getAcceptedInternalOrders();
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -72,7 +72,7 @@ router.route('/api/internalOrders/:id')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getInternalOrder(param);
+      controller.getInternalOrderController().getInternalOrder(param);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -91,7 +91,7 @@ router.route('/api/internalOrder')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().createInternalOrder(req.body);
+      controller.getInternalOrderController().createInternalOrder(req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -113,7 +113,7 @@ router.route('/api/internalOrder/:id')
 
 
       try {
-        controller.getOrderController().editIntenalOrder(param, req.body);
+        controller.getInternalOrderController().editIntenalOrder(param, req.body);
       } catch (error) {
         let responseParams = Exceptions.handle(error);
         return res.status(responseParams.code).send(responseParams.message);
@@ -132,7 +132,7 @@ router.route('/api/internalOrder/:id')
     controller.testPrint(req.url);
     
     try {
-      controller.getOrderController().deleteInternalOrder(param);
+      controller.getInternalOrderController().deleteInternalOrder(param);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -142,4 +142,4 @@ router.route('/api/internalOrder/:id')
   });
 
 
-module.exports = router
+  module.exports = router;

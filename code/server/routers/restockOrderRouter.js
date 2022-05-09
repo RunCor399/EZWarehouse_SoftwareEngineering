@@ -14,7 +14,7 @@ router.route('/api/restockOrders')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getAllRestockOrders();
+      controller.getRestockOrderController().getAllRestockOrders();
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -33,7 +33,7 @@ router.route('/api/restockOrder')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().createRestockOrder(req.body);
+      controller.getRestockOrderController().createRestockOrder(req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -54,7 +54,7 @@ router.route('/api/restockOrders/:id')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getRestockOrder(param);
+      controller.getRestockOrderController().getRestockOrder(param);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -74,7 +74,7 @@ router.route('/api/restockOrder/:id')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().editRestockOrder(param, req.body);
+      controller.getRestockOrderController().editRestockOrder(param, req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -92,7 +92,7 @@ router.route('/api/restockOrder/:id')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().deleteRestockOrder(param);
+      controller.getRestockOrderController().deleteRestockOrder(param);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -112,7 +112,7 @@ router.route('/api/restockOrdersIssued')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getIssuedRestockOrders();
+      controller.getRestockOrderController().getIssuedRestockOrders();
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -133,7 +133,7 @@ router.route('/api/restockOrders/:id/returnItems')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().getRestockOrderToBeReturned(param);
+      controller.getRestockOrderController().getRestockOrderToBeReturned(param);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -155,7 +155,7 @@ router.route('/api/restockOrder/:id/skuItems')
 
 
     try {
-      controller.getOrderController().addSkuItemsToRestockOrder(param, req.body);
+      controller.getRestockOrderController().addSkuItemsToRestockOrder(param, req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
@@ -176,7 +176,7 @@ router.route('/api/restockOrder/:id/transportNote')
     controller.testPrint(req.url);
 
     try {
-      controller.getOrderController().addTransportNote(param, req.body);
+      controller.getRestockOrderController().addTransportNote(param, req.body);
     } catch (error) {
       let responseParams = Exceptions.handle(error);
       return res.status(responseParams.code).send(responseParams.message);
