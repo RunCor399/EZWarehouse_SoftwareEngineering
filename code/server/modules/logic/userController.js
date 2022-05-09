@@ -6,7 +6,15 @@ const MD5 = require("crypto-js/md5")
 class UserController {
     #controller;
     #dbManager;
-    #user = undefined;
+    #user = {
+        id: undefined,
+        username : undefined,
+        name: undefined,
+        surname: undefined,
+        type: undefined,
+        
+    };
+    #logged = false;
 
     constructor(controller) {
         this.#controller = controller;
@@ -18,18 +26,18 @@ class UserController {
     }
 
     getUser() {
-        if (!this.#user)
+        if (!this.#logged)
             throw new Error(Exceptions.message401);
         else return this.#user;
     }
 
-    getAllSuppliers() {
-        const sqlInstruction = "SELECT * FROM USERS U WHERE TYPE='supplier'";;
-
-        if (!this.#user || this.#user.getType() !== "manager")
-            throw new Error(Exceptions.message401);
+   async getAllSuppliers() {
+        const sqlInstruction = "SELECT * FROM USERS U WHERE TYPE='supplier';";
+        let rows
+        //if (!this.#user || this.#user.type() !== "manager")
+         //   throw new Error(Exceptions.message401);
         try {
-            const rows = this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }
@@ -44,8 +52,8 @@ class UserController {
     async getAllUsers() {
         const sqlInstruction = "SELECT * FROM USERS U";
 
-        if (!this.#user || this.#user.getType() !== "manager")
-            throw new Error(Exceptions.message401);
+       // if (!this.#user || this.#user.type !== "manager")
+         //   throw new Error(Exceptions.message401);
         try {
             const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -60,13 +68,18 @@ class UserController {
 
 
 
-    createUser(body) {
+    async createUser(body) {
+
+        console.log(body);
 
         const sqlGetCount = 'SELECT COUNT(*) FROM USERS'
-
+        let id = 0;
         try {
-            const id = this.#dbManager.genericSqlGet(sqlGetCount);
+            const result = await this.#dbManager.genericSqlGet(sqlGetCount);
+            id = result[0]["COUNT(*)"];
+            console.log(id);
         } catch (error) {
+            console.log("error", error);
             throw (Exceptions.message500);
         }
 
@@ -83,45 +96,47 @@ class UserController {
         const hashedPassword = MD5(password).toString();
 
         const sqlInstruction =
-            `INSERT INTO USERS (id, username, name, surname, 
-                password, type) VALUES (${id + 1}, ${username} ,${name}, 
-                    ${surname}. ${hashedPassword}, ${type});`;
+            `INSERT INTO USERS (id, username, name, surname, password, type) VALUES
+             (${id+1}, "${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
 
         try {
             this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
+            console.log("error", error);
             throw (Exceptions.message500);
         }
 
         return;
     }
 
-    login(body, type) {
+  async  login(body, type) {
 
 
         const username = body["username"];
         const password = body["password"];
-
-        if (username === undefined || password === undefined)
-            throw new Error(Exceptions.message422);
+        let row;
+        if (username === undefined || password === undefined){
+            throw new Error(Exceptions.message422);}
 
         const hashedPassword = MD5(password).toString();
 
         const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
-        WHERE username=${username} AND password=${hashedPassword} AND type=${type}`;
+        WHERE username="${username}" AND password="${hashedPassword}" AND type="${type}"`;
 
         try {
-            const row = this.#dbManager.genericSqlGet(sqlInstruction);
+            row = (await this.#dbManager.genericSqlGet(sqlInstruction))[0];
+            console.log(row);
         } catch (error) {
             throw (Exceptions.message500);
         }
 
         if (row !== undefined) {
-            this.#user.id = row.id;
+            this.#user.id = row.ID;
             this.#user.username = row.username;
             this.#user.name = row.name;
             this.#user.surname = row.surname;
             this.#user.type = row.type;
+            this.#logged=true;
             return;
         }
         else {
@@ -130,13 +145,13 @@ class UserController {
     }
 
     logout() {
-        if (this.#user === undefined)
+        if (!this.#logged)
             throw new Error(Exceptions.message500);//already logged out
-        this.#user = undefined;
+       this.#logged=false;
         return;
     }
 
-    editUser(username, body) {
+    async editUser(username, body) {
 
         const oldType = body["oldType"];
         const newType = body["newType"];
@@ -144,23 +159,23 @@ class UserController {
         if (username === undefined || oldType === undefined || newType === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE USERS SET type=${newType} WHERE type=${oldType};`;
+        const sqlInstruction = `UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`;
         try {
-            this.#dbManager.genericSqlRun(sqlInstruction);
+           await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }
 
     }
 
-    deleteUser(username, type) {
+   async deleteUser(username, type) {
 
         if (username === undefined || type === undefined)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `DELETE FROM USERS WHERE username=${username} AND type=${type};`;
+        const sqlInstruction = `DELETE FROM USERS WHERE username="${username}" AND type="${type}";`;
         try {
-            this.#dbManager.genericSqlRun(sqlInstruction);
+           await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             throw (Exceptions.message500);
         }

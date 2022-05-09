@@ -7,11 +7,11 @@ const Exceptions = require('./exceptions')
 //GET /api/userinfo
 router.get('/api/userinfo', (req, res) => {
 
-
+  let user;
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
   try {
-    const session = controller.getUserController().getUser();
+    user = controller.getUserController().getUser();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -19,60 +19,50 @@ router.get('/api/userinfo', (req, res) => {
 
   let message = {
     id: "id",
-    username: session.username,
+    username: user.username,
     name: "name",
     surname: "surname",
-    type: session.type
+    type: user.type
   };
 
   return res.status(200).json(message);
 });
 
 //GET /api/suppliers
-router.get('/api/suppliers', (req, res) => {
-
+router.get('/api/suppliers', async (req, res) => {
+  let suppliers
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
   try {
-    const supplier = controller.getUserController().getAllSuppliers();
+    suppliers = await controller.getUserController().getAllSuppliers();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  let message = {
-    id: "id",
-    username: supplier.username,
-    name: "name",
-    surname: "surname",
-    type: supplier.type
-  };
-
-  return res.status(200).json(message);
+  return res.status(200).json(suppliers);
 });
 
 //GET /api/users
-router.get('/api/users', (req, res) => {
-  let message = {
-    message: '/api/users'
-  }
+router.get('/api/users', async (req, res) => {
+  let users;
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
 
 
   try {
-    controller.getUserController().getAllUsers();
+    users = await controller.getUserController().getAllUsers();
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(users);
 });
 
 //POST /api/newUser
-router.post('/api/newUser', (req, res) => {
+router.post('/api/newUser', async (req, res) => {
   let message = {
     message: '/api/newUser'
   }
@@ -81,7 +71,7 @@ router.post('/api/newUser', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().createUser(req.body);
+    await controller.getUserController().createUser(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -91,7 +81,7 @@ router.post('/api/newUser', (req, res) => {
 });
 
 //POST /api/managerSessions
-router.post('/api/managerSessions', (req, res) => {
+router.post('/api/managerSessions', async (req, res) => {
   let message = {
     message: '/api/managerSessions'
   }
@@ -101,7 +91,7 @@ router.post('/api/managerSessions', (req, res) => {
 
 
   try {
-    controller.getUserController().login(req.body, "manager");
+    await controller.getUserController().login(req.body, "manager");
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -111,7 +101,7 @@ router.post('/api/managerSessions', (req, res) => {
 });
 
 //POST /api/customerSessions
-router.post('/api/customerSessions', (req, res) => {
+router.post('/api/customerSessions', async (req, res) => {
   let message = {
     message: '/api/customerSessions'
   }
@@ -120,7 +110,7 @@ router.post('/api/customerSessions', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().login(req.body, "customer")
+    await controller.getUserController().login(req.body, "customer")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -130,7 +120,7 @@ router.post('/api/customerSessions', (req, res) => {
 });
 
 //POST /api/supplierSessions
-router.post('/api/supplierSessions', (req, res) => {
+router.post('/api/supplierSessions', async (req, res) => {
   let message = {
     message: '/api/supplierSessions'
   }
@@ -139,7 +129,7 @@ router.post('/api/supplierSessions', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().login(req.body, "supplier")
+    await  controller.getUserController().login(req.body, "supplier")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -149,7 +139,7 @@ router.post('/api/supplierSessions', (req, res) => {
 });
 
 //POST /api/clerkSessions
-router.post('/api/clerkSessions', (req, res) => {
+router.post('/api/clerkSessions', async (req, res) => {
   let message = {
     message: '/api/clerkSessions'
   }
@@ -158,7 +148,7 @@ router.post('/api/clerkSessions', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().login(req.body, "clerk")
+    await controller.getUserController().login(req.body, "clerk")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -168,7 +158,7 @@ router.post('/api/clerkSessions', (req, res) => {
 });
 
 //POST /api/qualityyEmployeeSessions
-router.post('/api/qualityEmployeeSessions', (req, res) => {
+router.post('/api/qualityEmployeeSessions', async (req, res) => {
   let message = {
     message: '/api/qualityEmployeeSessions'
   }
@@ -177,7 +167,7 @@ router.post('/api/qualityEmployeeSessions', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().login(req.body, "qualityEmployee")
+    await controller.getUserController().login(req.body, "qualityEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -187,7 +177,7 @@ router.post('/api/qualityEmployeeSessions', (req, res) => {
 });
 
 //POST /api/deliveryEmployeeSessions
-router.post('/api/deliveryEmployeeSessions', (req, res) => {
+router.post('/api/deliveryEmployeeSessions', async (req, res) => {
   let message = {
     message: '/api/deliveryEmployeeSessions'
   }
@@ -196,7 +186,7 @@ router.post('/api/deliveryEmployeeSessions', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().login(req.body, "deliveryEmployee")
+    await  controller.getUserController().login(req.body, "deliveryEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -206,7 +196,7 @@ router.post('/api/deliveryEmployeeSessions', (req, res) => {
 });
 
 //POST /api/logout
-router.post('/api/logout', (req, res) => {
+router.post('/api/logout', async (req, res) => {
   let message = {
     message: '/api/logout'
   }
@@ -216,7 +206,7 @@ router.post('/api/logout', (req, res) => {
 
 
   try {
-    controller.getUserController().logout();
+    await  controller.getUserController().logout();
   } catch (error) {
     if (error.message === Exceptions.message500)
       return res.status(500).send(Exceptions.message500)
@@ -228,7 +218,7 @@ router.post('/api/logout', (req, res) => {
 
 
 //PUT /api/user/:username
-router.put('/api/user/:username', (req, res) => {
+router.put('/api/user/:username', async (req, res) => {
   const param = req.params.username;
   let message = {
     message: '/api/user/:username'
@@ -238,7 +228,7 @@ router.put('/api/user/:username', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().editUser(param, req.body);
+    await  controller.getUserController().editUser(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -247,7 +237,7 @@ router.put('/api/user/:username', (req, res) => {
 });
 
 //DELETE /api/user/:username/:type
-router.delete('/api/user/:username/:type', (req, res) => {
+router.delete('/api/user/:username/:type', async (req, res) => {
   const paramUsername = req.params.username;
   const paramType = req.params.type;
   let message = {
@@ -258,7 +248,7 @@ router.delete('/api/user/:username/:type', (req, res) => {
   controller.testPrint(req.url);
 
   try {
-    controller.getUserController().deleteUser(paramUsername, paramType);
+    await  controller.getUserController().deleteUser(paramUsername, paramType);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
