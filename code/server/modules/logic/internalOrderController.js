@@ -69,10 +69,10 @@ class InternalOrderController {
         const products = body["products"];
         const customerId = body["customerId"]
 
-        if (!issueDate || !products || !customerId )
+        if (!issueDate || !products || !customerId)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO InternalOrder (ID, customerId) VALUES (${id + 1}, ${customerId});`;
+        const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) VALUES (${id + 1}, ${issueDate}, "ISSUED", ${customerId});`;
         try {
             const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
