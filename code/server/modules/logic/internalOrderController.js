@@ -69,7 +69,7 @@ class InternalOrderController {
         const products = body["products"];
         const customerId = body["customerId"]
 
-        if (issueDate === undefined || products === undefined || customerId === undefined)
+        if (!issueDate || !products || !customerId )
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `INSERT INTO InternalOrder (ID, customerId) VALUES (${id + 1}, ${customerId});`;
@@ -89,13 +89,13 @@ class InternalOrderController {
 
         const newState = body["newState"];
 
-        if (newState === undefined)
+        if (!newState)
             throw new Error(Exceptions.message422);
 
         if (newState === "COMPLETED") {
             const products = body["products"];
 
-            if (products === undefined)
+            if (!products)
                 throw new Error(Exceptions.message422);
 
             //query

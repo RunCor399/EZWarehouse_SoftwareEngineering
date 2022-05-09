@@ -25,7 +25,7 @@ class ItemController {
 
     /*getter function to retreive a single item given its ID*/
     async getItem(id) {
-        
+
         const sqlInstruction = `SELECT *  FROM Item WHERE ID= ${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
@@ -36,8 +36,8 @@ class ItemController {
     }
 
     /*TODO: JOIN BETWEEN Item AND SKU  - slightly modified*/
-   async createItem(body) {
-        
+    async createItem(body) {
+
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
 
         try {
@@ -51,11 +51,11 @@ class ItemController {
         const SKUid = body["SKUId"]
         const supplierId = body["supplierID"];
 
-        if(description === undefined || price === undefined || SKUid === undefined || supplierId === undefined)
+        if (!description || !price || !SKUid || !supplierId)
             throw new Error(Exceptions.message422);
 
         /*description and price are missing inside the Item table*/
-        const sqlInsert1 = `INSERT INTO Item (ID, SKUID) VALUES (${id+1}, ${SKUid});`; 
+        const sqlInsert1 = `INSERT INTO Item (ID, SKUID) VALUES (${id + 1}, ${SKUid});`;
         try {
             const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
@@ -64,9 +64,9 @@ class ItemController {
 
         /*here there should be the join(?)*/
 
-        const sqlInsert2 = `INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id+1}, ${supplierId});`; 
+        const sqlInsert2 = `INSERT INTO ItemSoldPerSupplier (itemID, supplierID) VALUES (${id + 1}, ${supplierId});`;
         try {
-            const insert2 = await  this.#dbManager.genericSqlGet(sqlInsert1);
+            const insert2 = await this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
             console.log("error");
         }
@@ -80,7 +80,7 @@ class ItemController {
         const newPrice = body["newPrice"];
 
         /*description and price are missing inside the Item table*/
-        if(newDescription === undefined || newPrice === undefined)
+        if (!newDescription || !newPrice)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE ITEM SET description= ${newDescription} AND price= ${newPrice} WHERE SKUid= ${id};`;

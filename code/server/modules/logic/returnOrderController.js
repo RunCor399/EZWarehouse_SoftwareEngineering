@@ -34,7 +34,7 @@ class ReturnOrderController {
     }
 
     /*TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
-   async createReturnOrder(body) {
+    async createReturnOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
 
@@ -48,7 +48,7 @@ class ReturnOrderController {
         const products = body["products"];
         const restockOrderId = body["restockOrderId"];
 
-        if (returnDate === undefined || products === undefined || restockOrderId === undefined)
+        if (!returnDate || !products || !restockOrderId)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
@@ -67,7 +67,7 @@ class ReturnOrderController {
     async deleteReturnOrder(id) {
         const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
         try {
-            const returnOrder =await this.#dbManager.genericSqlGet(sqlInstruction);
+            const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             console.log("error");
         }

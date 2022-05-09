@@ -3,7 +3,8 @@
 const PositionController = require("./positionController");
 const SkuController = require("./skuController");
 const UserController = require("./userController");
-const TestController = require("./testController");
+const TestResultController = require("./testResultController");
+const TestDescriptorController = require("./testDescriptorController");
 const InternalOrderController = require("./internalOrderController");
 const RestockOrderController = require("./restockOrderController");
 const ReturnOrderController = require("./returnOrderController");
@@ -16,7 +17,8 @@ class Controller {
     #userController;
     #positionController;
     #skuController;
-    #testController;
+    #testResultController;
+    #testDescriptorController;
     #restockOrderController;
     #returnOrderController;
     #internalOrderController;
@@ -30,7 +32,8 @@ class Controller {
         this.#userController = new UserController(this);
         this.#positionController = new PositionController(this);
         this.#skuController = new SkuController(this);
-        this.#testController = new TestController(this);
+        this.#testResultController = new TestResultController(this);
+        this.#testDescriptorController = new TestDescriptorController(this);
         this.#restockOrderController = new RestockOrderController(this);
         this.#returnOrderController = new ReturnOrderController(this);
         this.#internalOrderController = new InternalOrderController(this);
@@ -51,8 +54,12 @@ class Controller {
         return this.#skuController;
     }
 
-    getTestController() {
-        return this.#testController;
+    getTestResultController() {
+        return this.#testResultController;
+    }
+
+    getTestDescriptorController() {
+        return this.#testDescriptorController;
     }
 
     getRestockOrderController() {

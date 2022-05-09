@@ -10,9 +10,6 @@ class RestockOrderController {
         console.log("restockOrderController started");
     }
 
-
-
-
     /*getter function to retreive all the restock orders*/
     async getAllRestockOrders() {
         const sqlInstruction = "SELECT * FROM RestockOrder;";
@@ -66,7 +63,7 @@ class RestockOrderController {
         const products = body["products"];
         const supplierId = body["supplierId"]
 
-        if (issueDate === undefined || products === undefined || supplierId === undefined)
+        if (!issueDate  || !products || !supplierId )
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1}, ${supplierId}, ${issueDate});`;
@@ -86,7 +83,7 @@ class RestockOrderController {
 
         const newState = body["newState"];
 
-        if (newState === undefined)
+        if (!newState)
             throw new Error(Exceptions.message422);
 
 
@@ -104,7 +101,7 @@ class RestockOrderController {
 
         const skuItems = body["skuItems"];
 
-        if (skuItems === undefined)
+        if (!skuItems)
             throw new Error(Exceptions.message422);
 
         /*join between ItemsPerOrder and RestockOrder*/
@@ -116,7 +113,7 @@ class RestockOrderController {
    async addTransportNote(id, body) {
 
         const transportNote = body["transportNote"];
-        if (transportNote === undefined)
+        if (!transportNote)
             throw new Error(Exceptions.message422);
         return undefined;
     }

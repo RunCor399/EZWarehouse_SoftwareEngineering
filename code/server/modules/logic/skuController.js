@@ -50,8 +50,7 @@ class SkuController {
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
 
-        if (description === undefined || weight === undefined || volume === undefined || notes === undefined
-            || price === undefined || availableQuantity === undefined)
+        if (!description || !weight || !volume || !notes || !price || !availableQuantity)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description) VALUES (${id + 1}, ${weight}, ${volume}, ${price}, ${notes}, ${description});`;
@@ -73,8 +72,7 @@ class SkuController {
         const newPrice = body["newPrice"];
         const newAvailableQuantity = req.body["newAvailableQuantity"];
 
-        if (newDescription === undefined || newWeight === undefined || newVolume === undefined ||
-            newNotes === undefined || newPrice === undefined || newAvailableQuantity === undefined)
+        if (!newDescription || !newWeight || !newVolume || !newNotes || !newPrice || !newAvailableQuantity)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
@@ -88,11 +86,11 @@ class SkuController {
     }
 
     /*TO CHECK */
-   async setPosition(id, body) {
+    async setPosition(id, body) {
 
         const position = body["position"];
 
-        if (position === undefined)
+        if (!position)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE SKUStorage SET positionID= ${position} WHERE SKUID= ${id};`;
@@ -158,7 +156,7 @@ class SkuController {
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
 
-        if (RFID === undefined || SKUId === undefined || dateOfStock === undefined)
+        if (!RFID || !SKUId || !dateOfStock)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `INSERT INTO SKUItem (ID) VALUES (${id});`;
@@ -178,7 +176,7 @@ class SkuController {
         const newDateOfStock = body["newDateOfStock"];
 
 
-        if (newRFID === undefined || newSKUId === undefined || newDateOfStock === undefined)
+        if (!newRFID  || !newSKUId  || !newDateOfStock )
             throw new Error(Exceptions.message422);
 
 

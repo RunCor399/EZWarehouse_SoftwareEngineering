@@ -38,8 +38,8 @@ class PositionController {
         const maxWeight = body["maxWeight"];
         const maxVolume = body["maxVolume"];
 
-        if (positionID === undefined || aisleID === undefined || row === undefined ||
-            col === undefined || maxWeight === undefined || maxVolume === undefined)
+        if (!positionID || !aisleID || !row ||
+            !col || !maxWeight || !maxVolume)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) VALUES (${id + 1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
@@ -60,8 +60,7 @@ class PositionController {
         const newMaxWeight = body["newMaxWeight"];
         const newMaxVolume = body["newMaxVolume"];
 
-        if (newAisleID === undefined || newRow === undefined || newCol === undefined
-            || newMaxWeight === undefined || newMaxVolume === undefined)
+        if (!newAisleID || !newRow || !newCol || !newMaxWeight || !newMaxVolume)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE Position SET maxVolume= ${newMaxVolume} AND maxWeight= ${newMaxWeight} 
@@ -79,7 +78,7 @@ class PositionController {
     async editPosition(oldId, body) {
 
         const newPositionID = body["newPositionID"];
-        if (newPositionID === undefined)
+        if (!newPositionID)
             throw new Error(Exceptions.message422);
 
         const sqlInstruction = `UPDATE Position SET ID= ${newPositionID} WHERE ID= ${oldId};`;
