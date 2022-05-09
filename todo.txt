@@ -1,9 +1,0 @@
-- database design
-- data structure design and implementation
-- controller methods design
-- exceptions implementation and handling
-
-note:
-- la company person può essere chiamata User e considerata
-una singola classe dato che l'unica modifica è il tipo
-- bisognerebbe commentare il codice per renderlo più chiaro
