@@ -116,7 +116,7 @@ class InternalOrderController {
             new Error(Exceptions.message500);
         }
 
-        products.forEach((elem) => {
+        products.forEach(async (elem) => {
             const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
                 await this.#dbManager.genericSqlRun(sqlInsert);
@@ -141,7 +141,7 @@ class InternalOrderController {
             if (!products)
                 throw new Error(Exceptions.message422);
 
-            products.forEach((elem) => {
+            products.forEach(async (elem) => {
                 const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
                 try {
                     await this.#dbManager.genericSqlRun(sqlInsert);

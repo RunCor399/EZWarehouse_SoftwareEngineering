@@ -96,7 +96,7 @@ class RestockOrderController {
                 .then(values => skus = values)
                 .catch(error => { throw new Error(Exceptions.message500) });
 
-            skuitems.forEach((sk) => {
+            skuitems.forEach(async (sk) => {
 
                 let res;
                 await this.#dbManager.genericSqlGet(`SELECT result FROM TestResult WHERE SKUItemID = ${sk.id};`)
@@ -142,7 +142,7 @@ class RestockOrderController {
         for (sku, skuitem) of products:
          INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
         */
-        products.forEach((elem) => {
+        products.forEach(async (elem) => {
             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
                 await this.#dbManager.genericSqlRun(sqlInsert);
