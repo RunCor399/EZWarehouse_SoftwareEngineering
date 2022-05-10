@@ -4,29 +4,32 @@ class PositionController {
     #controller;
     #dbManager;
     constructor(controller) {
-        this.controller = controller;
-        this.dbManager = controller.getDBManager();
+        this.#controller = controller;
+        this.#dbManager = controller.getDBManager();
         console.log("positionController started");
     }
 
     /*getter function to retreive all positions*/
     async getAllPositions() {
+        let rows;
         const sqlInstruction = "SELECT * FROM Position";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            console.log(rows);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*creation of a new position inside the warehouse*/
     async createPosition(body) {
-
+        console.log(body)
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
-
+        let id;
         try {
-            const id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
+            id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
+            console.log(id);
         } catch (error) {
             new Error(Exceptions.message500);
         }

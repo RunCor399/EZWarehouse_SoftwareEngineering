@@ -1,7 +1,7 @@
 const { application } = require('express');
 const express = require('express')
 const router = express.Router();
-
+const Exceptions = require('./exceptions');
 
 //POSITION
 //GET /api/positions
@@ -12,15 +12,16 @@ router.get('/api/positions', async(req, res) => {
 
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
-
+  let positions;
   try {
-    await controller.getPositionController().getAllPositions();
+    positions = await controller.getPositionController().getAllPositions();
+    console.log(positions)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(positions);
 
 });
 
