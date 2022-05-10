@@ -29,7 +29,7 @@ router.get('/api/suppliers', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
   let suppliers;
 
   try {
@@ -87,15 +87,15 @@ router.post('/api/managerSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
-
+  let user;
   try {
-    await controller.getUserController().login(req.body, "manager");
+    user = await controller.getUserController().login(req.body, "manager");
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(200).json(user);
 });
 
 //POST /api/customerSessions
@@ -105,14 +105,15 @@ router.post('/api/customerSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
+  let user;
   try {
-    await controller.getUserController().login(req.body, "customer")
+    user = await controller.getUserController().login(req.body, "customer")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(200).json(user);
 });
 
 //POST /api/supplierSessions
@@ -122,14 +123,15 @@ router.post('/api/supplierSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
+  let user;
   try {
-    await controller.getUserController().login(req.body, "supplier")
+    user = await controller.getUserController().login(req.body, "supplier")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(200).json(user);
 });
 
 //POST /api/clerkSessions
@@ -139,14 +141,15 @@ router.post('/api/clerkSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
+  let user;
   try {
-    await controller.getUserController().login(req.body, "clerk")
+    user = await controller.getUserController().login(req.body, "clerk")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(200).json(user);
 });
 
 //POST /api/qualityyEmployeeSessions
@@ -156,14 +159,15 @@ router.post('/api/qualityEmployeeSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
+  let user;
   try {
-    await controller.getUserController().login(req.body, "qualityEmployee")
+    user = await controller.getUserController().login(req.body, "qualityEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(200).json(user);
 });
 
 //POST /api/deliveryEmployeeSessions
@@ -173,14 +177,15 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
+  let user;
   try {
-    await controller.getUserController().login(req.body, "deliveryEmployee")
+    user = await controller.getUserController().login(req.body, "deliveryEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(200).json(user);
 });
 
 //POST /api/logout

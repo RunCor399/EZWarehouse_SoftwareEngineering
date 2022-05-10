@@ -134,6 +134,8 @@ class UserController {
             throw (Exceptions.message500);
         }
 
+        console.log(row);
+
         if (row !== undefined) {
             this.#user.id = row.ID;
             this.#user.username = row.username;
@@ -141,7 +143,7 @@ class UserController {
             this.#user.surname = row.surname;
             this.#user.type = row.type;
             this.#logged = true;
-            return;
+            return  {id: this.#user.id, username : this.#user.username,  name:this.#user.name};
         }
         else {
             throw new Error(Exceptions.message401);
