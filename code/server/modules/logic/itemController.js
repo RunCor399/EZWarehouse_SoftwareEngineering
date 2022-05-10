@@ -53,8 +53,7 @@ class ItemController {
 
     }
 
-    /**TO CHECK - some attributes are missing in the table!
-    creation of a new item in the table*/
+    /**creation of a new item in the table*/
     async createItem(body) {
 
         const id = body["id"];
@@ -65,8 +64,7 @@ class ItemController {
 
         if (!id || !description || !price || !SKUid || !supplierId)
             throw new Error(Exceptions.message422);
-
-        /*description, price and supplierId are missing inside the Item table*/
+        
         const sqlInsert1 = `INSERT INTO Item (ID, description, price, SKUId, supplierId) 
         VALUES (${id}, "${description}", ${price}, ${SKUid}, ${supplierId});`;
         try {
@@ -86,14 +84,12 @@ class ItemController {
 
     }
 
-    /**TO CHECK - some attributes are missing in the table! 
-    function to edit the properties of a specific item, given its ID*/
+    /**function to edit the properties of a specific item, given its ID*/
     async editItem(id, body) {
 
         const newDescription = body["newDescription"];
         const newPrice = body["newPrice"];
 
-        /*description and price are missing inside the Item table*/
         if (!newDescription || !newPrice)
             throw new Error(Exceptions.message422);
 
