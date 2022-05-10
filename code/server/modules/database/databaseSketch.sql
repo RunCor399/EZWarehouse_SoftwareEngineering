@@ -145,7 +145,7 @@ CREATE TABLE SKUPerInternalOrder(
 CREATE TABLE SKUItemsPerRestockOrder(
     orderID INT,
     SKUItemID INT,
-    PRIMARY KEY(orderID, SKUID),
+    PRIMARY KEY(orderID, SKUIItemID),
     FOREIGN KEY(SKUItemID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
 )
@@ -153,7 +153,7 @@ CREATE TABLE SKUItemsPerRestockOrder(
 CREATE TABLE SKUItemsPerReturnOrder(
     orderID INT,
     SKUItemID INT,
-    PRIMARY KEY(orderID, SKUID),
+    PRIMARY KEY(orderID, SKUItemID),
     FOREIGN KEY(SKUItemID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(orderID) REFERENCES ReturnOrder(ID)
 )
@@ -162,7 +162,7 @@ CREATE TABLE SKUItemsPerReturnOrder(
 CREATE TABLE SKUItemsPerInternalOrder(
     orderID INT,
     SKUItemID INT,
-    PRIMARY KEY(orderID, SKUID),
+    PRIMARY KEY(orderID, SKUItemID),
     FOREIGN KEY(SKUItemID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(orderID) REFERENCES InternalOrder(ID)
 )
