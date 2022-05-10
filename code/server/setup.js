@@ -149,12 +149,35 @@ const sqlInstructions = [createPosition, createTestDescriptor, createSKU, create
 
 const dbManager = new DBManager();
 
+prova3()
 
- sqlInstructions.forEach(async (sql) => {
-    try {
-        await dbManager.genericSqlRun(sql);
-    } catch (error) {
-        console.log("error", error, "about", sql);
-    }
-})
+async function prova3(){
+await prova1()
+await prova2()}
+
+
+async function prova1() {
+
+    sqlInstructions.forEach(async (sql) => {
+        await dbManager.genericSqlRun(sql).catch((error) => { console.log(error)})
+    })
+}
+
+
+async function prova2() {
+
+    await dbManager.genericSqlRun(`INSERT INTO USERS (id, username, name, surname, password, type) 
+VALUES (1, "user1@ezwh.com", "name1", "surname1", "e16b2ab8d12314bf4efbd6203906ea6c", "customer")`)
+    await dbManager.genericSqlRun(`INSERT INTO USERS (id, username, name, surname, password, type)
+VALUES (2, "qualityEmployee1@ezwh.com", "name2", "surname2", "e16b2ab8d12314bf4efbd6203906ea6c", "qualityEmployee")`)
+    await dbManager.genericSqlRun(`INSERT INTO USERS (id, username, name, surname, password, type) 
+VALUES (3, "clerk1@ezwh.com", "name3", "surname3", "e16b2ab8d12314bf4efbd6203906ea6c", "clerk")`)
+    await dbManager.genericSqlRun(`INSERT INTO USERS (id, username, name, surname, password, type) 
+VALUES (4, "deliveryEmployee1@ezwh.com", "name4", "surname4", "e16b2ab8d12314bf4efbd6203906ea6c", "deliveryEmployee")`)
+    await dbManager.genericSqlRun(`INSERT INTO USERS (id, username, name, surname, password, type) 
+VALUES (5, "supplier1@ezwh.com", "name5", "surname5", "e16b2ab8d12314bf4efbd6203906ea6c", "supplier")`)
+    await dbManager.genericSqlRun(`INSERT INTO USERS (id, username, name, surname, password, type) 
+VALUES (6, "manager1@ezwh.com", "name6", "surname6", "e16b2ab8d12314bf4efbd6203906ea6c", "manager")`)
+
+}
 

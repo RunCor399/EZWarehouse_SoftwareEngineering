@@ -125,6 +125,8 @@ class UserController {
 
         const hashedPassword = MD5(password).toString();
 
+        console.log(username, hashedPassword, type);
+
         const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
         WHERE username="${username}" AND password="${hashedPassword}" AND type="${type}"`;
 
@@ -133,8 +135,6 @@ class UserController {
         } catch (error) {
             throw (Exceptions.message500);
         }
-
-        console.log(row);
 
         if (row !== undefined) {
             this.#user.id = row.ID;
