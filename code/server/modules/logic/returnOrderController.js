@@ -50,7 +50,7 @@ class ReturnOrderController {
         return row;
     }
 
-    /**TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
+    /**TO BE CHECKED*/
     async createReturnOrder(body) {
 
         const returnDate = body["returnDate"];
