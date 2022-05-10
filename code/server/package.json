@@ -2,6 +2,7 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "express": "^4.17.3",
+    "node-fetch": "^3.2.4",
     "nodemon": "^2.0.16",
     "sqlite3": "^5.0.6"
   },
