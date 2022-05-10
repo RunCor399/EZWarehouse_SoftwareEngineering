@@ -116,7 +116,7 @@ class InternalOrderController {
             new Error(Exceptions.message500);
         }
 
-        products.forEach((elem) => {
+        products.forEach(async (elem) => {
             const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
                 //This await crashes everything -> its not inside an async method (lambda)
@@ -142,7 +142,7 @@ class InternalOrderController {
             if (!products)
                 throw new Error(Exceptions.message422);
 
-            products.forEach((elem) => {
+            products.forEach(async (elem) => {
                 const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
                 try {
                     const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
