@@ -12,37 +12,43 @@ class SkuController {
 
     /*getter function to retreive all the SKUs*/
     async getAllSku() {
-        let rows;
+        /*let rows;
         const sqlInstruction = "SELECT * FROM SKU";
         try {
              rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
+        return rows;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
+            .then(value => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
         return rows;
     }
 
     /*getter function to retreive a single SKU, given its ID*/
     async getSku(id) {
-        const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
+        /*const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
         try {
             const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
+        return sku;*/
+
+        let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
+            .then(value => sku = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
         return sku;
+
+
     }
 
     /*TO CHECK - availableQuantity is missing in the SKU table */
     async createSku(body) {
-        let id;
-        const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
-
-        try {
-             id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
 
         const description = body["description"];
         const weight = body["weight"];
@@ -50,12 +56,27 @@ class SkuController {
         const notes = body["notes"];
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
-
+    
         if (!description || !weight || !volume || !notes || !price || !availableQuantity)
             throw new Error(Exceptions.message422);
+        
+       /* let id;
+        const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
+
+        try {
+             id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
+        } catch (error) {
+            new Error(Exceptions.message500);
+        }*/
+
+        let id;
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
+            .then(value => id = value[0]["COUNT(*)"] )
+            .catch(error => { throw new Error(Exceptions.message500) });
 
         const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity)
          VALUES (${id + 1}, ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
+        
         try {
             const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
