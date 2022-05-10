@@ -7,6 +7,7 @@ const createSKU = `CREATE TABLE SKU(
     price FLOAT,
     notes VARCHAR(250),
     description VARCHAR(250),
+    availableQuantity INT,
     positionID INT,
     FOREIGN KEY(positionID) REFERENCES Position(ID),
     PRIMARY KEY (ID)

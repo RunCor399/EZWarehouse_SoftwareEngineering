@@ -1,38 +1,56 @@
 'use strict'
+const Exceptions = require('../../routers/exceptions');
+const Controller = require('./controller')
 
 class TestResultController {
+        /** @type {Controller} */
+
     #controller;
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
 
         console.log("testResultController started");
     }
 
-    /*getter function to retreive all test results related to an SKUItem, given its RFID - more than a single test*/
+    /** getter function to retreive all test results related to an SKUItem, given its RFID - more than a single test*/
     async getTestResults(rfid) {
+        /*let rows
         const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= "${rfid}";`;
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE SKUItemID= "${rfid}";`)
+            .then(value => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return rows;
     }
 
-    /*getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test*/
+    /**getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test*/
     async getTestResult(rfid, id) {
+        /*let row;
         const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= "${rfid}" AND ID= ${id};`;
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return row;*/
+
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE SKUItemID= "${rfid}" AND ID= ${id};`)
+            .then(value => row = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return row;
     }
 
-    /*creation of a new test result*/
+    /**creation of a new test result*/
     async createTestResult(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM TestResult;'
@@ -61,7 +79,7 @@ class TestResultController {
         return testRes;
     }
 
-    /*function to edit the properties of a SKUItem's test result, given its RFID and the ID of the test result*/
+    /**function to edit the properties of a SKUItem's test result, given its RFID and the ID of the test result*/
     async editTestResult(rfid, id, body) {
 
         const newIdTestDesciptor = body["newIdTestDescriptor"];
@@ -82,7 +100,7 @@ class TestResultController {
         return testRes;
     }
 
-    /*delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
+    /**delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
     async deleteTestResult(rfid, id) {
         const sqlInstruction = `DELETE FROM TestResult WHERE ID= ${id} AND SKUItemID= "${rfid}";`;
 

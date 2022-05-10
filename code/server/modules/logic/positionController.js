@@ -1,4 +1,6 @@
 'use strict'
+const Exceptions = require('../../routers/exceptions');
+const Controller = require('./controller')
 
 class PositionController {
     #controller;
@@ -9,7 +11,7 @@ class PositionController {
         console.log("positionController started");
     }
 
-    /*getter function to retreive all positions*/
+    /**getter function to retreive all positions*/
     async getAllPositions() {
         let rows;
         const sqlInstruction = "SELECT * FROM Position";
@@ -21,7 +23,7 @@ class PositionController {
         return rows;
     }
 
-    /*creation of a new position inside the warehouse*/
+    /**creation of a new position inside the warehouse*/
     async createPosition(body) {
         console.log(body)
         const sqlGetCount = 'SELECT COUNT(*) FROM Position'
@@ -54,7 +56,7 @@ class PositionController {
 
     }
 
-    /*function to edit the properties of a specific position, given its ID*/
+    /**function to edit the properties of a specific position, given its ID*/
     async editPosition(id, body) {
 
         const newAisleID = body["newAisleID"];
@@ -79,7 +81,7 @@ class PositionController {
         return position;
     }
 
-    /*function to edit the ID of a specific position, given its older ID*/
+    /**function to edit the ID of a specific position, given its older ID*/
     async editPosition(oldId, body) {
 
         const newPositionID = body["newPositionID"];
@@ -95,7 +97,7 @@ class PositionController {
         return position;
     }
 
-    /*delete function to remove a position from the table, given its ID*/
+    /**delete function to remove a position from the table, given its ID*/
     async deletePosition(id) {
         const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
         try {

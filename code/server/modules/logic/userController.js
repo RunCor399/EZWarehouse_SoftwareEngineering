@@ -86,7 +86,7 @@ class UserController {
 
 
     async createUser(body) {
-        
+
         const username = body["username"];
         const name = body["name"];
         const surname = body["surname"];
@@ -96,10 +96,10 @@ class UserController {
         if (username === undefined || name === undefined || surname === undefined
             || password === undefined || type === undefined)
             throw new Error(Exceptions.message422);
-        
+
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM USERS')
-            .then(value => id = value[0]["COUNT(*)"] )
+            .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw new Error(Exceptions.message500) });
 
         const hashedPassword = MD5(password).toString();
@@ -107,14 +107,10 @@ class UserController {
             `INSERT INTO USERS (id, username, name, surname, password, type) VALUES
              (${id + 1}, "${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
 
-        try {
-            this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            console.log("error", error);
-            throw (Exceptions.message500);
-        }
 
-        return;
+        this.#dbManager.genericSqlRun(sqlInstruction).
+            catch((error) => { throw new Error((Exceptions.message500)); });
+
     }
 
     async login(body, type) {
@@ -123,7 +119,7 @@ class UserController {
         const username = body["username"];
         const password = body["password"];
         let row;
-        if (username === undefined || password === undefined) {
+        if (!username  || !password ) {
             throw new Error(Exceptions.message422);
         }
 
@@ -164,29 +160,23 @@ class UserController {
         const oldType = body["oldType"];
         const newType = body["newType"];
 
-        if (username === undefined || oldType === undefined || newType === undefined)
+        if (!username || !oldType || !newType)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            throw (Exceptions.message500);
-        }
+        await this.#dbManager.genericSqlRun
+            (`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`)
+            .catch((error) => { throw new Error(Exceptions.message500); });
 
     }
 
     async deleteUser(username, type) {
 
-        if (username === undefined || type === undefined)
+        if (!username || !type)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `DELETE FROM USERS WHERE username="${username}" AND type="${type}";`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            throw (Exceptions.message500);
-        }
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM USERS WHERE username="${username}" AND type="${type}";`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
 
     }
 }

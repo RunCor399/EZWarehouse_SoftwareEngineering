@@ -1,16 +1,20 @@
 'use strict'
 
+const Exceptions = require('../../routers/exceptions');
+const Controller = require('./controller')
+
 class SkuController {
+    /** @type {Controller} */
     #controller;
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
 
         console.log("skuController started");
     }
 
-    /*getter function to retreive all the SKUs*/
+    /**getter function to retreive all the SKUs*/
     async getAllSku() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM SKU";
@@ -28,7 +32,7 @@ class SkuController {
         return rows;
     }
 
-    /*getter function to retreive a single SKU, given its ID*/
+    /**getter function to retreive a single SKU, given its ID*/
     async getSku(id) {
         /*const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
         try {
@@ -47,7 +51,7 @@ class SkuController {
 
     }
 
-    /*TO CHECK - availableQuantity is missing in the SKU table */
+    /**TO CHECK - availableQuantity is missing in the SKU table */
     async createSku(body) {
 
         const description = body["description"];
@@ -56,36 +60,35 @@ class SkuController {
         const notes = body["notes"];
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
-    
+
         if (!description || !weight || !volume || !notes || !price || !availableQuantity)
             throw new Error(Exceptions.message422);
-        
-       /* let id;
-        const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
 
-        try {
-             id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }*/
+
+
+        /* let id;
+         const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
+ 
+         try {
+              id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
+         } catch (error) {
+             new Error(Exceptions.message500);
+         }*/
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
-            .then(value => id = value[0]["COUNT(*)"] )
+            .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw new Error(Exceptions.message500) });
 
-        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity)
-         VALUES (${id + 1}, ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
-        
-        try {
-            const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return sku;
+        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity, positionID)
+         VALUES (${id + 1}, ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity}, NULL);`;
+
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch((error) => { throw new Error(Exceptions.message500) });
+
     }
 
-    /*TO CHECK - availableQuantity is missing in the SKU table */
+    /**TO CHECK - availableQuantity is missing in the SKU table */
     async editSku(id, body) {
 
         const newDescription = body["newDescription"];
@@ -100,11 +103,8 @@ class SkuController {
 
         const sqlInstruction = `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
         AND notes= "${newNotes}" AND description= "${newDescription}" AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
-        try {
-            const item = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch((error) => { new Error(Exceptions.message500); });
 
         if (!this.getSku(id).position) {
             SKUweight = this.getSku(id).weight;
@@ -123,7 +123,7 @@ class SkuController {
 
     }
 
-    /*TO CHECK - which way of getting the volume and the weight is the right one?*/
+    /**TO CHECK - which way of getting the volume and the weight is the right one?*/
     async setPosition(id, body) {
 
         const position = body["position"];
@@ -162,15 +162,21 @@ class SkuController {
 
     }
 
-    /*delete function to remove an SKU from the table, given its ID */
+    /**delete function to remove an SKU from the table, given its ID */
     async deleteSku(id) {
-        const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
+       /* const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
         try {
-            const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message500);
         }
-        return sku; /*sku returned to test it*/
+        
+        return sku; //sku returned to test it
+        */
+
+        await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE ID= ${id};`)
+        .catch((error) => {throw new Error(Exceptions.message500);});
+
     }
 }
 

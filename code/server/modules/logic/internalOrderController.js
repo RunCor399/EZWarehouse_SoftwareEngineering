@@ -1,64 +1,90 @@
 'use strict'
 
+const Exceptions = require('../../routers/exceptions');
+const Controller = require('./controller')
+
 class InternalOrderController {
+    /** @type {Controller} */
     #controller;
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
         console.log("internalOrderController started");
     }
 
 
-    /*getter function to retreive all the internal orders*/
+    /**getter function to retreive all the internal orders*/
     async getAllInternalOrders() {
-        let rows;
-        const sqlInstruction = "SELECT * FROM InternalOrder;";
+        /* let rows;
+         const sqlInstruction = "SELECT * FROM InternalOrder;";
+         try {
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+         } catch (error) {
+             new Error(Exceptions.message500);
+         }
+         return rows;*/
+         let rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
+        .then((value) => rows = value)
+        .catch((error) => {throw new Error(Exceptions.message500);});
+
+    }
+
+    /**getter function to retreive all the issued internal orders*/
+    async getIssuedInternalOrders() {
+        /*let rows;
+        const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
         try {
             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows;
-    }
+        return rows;*/
 
-    /*getter function to retreive all the issued internal orders*/
-    async getIssuedInternalOrders() {
         let rows;
-        const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
-        try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
+        .then((value) => rows = value)
+        .catch((error) => {throw new Error(Exceptions.message500);});
+
     }
 
-    /*getter function to retreive all the accepted internal orders*/
+    /**getter function to retreive all the accepted internal orders*/
     async getAcceptedInternalOrders() {
-        let rows;
+        /*let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
         try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows;
+        return rows;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
+        .then((value) => rows = value)
+        .catch((error) => {throw new Error(Exceptions.message500);});
+
     }
 
-    /*getter function to retreive a single internal order, given its ID*/
+    /**getter function to retreive a single internal order, given its ID*/
     async getInternalOrder(id) {
-        let row;
+        /*let row;
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
         try {
             row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return row;
+        return row;*/
+
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
+        .then((value) => row = value[0])
+        .catch((error) => {throw new Error(Exceptions.message500);});
     }
 
-    /*TODO - products and issueDate are missing in the table */
+    /**TODO - products and issueDate are missing in the table */
     async createInternalOrder(body) {
 
         let id;
@@ -80,7 +106,7 @@ class InternalOrderController {
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
         VALUES (${id + 1}, "${issueDate}", "ISSUED", "${customerId}");`;
         try {
-              await this.#dbManager.genericSqlRun(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
@@ -89,7 +115,7 @@ class InternalOrderController {
 
     }
 
-    /*TODO*/
+    /**TODO*/
     async editInternalOrder(id, body) {
 
         const newState = body["newState"];
@@ -119,11 +145,11 @@ class InternalOrderController {
     }
 
 
-    /*delete function to remove an internal order from the table, given its ID */
+    /**delete function to remove an internal order from the table, given its ID */
     async deleteInternalOrder(id) {
         const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
-             await this.#dbManager.genericSqlRun(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }

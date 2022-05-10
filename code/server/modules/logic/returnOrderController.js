@@ -1,40 +1,56 @@
 'use strict'
+const Exceptions = require('../../routers/exceptions');
+const Controller = require('./controller')
 
 class ReturnOrderController {
+        /** @type {Controller} */
     #controller;
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
         console.log("returnOrderController started");
     }
 
 
 
-    /*getter function to retreive all the return orders*/
+    /**getter function to retreive all the return orders*/
     async getAllReturnOrders() {
-        let rows;
+        /*let rows;
         const sqlInstruction = "SELECT * FROM ReturnOrder;";
         try {
              rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
+        return rows;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM ReturnOrder;")
+            .then(value => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
         return rows;
     }
 
-    /*getter function to retreive a single return order, given its ID*/
+    /**getter function to retreive a single return order, given its ID*/
     async getReturnOrder(id) {
+        /*let row
         const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
         try {
-            const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+            row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return returnOrder;
+        return row;*/
+
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM ReturnOrder WHERE ID= ${id};`)
+            .then(value => row = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return row;
     }
 
-    /*TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
+    /**TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
     async createReturnOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
@@ -65,7 +81,7 @@ class ReturnOrderController {
         return returnOrder;
     }
 
-    /*delete function to remove a return order from the table, given its ID*/
+    /**delete function to remove a return order from the table, given its ID*/
     async deleteReturnOrder(id) {
         const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
         try {

@@ -1,39 +1,56 @@
 'use strict'
+const Exceptions = require('../../routers/exceptions');
+const Controller = require('./controller')
 
 class TestDescriptorController {
+        /** @type {Controller} */
+
     #controller;
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
 
         console.log("testDescriptorController started");
     }
 
-    /*getter function to retreive all test descriptors*/
+    /**getter function to retreive all test descriptors*/
     async getAllTestDescriptors() {
-        let rows;
+        /*let rows;
         const sqlInstruction = "SELECT * FROM TestDescriptor;";
         try {
             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
+        return rows;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
+            .then(value => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
         return rows;
     }
 
-    /*getter function to retreive a single test descriptor given its ID*/
+    /**getter function to retreive a single test descriptor given its ID*/
     async getTestDesciptor(id) {
+       /*let row;
         const sqlInstruction = `SELECT * FROM TestDescriptor WHERE ID= ${id};`;
         try {
-            const testDescriptor = await this.#dbManager.genericSqlGet(sqlInstruction);
+            row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return testDescriptor;
+        return row;*/
+
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ${id};`)
+            .then(value => row = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return row;
     }
 
-    /*creation of a new test descriptor*/
+    /**creation of a new test descriptor*/
     async createTestDescriptor(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM TestDescriptor;'
@@ -69,7 +86,7 @@ class TestDescriptorController {
 
     }
 
-    /*function to edit a test descriptor, given its ID*/
+    /**function to edit a test descriptor, given its ID*/
     async editTestDesciptor(id, body) {
 
         const newName = body["newName"];
@@ -98,7 +115,7 @@ class TestDescriptorController {
         }
     }
 
-    /*delete function to remove a test descriptor from the table, given its ID*/
+    /**delete function to remove a test descriptor from the table, given its ID*/
     async deleteTestDescriptor(id) {
         const sqlInstruction = `DELETE FROM TestDescriptor WHERE ID= ${id};`
         try {

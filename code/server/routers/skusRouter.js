@@ -50,6 +50,8 @@ router.post('/api/sku', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
+  console.l
+
   try {
     await controller.getSkuController().createSku(req.body);
   } catch (error) {
