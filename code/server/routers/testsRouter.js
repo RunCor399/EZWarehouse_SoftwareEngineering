@@ -20,16 +20,16 @@ router.get('/api/testDescriptors', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(testDescriptors);
 });
 
 //GET /api/testDescriptors/:id
 router.get('/api/testDescriptors/:id', async (req, res) => {
   const param = req.params.id;
- 
-/** @type {Controller} */
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET',req.url);
+  console.log('GET', req.url);
   let testDescriptor;
 
   try {
@@ -40,15 +40,15 @@ router.get('/api/testDescriptors/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(testDescriptor);
 });
 
 //POST /api/testDescriptor
 router.post('/api/testDescriptor', async (req, res) => {
-  
+
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('POST',req.url);
+  console.log('POST', req.url);
 
 
   try {
@@ -58,16 +58,16 @@ router.post('/api/testDescriptor', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(201).json(message);
+  return res.status(201).end();
 });
 
 //PUT /api/testDescriptor/:id
 router.put('/api/testDescriptor/:id', async (req, res) => {
   const param = req.params.id;
-  
-/** @type {Controller} */
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('PUT',req.url);
+  console.log('PUT', req.url);
 
   try {
     await controller.getTestDescriptorController().editTestDescriptor(param, req.body);
@@ -76,16 +76,16 @@ router.put('/api/testDescriptor/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //DELETE /api/testDescriptor/:id
 router.delete('/api/testDescriptor/:id', async (req, res) => {
   const param = req.params.id;
-  
+
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('DELETE',req.url);
+  console.log('DELETE', req.url);
 
   try {
     await controller.getTestDescriptorController().deleteTestDescriptor(param);
@@ -93,11 +93,8 @@ router.delete('/api/testDescriptor/:id', async (req, res) => {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
-  return res.status(204).json(message);
+  return res.status(204).end();
 });
-
-
-
 
 
 
@@ -108,7 +105,7 @@ router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET',req.url);
+  console.log('GET', req.url);
   let testResults;
 
   try {
@@ -119,18 +116,18 @@ router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(testResults);
 });
 
 //GET /api/skuitems/:rfid/testResults/:id
 router.get('/api/skuitems/:rfid/testResults/:id', async (req, res) => {
   const paramRfid = req.params.rfid;
   const paramId = req.params.id;
- 
-/** @type {Controller} */
-const controller = req.app.get("controller");
-console.log('GET',req.url);
-let testResult;
+
+  /** @type {Controller} */
+  const controller = req.app.get("controller");
+  console.log('GET', req.url);
+  let testResult;
 
   try {
     testResult = await controller.getTestResultController().getTestResult(paramRfid, paramId);
@@ -140,15 +137,15 @@ let testResult;
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(testResult);
 });
 
 //POST /api/skuitems/testResult
 router.post('/api/skuitems/testResult', async (req, res) => {
-  
-/** @type {Controller} */
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('POST',req.url);
+  console.log('POST', req.url);
 
   try {
     await controller.getTestResultController().createTestResult(req.body);
@@ -156,17 +153,17 @@ router.post('/api/skuitems/testResult', async (req, res) => {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //PUT /api/skuitems/:rfid/testResult/:id
 router.put('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   const paramRfid = req.params.rfid;
   const paramId = req.params.id;
-  
+
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('PUT',req.url);
+  console.log('PUT', req.url);
 
   try {
     await controller.getTestResultController().editTestResult(paramRfid, paramId, req.body);
@@ -174,17 +171,17 @@ router.put('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //DELETE /api/skuitems/:rfid/testResult/:id
 router.delete('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   const paramRfid = req.params.rfid;
   const paramId = req.params.id;
-  
+
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('DELETE',req.url);
+  console.log('DELETE', req.url);
 
   try {
     await controller.getTestResultController().deleteTestResult(paramRfid, paramId);
@@ -192,7 +189,7 @@ router.delete('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 

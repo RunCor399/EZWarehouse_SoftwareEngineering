@@ -21,15 +21,7 @@ router.get('/api/userinfo', (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  let message = {
-    id: "id",
-    username: user.username,
-    name: "name",
-    surname: "surname",
-    type: user.type
-  };
-
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //GET /api/suppliers
@@ -85,7 +77,7 @@ router.post('/api/newUser', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(201).json(message);
+  return res.status(201).end();
 });
 
 //POST /api/managerSessions
@@ -103,7 +95,7 @@ router.post('/api/managerSessions', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //POST /api/customerSessions
@@ -120,7 +112,7 @@ router.post('/api/customerSessions', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //POST /api/supplierSessions
@@ -137,7 +129,7 @@ router.post('/api/supplierSessions', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //POST /api/clerkSessions
@@ -154,7 +146,7 @@ router.post('/api/clerkSessions', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //POST /api/qualityyEmployeeSessions
@@ -171,7 +163,7 @@ router.post('/api/qualityEmployeeSessions', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //POST /api/deliveryEmployeeSessions
@@ -188,11 +180,11 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //POST /api/logout
-router.post('/api/logout', async (req, res) => {
+router.post('/api/logout',  (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -200,13 +192,13 @@ router.post('/api/logout', async (req, res) => {
 
 
   try {
-    await controller.getUserController().logout();
+     controller.getUserController().logout();
   } catch (error) {
     if (error.message === Exceptions.message500)
       return res.status(500).send(Exceptions.message500)
   }
 
-  return res.status(200).json(Exceptions.message);
+  return res.status(200).end();
 });
 
 
@@ -225,7 +217,7 @@ router.put('/api/user/:username', async (req, res) => {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //DELETE /api/user/:username/:type
@@ -244,7 +236,7 @@ router.delete('/api/user/:username/:type', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 

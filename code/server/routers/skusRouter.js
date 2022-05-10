@@ -58,15 +58,7 @@ router.post('/api/sku', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json({ message: '/api/sku' });
-
-
-
-  //unprocessable entity
-  //return res.status(422);
-
-  //Service unavailable
-  //return res.status(503)
+  return res.status(200).end();
 });
 
 //PUT /api/sku/:id
@@ -83,8 +75,8 @@ router.put('/api/sku/:id', async (req, res) => {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
-  return res.status(200).json({ message: '/api/sku/:id' });
 
+  return res.status(200).end();
 });
 
 //PUT /api/sku/:id/position
@@ -103,7 +95,7 @@ router.put('/api/sku/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-
+  return res.status(200).end();
 });
 
 //DELETE /api/sku/:id
@@ -121,8 +113,7 @@ router.delete('/api/sku/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(204).json({ message: '/api/sku/:id' });
-
+  return res.status(204).end();
 });
 
 

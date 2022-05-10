@@ -4,9 +4,7 @@ const Exceptions = require('./exceptions')
 const Controller = require('../modules/logic/controller')
 
 router.get('/api/internalOrders', async (req, res) => {
-  let message = {
-    message: 'GET Internal Orders'
-  }
+  
   let internalOrders;
 
   /** @type {Controller} */
@@ -22,13 +20,11 @@ router.get('/api/internalOrders', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(internalOrders);
 });
 
 router.get('/api/internalOrdersIssued', async (req, res) => {
-  let message = {
-    message: "GET: internalOrdersIssued "
-  }
+  
   let internalOrdersIssued;
 
   /** @type {Controller} */
@@ -48,9 +44,7 @@ router.get('/api/internalOrdersIssued', async (req, res) => {
 });
 
 router.get('/api/internalOrdersAccepted', async (req, res) => {
-  let message = {
-    message: "GET: internalOrdersAccepted "
-  }
+  
   let internalOrdersAccepted;
 
   /** @type {Controller} */
@@ -67,14 +61,12 @@ router.get('/api/internalOrdersAccepted', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(internalOrdersAccepted);
 });
 
 router.get('/api/internalOrders/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: 'GET Internal Orders'
-  }
+
 
   let internalOrder;
 
@@ -91,13 +83,11 @@ router.get('/api/internalOrders/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(internalOrder);
 });
 
 router.post('/api/internalOrder', async (req, res) => {
-  let message = {
-    message: '/api/internalOrder'
-  }
+  
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -112,16 +102,14 @@ router.post('/api/internalOrder', async (req, res) => {
   }
 
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 
 router.put('/api/internalOrder/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "PUT /api/internalOrder/: " + param
-  }
   
+
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT', req.url);
@@ -136,14 +124,12 @@ router.put('/api/internalOrder/:id', async (req, res) => {
   }
 
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 router.delete('/api/internalOrder/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "DELETE /api/internalOrder/: " + param
-  }
+  
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -157,7 +143,7 @@ router.delete('/api/internalOrder/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 

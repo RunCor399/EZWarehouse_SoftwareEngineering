@@ -6,9 +6,6 @@ const Controller = require('../modules/logic/controller')
 
 
 router.get('/api/restockOrders', async (req, res) => {
-  let message = {
-    message: 'GET Restock Orders'
-  }
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -23,18 +20,12 @@ router.get('/api/restockOrders', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(restockOrders);
 });
-
-
-
 
 router.get('/api/restockOrders/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "GET: " + param
-  }
-
+ 
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
@@ -48,14 +39,11 @@ router.get('/api/restockOrders/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
   
-  return res.status(200).json(message);
+  return res.status(200).json(restockOrder);
 });
 
 router.get('/api/restockOrders/:id/returnItems', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "/api/restockOrders/:id/returnItems"
-  }
   
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -70,14 +58,11 @@ router.get('/api/restockOrders/:id/returnItems', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
   
-  return res.status(200).json(message);
+  return res.status(200).json(returnItems);
 });
 
 
 router.get('/api/restockOrdersIssued', async (req, res) => {
-  let message = {
-    message: "/api/restockOrdersIssued"
-  }
   
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -92,14 +77,11 @@ router.get('/api/restockOrdersIssued', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
   
-  return res.status(200).json(message);
+  return res.status(200).json(restockOrdersIssued);
 });
 
 
 router.post('/api/restockOrder', async (req, res) => {
-  let message = {
-    message: '/api/restockOrder'
-  }  
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -112,14 +94,11 @@ router.post('/api/restockOrder', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }  
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });  
 
 router.put('/api/restockOrder/:id', async (req, res) => {
-  const param = req.params.id;
-  let message = {
-    message: "PUT /api/restockOrder/: " + param
-  }  
+  const param = req.params.id
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -132,17 +111,11 @@ router.put('/api/restockOrder/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }  
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 })  
-
-
-
 
 router.put('/api/restockOrder/:id/skuItems', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "PUT /api/restockOrder/id/skuItems: " + param
-  }
   
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -156,15 +129,12 @@ router.put('/api/restockOrder/:id/skuItems', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
   
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 
 router.put('/api/restockOrder/:id/transportNote', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "PUT /api/restockOrder/id/transportNote: " + param
-  }
   
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -177,15 +147,12 @@ router.put('/api/restockOrder/:id/transportNote', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
   
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 
 router.delete('/api/restockOrder/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "DELETE /api/restockOrder/: " + param
-  }
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
@@ -198,7 +165,7 @@ router.delete('/api/restockOrder/:id', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 module.exports = router
