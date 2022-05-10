@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
+
 const DBManager = require("./modules/database/databaseManager");
 const dbManager = new DBManager();
 
-
-async function createTables(dbManager) {
+function createTables(dbManager) {
 
     const createSKU =
         `CREATE TABLE SKU(
@@ -184,22 +184,19 @@ async function createTables(dbManager) {
         createItem
     ]
 
+    try{
+        sqlInstructions.forEach((sql) => {
+            dbManager.genericSqlRun(sql);});
+    } catch {
+        console.log("error");
+        return 1;
+    }
 
-    return new Promise(async (resolve, reject) => {
-        try {
-            sqlInstructions.forEach(async (sql) => {
-                await dbManager.genericSqlRun(sql);
-            });
-        } catch (error) {
-            reject(false)
-        }
-        resolve(true)
-    });
 
 
 }
 
-async function addUsers(dbManager) {
+function addUsers(dbManager) {
 
 
 
@@ -216,7 +213,51 @@ async function addUsers(dbManager) {
     await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
     VALUES (6, "manager1@ezwh.com", "name6", "surname6", "e16b2ab8d12314bf4efbd6203906ea6c", "manager")`);
 
+function prova1() {
+   try{
+    console.log("prova1 start");
+    const create =  createTables(dbManager);
+    console.log("prova1 finish");
+   } catch {
+       return 1;
+   }
+   
+   return 0;
 }
 
-//createTables(dbManager);
-addUsers(dbManager);
+function prova2(){
+    console.log("prova2 start");
+    const add = addUsers(dbManager);
+    console.log("prova2 finish")
+}
+
+const myPromise = new Promise((resolve, reject) => {
+    if(prova1() == 0){
+        console.log("resolve 2");
+        resolve();
+    }
+    else{
+        reject();
+    }
+});
+
+
+prom.then(() => {
+    myPromise.then(() => {
+        prova2();
+    }).catch(() => {
+        console.log("Error 2");
+    });
+});
+
+
+
+
+
+//prova1();
+//prova2();
+
+
+}
+
+createTables(dbManager).then(() => addUsers(dbManager));
