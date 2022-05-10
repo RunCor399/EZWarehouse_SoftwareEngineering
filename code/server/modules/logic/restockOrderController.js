@@ -145,7 +145,7 @@ class RestockOrderController {
         products.forEach((elem) => {
             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
-                const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
                 new Error(Exceptions.message500);
             }
@@ -163,7 +163,7 @@ class RestockOrderController {
 
         const sqlInstruction = `UPDATE RestockOrder SET state = "${newState}" WHERE ID= ${id};`;
         try {
-            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
@@ -183,10 +183,10 @@ class RestockOrderController {
          INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
 
         */
-        skuItems.forEach((elem) => {
+        skuItems.forEach(async (elem) => {
             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
-                const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
                 new Error(Exceptions.message500);
             }
@@ -207,7 +207,7 @@ class RestockOrderController {
     async deleteRestockOrder(id) {
         const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
         try {
-            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }

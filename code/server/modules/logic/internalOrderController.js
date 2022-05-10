@@ -119,7 +119,7 @@ class InternalOrderController {
         products.forEach((elem) => {
             const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
-                const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
                 new Error(Exceptions.message500);
             }
@@ -144,7 +144,7 @@ class InternalOrderController {
             products.forEach((elem) => {
                 const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
                 try {
-                    const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                    await this.#dbManager.genericSqlRun(sqlInsert);
                 } catch (error) {
                     new Error(Exceptions.message500);
                 }
