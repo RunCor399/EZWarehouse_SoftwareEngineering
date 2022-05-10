@@ -68,12 +68,21 @@ class RestockOrderController {
         return row;
     }
 
-    /**TODO */
+    /*TODO - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
     async getRestockOrderToBeReturned(id) {
+
+        /* - get Restock Order with id
+           - check if the state is COMPLETEDRETURN
+           - get each SKUItem from SKUItemsPerRestockOrder: SKUITEMID = (SELECT SKUItemID FROM SKUItemsPerRestockOrder SIPRO WHERE SIPRO.orderID = ${id});
+           - get result of an SKUItem from TestResult: 
+           result = (SELECT result FROM TestResult WHERE SKUItemID = ${SKUITEMID});
+           - if result of SKUItemID is false, create a JSON object with SKUID and RFID from SKUItem
+        */
+
         return undefined;
     }
 
-    /**TO BE COMPLETED*/
+    /*TO BE COMPLETED - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
     async createRestockOrder(body) {
 
         const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
@@ -99,10 +108,14 @@ class RestockOrderController {
             new Error(Exceptions.message500);
         }
 
-        /*products to be added into ItemsPerOrder*/
+        /*loop of the products to be added into SKUPerRestockOrder:
+        for (sku, skuitem) of products:
+         INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
+        */
 
         return restockOrder;
     }
+
 
     /**function to edit a state of a restock order, given its ID*/
     async editRestockOrder(id, body) {
@@ -122,7 +135,7 @@ class RestockOrderController {
 
     }
 
-    /**TODO */
+    /*TODO */
     async addSkuItemsToRestockOrder(id, body) {
 
         const skuItems = body["skuItems"];
@@ -130,8 +143,11 @@ class RestockOrderController {
         if (!skuItems)
             throw new Error(Exceptions.message422);
 
-        /*join between ItemsPerOrder and RestockOrder*/
-        /*loop to save insert each new item into ItemsPerOrder */
+        /*loop of the products to be added into SKUPerRestockOrder:
+        for (sku, skuitem) of products:
+         INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
+        */
+
         return undefined;
     }
 
