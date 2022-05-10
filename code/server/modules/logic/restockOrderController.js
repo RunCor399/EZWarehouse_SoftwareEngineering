@@ -117,6 +117,15 @@ class RestockOrderController {
         /*loop of the products to be added into SKUPerRestockOrder:
         for (sku, skuitem) of products:
          INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
+
+         products.forEach((elem) => {
+             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+        try {
+            const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+        } catch (error) {
+            new Error(Exceptions.message500);
+        }
+         } )
         */
 
         return restockOrder;
@@ -152,6 +161,15 @@ class RestockOrderController {
         /*loop of the products to be added into SKUPerRestockOrder:
         for (sku, skuitem) of products:
          INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
+
+         skuItems.forEach((elem) => {
+             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+        try {
+            const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+        } catch (error) {
+            new Error(Exceptions.message500);
+        }
+         } )
         */
 
         return undefined;
