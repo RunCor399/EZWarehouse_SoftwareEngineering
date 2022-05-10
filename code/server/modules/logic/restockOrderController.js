@@ -39,7 +39,7 @@ class RestockOrderController {
             .catch(error => { throw new Error(Exceptions.message500) });
     }
     return rows;
-    }*/
+}*/
 
     /*getter function to retreive all the issued restock orders*/
     async getIssuedRestockOrders() {
@@ -51,8 +51,7 @@ class RestockOrderController {
         }
         return rows.map((row) => row);
     }
-
-    /* 
+    /*
 async getIssuedRestockOrders() {
     let rows;
     await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder WHERE state = 'ISSUED';")
@@ -84,23 +83,6 @@ async getIssuedRestockOrders() {
         }
         return restockOrder;
     }
-    /*
-async getRestockOrder(id) {
-    let row;
-    await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID="${id};`)
-        .then(value => row = value[0])
-        .catch(error => { throw new Error(Exceptions.message500) });
-        row.transportNote={deliveryDate:row.shipmentDate};
-        delete row.shipmentDate;
-        await this.#dbManager.genericSqlGet("SELECT ID as SKUId, description, price, qty FROM SKUPerRestockOrder JOIN SKU ON(ID=orderID) WHERE orderID="+rows[i].orderID+";")
-            .then(value => row.products=value)
-            .catch(error => { throw new Error(Exceptions.message500) });
-
-            await this.#dbManager.genericSqlGet("SELECT SPR.SKUID as SKUId, SIPR.SKUItemID as rfid  FROM SKUPerRestockOrder SPR JOIN SKUItemPerRestockOrder SIPR  WHERE SPR.orderID=SIPR.orderID and SPR.orderID="+rows[i].orderID+";")
-                .then(value => row.skuItems=value)
-                .catch(error => { throw new Error(Exceptions.message500) });
-    return row;
-}*/
 
     /*TODO */
     async getRestockOrderToBeReturned(id) {

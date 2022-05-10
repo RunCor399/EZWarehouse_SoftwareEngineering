@@ -1,50 +1,74 @@
 'use strict'
+const Exceptions = require('../../routers/exceptions');
+const Controller = require('./controller')
 
 class SkuItemController {
+    /** @type {Controller} */
     #controller;
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
 
         console.log("skuItemController started");
     }
 
-    /*getter function to retreive all the SKUItems*/
+    /**getter function to retreive all the SKUItems*/
     async getAllSkuItems() {
+        /*let rows;
         const sqlInstruction = "SELECT * FROM SKUItem";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM SKUItem")
+            .then(value => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return rows;
     }
 
 
-    /*getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
+    /**getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
     async getSkuItems(id) {
+        /*let row;
         const sqlInstruction = `SELECT * FROM SKUItem WHERE SKUId= ${id};`;
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return row;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ${id};`)
+            .then(value => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return rows;
     }
 
-    /*getter function to retreive a single SKUItem, given its RFID */
+    /**getter function to retreive a single SKUItem, given its RFID */
     async getSkuItem(rfid) {
-        const sqlInstruction = `SELECT * FROM SKUItem WHERE RFID= ${rfid};`;
+        /*let row;
+        const sqlInstruction = `SELECT * FROM SKUItem WHERE RFID= "${rfid}";`;
         try {
-            const skuItem = this.#dbManager.genericSqlGet(sqlInstruction);
+            row = this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return skuItem;
+        return row;*/
+
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= "${rfid}";`)
+            .then(value => row = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return row;
     }
 
-    /*creation of an SKUItem*/
+    /**creation of an SKUItem*/
     async createSkuItem(body) {
 
         const RFID = body["RFID"];
@@ -54,7 +78,8 @@ class SkuItemController {
         if (!RFID || !SKUId || !dateOfStock)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (${RFID}, ${SKUId}, 0, ${dateOfStock});`;
+        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
+        VALUES ("${RFID}", ${SKUId}, 0, ${dateOfStock});`;
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -63,7 +88,7 @@ class SkuItemController {
         return skuItem;
     }
 
-    /*function to edit an SKUItem*/
+    /**function to edit an SKUItem*/
     async editSkuItem(oldRFID, body) {
 
         const newRFID = body["newRFID"];
@@ -74,7 +99,8 @@ class SkuItemController {
         if (!newRFID || !newSKUId || !newDateOfStock)
             throw new Error(Exceptions.message422);
 
-        const sqlUpdate = `UPDATE SKUItem SET RFID= ${newRFID} AND Available= ${newAvailable} AND DateOfStock= ${newDateOfStock} WHERE RFID= ${oldRFID};`;
+        const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}" AND Available= ${newAvailable} 
+        AND DateOfStock= ${newDateOfStock} WHERE RFID= "${oldRFID}";`;
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlUpdate);
         } catch (error) {
@@ -82,15 +108,19 @@ class SkuItemController {
         }
     }
 
-    /*delete function to remove an SKUItem from the table, given its ID */
+    /**delete function to remove an SKUItem from the table, given its ID */
     async deleteSkuItem(rfid) {
-        const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
+       /* const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return skuItem; /*skuItem returned to test it*/
+        return skuItem; //skuItem returned to test it*/
+
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM SKUItem WHERE ID= ${rfid};`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
     }
 }
 

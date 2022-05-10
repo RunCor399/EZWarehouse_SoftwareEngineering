@@ -1,139 +1,149 @@
 const express = require('express')
 const router = express.Router()
+const Exceptions = require('./exceptions')
+const Controller = require('../modules/logic/controller')
 
-//Internal Order Requests
+router.get('/api/internalOrders', async (req, res) => {
+  
+  let internalOrders;
 
-
-router.route('/api/internalOrders').get(async (req, res) => {
-  let message = {
-    message: 'GET Internal Orders'
-  }
-
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
   try {
-    await controller.getInternalOrderController().getAllInternalOrders();
+    internalOrders = await controller.getInternalOrderController().getAllInternalOrders();
+    console.log("internalOrders", internalOrders)
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(internalOrders);
 });
 
-router.route('/api/internalOrdersIssued').get(async (req, res) => {
-  let message = {
-    message: "GET: internalOrdersIssued "
-  }
+router.get('/api/internalOrdersIssued', async (req, res) => {
+  
+  let internalOrdersIssued;
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
   try {
-    await controller.getInternalOrderController().getIssuedInternalOrders();
+    internalOrdersIssued = await controller.getInternalOrderController().getIssuedInternalOrders();
+    console.log("internalOrdersIssued", internalOrdersIssued)
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(internalOrdersIssued);
 });
 
-router.route('/api/internalOrdersAccepted').get(async (req, res) => {
-  let message = {
-    message: "GET: internalOrdersAccepted "
-  }
+router.get('/api/internalOrdersAccepted', async (req, res) => {
+  
+  let internalOrdersAccepted;
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
   try {
-    await controller.getInternalOrderController().getAcceptedInternalOrders();
+    internalOrdersAccepted = await controller.getInternalOrderController().getAcceptedInternalOrders();
+    console.log("internalOrdersAccepted", internalOrdersAccepted);
+
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(internalOrdersAccepted);
 });
 
-router.route('/api/internalOrders/:id').get(async (req, res) => {
+router.get('/api/internalOrders/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: 'GET Internal Orders'
-  }
 
+
+  let internalOrder;
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
   try {
-    await controller.getInternalOrderController().getInternalOrder(param);
+    internalOrder = await controller.getInternalOrderController().getInternalOrder(param);
+    console.log("internalOrder", internalOrder)
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(internalOrder);
 });
 
-router.route('/api/internalOrder').post(async (req, res) => {
-  let message = {
-    message: '/api/internalOrder'
-  }
+router.post('/api/internalOrder', async (req, res) => {
+  
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST', req.url);
 
   try {
     await controller.getInternalOrderController().createInternalOrder(req.body);
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 
-router.route('/api/internalOrder/:id').put(async (req, res) => {
+router.put('/api/internalOrder/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "PUT /api/internalOrder/: " + param
-  }
+  
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT', req.url);
 
 
   try {
     await controller.getInternalOrderController().editInternalOrder(param, req.body);
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
-router.route('/api/internalOrder/:id').delete(async (req, res) => {
+router.delete('/api/internalOrder/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: "DELETE /api/internalOrder/: " + param
-  }
+  
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE', req.url);
 
   try {
     await controller.getInternalOrderController().deleteInternalOrder(param);
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 

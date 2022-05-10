@@ -1,151 +1,121 @@
 const express = require('express')
 const router = express.Router()
-
-
-const testsRouter = require('./testsRouter');
-router.use('/', testsRouter);
+const Exceptions = require('./exceptions')
+const Controller = require('../modules/logic/controller')
 
 //SKU ITEM
 
 //GET /api/skuitems
-router.get('/api/skuitems', (req, res) => {
-  let message = {
-    message: '/api/skuitems'
-  }
+router.get('/api/skuitems', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
-
+  console.log('GET', req.url);
+  let skuitems;
 
   try {
-
-    controller.getSkuItemController().getAllSkuItems();
+    skuitems = await controller.getSkuItemController().getAllSkuItems();
+    console.log("skuitems", skuitems)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(skuitems);
 });
 
 //GET /api/skuitems/sku/:id
-router.get('/api/skuitems/sku/:id', (req, res) => {
+router.get('/api/skuitems/sku/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: '/api/skuitems/sku/:id'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
-
+  console.log('GET', req.url);
+  let sku;
 
   try {
-    controller.getSkuItemController().getSkuItems(param);
-
+    sku = await controller.getSkuItemController().getSkuItems(param);
+    console.log("sku", sku);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-
-  return res.status(200).json(message);
-
-
-
+  return res.status(200).json(sku);
 });
 
 //GET /api/skuitems/:rfid
-router.get('/api/skuitems/:rfid', (req, res) => {
+router.get('/api/skuitems/:rfid', async (req, res) => {
   const param = req.params.rfid;
-  let message = {
-    message: '/api/skuitems/:rfid'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
-
+  console.log('GET', req.url);
+  let skuitem;
 
   try {
-    controller.getSkuItemController().getSkuItem(param);
-
+    skuitem = await controller.getSkuItemController().getSkuItem(param);
+    console.log("skuitem", skuitem);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-
-  return res.status(200).json(message);
-
-
+  return res.status(200).json(skuitem);
 });
 
 //POST /api/skuitem
-router.post('/api/skuitem', (req, res) => {
-  let message = {
-    message: '/api/skuitem'
-  }
+router.post('/api/skuitem', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST', req.url);
 
   try {
-    controller.getSkuItemController().createSkuItem(req.body);
-
+    await controller.getSkuItemController().createSkuItem(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-
-  return res.status(201).json(message);
-
-
+  return res.status(201).end();;
 });
 
 //PUT /api/skuitems/:rfid
-router.put('/api/skuitems/:rfid', (req, res) => {
+router.put('/api/skuitems/:rfid', async (req, res) => {
   const param = req.params.rfid;
-  let message = {
-    message: '/api/skuitems/:rfid'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
-  try {
+  console.log('PUT', req.url);
 
-    controller.getSkuItemController().editSkuItem(param, req.body)
+  try {
+    await controller.getSkuItemController().editSkuItem(param, req.body)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
-
-
+  return res.status(200).end();
 });
 
 //DELETE /api/skuitems/:rfid
-router.delete('/api/skuitems/:rfid', (req, res) => {
+router.delete('/api/skuitems/:rfid', async (req, res) => {
   const param = req.params.rfid;
-  let message = {
-    message: '/api/skuitems/:rfid'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE', req.url);
 
 
   try {
-
-    controller.getSkuItemController().deleteSkuItem(param);
+    await controller.getSkuItemController().deleteSkuItem(param);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(204).json(message);
-
-
+  return res.status(204).end();
 });
 
 

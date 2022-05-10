@@ -1,87 +1,80 @@
 const express = require('express');
 const router = express.Router();
+const Exceptions = require('./exceptions')
+const Controller = require('../modules/logic/controller')
 
 //ReturnOrder Requests
+router.get('/api/returnOrders', async (req, res) => {
 
-router.route('/api/returnOrders')
-    .get((req, res) => {
-        let message = {
-            message: 'GET Return Orders'
-        }
+    /** @type {Controller} */
+    const controller = req.app.get("controller");
+    console.log('GET',req.url);
+    let returnOrders;
 
-        const controller = req.app.get("controller");
-        controller.testPrint(req.url);
+    try {
+        returnOrders = await controller.getReturnOrderController().getAllReturnOrders();
+        console.log("returnOrders", returnOrders);
+    } catch (error) {
+        let responseParams = Exceptions.handle(error);
+        return res.status(responseParams.code).send(responseParams.message);
+    }
 
-        try {
-            controller.getReturnOrderController().getAllReturnOrders();
-        } catch (error) {
-            let responseParams = Exceptions.handle(error);
-            return res.status(responseParams.code).send(responseParams.message);
-        }
-
-        return res.status(200).json(message);
-    });
+    return res.status(200).json(returnOrders);
+});
 
 
-router.route('/api/returnOrders/:id')
-    .get((req, res) => {
-        const param = req.params.id;
-        let message = {
-            message: "GET Return Orders: " + param
-        }
+router.get('/api/returnOrders/:id', async (req, res) => {
+    const param = req.params.id;
 
-        const controller = req.app.get("controller");
-        controller.testPrint(req.url);
+    /** @type {Controller} */
+    const controller = req.app.get("controller");
+    console.log('GET',req.url);
+    let returnOrder;
 
-        try {
-            controller.getReturnOrderController().getReturnOrder(param);
-        } catch (error) {
-            let responseParams = Exceptions.handle(error);
-            return res.status(responseParams.code).send(responseParams.message);
-        }
+    try {
+        returnOrder = await controller.getReturnOrderController().getReturnOrder(param);
+        console.log("returnOrder", returnOrder)
+    } catch (error) {
+        let responseParams = Exceptions.handle(error);
+        return res.status(responseParams.code).send(responseParams.message);
+    }
 
-        return res.status(200).json(message);
-    });
+    return res.status(200).json(returnOrder);
+});
 
 
 
-router.route('/api/returnOrder')
-    .post((req, res) => {
-        let message = {
-            message: 'POST /api/returnOrder'
-        }
+router.post('/api/returnOrder', async (req, res) => {
+    
+    /** @type {Controller} */
+    const controller = req.app.get("controller");
+    console.log('POST',req.url);
 
-        const controller = req.app.get("controller");
-        controller.testPrint(req.url);
-        
-        try {
-            controller.getReturnOrderController().createReturnOrder(req.body);
-        } catch (error) {
-            let responseParams = Exceptions.handle(error);
-            return res.status(responseParams.code).send(responseParams.message);
-        }
-        return res.status(200).json(message);
-    });
+    try {
+        await controller.getReturnOrderController().createReturnOrder(req.body);
+    } catch (error) {
+        let responseParams = Exceptions.handle(error);
+        return res.status(responseParams.code).send(responseParams.message);
+    }
+    return res.status(200).end();
+});
 
-router.route('/api/returnOrder/:id')
-    .delete((req, res) => {
-        const param = req.params.id;
-        let message = {
-            message: 'DELETE /api/returnOrder ' + param
-        }
+router.delete('/api/returnOrder/:id', async (req, res) => {
+    const param = req.params.id;
+   
+    /** @type {Controller} */
+    const controller = req.app.get("controller");
+    console.log('DELETE',req.url);
 
-        const controller = req.app.get("controller");
-        controller.testPrint(req.url);
+    try {
+        await controller.getReturnOrderController().deleteReturnOrder(param);
+    } catch (error) {
+        let responseParams = Exceptions.handle(error);
+        return res.status(responseParams.code).send(responseParams.message);
+    }
 
-        try {
-            controller.getReturnOrderController().deleteReturnOrder(param);
-        } catch (error) {
-            let responseParams = Exceptions.handle(error);
-            return res.status(responseParams.code).send(responseParams.message);
-        }
-
-        return res.status(200).json(message);
-    });
+    return res.status(200).end();
+});
 
 
 

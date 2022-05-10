@@ -1,53 +1,60 @@
 'use strict'
 
 const Exceptions = require('../../routers/exceptions');
-
+const Controller = require('./controller')
 class ItemController {
+    /** @type {Controller} */
     #controller;
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
         console.log("itemController started");
     }
 
 
-    /*getter function to retreive all the items*/
+    /**getter function to retreive all the items*/
     async getAllItems() {
+       /* let rows;
         const sqlInstruction = "SELECT * FROM Item";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;*/
+
+        let rows;
+        await this.#dbManager.genericSqlGet("SELECT * FROM Item")
+            .then(value => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return rows;
+
+
     }
 
-    /*getter function to retreive a single item given its ID*/
+    /**getter function to retreive a single item given its ID*/
     async getItem(id) {
-
-        const sqlInstruction = `SELECT *  FROM Item WHERE ID= ${id};`;
+       /* let row;
+        const sqlInstruction = `SELECT * FROM Item WHERE ID= ${id};`;
         try {
-            const item = await this.#dbManager.genericSqlGet(sqlInstruction);
+            row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return item;
+        return row;*/
+
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE ID= ${id};`)
+            .then(value => row = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        return row;
+
+
     }
 
-    /*TO CHECK - some attributes are missing in the table!
-    creation of a new item in the table*/
+    /**creation of a new item in the table*/
     async createItem(body) {
-
-        /* unuseful: the id is given in the body
-        const sqlGetCount = 'SELECT COUNT(*) FROM Position'
-
-        try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-        } catch (error) {
-            console.log("error");
-        }
-        */
 
         const id = body["id"];
         const description = body["description"];
@@ -57,9 +64,9 @@ class ItemController {
 
         if (!id || !description || !price || !SKUid || !supplierId)
             throw new Error(Exceptions.message422);
-
-        /*description, price and supplierId are missing inside the Item table*/
-        const sqlInsert1 = `INSERT INTO Item (ID, description, price, SKUId, supplierId) VALUES (${id}, ${description}, ${price}, ${SKUid}, ${supplierId});`;
+        
+        const sqlInsert1 = `INSERT INTO Item (ID, description, price, SKUId, supplierId) 
+        VALUES (${id}, "${description}", ${price}, ${SKUid}, ${supplierId});`;
         try {
             const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
@@ -77,18 +84,17 @@ class ItemController {
 
     }
 
-    /*TO CHECK - some attributes are missing in the table! 
-    function to edit the properties of a specific item, given its ID*/
+    /**function to edit the properties of a specific item, given its ID*/
     async editItem(id, body) {
 
         const newDescription = body["newDescription"];
         const newPrice = body["newPrice"];
 
-        /*description and price are missing inside the Item table*/
         if (!newDescription || !newPrice)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE ITEM SET description= ${newDescription} AND price= ${newPrice} WHERE SKUid= ${id};`;
+        const sqlInstruction = `UPDATE ITEM SET description= "${newDescription}"
+        AND price= ${newPrice} WHERE SKUid= ${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
@@ -97,15 +103,19 @@ class ItemController {
         return item;
     }
 
-    /*delete function to remove an item from the table, given its ID*/
+    /**delete function to remove an item from the table, given its ID*/
     async deleteItem(id) {
-        const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
+        /* const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return item;
+        return item; */
+
+        await this.#dbManager.genericSqlRun
+        (`DELETE FROM Item WHERE ID= ${id};`)
+        .catch((error) => { throw new Error(Exceptions.message500) });
     }
 
 }

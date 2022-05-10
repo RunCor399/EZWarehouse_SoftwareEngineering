@@ -1,270 +1,247 @@
 const express = require('express')
 const router = express.Router()
 const Exceptions = require('./exceptions')
-
+const Controller = require('../modules/logic/controller')
 
 //USER
 //GET /api/userinfo
 router.get('/api/userinfo', (req, res) => {
 
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
+  let user;
+
   try {
-    const session = controller.getUserController().getUser();
+    user = controller.getUserController().getUser();
+    console.log("user", user);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  let message = {
-    id: "id",
-    username: session.username,
-    name: "name",
-    surname: "surname",
-    type: session.type
-  };
-
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //GET /api/suppliers
-router.get('/api/suppliers', (req, res) => {
+router.get('/api/suppliers', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
+  let suppliers;
+
   try {
-    const supplier = controller.getUserController().getAllSuppliers();
+    suppliers = await controller.getUserController().getAllSuppliers();
+    console.log("suppliers", suppliers);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  let message = {
-    id: "id",
-    username: supplier.username,
-    name: "name",
-    surname: "surname",
-    type: supplier.type
-  };
-
-  return res.status(200).json(message);
+  return res.status(200).json(suppliers);
 });
 
 //GET /api/users
-router.get('/api/users', (req, res) => {
-  let message = {
-    message: '/api/users'
-  }
+router.get('/api/users', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
+  let users;
 
 
   try {
-    controller.getUserController().getAllUsers();
+    users = await controller.getUserController().getAllUsers();
+    console.log("users", users)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(users);
 });
 
 //POST /api/newUser
-router.post('/api/newUser', (req, res) => {
-  let message = {
-    message: '/api/newUser'
-  }
+router.post('/api/newUser', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST', req.url);
 
   try {
-    controller.getUserController().createUser(req.body);
+    await controller.getUserController().createUser(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(201).json(message);
+  return res.status(201).end();
 });
 
 //POST /api/managerSessions
-router.post('/api/managerSessions', (req, res) => {
-  let message = {
-    message: '/api/managerSessions'
-  }
+router.post('/api/managerSessions', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST', req.url);
 
-
+  let user;
   try {
-    controller.getUserController().login(req.body, "manager");
+    user = await controller.getUserController().login(req.body, "manager");
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //POST /api/customerSessions
-router.post('/api/customerSessions', (req, res) => {
-  let message = {
-    message: '/api/customerSessions'
-  }
+router.post('/api/customerSessions', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST', req.url);
 
+  let user;
   try {
-    controller.getUserController().login(req.body, "customer")
+    user = await controller.getUserController().login(req.body, "customer")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //POST /api/supplierSessions
-router.post('/api/supplierSessions', (req, res) => {
-  let message = {
-    message: '/api/supplierSessions'
-  }
+router.post('/api/supplierSessions', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
+  let user;
   try {
-    controller.getUserController().login(req.body, "supplier")
+    user = await controller.getUserController().login(req.body, "supplier")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //POST /api/clerkSessions
-router.post('/api/clerkSessions', (req, res) => {
-  let message = {
-    message: '/api/clerkSessions'
-  }
+router.post('/api/clerkSessions', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
+  let user;
   try {
-    controller.getUserController().login(req.body, "clerk")
+    user = await controller.getUserController().login(req.body, "clerk")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //POST /api/qualityyEmployeeSessions
-router.post('/api/qualityEmployeeSessions', (req, res) => {
-  let message = {
-    message: '/api/qualityEmployeeSessions'
-  }
+router.post('/api/qualityEmployeeSessions', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
+  let user;
   try {
-    controller.getUserController().login(req.body, "qualityEmployee")
+    user = await controller.getUserController().login(req.body, "qualityEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //POST /api/deliveryEmployeeSessions
-router.post('/api/deliveryEmployeeSessions', (req, res) => {
-  let message = {
-    message: '/api/deliveryEmployeeSessions'
-  }
+router.post('/api/deliveryEmployeeSessions', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
+  let user;
   try {
-    controller.getUserController().login(req.body, "deliveryEmployee")
+    user = await controller.getUserController().login(req.body, "deliveryEmployee")
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(user);
 });
 
 //POST /api/logout
-router.post('/api/logout', (req, res) => {
-  let message = {
-    message: '/api/logout'
-  }
+router.post('/api/logout',  (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
 
 
   try {
-    controller.getUserController().logout();
+     controller.getUserController().logout();
   } catch (error) {
     if (error.message === Exceptions.message500)
       return res.status(500).send(Exceptions.message500)
   }
 
-  return res.status(200).json(Exceptions.message);
+  return res.status(200).end();
 });
 
 
 
 //PUT /api/user/:username
-router.put('/api/user/:username', (req, res) => {
+router.put('/api/user/:username', async (req, res) => {
   const param = req.params.username;
-  let message = {
-    message: '/api/user/:username'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT', req.url);
 
   try {
-    controller.getUserController().editUser(param, req.body);
+    await controller.getUserController().editUser(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 //DELETE /api/user/:username/:type
-router.delete('/api/user/:username/:type', (req, res) => {
+router.delete('/api/user/:username/:type', async (req, res) => {
   const paramUsername = req.params.username;
   const paramType = req.params.type;
-  let message = {
-    message: '/api/user/:username/:type'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE', req.url);
 
   try {
-    controller.getUserController().deleteUser(paramUsername, paramType);
+    await controller.getUserController().deleteUser(paramUsername, paramType);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).end();
 });
 
 
