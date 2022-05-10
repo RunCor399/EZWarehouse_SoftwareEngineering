@@ -92,7 +92,7 @@ class InternalOrderController {
 
         if (!issueDate || !products || !customerId)
             throw new Error(Exceptions.message422);
-            
+
         /*let id;
                 const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
         
@@ -116,11 +116,18 @@ class InternalOrderController {
             new Error(Exceptions.message500);
         }
 
-        /*join between SKUItemsInInternalOrder and InternalOrder */
+        products.forEach((elem) => {
+            const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            try {
+                const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+            } catch (error) {
+                new Error(Exceptions.message500);
+            }
+        })
 
     }
 
-    /**TODO*/
+    /**TO CHECK*/
     async editInternalOrder(id, body) {
 
         const newState = body["newState"];
@@ -134,8 +141,14 @@ class InternalOrderController {
             if (!products)
                 throw new Error(Exceptions.message422);
 
-            //query
-            /*join between SKUItemsInInternalOrder and InternalOrder */
+            products.forEach((elem) => {
+                const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+                try {
+                    const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                } catch (error) {
+                    new Error(Exceptions.message500);
+                }
+            })
             return internalOrder;
         }
         else {
