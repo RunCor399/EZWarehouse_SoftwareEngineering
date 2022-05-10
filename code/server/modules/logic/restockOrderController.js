@@ -68,7 +68,7 @@ class RestockOrderController {
         return row;
     }
 
-    /*TODO - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
+    /**TODO - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
     async getRestockOrderToBeReturned(id) {
 
         /* - get Restock Order with id
@@ -82,7 +82,7 @@ class RestockOrderController {
         return undefined;
     }
 
-    /*TO BE COMPLETED - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
+    /**TO BE COMPLETED - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
     async createRestockOrder(body) {
 
         const issueDate = body["issueDate"];
@@ -141,7 +141,7 @@ class RestockOrderController {
 
     }
 
-    /*TODO */
+    /**TODO */
     async addSkuItemsToRestockOrder(id, body) {
 
         const skuItems = body["skuItems"];
