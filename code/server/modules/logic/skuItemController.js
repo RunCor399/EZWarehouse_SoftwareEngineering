@@ -110,13 +110,17 @@ class SkuItemController {
 
     /**delete function to remove an SKUItem from the table, given its ID */
     async deleteSkuItem(rfid) {
-        const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
+       /* const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
         try {
             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return skuItem; /*skuItem returned to test it*/
+        return skuItem; //skuItem returned to test it*/
+
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM SKUItem WHERE ID= ${rfid};`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
     }
 }
 

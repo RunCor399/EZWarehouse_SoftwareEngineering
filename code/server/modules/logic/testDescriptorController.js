@@ -53,20 +53,26 @@ class TestDescriptorController {
     /**creation of a new test descriptor*/
     async createTestDescriptor(body) {
 
-        const sqlGetCount = 'SELECT COUNT(*) FROM TestDescriptor;'
-
-        try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-
         const name = body["name"];
         const procedureDescription = body["procedureDescription"];
         const idSKU = body["idSKU"];
 
         if (!name || !procedureDescription || !idSKU )
             throw new Error(Exceptions.message422);
+
+        /* const sqlGetCount = 'SELECT COUNT(*) FROM TestDescriptor;'
+
+        try {
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            new Error(Exceptions.message500);
+        } */
+
+        let id;
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM TestDescriptor;')
+            .then(value => id = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message500) });
+
 
         const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, description, passRate) 
         VALUES (${id + 1}, "${name}", "${procedureDescription}", 0);`;
@@ -117,13 +123,18 @@ class TestDescriptorController {
 
     /**delete function to remove a test descriptor from the table, given its ID*/
     async deleteTestDescriptor(id) {
-        const sqlInstruction = `DELETE FROM TestDescriptor WHERE ID= ${id};`
+       /* const sqlInstruction = `DELETE FROM TestDescriptor WHERE ID= ${id};`
         try {
             const testDescriptor = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return testDescriptor;
+        return testDescriptor;*/
+
+        
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM TestDescriptor WHERE ID= ${id};`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
     }
 }
 

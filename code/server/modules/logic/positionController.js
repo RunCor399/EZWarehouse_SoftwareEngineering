@@ -25,16 +25,7 @@ class PositionController {
 
     /**creation of a new position inside the warehouse*/
     async createPosition(body) {
-        console.log(body)
-        const sqlGetCount = 'SELECT COUNT(*) FROM Position'
-        let id;
-        try {
-            id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
-            console.log(id);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-
+        
         const positionID = body["positionID"];
         const aisleID = body["aisleID"];
         const row = body["row"];
@@ -45,6 +36,22 @@ class PositionController {
         if (!positionID || !aisleID || !row ||
             !col || !maxWeight || !maxVolume)
             throw new Error(Exceptions.message422);
+
+        /* console.log(body)
+        const sqlGetCount = 'SELECT COUNT(*) FROM Position'
+        let id;
+        try {
+            id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
+            console.log(id);
+        } catch (error) {
+            new Error(Exceptions.message500);
+        } */
+
+        let id;
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM Position')
+            .then(value => id = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message500) });
+
 
         const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) 
         VALUES (${id + 1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
@@ -99,13 +106,18 @@ class PositionController {
 
     /**delete function to remove a position from the table, given its ID*/
     async deletePosition(id) {
-        const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
-        try {
-            const position = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return position;
+        /* const sqlInstruction = `DELETE FROM Position WHERE ID= ${id};`;
+         try {
+             const position = await this.#dbManager.genericSqlGet(sqlInstruction);
+         } catch (error) {
+             new Error(Exceptions.message500);
+         }
+         return position;*/
+
+
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM Position WHERE ID= ${id};`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
     }
 
 }

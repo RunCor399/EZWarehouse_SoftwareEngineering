@@ -53,21 +53,27 @@ class TestResultController {
     /**creation of a new test result*/
     async createTestResult(body) {
 
-        const sqlGetCount = 'SELECT COUNT(*) FROM TestResult;'
-
-        try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-
         const rfid = body["rfid"];
         const idTestDesciptor = body["idTestDescriptor"];
         const date = body["Date"];
         const result = body["Result"];
-
+  
         if (!rfid || !idTestDesciptor || !date || !result)
             throw new Error(Exceptions.message422);
+            
+      /*  const sqlGetCount = 'SELECT COUNT(*) FROM TestResult;'
+
+       try {
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            new Error(Exceptions.message500);
+        } */
+
+        let id;
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM TestResult;')
+            .then(value => id = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message500) });
+
 
         const sqlInstruction = `INSERT INTO TestResult (ID, testDescID,  SKUItemID, date, result) 
         VALUES (${id + 1}, ${idTestDesciptor}, "${rfid}", ${date}, ${result});`;
@@ -102,14 +108,19 @@ class TestResultController {
 
     /**delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
     async deleteTestResult(rfid, id) {
-        const sqlInstruction = `DELETE FROM TestResult WHERE ID= ${id} AND SKUItemID= "${rfid}";`;
+        /*const sqlInstruction = `DELETE FROM TestResult WHERE ID= ${id} AND SKUItemID= "${rfid}";`;
 
         try {
             const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return testRes;
+        return testRes;*/
+
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM TestResult WHERE ID= ${id} AND SKUItemID= "${rfid}";`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
+
     }
 
 }

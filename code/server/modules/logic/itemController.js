@@ -57,16 +57,6 @@ class ItemController {
     creation of a new item in the table*/
     async createItem(body) {
 
-        /* unuseful: the id is given in the body
-        const sqlGetCount = 'SELECT COUNT(*) FROM Position'
-
-        try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-        } catch (error) {
-            console.log("error");
-        }
-        */
-
         const id = body["id"];
         const description = body["description"];
         const price = body["price"];
@@ -119,13 +109,17 @@ class ItemController {
 
     /**delete function to remove an item from the table, given its ID*/
     async deleteItem(id) {
-        const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
+        /* const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
         try {
             const item = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return item;
+        return item; */
+
+        await this.#dbManager.genericSqlRun
+        (`DELETE FROM Item WHERE ID= ${id};`)
+        .catch((error) => { throw new Error(Exceptions.message500) });
     }
 
 }

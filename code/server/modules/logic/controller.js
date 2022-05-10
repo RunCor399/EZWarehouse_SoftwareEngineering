@@ -28,8 +28,6 @@ class Controller {
 
     constructor() {
         this.#dbManager = new DBManager();
-
-
         this.#itemController = new ItemController(this);
         this.#userController = new UserController(this);
         this.#positionController = new PositionController(this);
@@ -42,8 +40,6 @@ class Controller {
         this.#internalOrderController = new InternalOrderController(this);
         console.log("general Controller started");
     }
-
-
 
     getUserController() {
         return this.#userController;
@@ -60,7 +56,6 @@ class Controller {
     getSkuItemController() {
         return this.#skuItemController;
     }
-
 
     getTestResultController() {
         return this.#testResultController;
@@ -88,10 +83,6 @@ class Controller {
 
     getDBManager() {
         return this.#dbManager;
-    }
-
-    testPrint(string) {
-        console.log(string);
     }
 
     getSession() {

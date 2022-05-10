@@ -76,20 +76,26 @@ class RestockOrderController {
     /**TO BE COMPLETED*/
     async createRestockOrder(body) {
 
-        const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
-
-        try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-
         const issueDate = body["issueDate"];
         const products = body["products"];
         const supplierId = body["supplierId"]
 
         if (!issueDate || !products || !supplierId)
             throw new Error(Exceptions.message422);
+
+        /*   const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
+  
+          try {
+              const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+          } catch (error) {
+              new Error(Exceptions.message500);
+          }*/
+
+        let id;
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM RestockOrder')
+            .then(value => id = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message500) });
+
 
         const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1},
              ${supplierId}, ${issueDate});`;
@@ -146,13 +152,17 @@ class RestockOrderController {
 
     /**delete function to remove a restock order from the table, given its ID*/
     async deleteRestockOrder(id) {
-        const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
+        /*const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return restockOrder;
+        return restockOrder;*/
+
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM RestockOrder WHERE ID= ${id};`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
     }
 }
 

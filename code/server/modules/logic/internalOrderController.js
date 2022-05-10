@@ -24,10 +24,10 @@ class InternalOrderController {
              new Error(Exceptions.message500);
          }
          return rows;*/
-         let rows;
+        let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
-        .then((value) => rows = value)
-        .catch((error) => {throw new Error(Exceptions.message500);});
+            .then((value) => rows = value)
+            .catch((error) => { throw new Error(Exceptions.message500); });
 
     }
 
@@ -44,8 +44,8 @@ class InternalOrderController {
 
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
-        .then((value) => rows = value)
-        .catch((error) => {throw new Error(Exceptions.message500);});
+            .then((value) => rows = value)
+            .catch((error) => { throw new Error(Exceptions.message500); });
 
     }
 
@@ -62,8 +62,8 @@ class InternalOrderController {
 
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
-        .then((value) => rows = value)
-        .catch((error) => {throw new Error(Exceptions.message500);});
+            .then((value) => rows = value)
+            .catch((error) => { throw new Error(Exceptions.message500); });
 
     }
 
@@ -80,28 +80,33 @@ class InternalOrderController {
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
-        .then((value) => row = value[0])
-        .catch((error) => {throw new Error(Exceptions.message500);});
+            .then((value) => row = value[0])
+            .catch((error) => { throw new Error(Exceptions.message500); });
     }
 
     /**TODO - products and issueDate are missing in the table */
     async createInternalOrder(body) {
-
-        let id;
-        const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
-
-        try {
-            id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];;
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-
         const issueDate = body["issueDate"];
         const products = body["products"];
         const customerId = body["customerId"]
 
         if (!issueDate || !products || !customerId)
             throw new Error(Exceptions.message422);
+            
+        /*let id;
+                const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
+        
+                try {
+                    id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];;
+                } catch (error) {
+                    new Error(Exceptions.message500);
+                } */
+
+        let id;
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
+            .then(value => id = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message500) });
+
 
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
         VALUES (${id + 1}, "${issueDate}", "ISSUED", "${customerId}");`;
@@ -147,12 +152,17 @@ class InternalOrderController {
 
     /**delete function to remove an internal order from the table, given its ID */
     async deleteInternalOrder(id) {
-        const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
+        /* const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
             await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
-        }
+        } */
+
+
+        await this.#dbManager.genericSqlRun
+            (`DELETE FROM InternalOrder WHERE ID= ${id};`)
+            .catch((error) => { throw new Error(Exceptions.message500) });
     }
 
 }
