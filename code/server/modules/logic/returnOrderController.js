@@ -3,7 +3,7 @@ const Exceptions = require('../../routers/exceptions');
 const Controller = require('./controller')
 
 class ReturnOrderController {
-        /** @type {Controller} */
+    /** @type {Controller} */
     #controller;
     #dbManager;
     constructor(controller) {
@@ -50,7 +50,7 @@ class ReturnOrderController {
         return row;
     }
 
-    /**TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
+    /**TO BE CHECKED*/
     async createReturnOrder(body) {
 
         const returnDate = body["returnDate"];
@@ -81,20 +81,27 @@ class ReturnOrderController {
             new Error(Exceptions.message500);
         }
 
-        /*join between SKUItemsInReturnOrder and ReturnOrder */
+        products.forEach((elem) => {
+            const sqlInsert = `INSERT INTO SKUPerReturnOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            try {
+                const returnOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+            } catch (error) {
+                new Error(Exceptions.message500);
+            }
+        })
 
         return returnOrder;
     }
 
     /**delete function to remove a return order from the table, given its ID*/
     async deleteReturnOrder(id) {
-      /*  const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
-        try {
-            const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return returnOrder;*/
+        /*  const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
+          try {
+              const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+          } catch (error) {
+              new Error(Exceptions.message500);
+          }
+          return returnOrder;*/
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM ReturnOrder WHERE ID= ${id};`)
