@@ -24,7 +24,16 @@ class SkuItemController {
         }
         return rows;*/
 
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
         let rows;
+
         await this.#dbManager.genericSqlGet("SELECT * FROM SKUItem")
             .then(value => rows = value)
             .catch(error => { throw new Error(Exceptions.message500) });
@@ -42,11 +51,27 @@ class SkuItemController {
             new Error(Exceptions.message500);
         }
         return row;*/
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'customer')
+            throw new Error(Exceptions.message401);
+
+        if (isNaN(id))
+            throw new Error(Exceptions.message422);
+
 
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ${id};`)
             .then(value => rows = value)
             .catch(error => { throw new Error(Exceptions.message500) });
+
+        if (!rows)
+            throw new Error(Exceptions.message404)
+
         return rows;
     }
 
@@ -61,29 +86,60 @@ class SkuItemController {
         }
         return row;*/
 
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
+        if (String(rfid).length !== 12)
+            throw new Error(Exceptions.message422);
+
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= "${rfid}";`)
             .then(value => row = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
+
+        if (!row)
+            throw new Error(Exceptions.message404)
         return row;
     }
 
     /**creation of an SKUItem*/
     async createSkuItem(body) {
 
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'clerk')
+            throw new Error(Exceptions.message401);
+
         const RFID = body["RFID"];
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
 
-        if (!RFID || !SKUId || !dateOfStock)
+        if (!RFID || String(RFID).length !== 12 || !SKUId || isNaN(SKUId) || !dateOfStock)
             throw new Error(Exceptions.message422);
+
+        let num;
+        await this.#dbManager.genericSqlGet(`SELECT COUNT(*) FROM SKUItem WHERE SKUId= ${id};`)
+            .then(value => num = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        if (num === 0)
+            throw new Error(Exceptions.message404);
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
         VALUES ("${RFID}", ${SKUId}, 0, ${dateOfStock});`;
         try {
-            const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
-            new Error(Exceptions.message500);
+            new Error(Exceptions.message503);
         }
         return skuItem;
     }
@@ -91,12 +147,21 @@ class SkuItemController {
     /**function to edit an SKUItem*/
     async editSkuItem(oldRFID, body) {
 
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
         const newRFID = body["newRFID"];
         const newAvailable = body["newAvailable"];
         const newDateOfStock = body["newDateOfStock"];
 
 
-        if (!newRFID || !newSKUId || !newDateOfStock)
+        if (!newRFID || !newAvailable || !newDateOfStock)
             throw new Error(Exceptions.message422);
 
         const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}" AND Available= ${newAvailable} 
@@ -110,13 +175,22 @@ class SkuItemController {
 
     /**delete function to remove an SKUItem from the table, given its ID */
     async deleteSkuItem(rfid) {
-       /* const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
+        /* const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
+         try {
+             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
+         } catch (error) {
+             new Error(Exceptions.message500);
+         }
+         return skuItem; //skuItem returned to test it*/
+
+        let user;
         try {
-            const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
+            user = this.#controller.getSession();
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message401);
         }
-        return skuItem; //skuItem returned to test it*/
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM SKUItem WHERE ID= ${rfid};`)

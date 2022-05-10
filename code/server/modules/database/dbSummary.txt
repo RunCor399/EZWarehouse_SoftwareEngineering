@@ -1,4 +1,4 @@
-Users(ID, name, surname, email, type, password)
+Users(ID, username,name, surname, type, password)
 TestDescriptor(ID, name, description, passRate, SKUID)
 SKUItem(RFID, SKUID, dateOfStock, available)
 SKU(ID, weight, volume, price, notes, description, positionID)

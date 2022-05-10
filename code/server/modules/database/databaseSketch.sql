@@ -118,7 +118,6 @@ CREATE TABLE SKUPerReturnOrder(
     PRIMARY KEY(orderID, SKUId),
     FOREIGN KEY(SKUId) REFERENCES SKU(id)    
     FOREIGN KEY(id) REFERENCES ReturnOrder(id)
-
 )
 
 CREATE TABLE SKUItemsPerReturnOrder(
@@ -127,8 +126,6 @@ CREATE TABLE SKUItemsPerReturnOrder(
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(id) REFERENCES ReturnOrder(id)
-
-
 )
 
 

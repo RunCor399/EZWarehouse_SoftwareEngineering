@@ -5,152 +5,184 @@ const dbManager = new DBManager();
 
 async function createTables(dbManager) {
 
-    const createSKU = `CREATE TABLE SKU(
-            ID INT,
+    const createSKU =
+        `CREATE TABLE SKU(
+            id INT,
             weight FLOAT,
             volume FLOAT,
             price FLOAT,
             notes VARCHAR(250),
             description VARCHAR(250),
-            availableQuantity INT,
+            PRIMARY KEY (id)
+        )`;
+
+    const createSKUItem =
+        `CREATE TABLE SKUItem(
+            RFID INT,
+            SKUId INT, 
+            available INT,
+            dateOfStock DATE,
+            PRIMARY KEY (RFID),
+            FOREIGN KEY (SKUId) REFERENCES SKU(id)
+        );`
+
+
+    const createPosition =
+        `CREATE TABLE Position(
             positionID INT,
-            FOREIGN KEY(positionID) REFERENCES Position(ID),
-            PRIMARY KEY (ID)
+            aisleID INT,
+            row INT,
+            col INT,
+            maxWeight INT,
+            maxVolume INT,
+            occupiedWeight INT,
+            occupiedVolume INT,
+            PRIMARY KEY(positionID)
+        );`
+
+    const createSKU_in_Position =
+        `CREATE TABLE SKU_in_Position(
+            SKUId INT,
+            positionID INT,
+            PRIMARY KEY(SKUId, positionID),
+            FOREIGN KEY (SKUId) REFERENCES SKU(id),
+            FOREIGN KEY (positionID) REFERENCES Position(positionID)
+        );`
+
+    const createTestDescriptor =
+        `CREATE TABLE TestDescriptor(
+        id INT,
+        name VARCHAR(100),
+        procedureDescription VARCHAR(250),
+        idSKU INT,
+        PRIMARY KEY (id),
+        FOREIGN KEY (idSKU) REFERENCES SKU(id)
+    );`
+
+    const createTestResult =
+        `CREATE TABLE TestResult(
+        id INT,
+        idTestDescriptor INT,
+        RFID INT,
+        Date DATE,
+        Result BOOLEAN,
+        PRIMARY KEY (id),
+        FOREIGN KEY(idTestDescriptor) REFERENCES TestDescriptor(id),
+        FOREIGN KEY (RFID) REFERENCES SKUItem(RFID)
+    );`
+
+    const createUsers =
+        `CREATE TABLE Users(
+        id INT,
+        username VARCHAR(250),
+        name VARCHAR(100),
+        surname VARCHAR(100),
+        type VARCHAR(100),
+        password VARCHAR(250),
+        PRIMARY KEY (id)
+    );`
+
+    const createRestockOrder =
+        `CREATE TABLE RestockOrder(
+        id INT,
+        issueDate DATE,
+        state VARCHAR(250),
+        shipmentDate DATE, 
+        supplierId INT, 
+        PRIMARY KEY(id),
+        FOREIGN KEY(supplierId) REFERENCES Users(id)
+    );`
+
+    const createSKUPerRestockOrder =
+        `CREATE TABLE SKUPerRestockOrder(
+            id INT,
+            SKUid INT,
+            qty INT, 
+            PRIMARY KEY(id, SKUid),
+            FOREIGN KEY(SKUid) REFERENCES SKU(id),
+            FOREIGN KEY(id) REFERENCES RestockOrder(id)
         )`
 
-    const createTestDescriptor = `CREATE TABLE TestDescriptor(
-            ID INT,
-            name VARCHAR(100),
-            description VARCHAR(250),
-            passRate FLOAT,
-            SKUID INT,
-            PRIMARY KEY (ID),
-            FOREIGN KEY (SKUID) REFERENCES SKU(ID)
-        );`
-
-    const createSKUItem = `CREATE TABLE SKUItem(
+    const createSKUItemsPerRestockOrder =
+        `CREATE TABLE SKUItemsPerRestockOrder(
+            id INT,
             RFID INT,
-            SKUID INT, 
-            dateOfStock DATE,
-            available BOOLEAN,
-            PRIMARY KEY (RFID),
-            FOREIGN KEY (SKUID) REFERENCES SKU(ID)
-        );`
+            PRIMARY KEY(id, RFID),
+            FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
+            FOREIGN KEY(id) REFERENCES RestockOrder(id)
+        )`
 
-    const createTestResult = `CREATE TABLE TestResult(
-            testDescID INT,
-            SKUItemID INT,
-            date DATE,
-            result BOOLEAN,
-            PRIMARY KEY (testDescID, SKUItemID, date),
-            FOREIGN KEY(testDescID) REFERENCES TestDescriptor(ID),
-            FOREIGN KEY (SKUItemID) REFERENCES SKUItem(ID)
-        );
-        `
-    const createPosition = `CREATE TABLE Position(
-            positionID INT,
-            maxVolume FLOAT,
-            maxWeight FLOAT,
-            aisle INT,
-            row INT,
-            column INT,
-            occupiedWeight FLOAT,
-            occupiedVolume FLOAT,
-            PRIMARY KEY(positionID)
-        );
-        `
-    const createStockInfo = `CREATE TABLE StockInfo(
-            positionID INT,
-            SKUItemID INT,
-            stockDate DATE,
-            PRIMARY KEY (positionID, SKUItemID, stockDate),
-            FOREIGN KEY(positionID) REFERENCES Position(ID),
-            FOREIGN KEY (SKUItemID) REFERENCES SKUItem(ID)
-        );`
-    const createUsers = `CREATE TABLE Users(
-            ID INT,
-            username VARCHAR(250),
-            name VARCHAR(100),
-            surname VARCHAR(100),
-            type VARCHAR(100),
-            password VARCHAR(250),
-            PRIMARY KEY (ID)
-        );`
-
-
-    const createItem = `CREATE TABLE Item(
-            ID INT,
-            SKUID INT,
-            supplierID INT,
-            price INT,
-            description VARCHAR(250),
-            PRIMARY KEY (ID),
-            FOREIGN KEY (SKUID) REFERENCES SKU(ID),
-            FOREIGN KEY (supplierID) REFERENCES Users(ID),
-            CONSTRAINT SS_Item UNIQUE(SKUID, supplierID)
-        );`
-
-
-    const createRestockOrder = `CREATE TABLE RestockOrder(
-            ID INT,
-            supplierID INT, 
-            issueDate DATE,
-            shipmentDate DATE, 
-            state VARCHAR(250),
-            PRIMARY KEY(ID),
-            FOREIGN KEY(supplierID) REFERENCES Users(ID)
-        );`
-    const createReturnOrder = `CREATE TABLE  ReturnOrder(
-            ID INT,
+    const createReturnOrder =
+        `CREATE TABLE  ReturnOrder(
+            id INT,
             returnDate DATE,
             supplierID INT, 
             restockOrderID INT,
-            PRIMARY KEY(ID),
-            FOREIGN KEY(supplierID) REFERENCES Users(ID),
-            FOREIGN KEY(restockOrderID) REFERENCES RestockOrder(ID)
+            PRIMARY KEY(id),
+            FOREIGN KEY(supplierID) REFERENCES Users(id),
+            FOREIGN KEY(id) REFERENCES RestockOrder(id)
         );`
-    const createInternalOrder =
-        `CREATE TABLE InternalOrder(
-            ID INT,
-            state VARCHAR(250), 
-            internalCustomerID INT,
-            issueDate DATE,
-            PRIMARY KEY(ID),
-            FOREIGN KEY(internalCustomerID) REFERENCES Users(ID)
-        )`
-    const createItemsPerRestockOrder =
-        `CREATE TABLE ItemsPerRestockOrder(
-            orderID INT,
-            SKUID INT,
-            quantity INT, 
-            PRIMARY KEY(orderID, SKUID),
-            FOREIGN KEY(SKUID) REFERENCES SKU(ID),
-            FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
-        )
-        `
-    const createItemsPerReturnOrder =
-        `CREATE TABLE ItemsPerReturnOrder(
-            orderID INT,
-            SKUID INT,
-            quantity INT, 
-            PRIMARY KEY(orderID, SKUID),
-            FOREIGN KEY(SKUID) REFERENCES SKU(ID),
-            FOREIGN KEY(orderID) REFERENCES ReturnOrder(ID)
-        )
-        `
-    const createItemsPerInternalOrder =
-        `CREATE TABLE ItemsPerInternalOrder(
-            orderID INT,
-            SKUID INT,
-            quantity INT, 
-            PRIMARY KEY(orderID, SKUID),
-            FOREIGN KEY(SKUID) REFERENCES SKU(ID),
-            FOREIGN KEY(orderID) REFERENCES InternalOrder(ID)
+
+    const createSKUPerReturnOrder =
+        `CREATE TABLE SKUPerReturnOrder(
+            id INT,
+            SKUId INT,
+            qty INT, 
+            PRIMARY KEY(id, SKUId),
+            FOREIGN KEY(SKUId) REFERENCES SKU(id)    
+            FOREIGN KEY(id) REFERENCES ReturnOrder(id)
         )`
 
-    const sqlInstructions = [createPosition, createTestDescriptor, createSKU, createSKUItem, createTestResult,
-        createStockInfo, createUsers, createItem, createRestockOrder, createReturnOrder,
-        createInternalOrder, createItemsPerRestockOrder, createItemsPerReturnOrder, createItemsPerInternalOrder]
+    const createInternalOrder =
+        `CREATE TABLE SKUItemsPerReturnOrder(
+            id INT,
+            RFID INT,
+            PRIMARY KEY(id, RFID),
+            FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
+            FOREIGN KEY(id) REFERENCES ReturnOrder(id)
+        )`
+
+    const createSKUPerInternalOrder =
+        `CREATE TABLE SKUPerInternalOrder(
+            id INT,
+            SKUId INT,
+            qty INT, 
+            PRIMARY KEY(id, SKUId),
+            FOREIGN KEY(SKUId) REFERENCES SKU(Id),
+            FOREIGN KEY(id) REFERENCES InternalOrder(id)
+        )`
+
+    const createSKUItemsPerInternalOrder =
+        `CREATE TABLE SKUItemsPerInternalOrder(
+            id INT,
+            RFID INT,
+            PRIMARY KEY(id, RFID),
+            FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
+            FOREIGN KEY(id) REFERENCES InternalOrder(id)
+        )`
+
+
+    const createItem =
+        `CREATE TABLE Item(
+        id INT,
+        description VARCHAR(250),
+        price FLOAT,
+        SKUid INT,
+        supplierId INT,
+        PRIMARY KEY (id),
+        FOREIGN KEY (SKUid) REFERENCES SKU(id),
+        FOREIGN KEY (supplierId) REFERENCES Users(id),
+        CONSTRAINT SS_Item UNIQUE(SKUid, supplierId)
+    );`
+
+
+    const sqlInstructions = [
+        createSKU, createSKUItem, createPosition, createSKU_in_Position, createTestDescriptor,
+        createTestResult, createUsers, createRestockOrder, createSKUPerRestockOrder,
+        createSKUItemsPerRestockOrder, createReturnOrder, createSKUPerReturnOrder,
+        createInternalOrder, createSKUPerInternalOrder,createSKUItemsPerInternalOrder,
+        createItem
+    ]
 
 
     return new Promise(async (resolve, reject) => {
@@ -186,4 +218,5 @@ async function addUsers(dbManager) {
 
 }
 
-createTables(dbManager).then(() => addUsers(dbManager));
+//createTables(dbManager);
+addUsers(dbManager);
