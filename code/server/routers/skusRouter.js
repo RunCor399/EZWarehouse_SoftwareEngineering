@@ -60,7 +60,7 @@ router.post('/api/sku', async (req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(201).end();
 });
 
 //PUT /api/sku/:id
