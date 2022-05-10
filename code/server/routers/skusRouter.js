@@ -1,21 +1,23 @@
 const express = require('express')
 const router = express.Router()
+const Exceptions = require('./exceptions')
 
 //SKU
 //GET /api/skus
 router.get('/api/skus', async (req, res) => {
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
-
+  console.log('GET',req.url);
+  let skus;
   try {
-    await controller.getSkuController().getAllSku();
+    skus = await controller.getSkuController().getAllSku();
+    console.log("skus", skus);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json({ message: '/api/skus' });
+  return res.status(200).json(skus);
 });
 
 //GET /api/skus/:id
@@ -23,23 +25,24 @@ router.get('/api/skus/:id', async (req, res) => {
   const param = req.params.id;
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
-
+  console.log('GET',req.url);
+  let sku;
   try {
-    await controller.getSkuController().getSku(param);
+    sku = await controller.getSkuController().getSku(param);
+    console.log("sku",sku)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json({ message: '/api/skus/:id' });
+  return res.status(200).json(sku);
 
 });
 
 //POST /api/sku
 router.post('/api/sku', async (req, res) => {
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
   try {
     await controller.getSkuController().createSku(req.body);
@@ -67,7 +70,7 @@ router.put('/api/sku/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
   try {
     await controller.getSkuController().editSku(param, req.body);
@@ -87,7 +90,7 @@ router.put('/api/sku/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
 
   try {
@@ -108,7 +111,7 @@ router.delete('/api/sku/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE',req.url);
 
   try {
     await controller.getSkuController().deleteSku(param);

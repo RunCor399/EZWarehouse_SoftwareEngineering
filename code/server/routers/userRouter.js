@@ -9,7 +9,8 @@ router.get('/api/userinfo', (req, res) => {
 
   let user;
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
+  
   try {
     user = controller.getUserController().getUser();
   } catch (error) {
@@ -48,7 +49,7 @@ router.get('/api/users', async (req, res) => {
   let users;
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
 
   try {
@@ -68,7 +69,7 @@ router.post('/api/newUser', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
   try {
     await controller.getUserController().createUser(req.body);
@@ -87,7 +88,7 @@ router.post('/api/managerSessions', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
 
   try {
@@ -107,7 +108,7 @@ router.post('/api/customerSessions', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
   try {
     await controller.getUserController().login(req.body, "customer")
@@ -126,7 +127,7 @@ router.post('/api/supplierSessions', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await  controller.getUserController().login(req.body, "supplier")
@@ -145,7 +146,7 @@ router.post('/api/clerkSessions', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await controller.getUserController().login(req.body, "clerk")
@@ -164,7 +165,7 @@ router.post('/api/qualityEmployeeSessions', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await controller.getUserController().login(req.body, "qualityEmployee")
@@ -183,7 +184,7 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await  controller.getUserController().login(req.body, "deliveryEmployee")
@@ -202,7 +203,7 @@ router.post('/api/logout', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
 
   try {
@@ -225,7 +226,7 @@ router.put('/api/user/:username', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
   try {
     await  controller.getUserController().editUser(param, req.body);
@@ -245,7 +246,7 @@ router.delete('/api/user/:username/:type', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE',req.url);
 
   try {
     await  controller.getUserController().deleteUser(paramUsername, paramType);

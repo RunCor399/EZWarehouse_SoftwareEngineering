@@ -51,11 +51,12 @@ class UserController {
 
     async getAllUsers() {
         const sqlInstruction = "SELECT * FROM USERS U";
-
+        let rows;
        // if (!this.#user || this.#user.type !== "manager")
          //   throw new Error(Exceptions.message401);
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            console.log(rows)
         } catch (error) {
             throw (Exceptions.message500);
         }

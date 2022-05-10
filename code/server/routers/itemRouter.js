@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const Exceptions = require('./exceptions')
 
-//SKU
 //GET /api/items
 router.get('/api/items', async (req, res) => {
   let message = {
@@ -9,10 +9,12 @@ router.get('/api/items', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
+  let items;
 
   try {
-    const items = await controller.getItemController().getAllItems();
+    items = await controller.getItemController().getAllItems();
+    console.log("items", items);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -27,12 +29,13 @@ router.get('/api/items/:id', async (req, res) => {
   let message = {
     message: '/api/items/:id'
   }
-
+  let item;
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
   
   try {
-    const item = await controller.getItemController().getItem(param);
+    item = await controller.getItemController().getItem(param);
+    console.log("item", item);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -48,7 +51,7 @@ router.post('/api/item',async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
   try {
     await controller.getItemController().createItem(req.body);
@@ -69,7 +72,7 @@ router.put('/api/sku/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
   
   try {
@@ -90,7 +93,7 @@ router.delete('/api/items/:id', async(req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE',req.url);
   
   try {
     await controller.getItemController().deleteItem(param);

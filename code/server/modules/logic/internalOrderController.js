@@ -23,24 +23,26 @@ class InternalOrderController {
 
     /*getter function to retreive all the issued internal orders*/
     async getIssuedInternalOrders() {
+        let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive all the accepted internal orders*/
     async getAcceptedInternalOrders() {
+        let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive a single internal order, given its ID*/

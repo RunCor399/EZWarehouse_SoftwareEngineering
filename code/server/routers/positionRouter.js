@@ -11,8 +11,9 @@ router.get('/api/positions', async(req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET', req.url);
   let positions;
+
   try {
     positions = await controller.getPositionController().getAllPositions();
     console.log(positions)
@@ -32,7 +33,7 @@ router.post('/api/position', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
   try {
     await controller.getPositionController().createPosition(req.body);
@@ -54,7 +55,7 @@ router.put('/api/position/:positionID', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
 
   try {
@@ -77,7 +78,7 @@ router.put('/api/position/:positionID/changeID', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
   try {
     await controller.getPositionController().editPosition(param, req.body);
@@ -99,7 +100,7 @@ router.delete('/api/position/:positionID', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE',req.url);
 
   try {
    await controller.getPositionController().deletePosition(param);

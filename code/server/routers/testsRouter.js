@@ -11,7 +11,7 @@ router.get('/api/testDescriptors', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await controller.getTestDescriptorController().getAllTestDescriptors();
@@ -31,7 +31,7 @@ router.get('/api/testDescriptors/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await controller.getTestDescriptorController().getTestDescriptor(param);
@@ -49,7 +49,7 @@ router.post('/api/testDescriptor', async (req, res) => {
     message: '/api/testDescriptor'
   }
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
 
   try {
@@ -70,7 +70,7 @@ router.put('/api/testDescriptor/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
   try {
     await controller.getTestDescriptorController().editTestDescriptor(param, req.body);
@@ -90,7 +90,7 @@ router.delete('/api/testDescriptor/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE',req.url);
 
   try {
     await controller.getTestDescriptorController().deleteTestDescriptor(param);
@@ -115,7 +115,7 @@ router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await controller.getTestResultController().getTestResults(param);
@@ -136,7 +136,7 @@ router.get('/api/skuitems/:rfid/testResults/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
   try {
     await controller.getTestResultController().getTestResult(paramRfid, paramId);
@@ -155,7 +155,7 @@ router.post('/api/skuitems/testResult', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
   try {
     await controller.getTestResultController().createTestResult(req.body);
@@ -175,7 +175,7 @@ router.put('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
 
   try {
     await controller.getTestResultController().editTestResult(paramRfid, paramId, req.body);
@@ -195,7 +195,7 @@ router.delete('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE',req.url);
 
   try {
     await controller.getTestResultController().deleteTestResult(paramRfid, paramId);

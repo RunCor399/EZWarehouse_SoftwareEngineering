@@ -12,13 +12,14 @@ class SkuItemController {
 
     /*getter function to retreive all the SKUItems*/
     async getAllSkuItems() {
+        let rows;
         const sqlInstruction = "SELECT * FROM SKUItem";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
 

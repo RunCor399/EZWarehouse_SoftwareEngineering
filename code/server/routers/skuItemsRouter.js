@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Exceptions = require('./exceptions')
 
 
 const testsRouter = require('./testsRouter');
@@ -14,17 +15,18 @@ router.get('/api/skuitems', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
-
+  console.log('GET',req.url);
+  let skuitems;
 
   try {
-    await controller.getSkuItemController().getAllSkuItems();
+    skuitems = await controller.getSkuItemController().getAllSkuItems();
+    console.log("skuitems",skuitems)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).json(message);
+  return res.status(200).json(skuitems);
 });
 
 //GET /api/skuitems/sku/:id
@@ -35,7 +37,7 @@ router.get('/api/skuitems/sku/:id', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
 
   try {
@@ -60,7 +62,7 @@ router.get('/api/skuitems/:rfid', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('GET',req.url);
 
 
   try {
@@ -83,7 +85,7 @@ router.post('/api/skuitem', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('POST',req.url);
 
   try {
     await controller.getSkuItemController().createSkuItem(req.body);
@@ -106,7 +108,8 @@ router.put('/api/skuitems/:rfid', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('PUT',req.url);
+
   try {
     await controller.getSkuItemController().editSkuItem(param, req.body)
   } catch (error) {
@@ -127,7 +130,7 @@ router.delete('/api/skuitems/:rfid', async (req, res) => {
   }
 
   const controller = req.app.get("controller");
-  controller.testPrint(req.url);
+  console.log('DELETE',req.url);
 
 
   try {

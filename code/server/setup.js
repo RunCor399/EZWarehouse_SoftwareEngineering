@@ -1,6 +1,6 @@
 const DBManager = require("./modules/database/databaseManager");
 
- const createSKU= `CREATE TABLE SKU(
+const createSKU = `CREATE TABLE SKU(
     ID INT,
     weight FLOAT,
     volume FLOAT,
@@ -12,7 +12,7 @@ const DBManager = require("./modules/database/databaseManager");
     PRIMARY KEY (ID)
 )`
 
-const createTestDescriptor= `CREATE TABLE TestDescriptor(
+const createTestDescriptor = `CREATE TABLE TestDescriptor(
     ID INT,
     name VARCHAR(100),
     description VARCHAR(250),
@@ -22,7 +22,7 @@ const createTestDescriptor= `CREATE TABLE TestDescriptor(
     FOREIGN KEY (SKUID) REFERENCES SKU(ID)
 );`
 
-const createSKUItem=`CREATE TABLE SKUItem(
+const createSKUItem = `CREATE TABLE SKUItem(
     RFID INT,
     SKUID INT, 
     dateOfStock DATE,
@@ -31,7 +31,7 @@ const createSKUItem=`CREATE TABLE SKUItem(
     FOREIGN KEY (SKUID) REFERENCES SKU(ID)
 );`
 
-const createTestResult=`CREATE TABLE TestResult(
+const createTestResult = `CREATE TABLE TestResult(
     testDescID INT,
     SKUItemID INT,
     date DATE,
@@ -41,8 +41,8 @@ const createTestResult=`CREATE TABLE TestResult(
     FOREIGN KEY (SKUItemID) REFERENCES SKUItem(ID)
 );
 `
-const createPosition=`CREATE TABLE Position(
-    ID INT,
+const createPosition = `CREATE TABLE Position(
+    positionID INT,
     maxVolume FLOAT,
     maxWeight FLOAT,
     aisle INT,
@@ -50,10 +50,10 @@ const createPosition=`CREATE TABLE Position(
     column INT,
     occupiedWeight FLOAT,
     occupiedVolume FLOAT,
-    PRIMARY KEY(ID)
+    PRIMARY KEY(positionID)
 );
 `
-const createStockInfo=`CREATE TABLE StockInfo(
+const createStockInfo = `CREATE TABLE StockInfo(
     positionID INT,
     SKUItemID INT,
     stockDate DATE,
@@ -61,7 +61,7 @@ const createStockInfo=`CREATE TABLE StockInfo(
     FOREIGN KEY(positionID) REFERENCES Position(ID),
     FOREIGN KEY (SKUItemID) REFERENCES SKUItem(ID)
 );`
-const createUsers=`CREATE TABLE Users(
+const createUsers = `CREATE TABLE Users(
     ID INT,
     username VARCHAR(250),
     name VARCHAR(100),
@@ -72,7 +72,7 @@ const createUsers=`CREATE TABLE Users(
 );`
 
 
-const createItem=`CREATE TABLE Item(
+const createItem = `CREATE TABLE Item(
     ID INT,
     SKUID INT,
     supplierID INT,
@@ -85,7 +85,7 @@ const createItem=`CREATE TABLE Item(
 );`
 
 
-const createRestockOrder=`CREATE TABLE RestockOrder(
+const createRestockOrder = `CREATE TABLE RestockOrder(
     ID INT,
     supplierID INT, 
     issueDate DATE,
@@ -94,7 +94,7 @@ const createRestockOrder=`CREATE TABLE RestockOrder(
     PRIMARY KEY(ID),
     FOREIGN KEY(supplierID) REFERENCES Users(ID)
 );`
-const createReturnOrder=`CREATE TABLE  ReturnOrder(
+const createReturnOrder = `CREATE TABLE  ReturnOrder(
     ID INT,
     returnDate DATE,
     supplierID INT, 
@@ -103,8 +103,8 @@ const createReturnOrder=`CREATE TABLE  ReturnOrder(
     FOREIGN KEY(supplierID) REFERENCES Users(ID),
     FOREIGN KEY(restockOrderID) REFERENCES RestockOrder(ID)
 );`
-const createInternalOrder=`
-CREATE TABLE InternalOrder(
+const createInternalOrder =
+    `CREATE TABLE InternalOrder(
     ID INT,
     state VARCHAR(250), 
     internalCustomerID INT,
@@ -112,7 +112,8 @@ CREATE TABLE InternalOrder(
     PRIMARY KEY(ID),
     FOREIGN KEY(internalCustomerID) REFERENCES Users(ID)
 )`
-const createItemsPerRestockOrder=`CREATE TABLE ItemsPerRestockOrder(
+const createItemsPerRestockOrder =
+    `CREATE TABLE ItemsPerRestockOrder(
     orderID INT,
     SKUID INT,
     quantity INT, 
@@ -121,7 +122,8 @@ const createItemsPerRestockOrder=`CREATE TABLE ItemsPerRestockOrder(
     FOREIGN KEY(orderID) REFERENCES RestockOrder(ID)
 )
 `
-const createItemsPerReturnOrder=`CREATE TABLE ItemsPerReturnOrder(
+const createItemsPerReturnOrder =
+    `CREATE TABLE ItemsPerReturnOrder(
     orderID INT,
     SKUID INT,
     quantity INT, 
@@ -130,7 +132,8 @@ const createItemsPerReturnOrder=`CREATE TABLE ItemsPerReturnOrder(
     FOREIGN KEY(orderID) REFERENCES ReturnOrder(ID)
 )
 `
-const createItemsPerInternalOrder=`CREATE TABLE ItemsPerInternalOrder(
+const createItemsPerInternalOrder =
+    `CREATE TABLE ItemsPerInternalOrder(
     orderID INT,
     SKUID INT,
     quantity INT, 
@@ -139,18 +142,18 @@ const createItemsPerInternalOrder=`CREATE TABLE ItemsPerInternalOrder(
     FOREIGN KEY(orderID) REFERENCES InternalOrder(ID)
 )`
 
-const sqlInstructions = [createSKU, createTestDescriptor, createSKUItem, createTestResult, createPosition, 
-    createStockInfo, createUsers, createItem, createRestockOrder, createReturnOrder, 
+const sqlInstructions = [createPosition, createTestDescriptor, createSKU, createSKUItem, createTestResult,
+    createStockInfo, createUsers, createItem, createRestockOrder, createReturnOrder,
     createInternalOrder, createItemsPerRestockOrder, createItemsPerReturnOrder, createItemsPerInternalOrder]
 
 const dbManager = new DBManager();
 
 
-sqlInstructions.forEach((sql) => {
+ sqlInstructions.forEach(async (sql) => {
     try {
-        dbManager.genericSqlRun(sql);
+        await dbManager.genericSqlRun(sql);
     } catch (error) {
-        console.log("error");       
+        console.log("error", error, "about", sql);
     }
-}) 
+})
 
