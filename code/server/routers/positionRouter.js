@@ -16,7 +16,7 @@ router.get('/api/positions', async(req, res) => {
 
   try {
     positions = await controller.getPositionController().getAllPositions();
-    console.log(positions)
+    console.log("positions",positions)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

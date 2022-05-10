@@ -12,9 +12,10 @@ router.get('/api/testDescriptors', async (req, res) => {
 
   const controller = req.app.get("controller");
   console.log('GET',req.url);
-
+  let testDescriptors;
   try {
-    await controller.getTestDescriptorController().getAllTestDescriptors();
+    testDescriptors = await controller.getTestDescriptorController().getAllTestDescriptors();
+    console.log("testDescriptors", testDescriptors)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -32,9 +33,10 @@ router.get('/api/testDescriptors/:id', async (req, res) => {
 
   const controller = req.app.get("controller");
   console.log('GET',req.url);
-
+  let testDescriptor;
   try {
-    await controller.getTestDescriptorController().getTestDescriptor(param);
+    testDescriptor = await controller.getTestDescriptorController().getTestDescriptor(param);
+    console.log("testDescriptor", testDescriptor);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -113,12 +115,13 @@ router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
   let message = {
     message: '/api/skuitems/:rfid/testResults'
   }
-
+  let testResults;
   const controller = req.app.get("controller");
   console.log('GET',req.url);
 
   try {
-    await controller.getTestResultController().getTestResults(param);
+    testResults = await controller.getTestResultController().getTestResults(param);
+    console.log("testResults", testResults);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -135,11 +138,13 @@ router.get('/api/skuitems/:rfid/testResults/:id', async (req, res) => {
     message: '/api/skuitems/:rfid/testResults/:id'
   }
 
+  let testResult;
   const controller = req.app.get("controller");
   console.log('GET',req.url);
 
   try {
-    await controller.getTestResultController().getTestResult(paramRfid, paramId);
+    testResult = await controller.getTestResultController().getTestResult(paramRfid, paramId);
+    console.log("testResult", testResult);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

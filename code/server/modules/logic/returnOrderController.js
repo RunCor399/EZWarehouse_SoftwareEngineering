@@ -13,13 +13,14 @@ class ReturnOrderController {
 
     /*getter function to retreive all the return orders*/
     async getAllReturnOrders() {
+        let rows;
         const sqlInstruction = "SELECT * FROM ReturnOrder;";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive a single return order, given its ID*/

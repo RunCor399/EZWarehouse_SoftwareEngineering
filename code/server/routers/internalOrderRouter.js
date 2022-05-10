@@ -16,6 +16,7 @@ router.get('/api/internalOrders',async (req, res) => {
     internalOrders = await controller.getInternalOrderController().getAllInternalOrders();
     console.log("internalOrders", internalOrders)
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
@@ -35,6 +36,7 @@ router.get('/api/internalOrdersIssued',async (req, res) => {
     internalOrdersIssued = await controller.getInternalOrderController().getIssuedInternalOrders();
     console.log("internalOrdersIssued",internalOrdersIssued)
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
@@ -55,6 +57,7 @@ router.get('/api/internalOrdersAccepted', async (req, res) => {
     console.log("internalOrdersAccepted", internalOrdersAccepted);
 
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
@@ -76,6 +79,7 @@ router.get('/api/internalOrders/:id', async (req, res) => {
     internalOrder = await controller.getInternalOrderController().getInternalOrder(param);
     console.log("internalOrder", internalOrder)
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
@@ -94,6 +98,7 @@ router.post('/api/internalOrder', async (req, res) => {
   try {
     await controller.getInternalOrderController().createInternalOrder(req.body);
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
@@ -115,6 +120,7 @@ router.put('/api/internalOrder/:id', async (req, res) => {
   try {
     await controller.getInternalOrderController().editInternalOrder(param, req.body);
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }
@@ -135,6 +141,7 @@ router.delete('/api/internalOrder/:id', async (req, res) => {
   try {
     await controller.getInternalOrderController().deleteInternalOrder(param);
   } catch (error) {
+    console.log(error);
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
   }

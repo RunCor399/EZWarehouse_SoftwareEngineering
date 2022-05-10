@@ -5,16 +5,17 @@ const Exceptions = require('./exceptions')
 //Restock Order Requests
 
 
-router.route('/api/restockOrders').get(async (req, res) => {
+router.get('/api/restockOrders', async (req, res) => {
   let message = {
     message: 'GET Restock Orders'
   }
-
+  let restockOrders;
   const controller = req.app.get("controller");
   console.log('GET',req.url);
 
   try {
-    await controller.getRestockOrderController().getAllRestockOrders();
+    restockOrders = await controller.getRestockOrderController().getAllRestockOrders();
+    console.log("restockOrders", restockOrders)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -31,12 +32,13 @@ router.get('/api/restockOrders/:id', async (req, res) => {
   let message = {
     message: "GET: " + param
   }
-  
+  let restockOrder;
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   
   try {
-    await controller.getRestockOrderController().getRestockOrder(param);
+    restockOrder = await controller.getRestockOrderController().getRestockOrder(param);
+    console.log("restockOrder", restockOrder);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -51,11 +53,13 @@ router.get('/api/restockOrders/:id/returnItems', async (req, res) => {
     message: "/api/restockOrders/:id/returnItems"
   }
   
+  let returnItems;
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   
   try {
-    await controller.getRestockOrderController().getRestockOrderToBeReturned(param);
+    returnItems = await controller.getRestockOrderController().getRestockOrderToBeReturned(param);
+    console.log("returnItems", returnItems);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -70,11 +74,13 @@ router.get('/api/restockOrdersIssued', async (req, res) => {
     message: "/api/restockOrdersIssued"
   }
   
+  let restockOrdersIssued;
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   
   try {
-    await controller.getRestockOrderController().getIssuedRestockOrders();
+    restockOrdersIssued = await controller.getRestockOrderController().getIssuedRestockOrders();
+    console.log("restockOrdersIssued", restockOrdersIssued);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

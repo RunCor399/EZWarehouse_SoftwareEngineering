@@ -13,6 +13,7 @@ router.get('/api/userinfo', (req, res) => {
   
   try {
     user = controller.getUserController().getUser();
+    console.log("user", user);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -31,11 +32,13 @@ router.get('/api/userinfo', (req, res) => {
 
 //GET /api/suppliers
 router.get('/api/suppliers', async (req, res) => {
-  let suppliers
+
+  let suppliers;
   const controller = req.app.get("controller");
   controller.testPrint(req.url);
   try {
     suppliers = await controller.getUserController().getAllSuppliers();
+    console.log("suppliers", suppliers);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -54,6 +57,7 @@ router.get('/api/users', async (req, res) => {
 
   try {
     users = await controller.getUserController().getAllUsers();
+    console.log("users", users)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

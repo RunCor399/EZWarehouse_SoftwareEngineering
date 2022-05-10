@@ -56,7 +56,6 @@ class UserController {
          //   throw new Error(Exceptions.message401);
         try {
             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-            console.log(rows)
         } catch (error) {
             throw (Exceptions.message500);
         }
@@ -77,7 +76,6 @@ class UserController {
         let id = 0;
         try {
             id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
-            console.log(id);
         } catch (error) {
             console.log("error", error);
             throw (Exceptions.message500);
@@ -125,7 +123,6 @@ class UserController {
 
         try {
             row = (await this.#dbManager.genericSqlGet(sqlInstruction))[0];
-            console.log(row);
         } catch (error) {
             throw (Exceptions.message500);
         }

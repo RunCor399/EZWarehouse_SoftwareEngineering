@@ -15,7 +15,6 @@ class PositionController {
         const sqlInstruction = "SELECT * FROM Position";
         try {
             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-            console.log(rows);
         } catch (error) {
             new Error(Exceptions.message500);
         }

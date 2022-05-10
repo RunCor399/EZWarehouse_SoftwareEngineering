@@ -12,13 +12,14 @@ class TestDescriptorController {
 
     /*getter function to retreive all test descriptors*/
     async getAllTestDescriptors() {
+        let rows;
         const sqlInstruction = "SELECT * FROM TestDescriptor;";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive a single test descriptor given its ID*/

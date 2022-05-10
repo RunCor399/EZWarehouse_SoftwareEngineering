@@ -14,13 +14,14 @@ class ItemController {
 
     /*getter function to retreive all the items*/
     async getAllItems() {
+        let rows;
         const sqlInstruction = "SELECT * FROM Item";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive a single item given its ID*/

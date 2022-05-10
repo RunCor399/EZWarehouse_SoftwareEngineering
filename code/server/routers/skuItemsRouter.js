@@ -36,12 +36,14 @@ router.get('/api/skuitems/sku/:id', async (req, res) => {
     message: '/api/skuitems/sku/:id'
   }
 
+  let sku;
   const controller = req.app.get("controller");
   console.log('GET',req.url);
 
 
   try {
-    await controller.getSkuItemController().getSkuItems(param);
+    sku = await controller.getSkuItemController().getSkuItems(param);
+    console.log("sku", sku);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -63,10 +65,11 @@ router.get('/api/skuitems/:rfid', async (req, res) => {
 
   const controller = req.app.get("controller");
   console.log('GET',req.url);
-
+  let skuitem;
 
   try {
-    await controller.getSkuItemController().getSkuItem(param);
+    skuitem = await controller.getSkuItemController().getSkuItem(param);
+    console.log("skuitem", skuitem);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

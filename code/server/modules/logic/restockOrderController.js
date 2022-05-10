@@ -12,24 +12,26 @@ class RestockOrderController {
 
     /*getter function to retreive all the restock orders*/
     async getAllRestockOrders() {
+        let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder;";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive all the issued restock orders*/
     async getIssuedRestockOrders() {
+        let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive a single restock order, given its ID*/
