@@ -60,7 +60,7 @@ class SkuItemController {
         if (user.type !== 'manager' && user.type !== 'customer')
             throw new Error(Exceptions.message401);
 
-        if (isNaN(id))
+        if (!id || isNaN(id))
             throw new Error(Exceptions.message422);
 
 
@@ -95,7 +95,7 @@ class SkuItemController {
         if (user.type !== 'manager')
             throw new Error(Exceptions.message401);
 
-        if (String(rfid).length !== 12)
+        if (!rfid || String(rfid).length !== 12)
             throw new Error(Exceptions.message422);
 
         let row;
@@ -161,15 +161,23 @@ class SkuItemController {
         const newDateOfStock = body["newDateOfStock"];
 
 
-        if (!newRFID || !newAvailable || !newDateOfStock)
+        if (!oldRFID || String(oldRFID).length !== 12 || !newRFID || String(newRFID).length !== 12
+            || !newAvailable || !newDateOfStock)
             throw new Error(Exceptions.message422);
+
+        let num;
+        await this.#dbManager.genericSqlGet(`SELECT COUNT(*) FROM SKUItem WHERE RFID= ${oldRFID};`)
+            .then(value => num = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message503) });
+        if (num === 0)
+            throw new Error(Exceptions.message404);
 
         const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}" AND Available= ${newAvailable} 
         AND DateOfStock= ${newDateOfStock} WHERE RFID= "${oldRFID}";`;
         try {
-            const skuItem = await this.#dbManager.genericSqlGet(sqlUpdate);
+            await this.#dbManager.genericSqlRun(sqlUpdate);
         } catch (error) {
-            new Error(Exceptions.message500);
+            new Error(Exceptions.message503);
         }
     }
 
@@ -192,9 +200,12 @@ class SkuItemController {
         if (user.type !== 'manager')
             throw new Error(Exceptions.message401);
 
+        if (!rfid || String(rfid).length !== 12)
+            throw new Error(Exceptions.message422);
+
         await this.#dbManager.genericSqlRun
             (`DELETE FROM SKUItem WHERE ID= ${rfid};`)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+            .catch((error) => { throw new Error(Exceptions.message503) });
     }
 }
 
