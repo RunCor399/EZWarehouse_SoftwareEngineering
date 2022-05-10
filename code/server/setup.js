@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 'use strict';
 
+=======
+'use strict'
+>>>>>>> 6ac4f9cd032e90beb79be9956414e17b619c9b91
 const DBManager = require("./modules/database/databaseManager");
 const dbManager = new DBManager();
 
@@ -173,15 +177,31 @@ function createTables(dbManager) {
         return 1;
     }
 
+<<<<<<< HEAD
     return 0;
        
        
      
+=======
+    return new Promise(async (resolve, reject) => {
+        try {
+            sqlInstructions.forEach(async (sql) => {
+                await dbManager.genericSqlRun(sql);
+            });
+        } catch (error) {
+            reject(false)
+        }
+        resolve(true)
+    });
+
+
+>>>>>>> 6ac4f9cd032e90beb79be9956414e17b619c9b91
 }
 
 function addUsers(dbManager) {
 
 
+<<<<<<< HEAD
    
          dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
     VALUES (1, "user1@ezwh.com", "name1", "surname1", "e16b2ab8d12314bf4efbd6203906ea6c", "customer")`);
@@ -194,10 +214,23 @@ function addUsers(dbManager) {
          dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
     VALUES (5, "supplier1@ezwh.com", "name5", "surname5", "e16b2ab8d12314bf4efbd6203906ea6c", "supplier")`);
          dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
-    VALUES (6, "manager1@ezwh.com", "name6", "surname6", "e16b2ab8d12314bf4efbd6203906ea6c", "manager")`);
-        
-}
+=======
 
+    await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
+    VALUES (1, "user1@ezwh.com", "name1", "surname1", "e16b2ab8d12314bf4efbd6203906ea6c", "customer")`);
+    await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type)
+    VALUES (2, "qualityEmployee1@ezwh.com", "name2", "surname2", "e16b2ab8d12314bf4efbd6203906ea6c", "qualityEmployee")`);
+    await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
+    VALUES (3, "clerk1@ezwh.com", "name3", "surname3", "e16b2ab8d12314bf4efbd6203906ea6c", "clerk")`);
+    await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
+    VALUES (4, "deliveryEmployee1@ezwh.com", "name4", "surname4", "e16b2ab8d12314bf4efbd6203906ea6c", "deliveryEmployee")`);
+    await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
+    VALUES (5, "supplier1@ezwh.com", "name5", "surname5", "e16b2ab8d12314bf4efbd6203906ea6c", "supplier")`);
+    await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
+>>>>>>> 6ac4f9cd032e90beb79be9956414e17b619c9b91
+    VALUES (6, "manager1@ezwh.com", "name6", "surname6", "e16b2ab8d12314bf4efbd6203906ea6c", "manager")`);
+
+<<<<<<< HEAD
 function prova1() {
    try{
     console.log("prova1 start");
@@ -243,3 +276,8 @@ prom.then(() => {
 //prova2();
 
 
+=======
+}
+
+createTables(dbManager).then(() => addUsers(dbManager));
+>>>>>>> 6ac4f9cd032e90beb79be9956414e17b619c9b91
