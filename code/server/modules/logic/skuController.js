@@ -106,14 +106,14 @@ class SkuController {
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { new Error(Exceptions.message500); });
 
-        if (!this.getSku(id).position) {
-            SKUweight = this.getSku(id).weight;
-            SKUvolume = this.getSku(id).volume;
-            SKUposition = this.getSku(id).position;
-            //SKUweight = getSku(id).getWeight();
-            //SKUvolume = getSku(id).getVolume();
 
-            const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${occupiedWeight + SKUweight} AND occupiedVolume = ${Position.occupiedVolume + SKUvolume} WHERE ID= ${SKUposition};`;
+        let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
+            .then(value => sku = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+
+        if (sku.position) {
+            const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${newWeight} AND occupiedVolume = ${newVolume} WHERE ID= ${sku.position};`;
             try {
                 const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
             } catch (error) {
@@ -123,7 +123,7 @@ class SkuController {
 
     }
 
-    /**TO CHECK - which way of getting the volume and the weight is the right one?*/
+    /**TO CHECK*/
     async setPosition(id, body) {
 
         const position = body["position"];
@@ -148,12 +148,12 @@ class SkuController {
         }
         */
 
-        SKUweight = this.getSku(id).weight;
-        SKUvolume = this.getSku(id).volume;
-        //SKUweight = getSku(id).getWeight();
-        //SKUvolume = getSku(id).getVolume();
+        let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
+            .then(value => sku = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
 
-        const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${occupiedWeight + SKUweight} AND occupiedVolume = ${Position.occupiedVolume + SKUvolume} WHERE ID= ${position}`;
+        const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${sku.weight} AND occupiedVolume = ${sku.volume} WHERE ID= ${position}`;
         try {
             const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
         } catch (error) {
@@ -164,18 +164,18 @@ class SkuController {
 
     /**delete function to remove an SKU from the table, given its ID */
     async deleteSku(id) {
-       /* const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            throw new Error(Exceptions.message500);
-        }
-        
-        return sku; //sku returned to test it
-        */
+        /* const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
+         try {
+             await this.#dbManager.genericSqlRun(sqlInstruction);
+         } catch (error) {
+             throw new Error(Exceptions.message500);
+         }
+         
+         return sku; //sku returned to test it
+         */
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE ID= ${id};`)
-        .catch((error) => {throw new Error(Exceptions.message500);});
+            .catch((error) => { throw new Error(Exceptions.message500); });
 
     }
 }
