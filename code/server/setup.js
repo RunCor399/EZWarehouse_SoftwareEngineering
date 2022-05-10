@@ -1,8 +1,8 @@
 const DBManager = require("./modules/database/databaseManager");
+const dbManager = new DBManager();
 
 
-async function createTables() {
-    const dbManager = new DBManager();
+async function createTables(dbManager) {
 
     const createSKU = `CREATE TABLE SKU(
             ID INT,
@@ -151,19 +151,17 @@ async function createTables() {
         createStockInfo, createUsers, createItem, createRestockOrder, createReturnOrder,
         createInternalOrder, createItemsPerRestockOrder, createItemsPerReturnOrder, createItemsPerInternalOrder]
 
-    return new Promise((resolve, reject) => {
-        sqlInstructions.forEach(async (sql) => {
-            await dbManager.genericSqlRun(sql);
-        });
-        resolve(true);
-    });
+
+       sqlInstructions.forEach(async (sql) => {
+             dbManager.genericSqlRun(sql);});
+       
+     
 }
 
-async function addUsers() {
+async function addUsers(dbManager) {
 
-    const dbManager = new DBManager();
 
-    return new Promise(async (resolve, reject) => {
+   
         await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
     VALUES (1, "user1@ezwh.com", "name1", "surname1", "e16b2ab8d12314bf4efbd6203906ea6c", "customer")`);
         await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type)
@@ -176,13 +174,20 @@ async function addUsers() {
     VALUES (5, "supplier1@ezwh.com", "name5", "surname5", "e16b2ab8d12314bf4efbd6203906ea6c", "supplier")`);
         await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
     VALUES (6, "manager1@ezwh.com", "name6", "surname6", "e16b2ab8d12314bf4efbd6203906ea6c", "manager")`);
-        resolve(true);
-    })
+        
 }
 
-async function main() {
-    await createTables().catch((error) => console.log("no"));
-    await addUsers();
+async function prova1() {
+   const create =  await createTables(dbManager);
+   console.log("prova1",typeof create, create)
+
 }
 
-main().catch((error) => console.log(error));
+async function prova2(){
+    const add = await addUsers(dbManager);
+    console.log("prova2", typeof add, add)
+}
+
+//prova1(); 
+prova2();
+
