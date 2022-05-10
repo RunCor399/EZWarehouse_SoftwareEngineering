@@ -26,14 +26,14 @@ class ItemController {
 
     /*getter function to retreive a single item given its ID*/
     async getItem(id) {
-
+        let row;
         const sqlInstruction = `SELECT * FROM Item WHERE ID= ${id};`;
         try {
-            const item = await this.#dbManager.genericSqlGet(sqlInstruction);
+            row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return item;
+        return row;
     }
 
     /*TO CHECK - some attributes are missing in the table!

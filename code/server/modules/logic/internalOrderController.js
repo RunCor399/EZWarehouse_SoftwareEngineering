@@ -12,13 +12,14 @@ class InternalOrderController {
 
     /*getter function to retreive all the internal orders*/
     async getAllInternalOrders() {
+        let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder;";
         try {
-            const rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return rows.map((row) => row);
+        return rows;
     }
 
     /*getter function to retreive all the issued internal orders*/
@@ -47,13 +48,14 @@ class InternalOrderController {
 
     /*getter function to retreive a single internal order, given its ID*/
     async getInternalOrder(id) {
+        let row;
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
         try {
-            const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+            row = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return internalOrder;
+        return row;
     }
 
     /*TODO - products and issueDate are missing in the table */
@@ -78,14 +80,13 @@ class InternalOrderController {
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
         VALUES (${id + 1}, "${issueDate}", "ISSUED", "${customerId}");`;
         try {
-            const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+              await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
 
         /*join between SKUItemsInInternalOrder and InternalOrder */
 
-        return internalOrder;
     }
 
     /*TODO*/
@@ -109,11 +110,10 @@ class InternalOrderController {
         else {
             const sqlInstruction = `UPDATE InternalOrder SET state= "${newState}" WHERE ID= ${id}`;
             try {
-                const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+                await this.#dbManager.genericSqlRun(sqlInstruction);
             } catch (error) {
                 new Error(Exceptions.message500);
             }
-            return internalOrder;
         }
 
     }
@@ -123,11 +123,10 @@ class InternalOrderController {
     async deleteInternalOrder(id) {
         const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
-            const internalOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+             await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return internalOrder;
     }
 
 }

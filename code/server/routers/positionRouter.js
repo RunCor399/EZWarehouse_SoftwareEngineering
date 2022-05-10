@@ -2,7 +2,7 @@ const { application } = require('express');
 const express = require('express')
 const router = express.Router();
 const Exceptions = require('./exceptions');
-
+const Controller = require('../modules/logic/controller')
 //POSITION
 //GET /api/positions
 router.get('/api/positions', async(req, res) => {
@@ -10,6 +10,7 @@ router.get('/api/positions', async(req, res) => {
     message: '/api/positions'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET', req.url);
   let positions;
@@ -32,6 +33,7 @@ router.post('/api/position', async (req, res) => {
     message: '/api/position'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('POST',req.url);
 
@@ -54,6 +56,7 @@ router.put('/api/position/:positionID', async (req, res) => {
     message: '/api/position/:positionID'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
 
@@ -77,6 +80,7 @@ router.put('/api/position/:positionID/changeID', async (req, res) => {
     message: '/api/position/:positionID/changeID'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
 
@@ -99,6 +103,7 @@ router.delete('/api/position/:positionID', async (req, res) => {
     message: '/api/position/:positionID'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE',req.url);
 

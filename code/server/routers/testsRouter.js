@@ -1,18 +1,17 @@
 const express = require('express')
 const router = express.Router()
 const Exceptions = require('./exceptions')
-
+const Controller = require('../modules/logic/controller')
 
 //TEST DESCRIPTOR
 //GET /api/testDescriptors
 router.get('/api/testDescriptors', async (req, res) => {
-  let message = {
-    message: '/api/testDescriptors'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET',req.url);
+  console.log('GET', req.url);
   let testDescriptors;
+
   try {
     testDescriptors = await controller.getTestDescriptorController().getAllTestDescriptors();
     console.log("testDescriptors", testDescriptors)
@@ -27,13 +26,12 @@ router.get('/api/testDescriptors', async (req, res) => {
 //GET /api/testDescriptors/:id
 router.get('/api/testDescriptors/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: '/api/testDescriptors/:id'
-  }
-
+ 
+/** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   let testDescriptor;
+
   try {
     testDescriptor = await controller.getTestDescriptorController().getTestDescriptor(param);
     console.log("testDescriptor", testDescriptor);
@@ -47,9 +45,8 @@ router.get('/api/testDescriptors/:id', async (req, res) => {
 
 //POST /api/testDescriptor
 router.post('/api/testDescriptor', async (req, res) => {
-  let message = {
-    message: '/api/testDescriptor'
-  }
+  
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('POST',req.url);
 
@@ -67,10 +64,8 @@ router.post('/api/testDescriptor', async (req, res) => {
 //PUT /api/testDescriptor/:id
 router.put('/api/testDescriptor/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: '/api/testDescriptor/:id'
-  }
-
+  
+/** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
 
@@ -87,10 +82,8 @@ router.put('/api/testDescriptor/:id', async (req, res) => {
 //DELETE /api/testDescriptor/:id
 router.delete('/api/testDescriptor/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: '/api/testDescriptor/:id'
-  }
-
+  
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE',req.url);
 
@@ -112,12 +105,11 @@ router.delete('/api/testDescriptor/:id', async (req, res) => {
 //GET /api/skuitems/:rfid/testResults
 router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
   const param = req.params.rfid;
-  let message = {
-    message: '/api/skuitems/:rfid/testResults'
-  }
-  let testResults;
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
+  let testResults;
 
   try {
     testResults = await controller.getTestResultController().getTestResults(param);
@@ -134,13 +126,11 @@ router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
 router.get('/api/skuitems/:rfid/testResults/:id', async (req, res) => {
   const paramRfid = req.params.rfid;
   const paramId = req.params.id;
-  let message = {
-    message: '/api/skuitems/:rfid/testResults/:id'
-  }
-
-  let testResult;
-  const controller = req.app.get("controller");
-  console.log('GET',req.url);
+ 
+/** @type {Controller} */
+const controller = req.app.get("controller");
+console.log('GET',req.url);
+let testResult;
 
   try {
     testResult = await controller.getTestResultController().getTestResult(paramRfid, paramId);
@@ -155,10 +145,8 @@ router.get('/api/skuitems/:rfid/testResults/:id', async (req, res) => {
 
 //POST /api/skuitems/testResult
 router.post('/api/skuitems/testResult', async (req, res) => {
-  let message = {
-    message: '/api/skuitems/testResult'
-  }
-
+  
+/** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('POST',req.url);
 
@@ -175,10 +163,8 @@ router.post('/api/skuitems/testResult', async (req, res) => {
 router.put('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   const paramRfid = req.params.rfid;
   const paramId = req.params.id;
-  let message = {
-    message: '/api/skuitems/:rfid/testResult/:id'
-  }
-
+  
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
 
@@ -195,10 +181,8 @@ router.put('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
 router.delete('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   const paramRfid = req.params.rfid;
   const paramId = req.params.id;
-  let message = {
-    message: '/api/skuitems/:rfid/testResult/:id'
-  }
-
+  
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE',req.url);
 

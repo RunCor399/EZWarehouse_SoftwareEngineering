@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Exceptions = require('./exceptions')
-
+const Controller = require('../modules/logic/controller')
 //ReturnOrder Requests
 
 router.get('/api/returnOrders', async (req, res) => {
@@ -9,9 +9,11 @@ router.get('/api/returnOrders', async (req, res) => {
         message: 'GET Return Orders'
     }
 
+    /** @type {Controller} */
     const controller = req.app.get("controller");
     console.log('GET',req.url);
     let returnOrders;
+
     try {
         returnOrders = await controller.getReturnOrderController().getAllReturnOrders();
         console.log("returnOrders", returnOrders);
@@ -29,9 +31,11 @@ router.get('/api/returnOrders/:id', async (req, res) => {
     let message = {
         message: "GET Return Orders: " + param
     }
-    let returnOrder;
+
+    /** @type {Controller} */
     const controller = req.app.get("controller");
     console.log('GET',req.url);
+    let returnOrder;
 
     try {
         returnOrder = await controller.getReturnOrderController().getReturnOrder(param);
@@ -51,6 +55,7 @@ router.post('/api/returnOrder', async (req, res) => {
         message: 'POST /api/returnOrder'
     }
 
+    /** @type {Controller} */
     const controller = req.app.get("controller");
     console.log('POST',req.url);
 
@@ -69,6 +74,7 @@ router.delete('/api/returnOrder/:id', async (req, res) => {
         message: 'DELETE /api/returnOrder ' + param
     }
 
+    /** @type {Controller} */
     const controller = req.app.get("controller");
     console.log('DELETE',req.url);
 

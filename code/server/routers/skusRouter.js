@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const Exceptions = require('./exceptions')
-
+const Controller = require('../modules/logic/controller')
 //SKU
 //GET /api/skus
 router.get('/api/skus', async (req, res) => {
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET',req.url);
+  console.log('GET', req.url);
   let skus;
   try {
     skus = await controller.getSkuController().getAllSku();
@@ -24,12 +25,14 @@ router.get('/api/skus', async (req, res) => {
 router.get('/api/skus/:id', async (req, res) => {
   const param = req.params.id;
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET',req.url);
+  console.log('GET', req.url);
   let sku;
+
   try {
     sku = await controller.getSkuController().getSku(param);
-    console.log("sku",sku)
+    console.log("sku", sku)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     console.log(error);
@@ -42,8 +45,10 @@ router.get('/api/skus/:id', async (req, res) => {
 
 //POST /api/sku
 router.post('/api/sku', async (req, res) => {
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('POST',req.url);
+  console.log('POST', req.url);
 
   try {
     await controller.getSkuController().createSku(req.body);
@@ -67,12 +72,10 @@ router.post('/api/sku', async (req, res) => {
 //PUT /api/sku/:id
 router.put('/api/sku/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: '/api/sku/:id'
-  }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('PUT',req.url);
+  console.log('PUT', req.url);
 
   try {
     await controller.getSkuController().editSku(param, req.body);
@@ -87,12 +90,10 @@ router.put('/api/sku/:id', async (req, res) => {
 //PUT /api/sku/:id/position
 router.put('/api/sku/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: '/api/sku/:id/position'
-  }
-
+  
+/** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('PUT',req.url);
+  console.log('PUT', req.url);
 
 
   try {
@@ -108,12 +109,10 @@ router.put('/api/sku/:id', async (req, res) => {
 //DELETE /api/sku/:id
 router.delete('/api/sku/:id', async (req, res) => {
   const param = req.params.id;
-  let message = {
-    message: '/api/sku/:id'
-  }
-
+  
+/** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('DELETE',req.url);
+  console.log('DELETE', req.url);
 
   try {
     await controller.getSkuController().deleteSku(param);

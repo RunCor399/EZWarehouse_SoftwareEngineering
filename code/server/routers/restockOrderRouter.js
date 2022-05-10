@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Exceptions = require('./exceptions')
-
+const Controller = require('../modules/logic/controller')
 //Restock Order Requests
 
 
@@ -9,9 +9,11 @@ router.get('/api/restockOrders', async (req, res) => {
   let message = {
     message: 'GET Restock Orders'
   }
-  let restockOrders;
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
+  let restockOrders;
 
   try {
     restockOrders = await controller.getRestockOrderController().getAllRestockOrders();
@@ -32,9 +34,11 @@ router.get('/api/restockOrders/:id', async (req, res) => {
   let message = {
     message: "GET: " + param
   }
-  let restockOrder;
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
+  let restockOrder;
   
   try {
     restockOrder = await controller.getRestockOrderController().getRestockOrder(param);
@@ -53,9 +57,10 @@ router.get('/api/restockOrders/:id/returnItems', async (req, res) => {
     message: "/api/restockOrders/:id/returnItems"
   }
   
-  let returnItems;
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
+  let returnItems;
   
   try {
     returnItems = await controller.getRestockOrderController().getRestockOrderToBeReturned(param);
@@ -74,9 +79,10 @@ router.get('/api/restockOrdersIssued', async (req, res) => {
     message: "/api/restockOrdersIssued"
   }
   
-  let restockOrdersIssued;
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
+  let restockOrdersIssued;
   
   try {
     restockOrdersIssued = await controller.getRestockOrderController().getIssuedRestockOrders();
@@ -94,6 +100,8 @@ router.post('/api/restockOrder', async (req, res) => {
   let message = {
     message: '/api/restockOrder'
   }  
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('POST',req.url);
 
@@ -113,6 +121,7 @@ router.put('/api/restockOrder/:id', async (req, res) => {
     message: "PUT /api/restockOrder/: " + param
   }  
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
 
@@ -135,6 +144,7 @@ router.put('/api/restockOrder/:id/skuItems', async (req, res) => {
     message: "PUT /api/restockOrder/id/skuItems: " + param
   }
   
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
   
@@ -156,6 +166,7 @@ router.put('/api/restockOrder/:id/transportNote', async (req, res) => {
     message: "PUT /api/restockOrder/id/transportNote: " + param
   }
   
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
   
@@ -176,6 +187,7 @@ router.delete('/api/restockOrder/:id', async (req, res) => {
     message: "DELETE /api/restockOrder/: " + param
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE',req.url);
 

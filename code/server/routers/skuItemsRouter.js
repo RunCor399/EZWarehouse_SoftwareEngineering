@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Exceptions = require('./exceptions')
-
+const Controller = require('../modules/logic/controller')
 
 const testsRouter = require('./testsRouter');
 router.use('/', testsRouter);
@@ -14,6 +14,7 @@ router.get('/api/skuitems', async (req, res) => {
     message: '/api/skuitems'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   let skuitems;
@@ -36,9 +37,10 @@ router.get('/api/skuitems/sku/:id', async (req, res) => {
     message: '/api/skuitems/sku/:id'
   }
 
-  let sku;
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
+  let sku;
 
 
   try {
@@ -63,6 +65,7 @@ router.get('/api/skuitems/:rfid', async (req, res) => {
     message: '/api/skuitems/:rfid'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   let skuitem;
@@ -87,6 +90,7 @@ router.post('/api/skuitem', async (req, res) => {
     message: '/api/skuitem'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('POST',req.url);
 
@@ -110,6 +114,7 @@ router.put('/api/skuitems/:rfid', async (req, res) => {
     message: '/api/skuitems/:rfid'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
 
@@ -132,6 +137,7 @@ router.delete('/api/skuitems/:rfid', async (req, res) => {
     message: '/api/skuitems/:rfid'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE',req.url);
 

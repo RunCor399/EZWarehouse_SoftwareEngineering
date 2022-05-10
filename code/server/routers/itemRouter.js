@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Exceptions = require('./exceptions')
+const Controller = require('../modules/logic/controller')
 
 //GET /api/items
 router.get('/api/items', async (req, res) => {
@@ -8,6 +9,7 @@ router.get('/api/items', async (req, res) => {
     message: '/api/items'
   }
 
+/** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   let items;
@@ -30,6 +32,8 @@ router.get('/api/items/:id', async (req, res) => {
     message: '/api/items/:id'
   }
   let item;
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET',req.url);
   
@@ -50,6 +54,7 @@ router.post('/api/item',async (req, res) => {
     message: '/api/item'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('POST',req.url);
 
@@ -71,6 +76,7 @@ router.put('/api/sku/:id', async (req, res) => {
     message: '/api/sku/:id'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT',req.url);
 
@@ -92,6 +98,7 @@ router.delete('/api/items/:id', async(req, res) => {
     message: '/api/items/:id'
   }
 
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE',req.url);
   
