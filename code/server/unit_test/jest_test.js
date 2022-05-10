@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+const fetch = require("./node-fetch");
 
 async function get_items_test() {
     const response = await fetch("/api/items");
