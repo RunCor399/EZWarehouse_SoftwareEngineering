@@ -68,22 +68,60 @@ class RestockOrderController {
         return row;
     }
 
-    /**TODO - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
+    /*TO CHECK - it's most probably wrong, but it's still something*/
     async getRestockOrderToBeReturned(id) {
 
         /* - get Restock Order with id
            - check if the state is COMPLETEDRETURN
-           - get each SKUItem from SKUItemsPerRestockOrder: SKUITEMID = (SELECT SKUItemID FROM SKUItemsPerRestockOrder SIPRO WHERE SIPRO.orderID = ${id});
+           - get each SKUItem from SKUItemsPerRestockOrder: SKUITEMID = (SELECT SKUItemID FROM SKUItemsPerRestockOrder WHERE orderID = ${id});
            - get result of an SKUItem from TestResult: 
            result = (SELECT result FROM TestResult WHERE SKUItemID = ${SKUITEMID});
            - if result of SKUItemID is false, create a JSON object with SKUID and RFID from SKUItem
-        */
+*/
 
-        return undefined;
+        var jsonObj = {};
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID="${id};`)
+            .then(value => row = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+
+        if (row.state === 'COMPLETEDRETURN') {
+            let skuitems;
+            await this.#dbManager.genericSqlGet(`SELECT RFID FROM SKUItemsPerRestockOrder WHERE orderID = ${id};`)
+                .then(values => skuitems = values)
+                .catch(error => { throw new Error(Exceptions.message500) });
+
+            let skus;
+            await this.#dbManager.genericSqlGet(`SELECT SKUID FROM SKUItemsPerRestockOrder WHERE orderID = ${id} AND RFID = ${skuitems};`)
+                .then(values => skus = values)
+                .catch(error => { throw new Error(Exceptions.message500) });
+
+            skuitems.forEach((sk) => {
+
+                let res;
+                await this.#dbManager.genericSqlGet(`SELECT result FROM TestResult WHERE SKUItemID = ${sk.id};`)
+                    .then((res) => {
+                        if (res === false) {
+                            jsonObj.push({ SKUId: skus, rfid: sk })
+                        }
+                    })
+                    .catch(error => { throw new Error(Exceptions.message500) });
+            })
+        }
+
+        return jsonObj;
     }
 
-    /**TO BE COMPLETED - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
+    /*TO BE COMPLETED - CHECK IF A TABLE BETWEEN SKUItemsPerRestockOrder AND SKUPerRestockOrder CAN BE DELETED*/
     async createRestockOrder(body) {
+
+        const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
+
+        try {
+            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+        } catch (error) {
+            new Error(Exceptions.message500);
+        }
 
         const issueDate = body["issueDate"];
         const products = body["products"];
@@ -91,20 +129,6 @@ class RestockOrderController {
 
         if (!issueDate || !products || !supplierId)
             throw new Error(Exceptions.message422);
-
-        /*   const sqlGetCount = 'SELECT COUNT(*) FROM RestockOrder'
-  
-          try {
-              const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-          } catch (error) {
-              new Error(Exceptions.message500);
-          }*/
-
-        let id;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM RestockOrder')
-            .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message500) });
-
 
         const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1},
              ${supplierId}, ${issueDate});`;
@@ -117,20 +141,16 @@ class RestockOrderController {
         /*loop of the products to be added into SKUPerRestockOrder:
         for (sku, skuitem) of products:
          INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
-
-         products.forEach((elem) => {
-             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
-        try {
-            const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-         } )
         */
-
-        return restockOrder;
+        products.forEach((elem) => {
+            const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            try {
+                const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+            } catch (error) {
+                new Error(Exceptions.message500);
+            }
+        })
     }
-
 
     /**function to edit a state of a restock order, given its ID*/
     async editRestockOrder(id, body) {
@@ -150,7 +170,7 @@ class RestockOrderController {
 
     }
 
-    /**TODO */
+    /*TODO */
     async addSkuItemsToRestockOrder(id, body) {
 
         const skuItems = body["skuItems"];
@@ -162,17 +182,16 @@ class RestockOrderController {
         for (sku, skuitem) of products:
          INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
 
-         skuItems.forEach((elem) => {
-             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
-        try {
-            const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-         } )
         */
+        skuItems.forEach((elem) => {
+            const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            try {
+                const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+            } catch (error) {
+                new Error(Exceptions.message500);
+            }
+        })
 
-        return undefined;
     }
 
     /**Transport Note is missing in the DB */
@@ -186,17 +205,13 @@ class RestockOrderController {
 
     /**delete function to remove a restock order from the table, given its ID*/
     async deleteRestockOrder(id) {
-        /*const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
+        const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
         try {
             const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return restockOrder;*/
-
-        await this.#dbManager.genericSqlRun
-            (`DELETE FROM RestockOrder WHERE ID= ${id};`)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+        return restockOrder;
     }
 }
 
