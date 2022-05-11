@@ -29,15 +29,14 @@ function createTables(dbManager) {
 
     const createPosition =
         `CREATE TABLE Position(
-            positionID INT,
+            positionID INTEGER PRIMARY KEY ,
             aisleID INT,
             row INT,
             col INT,
             maxWeight INT,
             maxVolume INT,
             occupiedWeight INT,
-            occupiedVolume INT,
-            PRIMARY KEY(positionID)
+            occupiedVolume INT
         );`
 
     const createSKU_in_Position =
@@ -51,7 +50,7 @@ function createTables(dbManager) {
 
     const createTestDescriptor =
         `CREATE TABLE TestDescriptor(
-        id INT PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR(100),
         procedureDescription VARCHAR(250),
         idSKU INT,
@@ -60,25 +59,23 @@ function createTables(dbManager) {
 
     const createTestResult =
         `CREATE TABLE TestResult(
-        id INT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         idTestDescriptor INT,
         RFID VARCHAR(50),
         Date VARCHAR(50),
         Result BOOLEAN,
-        PRIMARY KEY (id),
         FOREIGN KEY(idTestDescriptor) REFERENCES TestDescriptor(id),
         FOREIGN KEY (RFID) REFERENCES SKUItem(RFID)
     );`
 
     const createUsers =
         `CREATE TABLE Users(
-        id INT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         username VARCHAR(250),
         name VARCHAR(100),
         surname VARCHAR(100),
         type VARCHAR(100),
-        password VARCHAR(250),
-        PRIMARY KEY (id)
+        password VARCHAR(250)
     );`
 
     const createRestockOrder =

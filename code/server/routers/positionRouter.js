@@ -54,7 +54,7 @@ router.put('/api/position/:positionID', async (req, res) => {
   console.log('PUT',req.url);
 
   try {
-   await controller.getPositionController().editPosition(param, req.body)
+   await controller.getPositionController().editPositionVer1(param, req.body)
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);
@@ -73,7 +73,7 @@ router.put('/api/position/:positionID/changeID', async (req, res) => {
   console.log('PUT',req.url);
 
   try {
-    await controller.getPositionController().editPosition(param, req.body);
+    await controller.getPositionController().editPositionVer2(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

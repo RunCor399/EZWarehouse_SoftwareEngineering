@@ -14,7 +14,7 @@ router.get('/api/userinfo', (req, res) => {
   let user;
 
   try {
-    user = controller.getUserController().getUser();
+    user = controller.getUserController().getUserAPI();
     console.log("user", user);
   } catch (error) {
     let responseParams = Exceptions.handle(error);

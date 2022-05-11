@@ -25,7 +25,18 @@ class UserController {
 
     }
 
+    getUserAPI() {
+
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
+
+        if (!this.#logged)
+            return undefined;
+        else return this.#user;
+    }
+
     getUser() {
+
         if (!this.#logged)
             return undefined;
         else return this.#user;
@@ -60,6 +71,9 @@ class UserController {
 
 
     async createUser(body) {
+
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
 
         const username = body["username"];
         const name = body["name"];
@@ -99,9 +113,6 @@ class UserController {
             .then(value => row = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
 
-        console.log(row === undefined);
-
-
         if (!row)
             throw new Error(Exceptions.message401);
 
@@ -129,6 +140,9 @@ class UserController {
 
     async editUser(username, body) {
 
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
+
         const oldType = body["oldType"];
         const newType = body["newType"];
 
@@ -143,8 +157,12 @@ class UserController {
 
     async deleteUser(username, type) {
 
-        if (!username || !type)
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
+
+        if (this.#controller.areUndefined(username,type) || type === "manager")
             throw new Error(Exceptions.message422);
+
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM USERS WHERE username="${username}" AND type="${type}";`)
@@ -153,7 +171,7 @@ class UserController {
     }
 
     hasPermission(type, validType) {
-        console.log(type, validType, validType.includes(type))
+        //console.log(type, validType, validType.includes(type))
         return validType.includes(type)
     }
 

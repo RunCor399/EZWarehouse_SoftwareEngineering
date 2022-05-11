@@ -64,15 +64,20 @@ class SkuController {
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
 
+
         if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
             throw new Error(Exceptions.message422);
+
+
 
         const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
          VALUES ( ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { throw new Error(Exceptions.message503) });
+
+
 
     }
 
@@ -95,20 +100,12 @@ class SkuController {
             || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
             throw new Error(Exceptions.message422);
 
-        /* //check if sku exists
-         let num;
-         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
-             .then(value => num = value[0]["COUNT(*)"])
-             .catch(error => { throw new Error(Exceptions.message503) });
-         if (num === 0)
-             throw new Error(Exceptions.message404)*/
 
         let sku;
-        try {
-            sku = await this.getSku(id);
-        } catch (error) {
-            throw new Error(Exceptions.message404);
-        }
+        await this.getSku(id)
+            .then(value => sku = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!sku) throw new Error(Exceptions.message404)
 
 
         //check if sku has position
@@ -158,16 +155,15 @@ class SkuController {
 
         let sku;
         await this.getSku(id)
-        .then(value => sku = value)
-        .catch(() => {throw new Error(Exceptions.message500)});
-        if(!sku) throw new Error(Exceptions.message404)
-        
+            .then(value => sku = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!sku) throw new Error(Exceptions.message404)
+
 
         let position;
         await this.#dbManager.genericSqlGet(`SELECT * FROM Positions WHERE id= ${positionId};`)
             .then(value => position = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
-        //error if id doesnt exist
 
 
         if (position.maxWeight < sku.weight * sku.availableQuantity

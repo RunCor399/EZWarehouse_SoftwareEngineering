@@ -104,12 +104,12 @@ class Controller {
     }
 
     areUndefined(...params) {
-        console.log(params);
+        //console.log(params);
         return (params.includes(undefined));
     }
 
     areNotNumbers(...params) {
-        console.log(params)
+        //console.log(params)
         return params.some((num) => isNaN(num));
     }
 
