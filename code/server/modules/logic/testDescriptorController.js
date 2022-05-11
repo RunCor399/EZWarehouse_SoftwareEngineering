@@ -3,7 +3,7 @@ const Exceptions = require('../../routers/exceptions');
 const Controller = require('./controller')
 
 class TestDescriptorController {
-        /** @type {Controller} */
+    /** @type {Controller} */
 
     #controller;
     #dbManager;
@@ -16,14 +16,16 @@ class TestDescriptorController {
 
     /**getter function to retreive all test descriptors*/
     async getAllTestDescriptors() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM TestDescriptor;";
+
+        let user;
         try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            user = this.#controller.getSession();
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message401);
         }
-        return rows;*/
+        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
+            throw new Error(Exceptions.message401);
+
 
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
@@ -34,39 +36,55 @@ class TestDescriptorController {
 
     /**getter function to retreive a single test descriptor given its ID*/
     async getTestDesciptor(id) {
-       /*let row;
-        const sqlInstruction = `SELECT * FROM TestDescriptor WHERE ID= ${id};`;
+
+        let user;
         try {
-            row = await this.#dbManager.genericSqlGet(sqlInstruction);
+            user = this.#controller.getSession();
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message401);
         }
-        return row;*/
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
+        if (!id || isNaN(id))
+            throw new Error(Exceptions.message422);
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ${id};`)
             .then(value => row = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
+
+        if (row === undefined)
+            throw new Error(Exceptions.message404);
+
         return row;
     }
 
     /**creation of a new test descriptor*/
     async createTestDescriptor(body) {
 
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
         const name = body["name"];
         const procedureDescription = body["procedureDescription"];
         const idSKU = body["idSKU"];
 
-        if (!name || !procedureDescription || !idSKU )
+        if (!name || !procedureDescription || !idSKU || isNaN(idSKU))
             throw new Error(Exceptions.message422);
 
-        /* const sqlGetCount = 'SELECT COUNT(*) FROM TestDescriptor;'
-
-        try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        } */
+        let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${idSKU};`)
+            .then(value => sku = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        if (sku === undefined)
+            throw new Error(Exceptions.message404);
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM TestDescriptor;')
@@ -74,20 +92,12 @@ class TestDescriptorController {
             .catch(error => { throw new Error(Exceptions.message500) });
 
 
-        const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, description, passRate) 
-        VALUES (${id + 1}, "${name}", "${procedureDescription}", 0);`;
+        const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, procedureDescription,) 
+        VALUES (${id + 1}, "${name}", "${procedureDescription}";`;
         try {
             const insert1 = await this.#dbManager.genericSqlGet(sqlInsert1);
         } catch (error) {
-            new Error(Exceptions.message500);
-        }
-
-        const sqlInsert2 = `INSERT INTO TestDescriptorOwnership(testDescID, SKUID) 
-        VALUES (${id + 1}, ${idSKU});`;
-        try {
-            const insert2 = await this.#dbManager.genericSqlGet(sqlInsert2);
-        } catch (error) {
-            new Error(Exceptions.message500);
+            new Error(Exceptions.message503);
         }
 
     }
@@ -95,46 +105,68 @@ class TestDescriptorController {
     /**function to edit a test descriptor, given its ID*/
     async editTestDesciptor(id, body) {
 
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
+
         const newName = body["newName"];
         const newProcedureDescription = body["newProcedureDescription"];
         const newIdSKU = body["newIdSKU"];
 
-        if (!newName || !newProcedureDescription  || !newIdSKU )
+        if (!newName || !newProcedureDescription || !newIdSKU
+            || isNaN(newIdSKU || !id || isNaN(id)))
             throw new Error(Exceptions.message422);
 
+        let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${newIdSKUù};`)
+            .then(value => sku = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        if (sku === undefined)
+            throw new Error(Exceptions.message404);
+
+        let testDescriptor;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM TestDescriptor WHERE ID= ${id};`)
+            .then(value => testDescriptor = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        if (testDescriptor === undefined)
+            throw new Error(Exceptions.message404);
+
+
         const sqlUpdate1 = `UPDATE TestDescriptor SET name= "${newName}"
-        AND description= "${newProcedureDescription}" WHERE ID= ${id};`;
+        AND description= "${newProcedureDescription}" AND SKUID = ${newIdSKU}
+        WHERE ID= ${id};`;
 
         try {
-            const update1 = await this.#dbManager.genericSqlGet(sqlUpdate1);
+            await this.#dbManager.genericSqlRun(sqlUpdate1);
         } catch (error) {
-            new Error(Exceptions.message500);
+            new Error(Exceptions.message503);
         }
 
-        const sqlUpdate2 = `UPDATE TestDescriptorOwnership 
-        SET SKUID= ${newIdSKU} WHERE testDescID= ${id};`;
-
-        try {
-            const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
     }
 
     /**delete function to remove a test descriptor from the table, given its ID*/
     async deleteTestDescriptor(id) {
-       /* const sqlInstruction = `DELETE FROM TestDescriptor WHERE ID= ${id};`
+        let user;
         try {
-            const testDescriptor = await this.#dbManager.genericSqlGet(sqlInstruction);
+            user = this.#controller.getSession();
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message401);
         }
-        return testDescriptor;*/
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
 
-        
+        if (!id || isNaN(id))
+            throw new Error(Exceptions.message422)
+
         await this.#dbManager.genericSqlRun
             (`DELETE FROM TestDescriptor WHERE ID= ${id};`)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+            .catch((error) => { throw new Error(Exceptions.message503) });
     }
 }
 

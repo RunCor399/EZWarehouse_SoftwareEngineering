@@ -198,7 +198,7 @@ function createTables(dbManager) {
 
 }
 
-function addUsers(dbManager) {
+async function addUsers(dbManager) {
 
 
 
@@ -214,52 +214,24 @@ function addUsers(dbManager) {
     VALUES (5, "supplier1@ezwh.com", "name5", "surname5", "e16b2ab8d12314bf4efbd6203906ea6c", "supplier")`);
     await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
     VALUES (6, "manager1@ezwh.com", "name6", "surname6", "e16b2ab8d12314bf4efbd6203906ea6c", "manager")`);
-
-function prova1() {
-   try{
-    console.log("prova1 start");
-    const create =  createTables(dbManager);
-    console.log("prova1 finish");
-   } catch {
-       return 1;
-   }
+}
+    function prova1() {
+        try {
+            console.log("prova1 start");
+            const create = createTables(dbManager);
+            console.log("prova1 finish");
+        } catch {
+            return 1;
+        }
    
-   return 0;
-}
-
-function prova2(){
-    console.log("prova2 start");
-    const add = addUsers(dbManager);
-    console.log("prova2 finish")
-}
-
-const myPromise = new Promise((resolve, reject) => {
-    if(prova1() == 0){
-        console.log("resolve 2");
-        resolve();
+        return 0;
     }
-    else{
-        reject();
+
+    function prova2() {
+        console.log("prova2 start");
+        const add = addUsers(dbManager);
+        console.log("prova2 finish")
     }
-});
-
-
-prom.then(() => {
-    myPromise.then(() => {
-        prova2();
-    }).catch(() => {
-        console.log("Error 2");
-    });
-});
-
-
-
-
 
 //prova1();
-//prova2();
-
-
-}
-
-createTables(dbManager).then(() => addUsers(dbManager));
+prova2();

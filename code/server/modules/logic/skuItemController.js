@@ -15,14 +15,6 @@ class SkuItemController {
 
     /**getter function to retreive all the SKUItems*/
     async getAllSkuItems() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM SKUItem";
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;*/
 
         let user;
         try {
@@ -43,14 +35,7 @@ class SkuItemController {
 
     /**getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
     async getSkuItems(id) {
-        /*let row;
-        const sqlInstruction = `SELECT * FROM SKUItem WHERE SKUId= ${id};`;
-        try {
-            row = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return row;*/
+     
         let user;
         try {
             user = this.#controller.getSession();
@@ -77,14 +62,6 @@ class SkuItemController {
 
     /**getter function to retreive a single SKUItem, given its RFID */
     async getSkuItem(rfid) {
-        /*let row;
-        const sqlInstruction = `SELECT * FROM SKUItem WHERE RFID= "${rfid}";`;
-        try {
-            row = this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return row;*/
 
         let user;
         try {
@@ -183,14 +160,7 @@ class SkuItemController {
 
     /**delete function to remove an SKUItem from the table, given its ID */
     async deleteSkuItem(rfid) {
-        /* const sqlInstruction = `DELETE FROM SKUItem WHERE ID= ${rfid};`;
-         try {
-             const skuItem = await this.#dbManager.genericSqlGet(sqlInstruction);
-         } catch (error) {
-             new Error(Exceptions.message500);
-         }
-         return skuItem; //skuItem returned to test it*/
-
+        
         let user;
         try {
             user = this.#controller.getSession();

@@ -16,14 +16,6 @@ class SkuController {
 
     /**getter function to retreive all the SKUs*/
     async getAllSku() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM SKU";
-        try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;*/
         let user;
         try {
             user = this.#controller.getSession();
@@ -42,14 +34,7 @@ class SkuController {
 
     /**getter function to retreive a single SKU, given its ID*/
     async getSku(id) {
-        /*const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
-        try {
-            const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return sku;*/
-
+      
         if (!id || isNaN(id))
             throw new Error(Exceptions.message422);
 
@@ -97,16 +82,6 @@ class SkuController {
         if (!description || !weight || !volume || !notes || !price || !availableQuantity
             || isNaN(weight) || isNaN(volume) || isNaN(price) || isNaN(availableQuantity))
             throw new Error(Exceptions.message422);
-
-        /* let id;
-   const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
- 
-   try {
-        id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
-   } catch (error) {
-       new Error(Exceptions.message500);
-   }*/
-
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
@@ -187,8 +162,6 @@ class SkuController {
 
     }
 
-
-
     /**TO CHECK*/
     async setPosition(id, body) {
 
@@ -255,16 +228,6 @@ class SkuController {
         }
         if (user.type !== 'manager')
             throw new Error(Exceptions.message401);
-
-        /* const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
-                 try {
-                     await this.#dbManager.genericSqlRun(sqlInstruction);
-                 } catch (error) {
-                     throw new Error(Exceptions.message500);
-                 }
-                 
-                 return sku; //sku returned to test it
-                 */
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE Id= ${id};`)
             .catch((error) => { throw new Error(Exceptions.message503); });
