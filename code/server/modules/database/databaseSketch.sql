@@ -7,6 +7,7 @@ CREATE TABLE SKU(
     price FLOAT,
     notes VARCHAR(250),
     description VARCHAR(250),
+    availableQuantity INT,
     PRIMARY KEY (id)
 )
 

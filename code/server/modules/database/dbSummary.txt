@@ -1,4 +1,4 @@
-SKU(id, weight, volume, price, notes, description)
+SKU(id, weight, volume, price, notes, description, availableQuantity)
 SKUItem(RFID, SKUId, available, dateOfStock)
 Position(positionID, aisleID, row, col, maxWeight, maxVolume occupiedWeight, occupiedVolume)
 SKU_in_Position(SKUId, positionID)
