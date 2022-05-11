@@ -16,16 +16,10 @@ class SkuItemController {
     /**getter function to retreive all the SKUItems*/
     async getAllSkuItems() {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
-            throw new Error(Exceptions.message401);
-        let rows;
 
+        let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM SKUItem")
             .then(value => rows = value)
             .catch(error => { throw new Error(Exceptions.message500) });
@@ -35,17 +29,11 @@ class SkuItemController {
 
     /**getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
     async getSkuItems(id) {
-     
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'customer')
+
+        if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
             throw new Error(Exceptions.message401);
 
-        if (!id || isNaN(id))
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422);
 
 
@@ -63,16 +51,10 @@ class SkuItemController {
     /**getter function to retreive a single SKUItem, given its RFID */
     async getSkuItem(rfid) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
-        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422);
 
         let row;
@@ -88,51 +70,40 @@ class SkuItemController {
     /**creation of an SKUItem*/
     async createSkuItem(body) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'clerk')
+        if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Error(Exceptions.message401);
 
         const RFID = body["RFID"];
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
 
-        if (!RFID || isNaN(Number(RFID))|| RFID.length !== 32 || !SKUId || isNaN(SKUId) || !dateOfStock)
+        if (this.#controller.checkRFID(RFID) || this.#controller.areUndefined(SKUI,dateOfStock)
+         || this.#controller.areNotNumbers(SKUId) )
             throw new Error(Exceptions.message422);
 
         let num;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id= ${SKUId};`)
             .then(value => num = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
-        
+
         if (num === undefined)
             throw new Error(Exceptions.message404);
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
         VALUES ("${RFID}", ${SKUId}, 0, ${dateOfStock});`;
-      
+
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => {
                 throw new Error(Exceptions.message503);
             });
-            
+
 
     }
 
     /**function to edit an SKUItem*/
     async editSkuItem(oldRFID, body) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         const newRFID = body["newRFID"];
@@ -140,9 +111,8 @@ class SkuItemController {
         const newDateOfStock = body["newDateOfStock"];
 
 
-        if (!oldRFID || isNaN(Number(oldRFID)) || oldRFID.length !== 32
-            || !newRFID || isNaN(Number(newRFID)) || newRFID.length !== 32
-            || !newAvailable || !newDateOfStock)
+        if (this.#controller.checkRFID(oldRFID) || this.#controller.checkRFID(newRFID) 
+            || this.#controller.areUndefined(newAvailable,newDateOfStock))
             throw new Error(Exceptions.message422);
 
         let row;
@@ -163,17 +133,11 @@ class SkuItemController {
 
     /**delete function to remove an SKUItem from the table, given its ID */
     async deleteSkuItem(rfid) {
-        
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
-        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun

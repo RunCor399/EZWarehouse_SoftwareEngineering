@@ -28,7 +28,7 @@ class UserController {
 
     getUser() {
         if (!this.#logged)
-            throw new Error(Exceptions.message401);
+            return undefined;
         else return this.#user;
     }
 
@@ -182,7 +182,7 @@ class UserController {
 
     }
 
-    hasPermission(type, ...validType) {
+    hasPermission(type, validType) {
         return validType.includes(type)
     }
 

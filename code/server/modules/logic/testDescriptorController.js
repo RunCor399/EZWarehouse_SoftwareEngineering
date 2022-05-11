@@ -17,13 +17,7 @@ class TestDescriptorController {
     /**getter function to retreive all test descriptors*/
     async getAllTestDescriptors() {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
+        if (!this.#controller.isLoggedAndHasPermission("manager","qualityEmployee"))
             throw new Error(Exceptions.message401);
 
 
@@ -37,13 +31,7 @@ class TestDescriptorController {
     /**getter function to retreive a single test descriptor given its ID*/
     async getTestDesciptor(id) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         if (!id || isNaN(id))
@@ -63,13 +51,7 @@ class TestDescriptorController {
     /**creation of a new test descriptor*/
     async createTestDescriptor(body) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         const name = body["name"];
@@ -102,13 +84,7 @@ class TestDescriptorController {
     /**function to edit a test descriptor, given its ID*/
     async editTestDesciptor(id, body) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
 
@@ -147,13 +123,8 @@ class TestDescriptorController {
 
     /**delete function to remove a test descriptor from the table, given its ID*/
     async deleteTestDescriptor(id) {
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         if (!id || isNaN(id))

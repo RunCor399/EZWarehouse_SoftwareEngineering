@@ -129,7 +129,7 @@ class ReturnOrderController {
             new Error(Exceptions.message500);
         }
 
-        products.forEach((elem) => {
+        products.forEach(async (elem) => {
             const sqlInsert = `INSERT INTO SKUPerReturnOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
                 const returnOrder = await this.#dbManager.genericSqlGet(sqlInsert);

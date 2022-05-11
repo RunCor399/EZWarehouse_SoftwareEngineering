@@ -12,6 +12,7 @@ const ItemController = require("./itemController");
 const DBManager = require("../database/databaseManager");
 const SkuItemController = require("./skuItemController");
 const Exceptions = require("../../routers/exceptions");
+const { use } = require("../../routers/internalOrderRouter");
 
 class Controller {
 
@@ -96,8 +97,24 @@ class Controller {
         return user;
     }
 
-    hasPermission(type, ...validType) {
-        return this.#userController.hasPermission(type, validType);
+    isLoggedAndHasPermission(...validType) {
+        let user = this.#userController.getUser()
+        if (!user) return false;
+        return this.#userController.hasPermission(user.type, validType);
+    }
+
+    areUndefined(...params) {
+        console.log(params);
+        return (params.includes(undefined));
+    }
+
+    areNotNumbers(...params) {
+        console.log(params)
+        return params.some((num) => isNaN(num));
+    }
+
+    checkRFID(rfid) {
+        return (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
     }
 
 }

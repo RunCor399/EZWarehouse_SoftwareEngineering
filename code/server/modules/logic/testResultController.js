@@ -17,13 +17,7 @@ class TestResultController {
     /** getter function to retreive all test results related to an SKUItem, given its RFID - more than a single test*/
     async getTestResults(rfid) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
 
         if (!rfid || isNaN(rfid) || String(rfid).length !== 32)
@@ -46,14 +40,8 @@ class TestResultController {
     /**getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test*/
     async getTestResult(rfid, id) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
+        if (!this.#controller.isLoggedAndHasPermission("manager","qualityEmployee"))
             throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
-            throw new Error(Exceptions.message401)
 
         if (!id || isNaN(id)
             || !rfid || isNaN(Number(rfid)) || rfid.length !== 32)
@@ -71,14 +59,8 @@ class TestResultController {
     /**creation of a new test result*/
     async createTestResult(body) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
+        throw new Error(Exceptions.message401);
 
         const rfid = body["rfid"];
         const idTestDesciptor = body["idTestDescriptor"];
@@ -122,14 +104,8 @@ class TestResultController {
     async editTestResult(rfid, id, body) {
 
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
-            throw new Error(Exceptions.message401)
 
         const newIdTestDesciptor = body["newIdTestDescriptor"];
         const newDate = body["newDate"];
@@ -173,13 +149,7 @@ class TestResultController {
     /**delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
     async deleteTestResult(rfid, id) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
 
 

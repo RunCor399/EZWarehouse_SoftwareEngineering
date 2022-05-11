@@ -16,22 +16,9 @@ class SkuController {
 
     /**getter function to retreive all the SKUs*/
     async getAllSku() {
-        /*let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'customer' && user.type !== 'clerk')
-            throw new Error(Exceptions.message401);*/
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (!this.#controller.hasPermission(user.type, "manager", "customer", "clerk"))
+
+        if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Error(Exceptions.message401);
 
         let rows;
@@ -44,16 +31,10 @@ class SkuController {
     /**getter function to retreive a single SKU, given its ID*/
     async getSku(id) {
 
-        if (!id || isNaN(id))
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422);
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         let sku;
@@ -72,13 +53,8 @@ class SkuController {
     /**TO CHECK - availableQuantity is missing in the SKU table */
     async createSku(body) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         const description = body["description"];
@@ -88,8 +64,8 @@ class SkuController {
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
 
-        if (!description || !weight || !volume || !notes || !price || !availableQuantity
-            || isNaN(weight) || isNaN(volume) || isNaN(price) || isNaN(availableQuantity))
+        if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
+            || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
             throw new Error(Exceptions.message422);
 
         let id;
@@ -110,13 +86,7 @@ class SkuController {
 
 
         //permission check
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         //validation of body and id
@@ -127,8 +97,8 @@ class SkuController {
         const newPrice = body["newPrice"];
         const newAvailableQuantity = req.body["newAvailableQuantity"];
 
-        if (!newDescription || !newWeight || !newVolume || !newNotes || !newPrice || !newAvailableQuantity
-            || isNaN(newWeight) || isNaN(newVolume) || isNaN(newPrice) || isNaN(newAvailableQuantity) || !id || isNaN(id))
+        if (this.#controller.areUndefined(newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity, id)
+            || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
             throw new Error(Exceptions.message422);
 
         //check if sku exists
@@ -174,9 +144,12 @@ class SkuController {
     /**TO CHECK*/
     async setPosition(id, body) {
 
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
+
         const positionId = body["position"];
 
-        if (!positionId || !id || isNaN(id))
+        if (this.#controller.areUndefined(positionId,id) || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422);
 
         let sku;
@@ -222,16 +195,10 @@ class SkuController {
     /**delete function to remove an SKU from the table, given its ID */
     async deleteSku(id) {
 
-        if (!id || isNaN(id))
+        if (areUndefined(id) || areNotNumbers(id))
             throw new Error(Exceptions.message422);
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE Id= ${id};`)
