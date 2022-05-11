@@ -168,13 +168,6 @@ class SkuController {
                 || position.maxVolume < newVolume * newAvailableQuantity)
                 throw new Error(Exceptions.message422);
 
-            //update sku info
-            const sqlInstruction =
-                `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
-        AND notes= "${newNotes}" AND description= "${newDescription}" AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
-            await this.#dbManager.genericSqlRun(sqlInstruction)
-                .catch((error) => { new Error(Exceptions.message503); });
-
             //update position info
             const sqlUpdate = `UPDATE Position SET occupiedWeight= ${newWeight * newAvailableQuantity} 
                 AND occupiedVolume = ${newVolume * newAvailableQuantity} WHERE ID= ${position.positionId};`;
@@ -185,6 +178,12 @@ class SkuController {
             }
         }
 
+        //update sku info
+        const sqlInstruction =
+            `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
+  AND notes= "${newNotes}" AND description= "${newDescription}" AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch((error) => { new Error(Exceptions.message503); });
 
     }
 

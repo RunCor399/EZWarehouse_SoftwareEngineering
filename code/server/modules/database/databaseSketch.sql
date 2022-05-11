@@ -65,7 +65,7 @@ CREATE TABLE Users(
     id INT,
     name VARCHAR(100),
     surname VARCHAR(100),
-    email VARCHAR(250),
+    username VARCHAR(250),
     type VARCHAR(100),
     password VARCHAR(250),
     PRIMARY KEY (id)

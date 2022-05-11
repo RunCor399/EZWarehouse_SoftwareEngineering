@@ -134,12 +134,14 @@ function createTables(dbManager) {
         )`
 
     const createInternalOrder =
-        `CREATE TABLE SKUItemsPerReturnOrder(
+        `CREATE TABLE InternalOrder(
             id INT,
-            RFID INT,
-            PRIMARY KEY(id, RFID),
-            FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
-            FOREIGN KEY(id) REFERENCES ReturnOrder(id)
+            issueDate DATE,
+            state VARCHAR(250), 
+            customerId INT,
+            PRIMARY KEY(id),
+            FOREIGN KEY(customerId) REFERENCES Users(id),
+            FOREIGN KEY(id) REFERENCES Order(id);
         )`
 
     const createSKUPerInternalOrder =
