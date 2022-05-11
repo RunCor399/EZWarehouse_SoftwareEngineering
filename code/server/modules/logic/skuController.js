@@ -34,7 +34,7 @@ class SkuController {
 
     /**getter function to retreive a single SKU, given its ID*/
     async getSku(id) {
-      
+
         if (!id || isNaN(id))
             throw new Error(Exceptions.message422);
 
@@ -198,19 +198,15 @@ class SkuController {
         const sqlInsert =
             `INSERT INTO SKU_in_Position SET(SKUId, positionID) 
             VALUES (${id} ,${positionId});`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInsert);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
+        await this.#dbManager.genericSqlRun(sqlInsert)
+            .catch((error) => { throw new Error(Exceptions.message503) });
+
 
         const sqlUpdate = `UPDATE Position SET occupiedWeight= ${sku.weight * sku.availableQuantity} 
         AND occupiedVolume = ${sku.volume * sku.availableQuantity} WHERE ID= ${positionId}`;
-        try {
-            await this.#dbManager.genericSqlGet(sqlUpdate);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
+
+        await this.#dbManager.genericSqlGet(sqlUpdate)
+            .catch((error) => { throw new Error(Exceptions.message503) });
 
     }
 
