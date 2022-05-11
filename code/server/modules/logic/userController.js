@@ -70,15 +70,10 @@ class UserController {
         if (this.#controller.areUndefined(username, name, surname, password, type))
             throw new Error(Exceptions.message422);
 
-        let id;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM USERS')
-            .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message500) });
-
         const hashedPassword = MD5(password).toString();
         const sqlInstruction =
-            `INSERT INTO USERS (id, username, name, surname, password, type) VALUES
-             (${id + 1}, "${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
+            `INSERT INTO USERS ( username, name, surname, password, type) VALUES
+             ("${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
 
 
         this.#dbManager.genericSqlRun(sqlInstruction).

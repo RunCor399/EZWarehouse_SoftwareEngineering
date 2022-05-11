@@ -7,15 +7,14 @@ function createTables(dbManager) {
 
     const createSKU =
         `CREATE TABLE SKU(
-            id INT,
+            id INTEGER PRIMARY KEY  AUTOINCREMENT,
             weight FLOAT,
             volume FLOAT,
             price FLOAT,
             notes VARCHAR(250),
             description VARCHAR(250),
-            availableQuantity INT,
-            PRIMARY KEY (id)
-        )`;
+            availableQuantity INT
+            )`;
 
     const createSKUItem =
         `CREATE TABLE SKUItem(
@@ -52,11 +51,10 @@ function createTables(dbManager) {
 
     const createTestDescriptor =
         `CREATE TABLE TestDescriptor(
-        id INT,
+        id INT PRIMARY KEY AUTOINCREMENT,
         name VARCHAR(100),
         procedureDescription VARCHAR(250),
         idSKU INT,
-        PRIMARY KEY (id),
         FOREIGN KEY (idSKU) REFERENCES SKU(id)
     );`
 
@@ -237,10 +235,6 @@ function prova2() {
     console.log("prova2 finish")
 }
 
-/*try{
-    prova1();
-} catch {
-    prova2();
-}*/
+//prova1()
 prova2();
 
