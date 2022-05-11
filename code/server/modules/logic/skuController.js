@@ -41,7 +41,7 @@ class SkuController {
         await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
             .then(value => sku = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
-
+        
         if (!sku)
             throw new Error(Exceptions.message404);
 
@@ -114,13 +114,13 @@ class SkuController {
             .then(value => position = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
 
-        if (position !== undefined) {
-
+        if (position) {
             //if sku has position, check if position can contains modified sku
             if (position.maxWeight < newWeight * newAvailableQuantity
                 || position.maxVolume < newVolume * newAvailableQuantity)
                 throw new Error(Exceptions.message422);
-
+            
+            /*
             //update position info
             const sqlUpdate = `UPDATE Position SET occupiedWeight= ${newWeight * newAvailableQuantity} 
                 AND occupiedVolume = ${newVolume * newAvailableQuantity} WHERE ID= ${position.positionId};`;
@@ -128,7 +128,18 @@ class SkuController {
                 await this.#dbManager.genericSqlRun(sqlUpdate);
             } catch (error) {
                 new Error(Exceptions.message503);
-            }
+            }*/
+
+            this.#controller.getPositionController()
+                .editPositionVer1({
+                    newAisleID: position.aisleID,
+                    newRow: position.row,
+                    newCol: position.col,
+                    newMaxWeight: position.maxWeight,
+                    newMaxVolume: position.maxVolume,
+                    newOccupiedWeight: newWeight * newAvailableQuantity,
+                    newOccupiedVolume: newVolume * newAvailableQuantity,
+                }).catch(error => { throw new Error(Exceptions.message500) });
         }
 
         //update sku info
