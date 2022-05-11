@@ -181,6 +181,11 @@ class UserController {
             .catch((error) => { throw new Error(Exceptions.message500) });
 
     }
+
+    hasPermission(type, ...validType) {
+        return validType.includes(type)
+    }
+
 }
 
 module.exports = UserController;

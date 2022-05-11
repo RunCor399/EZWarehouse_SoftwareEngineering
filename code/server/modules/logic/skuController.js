@@ -16,13 +16,22 @@ class SkuController {
 
     /**getter function to retreive all the SKUs*/
     async getAllSku() {
-        let user;
+        /*let user;
         try {
             user = this.#controller.getSession();
         } catch (error) {
             throw new Error(Exceptions.message401);
         }
         if (user.type !== 'manager' && user.type !== 'customer' && user.type !== 'clerk')
+            throw new Error(Exceptions.message401);*/
+
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (!this.#controller.hasPermission(user.type, "manager", "customer", "clerk"))
             throw new Error(Exceptions.message401);
 
         let rows;

@@ -91,9 +91,13 @@ class Controller {
         try {
             user = this.#userController.getUser();
         } catch (error) {
-            throw new Error(Exceptions.message401) 
+            throw new Error(Exceptions.message401)
         }
         return user;
+    }
+
+    hasPermission(type, ...validType) {
+        return this.#userController.hasPermission(type, validType);
     }
 
 }
