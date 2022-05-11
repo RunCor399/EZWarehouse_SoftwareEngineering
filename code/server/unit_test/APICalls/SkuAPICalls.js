@@ -37,7 +37,23 @@ class SkuAPICalls {
         });
     }
 
-    
+    async modifySKUTest(id, description, weight, volume, notes, price, newAvailableQuantity){
+        return axios({
+            method: 'put',
+            url: this.#baseURL + "/api/sku/" + id,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: {
+                description : description,
+                weight : weight,
+                volume : volume,
+                notes : notes,
+                price : price,
+                newAvailableQuantity : newAvailableQuantity
+            }
+        });
+    }
 }
 
 module.exports = SkuAPICalls;
