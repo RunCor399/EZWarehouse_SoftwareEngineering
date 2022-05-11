@@ -105,10 +105,10 @@ class SkuItemController {
             throw new Error(Exceptions.message422);
 
         let num;
-        await this.#dbManager.genericSqlGet(`SELECT COUNT(*) FROM SKUItem WHERE SKUId= ${id};`)
-            .then(value => num = value[0]["COUNT(*)"])
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE SKUId= ${id};`)
+            .then(value => num = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
-        if (num === 0)
+        if (num === undefined)
             throw new Error(Exceptions.message404);
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
