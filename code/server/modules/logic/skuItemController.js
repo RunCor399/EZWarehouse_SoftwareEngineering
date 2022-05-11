@@ -105,19 +105,22 @@ class SkuItemController {
             throw new Error(Exceptions.message422);
 
         let num;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE SKUId= ${SKUId};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id= ${SKUId};`)
             .then(value => num = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
+        
         if (num === undefined)
             throw new Error(Exceptions.message404);
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
         VALUES ("${RFID}", ${SKUId}, 0, ${dateOfStock});`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
+      
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch((error) => {
+                throw new Error(Exceptions.message503);
+            });
+            
+
     }
 
     /**function to edit an SKUItem*/

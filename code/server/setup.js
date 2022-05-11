@@ -234,5 +234,10 @@ function prova2() {
     console.log("prova2 finish")
 }
 
-//prova1();
+/*try{
+    prova1();
+} catch {
+    prova2();
+}*/
 prova2();
+
