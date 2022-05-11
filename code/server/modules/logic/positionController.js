@@ -13,6 +13,17 @@ class PositionController {
 
     /**getter function to retreive all positions*/
     async getAllPositions() {
+
+        /*check if the current user is authorized*/
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'clerk')
+            throw new Error(Exceptions.message401);
+
         let rows;
         const sqlInstruction = "SELECT * FROM Position";
         try {
@@ -26,6 +37,16 @@ class PositionController {
     /**creation of a new position inside the warehouse*/
     async createPosition(body) {
         
+        /*check if the current user is authorized*/
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
         const positionID = body["positionID"];
         const aisleID = body["aisleID"];
         const row = body["row"];
@@ -33,8 +54,9 @@ class PositionController {
         const maxWeight = body["maxWeight"];
         const maxVolume = body["maxVolume"];
 
+        /*check if the body is valid*/
         if (!positionID || !aisleID || !row ||
-            !col || !maxWeight || !maxVolume)
+            !col || !maxWeight || !maxVolume || isNaN(positionID) || isNaN(aisleID) || isNaN(row) || isNaN(col) || isNaN(maxVolume) || isNaN(maxWeight))
             throw new Error(Exceptions.message422);
 
         /* console.log(body)
