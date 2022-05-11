@@ -147,7 +147,6 @@ class TestDescriptorController {
         } catch (error) {
             new Error(Exceptions.message503);
         }
-
     }
 
     /**delete function to remove a test descriptor from the table, given its ID*/
