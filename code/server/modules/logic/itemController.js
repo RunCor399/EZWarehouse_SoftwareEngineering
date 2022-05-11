@@ -212,7 +212,7 @@ class ItemController {
             throw new Error(Exceptions.message401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (isNaN(id) || !id)
             throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun
