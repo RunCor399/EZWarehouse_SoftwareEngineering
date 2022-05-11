@@ -13,6 +13,7 @@ function createTables(dbManager) {
             price FLOAT,
             notes VARCHAR(250),
             description VARCHAR(250),
+            availableQuantity INT,
             PRIMARY KEY (id)
         )`;
 
@@ -233,9 +234,10 @@ function prova2() {
     console.log("prova2 finish")
 }
 
-try{
+/*try{
     prova1();
 } catch {
     prova2();
-}
+}*/
+prova2();
 

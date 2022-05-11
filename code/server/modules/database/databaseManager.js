@@ -1,6 +1,7 @@
 'use strict';
 
 const sqlite = require('sqlite3');
+const Exceptions = require('../../routers/exceptions');
 
 class DBManager {
     #db;
@@ -21,7 +22,8 @@ class DBManager {
             this.#db.run(istruzione, (err) => {
                 if (err){
                     console.log("Database run error: err", err);
-                    reject(err);}
+                    reject(err);
+                }
                 else resolve(true);
             })
         })
@@ -31,9 +33,9 @@ class DBManager {
         return new Promise((resolve, reject) => {
             this.#db.all(istruzione, (err, rows) => {
                 if (err) {
-                    reject(err);
                     console.log("Database get error: err", err);
-
+                    reject(err);
+                    
                 } else {
                     resolve(rows)
                 }

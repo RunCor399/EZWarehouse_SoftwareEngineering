@@ -101,11 +101,11 @@ class SkuItemController {
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
 
-        if (!RFID || isNaN(Number(rfid))|| RFID.length !== 32 || !SKUId || isNaN(SKUId) || !dateOfStock)
+        if (!RFID || isNaN(Number(RFID))|| RFID.length !== 32 || !SKUId || isNaN(SKUId) || !dateOfStock)
             throw new Error(Exceptions.message422);
 
         let num;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE SKUId= ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id= ${SKUId};`)
             .then(value => num = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
         if (num === undefined)
@@ -113,11 +113,13 @@ class SkuItemController {
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
         VALUES ("${RFID}", ${SKUId}, 0, ${dateOfStock});`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
+      
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch((error) => {
+                throw new Error(Exceptions.message503);
+            });
+            
+
     }
 
     /**function to edit an SKUItem*/
