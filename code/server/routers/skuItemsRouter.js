@@ -75,6 +75,8 @@ router.post('/api/skuitem', async (req, res) => {
     await controller.getSkuItemController().createSkuItem(req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
+
+    console.log("********",error,"********");
     return res.status(responseParams.code).send(responseParams.message);
   }
 
