@@ -118,7 +118,6 @@ class SkuItemController {
         } catch (error) {
             new Error(Exceptions.message503);
         }
-        return skuItem;
     }
 
     /**function to edit an SKUItem*/

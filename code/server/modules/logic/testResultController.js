@@ -29,6 +29,13 @@ class TestResultController {
         if (!rfid || isNaN(rfid) || String(rfid).length !== 32)
             throw new Error(Exceptions.message422)
 
+        let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
+            .then(value => sku = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        if (sku === undefined)
+            throw new Error(Exceptions.message404);
+
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE SKUItemID= "${rfid}";`)
             .then(value => rows = value)
