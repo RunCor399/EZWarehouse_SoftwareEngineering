@@ -16,14 +16,14 @@ class SkuController {
 
     /**getter function to retreive all the SKUs*/
     async getAllSku() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM SKU";
+        let user;
         try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            user = this.#controller.getSession();
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message401);
         }
-        return rows;*/
+        if (user.type !== 'manager' && user.type !== 'customer' && user.type !== 'clerk')
+            throw new Error(Exceptions.message401);
 
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
@@ -34,18 +34,27 @@ class SkuController {
 
     /**getter function to retreive a single SKU, given its ID*/
     async getSku(id) {
-        /*const sqlInstruction = `SELECT *  FROM SKU WHERE ID= ${id};`;
+      
+        if (!id || isNaN(id))
+            throw new Error(Exceptions.message422);
+
+        let user;
         try {
-            const sku = await this.#dbManager.genericSqlGet(sqlInstruction);
+            user = this.#controller.getSession();
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message401);
         }
-        return sku;*/
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
 
         let sku;
         await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
-            .then(value => sku = value)
+            .then(value => sku = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
+
+        if (sku === undefined)
+            throw new Error(Exceptions.message404);
+
         return sku;
 
 
@@ -54,6 +63,15 @@ class SkuController {
     /**TO CHECK - availableQuantity is missing in the SKU table */
     async createSku(body) {
 
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
         const description = body["description"];
         const weight = body["weight"];
         const volume = body["volume"];
@@ -61,36 +79,38 @@ class SkuController {
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
 
-        if (!description || !weight || !volume || !notes || !price || !availableQuantity)
+        if (!description || !weight || !volume || !notes || !price || !availableQuantity
+            || isNaN(weight) || isNaN(volume) || isNaN(price) || isNaN(availableQuantity))
             throw new Error(Exceptions.message422);
-
-
-
-        /* let id;
-         const sqlGetCount = 'SELECT COUNT(*) FROM SKU'
- 
-         try {
-              id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
-         } catch (error) {
-             new Error(Exceptions.message500);
-         }*/
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw new Error(Exceptions.message503) });
 
-        const sqlInstruction = `INSERT INTO SKU (ID, weight, volume, price, notes, description, availableQuantity, positionID)
-         VALUES (${id + 1}, ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity}, NULL);`;
+        const sqlInstruction = `INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+         VALUES (${id + 1}, ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+            .catch((error) => { throw new Error(Exceptions.message503) });
 
     }
 
     /**TO CHECK - availableQuantity is missing in the SKU table */
     async editSku(id, body) {
 
+
+        //permission check
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
+        //validation of body and id
         const newDescription = body["newDescription"];
         const newWeight = body["newWeight"];
         const newVolume = body["newVolume"];
@@ -98,84 +118,119 @@ class SkuController {
         const newPrice = body["newPrice"];
         const newAvailableQuantity = req.body["newAvailableQuantity"];
 
-        if (!newDescription || !newWeight || !newVolume || !newNotes || !newPrice || !newAvailableQuantity)
+        if (!newDescription || !newWeight || !newVolume || !newNotes || !newPrice || !newAvailableQuantity
+            || isNaN(newWeight) || isNaN(newVolume) || isNaN(newPrice) || isNaN(newAvailableQuantity) || !id || isNaN(id))
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
-        AND notes= "${newNotes}" AND description= "${newDescription}" AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
-        await this.#dbManager.genericSqlRun(sqlInstruction)
-            .catch((error) => { new Error(Exceptions.message500); });
+        //check if sku exists
+        let num;
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
+            .then(value => num = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message503) });
+        if (num === 0)
+            throw new Error(Exceptions.message404)
 
+        //check if sku has position
+        let position;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${id}`)
+            .then(value => position = value[0])
+            .catch(error => { throw new Error(Exceptions.message503) });
 
-        let sku;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
-            .then(value => sku = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
+        if (position !== undefined) {
 
-        if (sku.position) {
-            const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${newWeight} AND occupiedVolume = ${newVolume} WHERE ID= ${sku.position};`;
+            //if sku has position, check if position can contains modified sku
+            if (position.maxWeight < newWeight * newAvailableQuantity
+                || position.maxVolume < newVolume * newAvailableQuantity)
+                throw new Error(Exceptions.message422);
+
+            //update position info
+            const sqlUpdate = `UPDATE Position SET occupiedWeight= ${newWeight * newAvailableQuantity} 
+                AND occupiedVolume = ${newVolume * newAvailableQuantity} WHERE ID= ${position.positionId};`;
             try {
-                const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
+                await this.#dbManager.genericSqlRun(sqlUpdate);
             } catch (error) {
-                new Error(Exceptions.message500);
+                new Error(Exceptions.message503);
             }
         }
+
+        //update sku info
+        const sqlInstruction =
+            `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
+  AND notes= "${newNotes}" AND description= "${newDescription}" AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch((error) => { new Error(Exceptions.message503); });
 
     }
 
     /**TO CHECK*/
     async setPosition(id, body) {
 
-        const position = body["position"];
+        const positionId = body["position"];
 
-        if (!position)
+        if (!positionId || !id || isNaN(id))
             throw new Error(Exceptions.message422);
 
-        const sqlUpdate1 = `UPDATE SKU SET position= ${position} WHERE ID= ${id};`;
-        try {
-            const update1 = await this.#dbManager.genericSqlGet(sqlUpdate1);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-
-        /*the SKUStorage table can be deleted
-
-        const sqlInstruction = `UPDATE SKUStorage SET positionID= ${position} WHERE SKUID= ${id};`;
-        try {
-            const position = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            console.log("error");
-        }
-        */
-
         let sku;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
-            .then(value => sku = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id= ${id};`)
+            .then(value => sku = value[0])
+            .catch(error => { throw new Error(Exceptions.message503) });
+        //error if id doesnt exist
 
-        const sqlUpdate2 = `UPDATE Position SET occupiedWeight= ${sku.weight} AND occupiedVolume = ${sku.volume} WHERE ID= ${position}`;
+        let position;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Positions WHERE id= ${positionId};`)
+            .then(value => position = value[0])
+            .catch(error => { throw new Error(Exceptions.message503) });
+        //error if id doesnt exist
+
+
+        if (position.maxWeight < sku.weight * sku.availableQuantity
+            || position.maxVolume < sku.volume * sku.availableQuantity)
+            throw new Error(Exceptions.message422);
+
+        let testValue;
+        await this.#dbManager.genericSqlGet(`SELECT COUNT(*) FROM SKU_in_Position WHERE positionId = ${positionId}`)
+            .then(value => testValue = value[0]["COUNT(*)"])
+            .catch(error => { throw new Error(Exceptions.message503) });
+
+        if (testValue !== 0)
+            throw new Error(Exceptions.message422);
+
+        const sqlInsert =
+            `INSERT INTO SKU_in_Position SET(SKUId, positionID) 
+            VALUES (${id} ,${positionId});`;
         try {
-            const update2 = await this.#dbManager.genericSqlGet(sqlUpdate2);
+            await this.#dbManager.genericSqlRun(sqlInsert);
         } catch (error) {
-            new Error(Exceptions.message500);
+            new Error(Exceptions.message503);
+        }
+
+        const sqlUpdate = `UPDATE Position SET occupiedWeight= ${sku.weight * sku.availableQuantity} 
+        AND occupiedVolume = ${sku.volume * sku.availableQuantity} WHERE ID= ${positionId}`;
+        try {
+            await this.#dbManager.genericSqlGet(sqlUpdate);
+        } catch (error) {
+            new Error(Exceptions.message503);
         }
 
     }
 
     /**delete function to remove an SKU from the table, given its ID */
     async deleteSku(id) {
-        /* const sqlInstruction = `DELETE FROM SKU WHERE ID= ${id};`;
-         try {
-             await this.#dbManager.genericSqlRun(sqlInstruction);
-         } catch (error) {
-             throw new Error(Exceptions.message500);
-         }
-         
-         return sku; //sku returned to test it
-         */
 
-        await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE ID= ${id};`)
-            .catch((error) => { throw new Error(Exceptions.message500); });
+        if (!id || isNaN(id))
+            throw new Error(Exceptions.message422);
+
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
+        await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE Id= ${id};`)
+            .catch((error) => { throw new Error(Exceptions.message503); });
 
     }
 }

@@ -59,7 +59,7 @@ router.post('/api/item',async (req, res) => {
   }
 
 
-  return res.status(200).end();
+  return res.status(201).end();
 });
 
 //PUT /api/item/:id
@@ -97,7 +97,7 @@ router.delete('/api/items/:id', async(req, res) => {
     return res.status(responseParams.code).send(responseParams.message);
   }
 
-  return res.status(200).end();
+  return res.status(204).end();
 });
 
 module.exports = router;

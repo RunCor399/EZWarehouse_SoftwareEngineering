@@ -11,6 +11,7 @@ const ReturnOrderController = require("./returnOrderController");
 const ItemController = require("./itemController");
 const DBManager = require("../database/databaseManager");
 const SkuItemController = require("./skuItemController");
+const Exceptions = require("../../routers/exceptions");
 
 class Controller {
 
@@ -86,7 +87,13 @@ class Controller {
     }
 
     getSession() {
-        return this.#userController.getUser();
+        let user;
+        try {
+            user = this.#userController.getUser();
+        } catch (error) {
+            throw new Error(Exceptions.message401) 
+        }
+        return user;
     }
 
 }

@@ -3,7 +3,7 @@ const Exceptions = require('../../routers/exceptions');
 const Controller = require('./controller')
 
 class TestResultController {
-        /** @type {Controller} */
+    /** @type {Controller} */
 
     #controller;
     #dbManager;
@@ -16,14 +16,25 @@ class TestResultController {
 
     /** getter function to retreive all test results related to an SKUItem, given its RFID - more than a single test*/
     async getTestResults(rfid) {
-        /*let rows
-        const sqlInstruction = `SELECT * FROM TestResult WHERE SKUItemID= "${rfid}";`;
+
+        let user;
         try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
+            user = this.#controller.getSession();
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw new Error(Exceptions.message401);
         }
-        return rows;*/
+        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
+            throw new Error(Exceptions.message401);
+
+        if (!rfid || isNaN(rfid) || String(rfid).length !== 32)
+            throw new Error(Exceptions.message422)
+
+        let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
+            .then(value => sku = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
+        if (sku === undefined)
+            throw new Error(Exceptions.message404);
 
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE SKUItemID= "${rfid}";`)
@@ -57,17 +68,17 @@ class TestResultController {
         const idTestDesciptor = body["idTestDescriptor"];
         const date = body["Date"];
         const result = body["Result"];
-  
+
         if (!rfid || !idTestDesciptor || !date || !result)
             throw new Error(Exceptions.message422);
-            
-      /*  const sqlGetCount = 'SELECT COUNT(*) FROM TestResult;'
 
-       try {
-            const id = await this.#dbManager.genericSqlGet(sqlGetCount);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        } */
+        /*  const sqlGetCount = 'SELECT COUNT(*) FROM TestResult;'
+  
+         try {
+              const id = await this.#dbManager.genericSqlGet(sqlGetCount);
+          } catch (error) {
+              new Error(Exceptions.message500);
+          } */
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM TestResult;')
