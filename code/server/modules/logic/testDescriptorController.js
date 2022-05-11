@@ -34,7 +34,7 @@ class TestDescriptorController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
-        if (!id || isNaN(id))
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422);
 
         let row;
@@ -58,7 +58,8 @@ class TestDescriptorController {
         const procedureDescription = body["procedureDescription"];
         const idSKU = body["idSKU"];
 
-        if (!name || !procedureDescription || !idSKU || isNaN(idSKU))
+        if (this.#controller.areUndefined(name,procedureDescription,idSKU) 
+        || this.#controller.areNotNumbers(idSKU))
             throw new Error(Exceptions.message422);
 
         let sku;
@@ -92,8 +93,8 @@ class TestDescriptorController {
         const newProcedureDescription = body["newProcedureDescription"];
         const newIdSKU = body["newIdSKU"];
 
-        if (!newName || !newProcedureDescription || !newIdSKU
-            || isNaN(newIdSKU || !id || isNaN(id)))
+        if (this.#controller.areUndefined(newName,newProcedureDescription ,newIdSKU,id)
+            || this.#controller.areNotNumbers(newIdSKU, id))
             throw new Error(Exceptions.message422);
 
         let sku;
@@ -123,11 +124,11 @@ class TestDescriptorController {
 
     /**delete function to remove a test descriptor from the table, given its ID*/
     async deleteTestDescriptor(id) {
-        
+
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
-        if (!id || isNaN(id))
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422)
 
         await this.#dbManager.genericSqlRun

@@ -22,8 +22,7 @@ class UserController {
         this.#dbManager = this.#controller.getDBManager();
         console.log("testController started");
 
-        //get first available id
-        //#id = query;
+
     }
 
     getUser() {
@@ -33,23 +32,11 @@ class UserController {
     }
 
     async getAllSuppliers() {
-        /*const sqlInstruction = "SELECT * FROM USERS U WHERE TYPE='supplier';";
-        let rows
-        //if (!this.#user || this.#user.type() !== "manager")
-        //   throw new Error(Exceptions.message401);
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            throw (Exceptions.message500);
-        }
 
-        if (!rows)
-            throw (Exceptions.message404);
-        else return rows;*/
 
-        if (!this.#logged
-            //    ||  this.#user.type !== "manager" 
-        ) throw new Error(Exceptions.message401)
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
             .then(value => rows = value)
@@ -59,23 +46,10 @@ class UserController {
     }
 
     async getAllUsers() {
-        /* const sqlInstruction = "SELECT * FROM USERS U";
-        let rows;
-        // if (!this.#user || this.#user.type !== "manager")
-        //   throw new Error(Exceptions.message401);
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            throw (Exceptions.message500);
-        }
 
-        if (!rows)
-            throw (Exceptions.message404);
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
 
-        else return rows;*/
-        if (!this.#logged
-            //    ||  this.#user.type !== "manager" 
-        ) throw new Error(Exceptions.message401)
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .then(value => rows = value)
@@ -93,8 +67,7 @@ class UserController {
         const password = body["password"];
         const type = body["type"];
 
-        if (username === undefined || name === undefined || surname === undefined
-            || password === undefined || type === undefined)
+        if (this.#controller.areUndefined(username, name, surname, password, type))
             throw new Error(Exceptions.message422);
 
         let id;
@@ -119,31 +92,27 @@ class UserController {
         const username = body["username"];
         const password = body["password"];
 
-        if (!username  || !password ) {
+        if (this.#controller.areUndefined(username ,password)) 
             throw new Error(Exceptions.message422);
-        }
-
+        
         const hashedPassword = MD5(password).toString();
-
-        console.log(username, hashedPassword, type);
-
         const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
         WHERE username="${username}" AND password="${hashedPassword}" AND type="${type}"`;
 
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction)
-        .then(value => row = value[0])
-        .catch (error => { throw new Error(Exceptions.message500) });
-        
+            .then(value => row = value[0])
+            .catch(error => { throw new Error(Exceptions.message500) });
 
-        if (row !== undefined) {
+
+        if (!row ) {
             this.#user.id = row.ID;
             this.#user.username = row.username;
             this.#user.name = row.name;
             this.#user.surname = row.surname;
             this.#user.type = row.type;
             this.#logged = true;
-            return  {id: this.#user.id, username : this.#user.username,  name:this.#user.name};
+            return { id: this.#user.id, username: this.#user.username, name: this.#user.name };
         }
         else {
             throw new Error(Exceptions.message401);
@@ -162,7 +131,7 @@ class UserController {
         const oldType = body["oldType"];
         const newType = body["newType"];
 
-        if (!username || !oldType || !newType)
+        if (this.#controller.areUndefined(username, oldType, newType))
             throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun
@@ -183,6 +152,7 @@ class UserController {
     }
 
     hasPermission(type, validType) {
+        console.log(type, validType, validType.includes(type))
         return validType.includes(type)
     }
 

@@ -20,7 +20,7 @@ class TestResultController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
 
-        if (!rfid || isNaN(rfid) || String(rfid).length !== 32)
+        if (this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422)
 
         let skuitem;
@@ -43,8 +43,8 @@ class TestResultController {
         if (!this.#controller.isLoggedAndHasPermission("manager","qualityEmployee"))
             throw new Error(Exceptions.message401);
 
-        if (!id || isNaN(id)
-            || !rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id)
+            || this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422);
 
         let row;
@@ -67,9 +67,9 @@ class TestResultController {
         const date = body["Date"];
         const result = body["Result"];
 
-        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32
-            || !idTestDesciptor || isNaN(idTestDesciptor)
-            || !date || !result)
+        if (this.#controller.checkRFID(rfid)||
+        this.#controller.areUndefined(testDescriptor,date,result)
+        || this.#controller.areNotNumbers(idTestDesciptor))
             throw new Error(Exceptions.message422);
 
 
@@ -111,9 +111,9 @@ class TestResultController {
         const newDate = body["newDate"];
         const newResult = body["newResult"];
 
-        if (!newIdTestDesciptor || !newDate || !newResult
-            || !id || isNaN(id)
-            || !rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.areUndefined(newIdTestDesciptor ,newDate ,newResult, id)
+            || this.#controller.areNotNumbers(id)
+            || this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422);
 
 
@@ -153,7 +153,8 @@ class TestResultController {
             throw new Error(Exceptions.message401);
 
 
-        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.checkRFID(rfid) || this.#controller.areUndefined(id) 
+        || this.#controller.areNotNumbers(id) )
             throw new Error(Exceptions.message422)
 
         await this.#dbManager.genericSqlRun
