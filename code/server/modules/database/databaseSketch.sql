@@ -86,6 +86,8 @@ CREATE TABLE RestockOrder(
 CREATE TABLE SKUPerRestockOrder(
     id INT,
     SKUid INT,
+    description VARCHAR(250),
+    price FLOAT,
     qty INT, 
     PRIMARY KEY(id, SKUid),
     FOREIGN KEY(SKUid) REFERENCES SKU(id),
