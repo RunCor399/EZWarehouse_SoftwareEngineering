@@ -24,10 +24,23 @@ class InternalOrderController {
              new Error(Exceptions.message500);
          }
          return rows;*/
+
+        /*check if the user is authorized */
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
             .then((value) => rows = value)
             .catch((error) => { throw new Error(Exceptions.message500); });
+
+        return rows;
 
     }
 
@@ -42,10 +55,22 @@ class InternalOrderController {
         }
         return rows;*/
 
+        /*check if the user is authorized */
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'customer')
+            throw new Error(Exceptions.message401);
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
             .then((value) => rows = value)
             .catch((error) => { throw new Error(Exceptions.message500); });
+
+        return rows;
 
     }
 
@@ -60,11 +85,22 @@ class InternalOrderController {
         }
         return rows;*/
 
+        /*check if the user is authorized */
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'delivery employee')
+            throw new Error(Exceptions.message401);
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
             .then((value) => rows = value)
             .catch((error) => { throw new Error(Exceptions.message500); });
 
+        return rows;
     }
 
     /**getter function to retreive a single internal order, given its ID*/
@@ -78,19 +114,52 @@ class InternalOrderController {
         }
         return row;*/
 
+        /*check if the user is authorized */
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'delivery employee')
+            throw new Error(Exceptions.message401);
+
+        /*check if the id is valid*/
+        if (!id || isNaN(id))
+            throw new Error(Exceptions.message422);
+
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
             .then((value) => row = value[0])
             .catch((error) => { throw new Error(Exceptions.message500); });
+
+        /*check if the internal order exists*/
+        if (!row)
+            throw new Error(Exceptions.message404)
+
+        return row;
+
     }
 
     /**TODO - products and issueDate are missing in the table */
     async createInternalOrder(body) {
+
+        /*check if the user is authorized */
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'customer')
+            throw new Error(Exceptions.message401);
+
         const issueDate = body["issueDate"];
         const products = body["products"];
         const customerId = body["customerId"]
 
-        if (!issueDate || !products || !customerId)
+        /*check if the body is valid */
+        if (!issueDate || !products || !customerId || isNaN(customerId))
             throw new Error(Exceptions.message422);
 
         /*let id;
@@ -105,23 +174,24 @@ class InternalOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw new Error(Exceptions.message503) });
 
 
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
-        VALUES (${id + 1}, "${issueDate}", "ISSUED", "${customerId}");`;
+        VALUES (${id + 1}, "${issueDate}", "ISSUED", ${customerId});`;
         try {
             await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
-            new Error(Exceptions.message500);
+            new Error(Exceptions.message503);
         }
 
-        products.forEach(async (elem) => {
+        /*TO BE CHECKED*/
+        products.forEach((elem) => {
             const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
-                await this.#dbManager.genericSqlRun(sqlInsert);
+                const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
             } catch (error) {
-                new Error(Exceptions.message500);
+                new Error(Exceptions.message503);
             }
         })
 
@@ -130,8 +200,32 @@ class InternalOrderController {
     /**TO CHECK*/
     async editInternalOrder(id, body) {
 
+        /*check if the user is authorized */
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager' && user.type !== 'customer' && user.type !== 'delivery employee')
+            throw new Error(Exceptions.message401);
+
+        /*check if the id is valid*/
+        if (!id || isNaN(id))
+            throw new Error(Exceptions.message422);
+
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
+            .then((value) => row = value[0])
+            .catch((error) => { throw new Error(Exceptions.message503); });
+
+        /*check if the internal order exists*/
+        if (!row)
+            throw new Error(Exceptions.message404)
+
         const newState = body["newState"];
 
+        /*check if the body is valid */
         if (!newState)
             throw new Error(Exceptions.message422);
 
@@ -141,12 +235,12 @@ class InternalOrderController {
             if (!products)
                 throw new Error(Exceptions.message422);
 
-            products.forEach(async (elem) => {
+            products.forEach((elem) => {
                 const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
                 try {
-                    await this.#dbManager.genericSqlRun(sqlInsert);
+                    const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
                 } catch (error) {
-                    new Error(Exceptions.message500);
+                    new Error(Exceptions.message503);
                 }
             })
             return internalOrder;
@@ -156,7 +250,7 @@ class InternalOrderController {
             try {
                 await this.#dbManager.genericSqlRun(sqlInstruction);
             } catch (error) {
-                new Error(Exceptions.message500);
+                new Error(Exceptions.message503);
             }
         }
 
@@ -172,10 +266,23 @@ class InternalOrderController {
             new Error(Exceptions.message500);
         } */
 
+        /*check if the user is authorized */
+        let user;
+        try {
+            user = this.#controller.getSession();
+        } catch (error) {
+            throw new Error(Exceptions.message401);
+        }
+        if (user.type !== 'manager')
+            throw new Error(Exceptions.message401);
+
+        /*check if the id is valid*/
+        if (!id || isNaN(id))
+            throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM InternalOrder WHERE ID= ${id};`)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+            .catch((error) => { throw new Error(Exceptions.message503) });
     }
 
 }

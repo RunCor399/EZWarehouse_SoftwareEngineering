@@ -19,7 +19,7 @@ test("login as manager", async () => {
     expect(response).not.toBeNull();    
     });*/
 
-test("test skuItem", async () => {
+test("test add skuItem", async () => {
     const response = await addNewSKUItemTest();
     console.log(response.status)
     expect(response).not.toBeNull();    
