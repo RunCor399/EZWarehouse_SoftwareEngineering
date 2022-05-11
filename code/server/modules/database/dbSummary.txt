@@ -8,7 +8,7 @@ Users(id, username, name, surname, type, password)
 
 RestockOrder(id, issueDate, state, shipmentDate, supplierID)
 SKUPerRestockOrder(id, SKUId, qty)
-SKUItemsPerRestockOrder(id, RFID)
+SKUItemsPerRestockOrder(id, SKUID, RFID)
 
 ReturnOrder(id, returnDate, supplierID, restockOrderID)
 SKUPerReturnOrder(id, SKUId, qty)

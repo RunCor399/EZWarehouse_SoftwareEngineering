@@ -17,16 +17,10 @@ class TestResultController {
     /** getter function to retreive all test results related to an SKUItem, given its RFID - more than a single test*/
     async getTestResults(rfid) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
 
-        if (!rfid || isNaN(rfid) || String(rfid).length !== 32)
+        if (this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422)
 
         let skuitem;
@@ -46,17 +40,11 @@ class TestResultController {
     /**getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test*/
     async getTestResult(rfid, id) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
+        if (!this.#controller.isLoggedAndHasPermission("manager","qualityEmployee"))
             throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
-            throw new Error(Exceptions.message401)
 
-        if (!id || isNaN(id)
-            || !rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id)
+            || this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422);
 
         let row;
@@ -71,23 +59,17 @@ class TestResultController {
     /**creation of a new test result*/
     async createTestResult(body) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
+        throw new Error(Exceptions.message401);
 
         const rfid = body["rfid"];
         const idTestDesciptor = body["idTestDescriptor"];
         const date = body["Date"];
         const result = body["Result"];
 
-        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32
-            || !idTestDesciptor || isNaN(idTestDesciptor)
-            || !date || !result)
+        if (this.#controller.checkRFID(rfid)||
+        this.#controller.areUndefined(testDescriptor,date,result)
+        || this.#controller.areNotNumbers(idTestDesciptor))
             throw new Error(Exceptions.message422);
 
 
@@ -113,34 +95,25 @@ class TestResultController {
 
         const sqlInstruction = `INSERT INTO TestResult (ID, testDescID,  SKUItemID, date, result) 
         VALUES (${id + 1}, ${idTestDesciptor}, "${rfid}", "${date}", ${result});`;
-        try {
-            const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
-        return testRes;
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch(error => { throw new Error(Exceptions.message503); });
+
     }
 
     /**function to edit the properties of a SKUItem's test result, given its RFID and the ID of the test result*/
     async editTestResult(rfid, id, body) {
 
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
-            throw new Error(Exceptions.message401)
 
         const newIdTestDesciptor = body["newIdTestDescriptor"];
         const newDate = body["newDate"];
         const newResult = body["newResult"];
 
-        if (!newIdTestDesciptor || !newDate || !newResult
-            || !id || isNaN(id)
-            || !rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.areUndefined(newIdTestDesciptor ,newDate ,newResult, id)
+            || this.#controller.areNotNumbers(id)
+            || this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422);
 
 
@@ -168,28 +141,20 @@ class TestResultController {
         const sqlInstruction = `UPDATE TestResult SET testDescID= ${idTestDesciptor} 
         AND date= "${newDate}" AND result= ${newResult} WHERE ID= ${id} AND SKUItemID = "${rfid}";`;
 
-        try {
-            const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
-        return testRes;
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch(error => { throw new Error(Exceptions.message503) });
     }
+
 
     /**delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
     async deleteTestResult(rfid, id) {
 
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'qualityEmployee')
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
 
 
-        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+        if (this.#controller.checkRFID(rfid) || this.#controller.areUndefined(id) 
+        || this.#controller.areNotNumbers(id) )
             throw new Error(Exceptions.message422)
 
         await this.#dbManager.genericSqlRun

@@ -15,6 +15,7 @@ router.get('/api/skus', async (req, res) => {
     console.log("skus", skus);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
+    console.log(responseParams);
     return res.status(responseParams.code).send(responseParams.message);
   }
 
@@ -55,8 +56,8 @@ router.post('/api/sku', async (req, res) => {
   try {
     await controller.getSkuController().createSku(req.body);
   } catch (error) {
-    console.log(error);
     let responseParams = Exceptions.handle(error);
+    console.log(responseParams);
     return res.status(responseParams.code).send(responseParams.message);
   }
 

@@ -39,7 +39,23 @@ class RestockOrderController {
         await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;")
             .then(value => rows = value)
             .catch(error => { throw new Error(Exceptions.message500) });
-        /*should you also put the SKUPerRestockOrder and the SKUItemsPerRestockOrder outputs?*/
+        
+        /*  TO BE COMPLETED (it's missing something about the generation of the dictionary)
+        
+        rows.forEach((r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
+            .then(value => r.products = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
+            .then(value => r.skuItems = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+            
+        })
+        */
+        
+        /* who does the json manipulation?
+        */
 
         return rows;
     }

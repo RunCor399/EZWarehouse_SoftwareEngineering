@@ -15,13 +15,7 @@ class PositionController {
     async getAllPositions() {
 
         /*check if the current user is authorized*/
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'clerk')
+        if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Error(Exceptions.message401);
 
         let rows;
@@ -36,15 +30,9 @@ class PositionController {
 
     /**creation of a new position inside the warehouse*/
     async createPosition(body) {
-        
+
         /*check if the current user is authorized*/
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
         const positionID = body["positionID"];
@@ -88,6 +76,9 @@ class PositionController {
     /**function to edit the properties of a specific position, given its ID*/
     async editPosition(id, body) {
 
+        if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
+            throw new Error(Exceptions.message401);
+
         const newAisleID = body["newAisleID"];
         const newRow = body["newRow"];
         const newCol = body["newCol"];
@@ -113,6 +104,9 @@ class PositionController {
     /**function to edit the ID of a specific position, given its older ID*/
     async editPosition(oldId, body) {
 
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
+
         const newPositionID = body["newPositionID"];
         if (!newPositionID)
             throw new Error(Exceptions.message422);
@@ -135,6 +129,9 @@ class PositionController {
              new Error(Exceptions.message500);
          }
          return position;*/
+
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Error(Exceptions.message401);
 
 
         await this.#dbManager.genericSqlRun
