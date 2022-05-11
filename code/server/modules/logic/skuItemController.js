@@ -85,7 +85,6 @@ class SkuItemController {
         } catch (error) {
             new Error(Exceptions.message500);
         }
-        return skuItem;
     }
 
     /**function to edit an SKUItem*/
