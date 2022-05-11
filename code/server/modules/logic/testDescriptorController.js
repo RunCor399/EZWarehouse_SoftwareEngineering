@@ -17,7 +17,7 @@ class TestDescriptorController {
     /**getter function to retreive all test descriptors*/
     async getAllTestDescriptors() {
 
-        if (!this.#controller.isLoggedAndHasPermission("manager","qualityEmployee"))
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
 
 
@@ -58,25 +58,26 @@ class TestDescriptorController {
         const procedureDescription = body["procedureDescription"];
         const idSKU = body["idSKU"];
 
-        if (this.#controller.areUndefined(name,procedureDescription,idSKU) 
-        || this.#controller.areNotNumbers(idSKU))
+        if (this.#controller.areUndefined(name, procedureDescription, idSKU)
+            || this.#controller.areNotNumbers(idSKU))
             throw new Error(Exceptions.message422);
 
-        let sku;
+        /* let sku;
         await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${idSKU};`)
             .then(value => sku = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
         if (sku === undefined)
-            throw new Error(Exceptions.message404);
+            throw new Error(Exceptions.message404);*/
 
-        let id;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM TestDescriptor;')
-            .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message500) });
+        let sku;
+        await this.getSku(id)
+            .then(value => sku = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!sku) throw new Error(Exceptions.message404)
 
 
-        const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, procedureDescription, idSKU) 
-        VALUES (${id + 1}, "${name}", "${procedureDescription}", ${idSKU};`;
+        const sqlInsert1 = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+        VALUES ( "${name}", "${procedureDescription}", ${idSKU};`;
         await this.#dbManager.genericSqlGet(sqlInsert1)
             .catch((error) => { throw new Error(Exceptions.message503) })
 
@@ -93,23 +94,35 @@ class TestDescriptorController {
         const newProcedureDescription = body["newProcedureDescription"];
         const newIdSKU = body["newIdSKU"];
 
-        if (this.#controller.areUndefined(newName,newProcedureDescription ,newIdSKU,id)
+        if (this.#controller.areUndefined(newName, newProcedureDescription, newIdSKU, id)
             || this.#controller.areNotNumbers(newIdSKU, id))
             throw new Error(Exceptions.message422);
 
-        let sku;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${newIdSKUù};`)
+        /*let sku;
+        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${newIdSKU};`)
             .then(value => sku = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
         if (sku === undefined)
-            throw new Error(Exceptions.message404);
+            throw new Error(Exceptions.message404);*/
 
-        let testDescriptor;
+        let sku;
+        await this.getSku(newIdSKU)
+            .then(value => sku = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!sku) throw new Error(Exceptions.message404)
+
+        /*let testDescriptor;
         await this.#dbManager.genericSqlGet(`SELECT *  FROM TestDescriptor WHERE ID= ${id};`)
             .then(value => testDescriptor = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
         if (testDescriptor === undefined)
-            throw new Error(Exceptions.message404);
+            throw new Error(Exceptions.message404);*/
+
+        let testDescriptor;
+        await this.getTestDesciptor(id)
+            .then(value => testDescriptor = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!sku) throw new Error(Exceptions.message404)
 
 
         const sqlUpdate1 = `UPDATE TestDescriptor SET name= "${newName}"
@@ -118,9 +131,9 @@ class TestDescriptorController {
 
         await this.#dbManager.genericSqlRun(sqlUpdate1)
             .catch((error) => { throw new Error(Exceptions.message503) });
-        
-        }
-    
+
+    }
+
 
     /**delete function to remove a test descriptor from the table, given its ID*/
     async deleteTestDescriptor(id) {

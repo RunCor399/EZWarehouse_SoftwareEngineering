@@ -42,7 +42,7 @@ class SkuController {
             .then(value => sku = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
 
-        if (sku === undefined)
+        if (!sku)
             throw new Error(Exceptions.message404);
 
         return sku;
@@ -68,13 +68,8 @@ class SkuController {
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
             throw new Error(Exceptions.message422);
 
-        let id;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
-            .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message503) });
-
-        const sqlInstruction = `INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
-         VALUES (${id + 1}, ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
+        const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+         VALUES ( ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { throw new Error(Exceptions.message503) });
@@ -83,7 +78,6 @@ class SkuController {
 
     /**TO CHECK - availableQuantity is missing in the SKU table */
     async editSku(id, body) {
-
 
         //permission check
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -101,13 +95,21 @@ class SkuController {
             || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
             throw new Error(Exceptions.message422);
 
-        //check if sku exists
-        let num;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
-            .then(value => num = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message503) });
-        if (num === 0)
-            throw new Error(Exceptions.message404)
+        /* //check if sku exists
+         let num;
+         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM SKU')
+             .then(value => num = value[0]["COUNT(*)"])
+             .catch(error => { throw new Error(Exceptions.message503) });
+         if (num === 0)
+             throw new Error(Exceptions.message404)*/
+
+        let sku;
+        try {
+            sku = await this.getSku(id);
+        } catch (error) {
+            throw new Error(Exceptions.message404);
+        }
+
 
         //check if sku has position
         let position;
@@ -135,7 +137,9 @@ class SkuController {
         //update sku info
         const sqlInstruction =
             `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
-  AND notes= "${newNotes}" AND description= "${newDescription}" AND availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
+            AND notes= "${newNotes}" AND description= "${newDescription}" AND 
+             availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
+
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { new Error(Exceptions.message503); });
 
@@ -149,14 +153,15 @@ class SkuController {
 
         const positionId = body["position"];
 
-        if (this.#controller.areUndefined(positionId,id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(positionId, id) || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422);
 
         let sku;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id= ${id};`)
-            .then(value => sku = value[0])
-            .catch(error => { throw new Error(Exceptions.message503) });
-        //error if id doesnt exist
+        await this.getSku(id)
+        .then(value => sku = value)
+        .catch(() => {throw new Error(Exceptions.message500)});
+        if(!sku) throw new Error(Exceptions.message404)
+        
 
         let position;
         await this.#dbManager.genericSqlGet(`SELECT * FROM Positions WHERE id= ${positionId};`)
@@ -170,11 +175,11 @@ class SkuController {
             throw new Error(Exceptions.message422);
 
         let testValue;
-        await this.#dbManager.genericSqlGet(`SELECT COUNT(*) FROM SKU_in_Position WHERE positionId = ${positionId}`)
-            .then(value => testValue = value[0]["COUNT(*)"])
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE positionId = ${positionId}`)
+            .then(value => testValue = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
 
-        if (testValue !== 0)
+        if (!testValue)
             throw new Error(Exceptions.message422);
 
         const sqlInsert =

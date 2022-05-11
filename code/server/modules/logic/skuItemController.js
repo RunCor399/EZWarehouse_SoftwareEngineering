@@ -36,6 +36,11 @@ class SkuItemController {
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422);
 
+        let sku;
+        await this.getSku(id)
+            .then(value => sku = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!sku) throw new Error(Exceptions.message404)
 
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ${id};`)
@@ -77,8 +82,9 @@ class SkuItemController {
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
 
-        if (this.#controller.checkRFID(RFID) || this.#controller.areUndefined(SKUI,dateOfStock)
-         || this.#controller.areNotNumbers(SKUId) )
+        if (this.#controller.checkRFID(RFID)
+            || this.#controller.areUndefined(SKUI, dateOfStock)
+            || this.#controller.areNotNumbers(SKUId))
             throw new Error(Exceptions.message422);
 
         let num;
@@ -111,8 +117,8 @@ class SkuItemController {
         const newDateOfStock = body["newDateOfStock"];
 
 
-        if (this.#controller.checkRFID(oldRFID) || this.#controller.checkRFID(newRFID) 
-            || this.#controller.areUndefined(newAvailable,newDateOfStock))
+        if (this.#controller.checkRFID(oldRFID) || this.#controller.checkRFID(newRFID)
+            || this.#controller.areUndefined(newAvailable, newDateOfStock))
             throw new Error(Exceptions.message422);
 
         let row;

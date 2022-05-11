@@ -90,6 +90,7 @@ router.post('/api/managerSessions', async (req, res) => {
   let user;
   try {
     user = await controller.getUserController().login(req.body, "manager");
+    console.log(user);
   } catch (error) {
     let responseParams = Exceptions.handle(error);
     return res.status(responseParams.code).send(responseParams.message);

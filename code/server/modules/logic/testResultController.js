@@ -23,12 +23,19 @@ class TestResultController {
         if (this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422)
 
-        let skuitem;
+        /*let skuitem;
         await this.#dbManager.genericSqlGet(`SELECT *  FROM SKUIrem WHERE RFID= ${rfid};`)
             .then(value => skuitem = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
         if (sku === undefined)
-            throw new Error(Exceptions.message404);
+            throw new Error(Exceptions.message404);*/
+
+        let skuitem;
+        await this.#controller.getSkuItemController().getSkuItem(rfid)
+            .then(value => skuitem = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!skuitem) throw new Error(Exceptions.message404)
+
 
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE SKUItemID= "${rfid}";`)
@@ -40,7 +47,7 @@ class TestResultController {
     /**getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test*/
     async getTestResult(rfid, id) {
 
-        if (!this.#controller.isLoggedAndHasPermission("manager","qualityEmployee"))
+        if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Error(Exceptions.message401);
 
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id)
@@ -60,41 +67,49 @@ class TestResultController {
     async createTestResult(body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
-        throw new Error(Exceptions.message401);
+            throw new Error(Exceptions.message401);
 
         const rfid = body["rfid"];
-        const idTestDesciptor = body["idTestDescriptor"];
+        const idTestDescriptor = body["idTestDescriptor"];
         const date = body["Date"];
         const result = body["Result"];
 
-        if (this.#controller.checkRFID(rfid)||
-        this.#controller.areUndefined(testDescriptor,date,result)
-        || this.#controller.areNotNumbers(idTestDesciptor))
+        if (this.#controller.checkRFID(rfid) ||
+            this.#controller.areUndefined(testDescriptor, date, result)
+            || this.#controller.areNotNumbers(idTestDescriptor))
             throw new Error(Exceptions.message422);
 
 
-        let skuitem;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE rfid= "${rfid}"};`)
-            .then(value => skuitem = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (skuitem === undefined)
-            throw new Error(Exceptions.message404)
+        /* let skuitem;
+         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE rfid= "${rfid}"};`)
+             .then(value => skuitem = value[0])
+             .catch(error => { throw new Error(Exceptions.message500) });
+         if (skuitem === undefined)
+             throw new Error(Exceptions.message404)*/
 
-        let testDescriptor;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescripor WHERE id= "${idTestDesciptor}" ;`)
+        let skuitem;
+        await this.#controller.getSkuItemController().getSkuItem(rfid)
+            .then(value => skuitem = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!skuitem) throw new Error(Exceptions.message404)
+
+
+        /*let testDescriptor;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescripor WHERE id= "${idTestDescriptor}" ;`)
             .then(value => testDescriptor = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
         if (testDescriptor === undefined)
-            throw new Error(Exceptions.message404)
+            throw new Error(Exceptions.message404)*/
 
-        let id;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM TestResult;')
-            .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message503) });
+        let testDescriptor;
+        await this.#controller.getTestDescriptorController().getTestDesciptor(idTestDescriptor)
+            .then(value => testDescriptor = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!testDescriptor) throw new Error(Exceptions.message404)
 
 
-        const sqlInstruction = `INSERT INTO TestResult (ID, testDescID,  SKUItemID, date, result) 
-        VALUES (${id + 1}, ${idTestDesciptor}, "${rfid}", "${date}", ${result});`;
+        const sqlInstruction = `INSERT INTO TestResult ( testDescID,  SKUItemID, date, result) 
+        VALUES ( ${idTestDescriptor}, "${rfid}", "${date}", ${result});`;
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch(error => { throw new Error(Exceptions.message503); });
 
@@ -111,32 +126,51 @@ class TestResultController {
         const newDate = body["newDate"];
         const newResult = body["newResult"];
 
-        if (this.#controller.areUndefined(newIdTestDesciptor ,newDate ,newResult, id)
+        if (this.#controller.areUndefined(newIdTestDesciptor, newDate, newResult, id)
             || this.#controller.areNotNumbers(id)
             || this.#controller.checkRFID(rfid))
             throw new Error(Exceptions.message422);
 
 
+        /* let skuitem;
+         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE rfid= "${rfid}"};`)
+             .then(value => skuitem = value[0])
+             .catch(error => { throw new Error(Exceptions.message500) });
+         if (skuitem === undefined)
+             throw new Error(Exceptions.message404)
+ 
+         let testDescriptor;
+         await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescripor WHERE id= "${newIdTestDesciptor}" ;`)
+             .then(value => testDescriptor = value[0])
+             .catch(error => { throw new Error(Exceptions.message500) });
+         if (testDescriptor === undefined)
+             throw new Error(Exceptions.message404)
+ 
+         let testResult;
+         await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE id= "${id}" ;`)
+             .then(value => testResult = value[0])
+             .catch(error => { throw new Error(Exceptions.message500) });
+         if (testResult === undefined)
+             throw new Error(Exceptions.message404)*/
+
         let skuitem;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE rfid= "${rfid}"};`)
-            .then(value => skuitem = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (skuitem === undefined)
-            throw new Error(Exceptions.message404)
+        await this.#controller.getSkuItemController().getSkuItem(rfid)
+            .then(value => skuitem = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!skuitem) throw new Error(Exceptions.message404)
 
         let testDescriptor;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescripor WHERE id= "${newIdTestDesciptor}" ;`)
-            .then(value => testDescriptor = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (testDescriptor === undefined)
-            throw new Error(Exceptions.message404)
+        await this.#controller.getTestDescriptorController().getTestDesciptor(idTestDescriptor)
+            .then(value => testDescriptor = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!testDescriptor) throw new Error(Exceptions.message404)
 
         let testResult;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE id= "${id}" ;`)
-            .then(value => testResult = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (testResult === undefined)
-            throw new Error(Exceptions.message404)
+        await this.getTestResult(id)
+            .then(value => testResult = value)
+            .catch(() => { throw new Error(Exceptions.message500) });
+        if (!testResult) throw new Error(Exceptions.message404)
+
 
         const sqlInstruction = `UPDATE TestResult SET testDescID= ${idTestDesciptor} 
         AND date= "${newDate}" AND result= ${newResult} WHERE ID= ${id} AND SKUItemID = "${rfid}";`;
@@ -153,8 +187,8 @@ class TestResultController {
             throw new Error(Exceptions.message401);
 
 
-        if (this.#controller.checkRFID(rfid) || this.#controller.areUndefined(id) 
-        || this.#controller.areNotNumbers(id) )
+        if (this.#controller.checkRFID(rfid) || this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(id))
             throw new Error(Exceptions.message422)
 
         await this.#dbManager.genericSqlRun

@@ -7,6 +7,7 @@ CREATE TABLE SKU(
     price FLOAT,
     notes VARCHAR(250),
     description VARCHAR(250),
+    availableQuantity INT,
     PRIMARY KEY (id)
 )
 
@@ -85,6 +86,8 @@ CREATE TABLE RestockOrder(
 CREATE TABLE SKUPerRestockOrder(
     id INT,
     SKUid INT,
+    description VARCHAR(250),
+    price FLOAT,
     qty INT, 
     PRIMARY KEY(id, SKUid),
     FOREIGN KEY(SKUid) REFERENCES SKU(id),
@@ -93,6 +96,7 @@ CREATE TABLE SKUPerRestockOrder(
 
 CREATE TABLE SKUItemsPerRestockOrder(
     id INT,
+    SKUID INT,
     RFID INT,
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
