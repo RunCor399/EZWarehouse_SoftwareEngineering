@@ -233,5 +233,9 @@ async function addUsers(dbManager) {
         console.log("prova2 finish")
     }
 
-//prova1();
-prova2();
+try{
+    prova1();
+} catch {
+    prova2();
+}
+
