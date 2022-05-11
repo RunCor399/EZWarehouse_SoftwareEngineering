@@ -39,7 +39,23 @@ class RestockOrderController {
         await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;")
             .then(value => rows = value)
             .catch(error => { throw new Error(Exceptions.message500) });
-        /*should you also put the SKUPerRestockOrder and the SKUItemsPerRestockOrder outputs?*/
+        
+        /*  TO BE COMPLETED (it's missing something about the generation of the dictionary)
+        
+        rows.forEach((r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
+            .then(value => r.products = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
+            .then(value => r.skuItems = value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+            
+        })
+        */
+        
+        /* who does the json manipulation?
+        */
 
         return rows;
     }
@@ -158,7 +174,7 @@ class RestockOrderController {
             .then(values => skus = values)
             .catch(error => { throw new Error(Exceptions.message500) });
 
-        skuitems.forEach(async (sk) => {
+        skuitems.forEach((sk) => {
             let res;
             await this.#dbManager.genericSqlGet(`SELECT result FROM TestResult WHERE SKUItemID = ${sk.id};`)
                 .then((res) => {
@@ -213,7 +229,7 @@ class RestockOrderController {
         for (sku, skuitem) of products:
          INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
         */
-        products.forEach(async (elem) => {
+        products.forEach((elem) => {
             const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUId, qty) VALUES (${id}, ${elem.SKUId}, ${elem.qty});`;
             try {
                 const restockOrder = await this.#dbManager.genericSqlRun(sqlInsert);
@@ -298,7 +314,7 @@ class RestockOrderController {
             throw new Error(Exceptions.message422)
 
         /*TO BE COMPLETED (table changed) */
-        skuItems.forEach(async (elem) => {
+        skuItems.forEach((elem) => {
             const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
                 const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
