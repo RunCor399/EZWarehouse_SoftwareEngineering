@@ -19,13 +19,11 @@ class PositionController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Error(Exceptions.message401);
 
+        const sqlInstruction = 'SELECT * FROM Position'
         let rows;
-        const sqlInstruction = "SELECT * FROM Position";
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
+        await this.#dbManager.genericSqlGet(sqlInstruction)
+            .then((value) => rows = value)
+            .catch(error => { throw new Error(Exceptions.message500) })
         return rows;
     }
 
@@ -45,26 +43,21 @@ class PositionController {
 
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||
-            this.#controller.areNotNumbers(positionID, aisleID, row, col, maxWeight, maxVolume))
+            this.#controller.areNotNumbers(maxWeight, maxVolume
+                || String(positionID).length !== 12 || aisleID).length !== 12
+            || String(row).length !== 12 || String(col).length !== 12)
             throw new Error(Exceptions.message422);
 
-
-        let id;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM Position')
-            .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message500) });
-
-
-        const sqlInstruction = `INSERT INTO Position (ID, maxVolume, maxWeight, aisle, row, column, occupiedWeight, occupiedVolume) 
-        VALUES (${id + 1}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
+        const sqlInstruction =
+            `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) 
+        VALUES (${positionID}, ${maxVolume}, ${maxWeight}, ${aisleID}, ${row}, ${col}, 0, 0);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch(error => { new Error(Exceptions.message500); });
     }
 
-
     /**function to edit the properties of a specific position, given its ID*/
-    async editPosition(id, body) {
+    async editPositionVer1(id, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Error(Exceptions.message401);
@@ -77,21 +70,32 @@ class PositionController {
         const newOccupiedWeight = body["newOccupiedWeight"];
         const newOccupiedVolume = body["newOccupiedVolume"];
 
-        if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume) ||
-            this.#controller.areNotNumbers(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume))
+        if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume) ||
+            this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
+            || String(id).length !== 12 || String(newAisleID).length !== 4 || String(newRow).length !== 4 || String(newCol).length !== 4)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE Position SET maxVolume= ${newMaxVolume} AND maxWeight= ${newMaxWeight} 
-        AND aisle= ${newAisleID} AND row= ${newRow} AND column= ${newCol} AND occupiedWeight= ${newOccupiedWeight} AND occupiedVolume= ${newOccupiedVolume} WHERE ID= ${id};`;
+        let positions;
+        await this.getAllPositions()
+            .then(value => positions = value)
+            .catch(() => { throw new Error(Exceptions.message503) })
 
-        
+        const positionIDs = positions.map(pos => String(pos.positionID));
+
+        if (!positionIDs.includes(id))
+            throw new Error(Exceptions.message404);
+
+        const sqlInstruction =
+            `UPDATE Position SET maxVolume= ${newMaxVolume}, maxWeight= ${newMaxWeight}, aisleID = ${newAisleID}, 
+        row= ${newRow}, col= ${newCol},  occupiedWeight= ${newOccupiedWeight}, occupiedVolume= ${newOccupiedVolume} 
+        WHERE positionID= ${id};`;
+
         await this.#dbManager.genericSqlRun(sqlInstruction)
-            .catch (error => {throw new Error(Exceptions.message500);})
-
+            .catch(error => { throw new Error(Exceptions.message500); })
     }
 
     /**function to edit the ID of a specific position, given its older ID*/
-    async editPosition(oldId, body) {
+    async editPositionVer2(oldId, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
@@ -99,12 +103,12 @@ class PositionController {
         const newPositionID = body["newPositionID"];
 
         if (this.#controller.areUndefined(oldId, newPositionID)
-        || this.#controller.areNotNumbers(oldId, newPositionID))
+            || String(oldId).length !== 12 || String(newPositionID).length !== 12)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE Position SET ID= ${newPositionID} WHERE ID= ${oldId};`;
+        const sqlInstruction = `UPDATE Position SET positionID= ${newPositionID} WHERE positionID= ${oldId};`;
         await this.#dbManager.genericSqlGet(sqlInstruction)
-        .catch (error => {throw new Error(Exceptions.message500);})
+            .catch(error => { throw new Error(Exceptions.message500); })
     }
 
     /**delete function to remove a position from the table, given its ID*/
@@ -113,11 +117,11 @@ class PositionController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id) || String(id).length !== 12)
             throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM Position WHERE ID= ${id};`)
+            (`DELETE FROM Position WHERE positionID= ${id};`)
             .catch((error) => { throw new Error(Exceptions.message500) });
     }
 

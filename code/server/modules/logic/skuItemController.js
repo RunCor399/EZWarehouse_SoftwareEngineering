@@ -75,6 +75,7 @@ class SkuItemController {
     /**creation of an SKUItem*/
     async createSkuItem(body) {
 
+        console.log("prova1")
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Error(Exceptions.message401);
 
@@ -83,26 +84,24 @@ class SkuItemController {
         const dateOfStock = body["DateOfStock"];
 
         if (this.#controller.checkRFID(RFID)
-            || this.#controller.areUndefined(SKUI, dateOfStock)
+            || this.#controller.areUndefined(SKUId, dateOfStock)
             || this.#controller.areNotNumbers(SKUId))
             throw new Error(Exceptions.message422);
+            
+        let sku;
+        await this.#controller.getSkuController().getSku(SKUId)
+        .then(value => sku = value)
+        .catch(() => {throw new Error(Exceptions.message500)});
+        if(!sku) throw new Error(Exceptions.message404)
 
-        let num;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id= ${SKUId};`)
-            .then(value => num = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-
-        if (num === undefined)
-            throw new Error(Exceptions.message404);
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
-        VALUES ("${RFID}", ${SKUId}, 0, ${dateOfStock});`;
+        VALUES ("${RFID}", ${SKUId}, 0, "${dateOfStock}");`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => {
                 throw new Error(Exceptions.message503);
             });
-
 
     }
 

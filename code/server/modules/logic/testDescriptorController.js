@@ -125,9 +125,8 @@ class TestDescriptorController {
         if (!sku) throw new Error(Exceptions.message404)
 
 
-        const sqlUpdate1 = `UPDATE TestDescriptor SET name= "${newName}"
-        AND description= "${newProcedureDescription}" AND SKUID = ${newIdSKU}
-        WHERE ID= ${id};`;
+        const sqlUpdate1 = `UPDATE TestDescriptor SET name= "${newName}",
+         description= "${newProcedureDescription}", SKUID = ${newIdSKU} WHERE ID= ${id};`;
 
         await this.#dbManager.genericSqlRun(sqlUpdate1)
             .catch((error) => { throw new Error(Exceptions.message503) });
