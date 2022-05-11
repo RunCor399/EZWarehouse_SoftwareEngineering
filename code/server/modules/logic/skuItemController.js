@@ -108,6 +108,7 @@ class SkuItemController {
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id= ${SKUId};`)
             .then(value => num = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
+        
         if (num === undefined)
             throw new Error(Exceptions.message404);
 
