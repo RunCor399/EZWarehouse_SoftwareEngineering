@@ -96,6 +96,7 @@ CREATE TABLE SKUPerRestockOrder(
 
 CREATE TABLE SKUItemsPerRestockOrder(
     id INT,
+    SKUID INT,
     RFID INT,
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
