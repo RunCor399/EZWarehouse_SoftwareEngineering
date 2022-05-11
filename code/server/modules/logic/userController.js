@@ -118,7 +118,7 @@ class UserController {
 
         const username = body["username"];
         const password = body["password"];
-        let row;
+
         if (!username  || !password ) {
             throw new Error(Exceptions.message422);
         }
@@ -130,11 +130,11 @@ class UserController {
         const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
         WHERE username="${username}" AND password="${hashedPassword}" AND type="${type}"`;
 
-        try {
-            row = (await this.#dbManager.genericSqlGet(sqlInstruction))[0];
-        } catch (error) {
-            throw (Exceptions.message500);
-        }
+        let row;
+        await this.#dbManager.genericSqlGet(sqlInstruction)
+        .then(value => row = value[0])
+        .catch (error => { throw new Error(Exceptions.message500) });
+        
 
         if (row !== undefined) {
             this.#user.id = row.ID;

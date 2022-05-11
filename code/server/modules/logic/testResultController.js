@@ -113,12 +113,9 @@ class TestResultController {
 
         const sqlInstruction = `INSERT INTO TestResult (ID, testDescID,  SKUItemID, date, result) 
         VALUES (${id + 1}, ${idTestDesciptor}, "${rfid}", "${date}", ${result});`;
-        try {
-            const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
-        return testRes;
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch(error => { throw new Error(Exceptions.message503); });
+
     }
 
     /**function to edit the properties of a SKUItem's test result, given its RFID and the ID of the test result*/
@@ -168,13 +165,10 @@ class TestResultController {
         const sqlInstruction = `UPDATE TestResult SET testDescID= ${idTestDesciptor} 
         AND date= "${newDate}" AND result= ${newResult} WHERE ID= ${id} AND SKUItemID = "${rfid}";`;
 
-        try {
-            const testRes = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
-        return testRes;
+        await this.#dbManager.genericSqlRun(sqlInstruction)
+            .catch(error => { throw new Error(Exceptions.message503) });
     }
+
 
     /**delete function to remove a test result from the table, given the test descriptor ID and the SKUItem RFID*/
     async deleteTestResult(rfid, id) {

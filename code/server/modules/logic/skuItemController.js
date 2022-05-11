@@ -145,11 +145,11 @@ class SkuItemController {
             || !newAvailable || !newDateOfStock)
             throw new Error(Exceptions.message422);
 
-        let num;
-        await this.#dbManager.genericSqlGet(`SELECT COUNT(*) FROM SKUItem WHERE RFID= ${oldRFID};`)
-            .then(value => num = value[0]["COUNT(*)"])
+        let row;
+        await this.#dbManager.genericSqlGet(`SELECT (*) FROM SKUItem WHERE RFID= ${oldRFID};`)
+            .then(value => row = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
-        if (num === 0)
+        if (num === undefined)
             throw new Error(Exceptions.message404);
 
         const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}" AND Available= ${newAvailable} 
@@ -173,7 +173,7 @@ class SkuItemController {
         if (user.type !== 'manager')
             throw new Error(Exceptions.message401);
 
-        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 12)
+        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
             throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun

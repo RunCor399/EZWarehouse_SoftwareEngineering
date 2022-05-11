@@ -92,13 +92,10 @@ class TestDescriptorController {
             .catch(error => { throw new Error(Exceptions.message500) });
 
 
-        const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, procedureDescription,) 
-        VALUES (${id + 1}, "${name}", "${procedureDescription}";`;
-        try {
-            const insert1 = await this.#dbManager.genericSqlGet(sqlInsert1);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
+        const sqlInsert1 = `INSERT INTO TestDescriptor (ID, name, procedureDescription, idSKU) 
+        VALUES (${id + 1}, "${name}", "${procedureDescription}", ${idSKU};`;
+        await this.#dbManager.genericSqlGet(sqlInsert1)
+            .catch((error) => { throw new Error(Exceptions.message503) })
 
     }
 
@@ -142,12 +139,11 @@ class TestDescriptorController {
         AND description= "${newProcedureDescription}" AND SKUID = ${newIdSKU}
         WHERE ID= ${id};`;
 
-        try {
-            await this.#dbManager.genericSqlRun(sqlUpdate1);
-        } catch (error) {
-            new Error(Exceptions.message503);
+        await this.#dbManager.genericSqlRun(sqlUpdate1)
+            .catch((error) => { throw new Error(Exceptions.message503) });
+        
         }
-    }
+    
 
     /**delete function to remove a test descriptor from the table, given its ID*/
     async deleteTestDescriptor(id) {
