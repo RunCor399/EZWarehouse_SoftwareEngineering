@@ -18,10 +18,10 @@ function createTables(dbManager) {
 
     const createSKUItem =
         `CREATE TABLE SKUItem(
-            RFID INT,
+            RFID VARCHAR(50),
             SKUId INT, 
             available INT,
-            dateOfStock DATE,
+            dateOfStock VARCHAR(50),
             PRIMARY KEY (RFID),
             FOREIGN KEY (SKUId) REFERENCES SKU(id)
         );`
@@ -63,8 +63,8 @@ function createTables(dbManager) {
         `CREATE TABLE TestResult(
         id INT,
         idTestDescriptor INT,
-        RFID INT,
-        Date DATE,
+        RFID VARCHAR(50),
+        Date VARCHAR(50),
         Result BOOLEAN,
         PRIMARY KEY (id),
         FOREIGN KEY(idTestDescriptor) REFERENCES TestDescriptor(id),
@@ -85,9 +85,9 @@ function createTables(dbManager) {
     const createRestockOrder =
         `CREATE TABLE RestockOrder(
         id INT,
-        issueDate DATE,
+        issueDate VARCHAR(50),
         state VARCHAR(250),
-        shipmentDate DATE, 
+        shipmentDate VARCHAR(50),
         supplierId INT, 
         PRIMARY KEY(id),
         FOREIGN KEY(supplierId) REFERENCES Users(id)
@@ -106,7 +106,7 @@ function createTables(dbManager) {
     const createSKUItemsPerRestockOrder =
         `CREATE TABLE SKUItemsPerRestockOrder(
             id INT,
-            RFID INT,
+            RFID VARCHAR(50),
             PRIMARY KEY(id, RFID),
             FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
             FOREIGN KEY(id) REFERENCES RestockOrder(id)
@@ -115,7 +115,7 @@ function createTables(dbManager) {
     const createReturnOrder =
         `CREATE TABLE  ReturnOrder(
             id INT,
-            returnDate DATE,
+            returnDate VARCHAR(50),
             supplierID INT, 
             restockOrderID INT,
             PRIMARY KEY(id),
@@ -129,19 +129,18 @@ function createTables(dbManager) {
             SKUId INT,
             qty INT, 
             PRIMARY KEY(id, SKUId),
-            FOREIGN KEY(SKUId) REFERENCES SKU(id)    
+            FOREIGN KEY(SKUId) REFERENCES SKU(id),    
             FOREIGN KEY(id) REFERENCES ReturnOrder(id)
         )`
 
     const createInternalOrder =
         `CREATE TABLE InternalOrder(
             id INT,
-            issueDate DATE,
+            issueDate VARCHAR(50),
             state VARCHAR(250), 
             customerId INT,
             PRIMARY KEY(id),
-            FOREIGN KEY(customerId) REFERENCES Users(id),
-            FOREIGN KEY(id) REFERENCES Order(id);
+            FOREIGN KEY(customerId) REFERENCES Users(id)
         )`
 
     const createSKUPerInternalOrder =
@@ -157,7 +156,7 @@ function createTables(dbManager) {
     const createSKUItemsPerInternalOrder =
         `CREATE TABLE SKUItemsPerInternalOrder(
             id INT,
-            RFID INT,
+            RFID VARCHAR(50),
             PRIMARY KEY(id, RFID),
             FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
             FOREIGN KEY(id) REFERENCES InternalOrder(id)
@@ -182,13 +181,14 @@ function createTables(dbManager) {
         createSKU, createSKUItem, createPosition, createSKU_in_Position, createTestDescriptor,
         createTestResult, createUsers, createRestockOrder, createSKUPerRestockOrder,
         createSKUItemsPerRestockOrder, createReturnOrder, createSKUPerReturnOrder,
-        createInternalOrder, createSKUPerInternalOrder,createSKUItemsPerInternalOrder,
+        createInternalOrder, createSKUPerInternalOrder, createSKUItemsPerInternalOrder,
         createItem
     ]
 
-    try{
+    try {
         sqlInstructions.forEach((sql) => {
-            dbManager.genericSqlRun(sql);});
+            dbManager.genericSqlRun(sql);
+        });
     } catch {
         console.log("error");
         return 1;
@@ -215,23 +215,23 @@ async function addUsers(dbManager) {
     await dbManager.genericSqlRun(`INSERT INTO Users (id, username, name, surname, password, type) 
     VALUES (6, "manager1@ezwh.com", "name6", "surname6", "e16b2ab8d12314bf4efbd6203906ea6c", "manager")`);
 }
-    function prova1() {
-        try {
-            console.log("prova1 start");
-            const create = createTables(dbManager);
-            console.log("prova1 finish");
-        } catch {
-            return 1;
-        }
-   
-        return 0;
+function prova1() {
+    try {
+        console.log("prova1 start");
+        const create = createTables(dbManager);
+        console.log("prova1 finish");
+    } catch {
+        return 1;
     }
 
-    function prova2() {
-        console.log("prova2 start");
-        const add = addUsers(dbManager);
-        console.log("prova2 finish")
-    }
+    return 0;
+}
+
+function prova2() {
+    console.log("prova2 start");
+    const add = addUsers(dbManager);
+    console.log("prova2 finish")
+}
 
 try{
     prova1();

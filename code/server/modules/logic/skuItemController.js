@@ -72,7 +72,7 @@ class SkuItemController {
         if (user.type !== 'manager')
             throw new Error(Exceptions.message401);
 
-        if (!rfid || String(rfid).length !== 12)
+        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
             throw new Error(Exceptions.message422);
 
         let row;
@@ -101,7 +101,7 @@ class SkuItemController {
         const SKUId = body["SKUId"];
         const dateOfStock = body["DateOfStock"];
 
-        if (!RFID || String(RFID).length !== 12 || !SKUId || isNaN(SKUId) || !dateOfStock)
+        if (!RFID || isNaN(Number(rfid))|| RFID.length !== 32 || !SKUId || isNaN(SKUId) || !dateOfStock)
             throw new Error(Exceptions.message422);
 
         let num;
@@ -137,7 +137,8 @@ class SkuItemController {
         const newDateOfStock = body["newDateOfStock"];
 
 
-        if (!oldRFID || String(oldRFID).length !== 12 || !newRFID || String(newRFID).length !== 12
+        if (!oldRFID || isNaN(Number(oldRFID)) || oldRFID.length !== 32
+            || !newRFID || isNaN(Number(newRFID)) || newRFID.length !== 32
             || !newAvailable || !newDateOfStock)
             throw new Error(Exceptions.message422);
 
@@ -169,7 +170,7 @@ class SkuItemController {
         if (user.type !== 'manager')
             throw new Error(Exceptions.message401);
 
-        if (!rfid || String(rfid).length !== 12)
+        if (!rfid || isNaN(Number(rfid)) || rfid.length !== 12)
             throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun
