@@ -74,6 +74,7 @@ router.put('/api/sku/:id', async (req, res) => {
   console.log('PUT', req.url);
 
   try {
+    console.log("prova")
     await controller.getSkuController().editSku(param, req.body);
   } catch (error) {
     let responseParams = Exceptions.handle(error);

@@ -41,7 +41,7 @@ class SkuController {
         await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
             .then(value => sku = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
-        
+
         if (!sku)
             throw new Error(Exceptions.message404);
 
@@ -87,25 +87,30 @@ class SkuController {
         //permission check
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Error(Exceptions.message401);
-
+        
         //validation of body and id
         const newDescription = body["newDescription"];
         const newWeight = body["newWeight"];
         const newVolume = body["newVolume"];
         const newNotes = body["newNotes"];
         const newPrice = body["newPrice"];
-        const newAvailableQuantity = req.body["newAvailableQuantity"];
+        const newAvailableQuantity = body["newAvailableQuantity"];
+
+        console.log("prova1")
 
         if (this.#controller.areUndefined(newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity, id)
             || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
             throw new Error(Exceptions.message422);
 
+            console.log("prova2")
 
         let sku;
         await this.getSku(id)
             .then(value => sku = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
+            .catch((err) => { throw new Error(err.message) });
         if (!sku) throw new Error(Exceptions.message404)
+
+        console.log("prova3")
 
 
         //check if sku has position
@@ -114,11 +119,16 @@ class SkuController {
             .then(value => position = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
 
+            console.log("prova4", position)
+        
+        
         if (position) {
             //if sku has position, check if position can contains modified sku
             if (position.maxWeight < newWeight * newAvailableQuantity
                 || position.maxVolume < newVolume * newAvailableQuantity)
                 throw new Error(Exceptions.message422);
+
+        console.log("prova5")
             
             /*
             //update position info
@@ -140,16 +150,25 @@ class SkuController {
                     newOccupiedWeight: newWeight * newAvailableQuantity,
                     newOccupiedVolume: newVolume * newAvailableQuantity,
                 }).catch(error => { throw new Error(Exceptions.message500) });
+            
+        console.log("prova6")
+            
         }
 
         //update sku info
         const sqlInstruction =
-            `UPDATE SKU SET weight= ${newWeight} AND volume= ${newVolume} AND price= ${newPrice} 
-            AND notes= "${newNotes}" AND description= "${newDescription}" AND 
+            `UPDATE SKU SET weight= ${newWeight}, volume= ${newVolume}, price= ${newPrice} ,
+             notes= "${newNotes}", description= "${newDescription}", 
              availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
 
+             console.log("prova7")
+        
+        
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { new Error(Exceptions.message503); });
+        
+            console.log("prova8")
+        
 
     }
 

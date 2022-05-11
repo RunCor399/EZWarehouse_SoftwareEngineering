@@ -63,7 +63,7 @@ router.post('/api/item',async (req, res) => {
 });
 
 //PUT /api/item/:id
-router.put('/api/sku/:id', async (req, res) => {
+router.put('/api/item/:id', async (req, res) => {
   const param = req.params.id;
   
   /** @type {Controller} */
