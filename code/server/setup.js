@@ -107,6 +107,7 @@ function createTables(dbManager) {
     const createSKUItemsPerRestockOrder =
         `CREATE TABLE SKUItemsPerRestockOrder(
             id INT,
+            SKUID INT,
             RFID VARCHAR(50),
             PRIMARY KEY(id, RFID),
             FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
