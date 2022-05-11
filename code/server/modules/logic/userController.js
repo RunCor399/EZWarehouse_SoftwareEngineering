@@ -92,9 +92,9 @@ class UserController {
         const username = body["username"];
         const password = body["password"];
 
-        if (this.#controller.areUndefined(username ,password)) 
+        if (this.#controller.areUndefined(username, password))
             throw new Error(Exceptions.message422);
-        
+
         const hashedPassword = MD5(password).toString();
         const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
         WHERE username="${username}" AND password="${hashedPassword}" AND type="${type}"`;
@@ -104,19 +104,25 @@ class UserController {
             .then(value => row = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
 
+        console.log(row === undefined);
 
-        if (!row ) {
-            this.#user.id = row.ID;
-            this.#user.username = row.username;
-            this.#user.name = row.name;
-            this.#user.surname = row.surname;
-            this.#user.type = row.type;
-            this.#logged = true;
-            return { id: this.#user.id, username: this.#user.username, name: this.#user.name };
-        }
-        else {
+
+        if (!row)
             throw new Error(Exceptions.message401);
-        }
+
+        this.#user.id = row.ID;
+        this.#user.username = row.username;
+        this.#user.name = row.name;
+        this.#user.surname = row.surname;
+        this.#user.type = row.type;
+        this.#logged = true;
+        return (
+            {
+                id: this.#user.id,
+                username: this.#user.username,
+                name: this.#user.name
+            });
+
     }
 
     logout() {

@@ -42,7 +42,7 @@ class SkuController {
             .then(value => sku = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
 
-        if (sku === undefined)
+        if (!sku)
             throw new Error(Exceptions.message404);
 
         return sku;
