@@ -15,14 +15,20 @@ test("login as manager", async () => {
     const response = await utilityCalls.login("manager1@ezwh.com", "testpassword");
     
     expect(response.data.username).toMatch("manager1@ezwh.com");    
-    });
+});
 
     
-test("add sku", async () => {
-    const response = await skuAPICalls.addNewSKUItemTestaddSKUTest();
-    //console.log(response.status);
-    expect(response).not.toBeNull();    
-    });
+// test("add sku", async () => {
+//     const response = await skuAPICalls.addNewSKUItemTestaddSKUTest();
+
+//     expect(response).not.toBeNull();    
+// });
+
+test("get skus", async () => {
+    const response = await skuAPICalls.getSKUsTest();
+    console.log(response.body);
+    expect(response.status).toBe(200);
+});
 
 
 //MOVE INSIDE SKUItem.test.js

@@ -9,6 +9,16 @@ class SkuAPICalls {
         this.#baseURL = "http://localhost:3001";
     }
 
+    async getSKUsTest(){
+        return axios({
+            method: 'get',
+            url: this.#baseURL + "/api/skus",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+    }
+
     async addSKUTest(){
         return axios({
             method: 'post',
