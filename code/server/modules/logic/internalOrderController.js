@@ -41,7 +41,7 @@ class InternalOrderController {
             .catch((error) => { throw new Error(Exceptions.message500); });
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
-        rows.forEach((r) => {
+        rows.forEach(async (r) => {
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
                 .then(value => r.products =
                     /*generation of the dictionary */
@@ -80,7 +80,7 @@ class InternalOrderController {
             .catch((error) => { throw new Error(Exceptions.message500); });
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
-        rows.forEach((r) => {
+        rows.forEach(async (r) => {
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
                 .then(value => r.products =
                     /*generation of the dictionary */
@@ -119,7 +119,7 @@ class InternalOrderController {
             .catch((error) => { throw new Error(Exceptions.message500); });
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
-        rows.forEach((r) => {
+        rows.forEach(async (r) => {
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
                 .then(value => r.products =
                     /*generation of the dictionary */
@@ -220,7 +220,7 @@ class InternalOrderController {
         }
 
         /*TO BE CHECKED*/
-        products.forEach((elem) => {
+        products.forEach(async (elem) => {
             const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (${id}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.qty});`;
             try {
                 const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);
@@ -270,7 +270,7 @@ class InternalOrderController {
                 throw new Error(Exceptions.message422);
 
             /*TO BE CHECKED*/
-            products.forEach((elem) => {
+            products.forEach(async (elem) => {
                 const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
                 try {
                     const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);

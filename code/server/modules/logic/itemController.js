@@ -69,7 +69,7 @@ class ItemController {
             throw new Error(Exceptions.message422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE ID= ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ${id};`)
             .then(value => row = value[0])
             .catch(error => { throw new Error(Exceptions.message500) });
 
@@ -114,7 +114,7 @@ class ItemController {
 
         /*check if the supplier already sells an item with the same ID*/
         let num2;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM Item WHERE ID = ${id} AND supplierID = ${supplierId}')
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM Item WHERE id = ${id} AND supplierID = ${supplierId}')
             .then(value => num2 = value[0]["COUNT(*)"])
             .catch(error => { throw new Error(Exceptions.message503) });
         if (num2 !== 0)
@@ -130,7 +130,7 @@ class ItemController {
             throw new Error(Exceptions.message404)
 
         let row;
-        await this.#dbManager.genericSqlRun(`INSERT INTO Item (ID, description, price, SKUId, supplierId) 
+        await this.#dbManager.genericSqlRun(`INSERT INTO Item (id, description, price, SKUId, supplierId) 
             VALUES (${id}, "${description}", ${price}, ${SKUid}, ${supplierId});`)
             .catch(error => { throw new Error(Exceptions.message503) });
 
@@ -168,7 +168,7 @@ class ItemController {
 
         /*check if the item exists in the Item table*/
         let item;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE ID = ${id}`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id = ${id}`)
             .then(value => item = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
 
@@ -216,7 +216,7 @@ class ItemController {
             throw new Error(Exceptions.message422);
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM Item WHERE ID= ${id};`)
+            (`DELETE FROM Item WHERE id= ${id};`)
             .catch((error) => { throw new Error(Exceptions.message503) });
     }
 
