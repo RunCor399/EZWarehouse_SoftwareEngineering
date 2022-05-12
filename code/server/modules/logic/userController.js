@@ -26,20 +26,22 @@ class UserController {
     }
 
     getUserAPI() {
-
-        if (!this.#controller.isLoggedAndHasPermission("manager"))
+        console.log("provaUser")
+        console.log(this.#controller.isLoggedAndHasPermission("manager") )
+        console.log(this.#logged)
+        if (this.#controller.isLoggedAndHasPermission("manager") === false
+            || this.#logged === false)
             throw new Exceptions(401);
-        
-        if (!this.#logged)
-            return undefined;
-        else return this.#user;
+        console.log("provaUser2")
+
+        return this.#user;
     }
 
     getUser() {
 
         if (!this.#logged)
-            return undefined;
-        else return this.#user;
+            throw new Exceptions(401);
+        return this.#user;
     }
 
     async getAllSuppliers() {
@@ -47,7 +49,7 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
             .then(value => rows = value)
@@ -60,11 +62,11 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500)});
+            .catch(error => { throw new Exceptions(500) });
         return rows;
     }
 
@@ -74,7 +76,7 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         const username = body["username"];
         const name = body["name"];
         const surname = body["surname"];
@@ -82,7 +84,7 @@ class UserController {
         const type = body["type"];
 
         if (this.#controller.areUndefined(username, name, surname, password, type))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
         const sqlInstruction =
@@ -102,7 +104,7 @@ class UserController {
         const password = body["password"];
 
         if (this.#controller.areUndefined(username, password))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
         const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
@@ -115,7 +117,7 @@ class UserController {
 
         if (!row)
             throw new Exceptions(401);
-        
+
         this.#user.id = row.ID;
         this.#user.username = row.username;
         this.#user.name = row.name;
@@ -133,7 +135,7 @@ class UserController {
 
     logout() {
         if (!this.#logged)
-        throw new Exceptions(500)//already logged out
+            throw new Exceptions(500)//already logged out
         this.#logged = false;
         return;
     }
@@ -142,12 +144,12 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         const oldType = body["oldType"];
         const newType = body["newType"];
 
         if (this.#controller.areUndefined(username, oldType, newType))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
             (`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`)
@@ -159,9 +161,9 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
-        if (this.#controller.areUndefined(username,type) || type === "manager")
-        throw new Exceptions(422);
+
+        if (this.#controller.areUndefined(username, type) || type === "manager")
+            throw new Exceptions(422);
 
 
         await this.#dbManager.genericSqlRun
@@ -172,9 +174,9 @@ class UserController {
 
     hasPermission(type, validType) {
         //console.log(type, validType, validType.includes(type))
-        console.log("Type: "+ type);
-        console.log(" validType: "+ validType);
-        console.log(" bool: "+validType.includes(type));
+        console.log("Type: " + type);
+        console.log(" validType: " + validType);
+        console.log(" bool: " + validType.includes(type));
         return validType.includes(type);
     }
 

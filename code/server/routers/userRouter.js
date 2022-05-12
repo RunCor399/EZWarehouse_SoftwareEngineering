@@ -11,9 +11,9 @@ router.get('/api/userinfo', (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().getUserAPI()
+  controller.getUserController().getUserAPI()
     .then((user) => { return res.status(200).json(user); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error);return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //GET /api/suppliers
@@ -122,7 +122,7 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
 
   await controller.getSkuController().login(req.body, "deliveryEmployee")
     .then(() => { return res.status(201).end() })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //POST /api/logout
@@ -132,7 +132,7 @@ router.post('/api/logout',  (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().logout()
+  controller.getSkuController().logout()
     .then(() => { return res.status(200).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
