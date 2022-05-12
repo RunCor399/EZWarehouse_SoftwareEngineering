@@ -24,7 +24,10 @@ class SkuController {
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
+
+       
+        
         return rows;
     }
 
@@ -40,7 +43,7 @@ class SkuController {
         let sku;
         await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
             .then(value => sku = value[0])
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
 
         if (!sku)
             throw new Exceptions(404);
