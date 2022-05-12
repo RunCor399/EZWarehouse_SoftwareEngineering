@@ -172,7 +172,10 @@ class UserController {
 
     hasPermission(type, validType) {
         //console.log(type, validType, validType.includes(type))
-        return validType.includes(type)
+        console.log("Type: "+ type);
+        console.log(" validType: "+ validType);
+        console.log(" bool: "+validType.includes(type));
+        return validType.includes(type);
     }
 
 }
