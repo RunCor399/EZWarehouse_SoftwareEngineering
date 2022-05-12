@@ -502,7 +502,7 @@ The input value is the body of the HTTP POST Request.
 
 ## **Class *skuItemController* - method *editSkuItem***
 
-The input value is the body of the HTTP POST Request, but also the old rfid
+The input value is the body of the HTTP PUT Request, but also the old rfid
 
 **Criteria for method *editSkuItem*:**
  - Validity of *oldrfid*	
@@ -957,7 +957,7 @@ The input value is the body of the HTTP PUT request and the test id.
 
 
 | Criteria 1 | Criteria 2|  Valid / Invalid | Description of the test case | Jest test case |
-|:-------:|:-------:|:-------:|:-------:|
+|:-------:|:-------:|:-------:|:-------:|:-------:|
 | Valid| Valid|  Valid| There is a SKU with *idSKU*, the test id is valid||
 | Valid| Invalid|  Invalid| There is no SKU with *idSKU*||
 | Invalid| Valid|  Invalid| There is no test with such id||
@@ -991,6 +991,1071 @@ The input value is the id.
 | :--------: | :---------------: |
 |    Validity of *id*      |     No boundary found     |
 
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no test descriptor with *id*||
+| Valid| Valid| There is a test descriptor with *id||
+
+## **Class *TestResultController* - method *getTestResults***
+
+The input value is the rfid.
+
+**Criteria for method *getTestResults*:**
+	
+ - Validity of *rfid*
+
+
+
+
+
+**Predicates for method *getTestResults*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *rfid*      |     There is no SKU item with the specified *rfid* in the database      |
+|          |     There is a SKU item with the specified *rfid* in the database     |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *rfid*      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no SKU item with *rfid*||
+| Valid| Valid| There is a SKU item with *rfid*||
+
+## **Class *TestResultController* - method *getTestResult***
+
+The input value is the rfid and the id of a test result.
+
+**Criteria for method *getTestResult*:**
+	
+ - Validity of *rfid*
+ - - Validity of *id*
+
+
+
+**Predicates for method *getTestResult*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *rfid*      |     There is no SKU item with the specified *rfid* in the database      |
+|          |     There is a SKU item with the specified *rfid* in the database     |
+|    Validity of *id*      |     There is no test result with the chosen *id* for the SKU item with the specified *rfid* in the database      |
+|          |     There is a test result with the chosen *id* for the SKU item with the specified *rfid* in the database     |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *rfid*      |     No boundary found     |
+|    Validity of *id*      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid| Valid| Valid| There is a SKU item with *rfid* and there is a test result with the specified *id*||
+| Valid| Invalid| Invalid| There is no test result with the specified *id*||
+| Invalid| Valid| Invalid| There is no SKU item with *rfid* ||
+| Invalid| Invalid| Invalid| There is no test result with the specified *id*, there is no SKU item with *rfid*||
+
+## **Class *TestResultController* - method *createTestResult***
+
+The input value is the body of the HTTP POST Request.
+
+**Criteria for method *createTestResult*:**
+	
+ - Validity of *rfid*
+ - - Validity of *descriptorid*
+
+
+
+**Predicates for method *createTestResult*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *rfid*      |     There is no SKU item with the specified *rfid* in the database      |
+|          |     There is a SKU item with the specified *rfid* in the database     |
+|    Validity of *descriptorid*     |     There is no test descriptor with the chosen *descriptorid* |
+|          |     There is a test descriptor with the chosen *descriptorid*|
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *rfid*      |     No boundary found     |
+|    Validity of *descriptorid*      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid| Valid| Valid| There is a SKU item with *rfid* and there is a test descriptor with the specified *descriptorid*||
+| Valid| Invalid| Invalid| There is no test descriptor with the specified *descriptorid*||
+| Invalid| Valid| Invalid| There is no SKU item with *rfid* ||
+| Invalid| Invalid| Invalid| There is no test descriptor with the specified *descriptorid*, there is no SKU item with *rfid*||
+
+## **Class *TestResultController* - method *editTestResult***
+
+The input value is the rfid, the id of the test descriptor and the body of the HTTP PUT Request.
+
+**Criteria for method *editTestResult*:**
+	
+ - Validity of *rfid*
+-  Validity of *newdescriptorid*
+ - Validity of *id*
+
+
+
+
+**Predicates for method *editTestResult*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *rfid*      |     There is no SKU item with the specified *rfid* in the database      |
+|          |     There is a SKU item with the specified *rfid* in the database     |
+|    Validity of *newdescriptorid*     |     There is no test descriptor with the chosen *newdescriptorid*|
+|          |     There is a test descriptor with the chosen *newdescriptorid*|
+|    Validity of *id*     |     There is no test result with the chosen *id* for the SKU item with the specified *rfid* in the database      |
+|          |     There is a test result with the chosen *id* for the SKU item with the specified *rfid* in the database     |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *rfid*      |     No boundary found     |
+|    Validity of *descriptorid*      |     No boundary found     |
+|    Validity of *id*      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2 | Criteria 3| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid| Valid| Valid| Valid| There is a SKU item with *rfid*,there is a test descriptor with the specified *newdescriptorid* and there is a test result with the chosen *id*||
+| Valid| Valid| Invalid| Invalid| There is no test result with the chosen *id* for the chosen SKUItem||
+| Valid| Invalid| Valid| Invalid| There is no test descrptor with the chosen *newdescriptorid*||
+| Valid| Invalid| Invalid| Invalid| There is no test result with the chosen *id* for the chosen SKUItem, there is no test descrptor with the chosen *newdescriptorid* ||
+| Invalid| Valid| Valid| Invalid| There is no SKU item with *rfid*||
+| Invalid| Valid| Invalid| Invalid| There is no SKU item with *rfid*||
+| Invalid| Invalid| Valid| Invalid| There is no SKU item with *rfid*, there is no test descrptor with the chosen *newdescriptorid*||
+| Invalid| Invalid| Invalid| Invalid| There is no SKU item with *rfid*, there is no test descrptor with the chosen *newdescriptorid* ||
+
+## **Class *TestResultController* - method *deleteTestResult***
+
+The input value is the rfid and the id of a test result.
+
+**Criteria for method *deleteTestResult*:**
+	
+ - Validity of *rfid*
+ - - Validity of *id*
+
+
+
+**Predicates for method *deleteTestResult*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *rfid*      |     There is no SKU item with the specified *rfid* in the database      |
+|          |     There is a SKU item with the specified *rfid* in the database     |
+|    Validity of *id*      |     There is no test result with the chosen *id* for the SKU item with the specified *rfid* in the database      |
+|          |     There is a test result with the chosen *id* for the SKU item with the specified *rfid* in the database     |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *rfid*      |     No boundary found     |
+|    Validity of *id*      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid| Valid| Valid| There is a SKU item with *rfid* and there is a test result with the specified *id*||
+| Valid| Invalid| Invalid| There is no test result with the specified *id*||
+| Invalid| Valid| Invalid| There is no SKU item with *rfid* ||
+| Invalid| Invalid| Invalid| There is no test result with the specified *id*, there is no SKU item with *rfid*||
+
+## **Class *UserController* - method *createUser***
+
+The input value is the body of the HTTP POST Request
+
+**Criteria for method *createUser*:**
+	
+ - Combination of *type* and *username*
+ - Length of *password*
+ - Username format
+ - Type validity
+
+
+**Predicates for method *createUser*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|  Combination of *type* and *username* |     No user with the same *type* and *username* exists     |
+|          |     There is an user with the same *type* and *username* |
+|    Length of *password*     |     Password is less then 8 char long      |
+|          |     Password is longer or equal to 8 char     |
+| Username format | The username is an email|
+|| The username is not an email|
+|Type validity| The type is one of them: customer, qualityEmployee, clerk, deliveryEmployee, supplier|
+|| The type is not a valid one|
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Combination of *type* and *username*      |     No boundary found     |
+|    Length of *password*     |     8     |
+| Username format |No boundary found  |
+|Type validity| No boundary found |
+
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2 |Criteria 3 | Criteria 4 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|-------:|:-------:|
+| Present| Valid| Valid| Valid| Invalid| There is an user with the same *type* and *username*||
+| Present| Valid| Valid|Invalid| Invalid| There is an user with the same *type* and *username*, the type format is invalid ||
+| Present| Valid| Invalid| Valid| Invalid| There is an user with the same *type* and *username*, the email format is invalid||
+| Present| Valid| Invalid|Invalid| Invalid| There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid ||
+| Present| Invalid| Valid| Valid| Invalid| There is an user with the same *type* and *username*, the password is shorter than 8 char||
+| Present| Invalid| Valid|Invalid| Invalid| There is an user with the same *type* and *username*, the type format is invalid, the password is shorter than 8 char ||
+| Present| Invalid| Invalid| Valid| Invalid| There is an user with the same *type* and *username*, the email format is invalid, the password is shorter than 8 char||
+| Present| Invalid| Invalid|Invalid| Invalid| There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid, , the password is shorter than 8 char||
+| Absent| Valid| Valid| Valid| Valid| All the inserted values are ok, there is no user with the same *type* and *username*||
+| Absent| Valid| Valid|Invalid| Invalid| The type format is invalid ||
+| Absent| Valid| Invalid| Valid| Invalid| The email format is invalid||
+| Absent| Valid| Invalid|Invalid| Invalid| The type format is invalid, the email format is invalid ||
+| Absent| Invalid| Valid| Valid| Invalid| The password is shorter than 8 char||
+| Absent| Invalid| Valid|Invalid| Invalid| The type format is invalid, the password is shorter than 8 char ||
+| Absent| Invalid| Invalid| Valid| Invalid| The email format is invalid, the password is shorter than 8 char||
+| Absent| Invalid| Invalid|Invalid| Invalid| The type format is invalid, the email format is invalid, , the password is shorter than 8 char||
+
+## **Class *UserController* - method *login***
+
+The input value is the body of the HTTP POST Request and the type
+
+**Criteria for method *login*:**
+	
+ - Validity of *password* and *username*
+ /* IF THE USERNAME EXISTS, IT ALREADY IS A VALID ONE
+ - Format of *username*
+*/
+
+**Predicates for method *login*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|  Validity of *password* and *username* |     The username with *username* exists, the password is valid for the chosen username      |
+|          |     The username with *username* doesn't exist, if he exists the password is not valid for the chosen username|
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *password* and *username*      |     No boundary found     |
+
+
+
+**Combination of predicates**:
+
+| Criteria 1 |Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Valid| Valid| The combination of *username and password* is valid||
+| Valid| Invalid| The combination of *username and password* is not valid||
+
+## **Class *UserController* - method *editUser***
+
+The input value is the body of the HTTP POST Request and the username
+
+**Criteria for method *editUser*:**
+	
+ - Validity of *username* and consistence of *oldType*
+ - Validity of *newType*
+ /* IF THE USERNAME EXISTS, IT ALREADY IS A VALID ONE
+ - Format of *username*
+*/
+
+**Predicates for method *editUser*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|  Validity *username* and consistence of *oldType* |     The user with *username* exists and the *oldType* corresponds to the type of the user before the API execution   |
+|          |     The user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution |
+|  Validity of *newType* || The type is one of them: customer, qualityEmployee, clerk, deliveryEmployee, supplier|
+|| The type is not a valid one|
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *username* and consistence of *oldType*     |     No boundary found     |
+|    Validity of *newType*      |     No boundary found     |
+
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid| Valid |Valid| The user with *username* exists and the *oldType* corresponds to the type of the user before the API execution, the *newType* is a valid one||
+| Valid| Invalid |Invalid| The *newType* is an invalid one||
+| Invalid| Valid |Invalid| The user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution ||
+| Invalid| Invalid |Invalid| The *newType* is an invalid one, the user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution ||
+
+## **Class *UserController* - method *deleteUser***
+
+The input value the username and the type
+
+**Criteria for method *deleteUser*:**
+	
+ - Validity of *username* 
+ - Validity of *type*
+ /* IF THE USERNAME EXISTS, IT ALREADY IS A VALID ONE
+ - Format of *username*
+*/
+
+**Predicates for method *deleteUser*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|  Validity *username* and consistence of *oldType* | The user with *username* exists and the *type* corresponds to the type of the user before the API execution   |
+|          |     The user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution |  |
+|  Validity of *type* || The type is one of them: customer, qualityEmployee, clerk, deliveryEmployee|
+|| The type is not a valid one|
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *username* and consistence of *type*   |     No boundary found     |
+|    Validity of *type*      |     No boundary found     |
+
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid| Valid |Valid| The user with *username* exists and the *type* corresponds to the type of the user before the API execution, the *type* is a valid one||
+| Valid| Invalid |Invalid| The *type* is an invalid one||
+| Invalid| Valid |Invalid| The user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution ||
+| Invalid| Invalid |Invalid| The *type* is an invalid one, the user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution ||
+
+## **Class *RestockOrderController* - method *getRestockOrder***
+
+The input value is the order id.
+
+**Criteria for method *getRestockOrder*:**
+	
+ - Validity of *id*
+
+
+
+
+
+**Predicates for method *getRestockOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*      |     There is no restock order with the given *id* in the database    |
+|          |     There is a restock order with the given *id* in the database     |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id*      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no restock order with the given *id* in the database||
+| Valid| Valid| There is a restock order with the given *id* in the database||
+
+## **Class *RestockOrderController* - method *getRestockOrderToBeReturned***
+
+The input value is the order id.
+
+**Criteria for method *getRestockOrderToBeReturned*:**
+	
+ - Validity of *id* and of the order status
+
+
+
+
+
+**Predicates for method *getRestockOrderToBeReturned*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id* and of the order status    |     There is no restock order with the given *id* in the database, if there is the restock order its status is COMPLETEDRETURN    |
+|          |     There is a restock order with the given *id* in the database and the status is different from COMPLETEDRETURN    |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* and of the order status      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no restock order with the given *id* in the database, if there is the restock order its status is COMPLETEDRETURN    ||
+| Valid| Valid|  There is a restock order with the given *id* in the database and the status is different from COMPLETEDRETURN||
+
+## **Class *RestockOrderController* - method *createRestockOrder***
+
+The input value is the body of the HTTP POST Request
+
+**Criteria for method *createRestockOrder*:**
+	
+ - Validity of *supplierid*
+ - Validity of product list 
+
+
+
+
+
+**Predicates for method *createRestockOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *supplierid* |     There is no supplier order with the given *supplierid* in the database|
+|          |    There is a supplier order with the given *supplierid* in the database|
+|    Validity of product list |     All the products are associated to a SKU with and existing SKUID in the database|
+|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database|
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *supplierid* |     No boundary found     |
+|    Validity of product list |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid|Valid| Valid| There is a supplier order with the given *supplierid* in the database and all the products are associated to a SKU with and existing SKUID in the database  ||
+| Valid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database ||
+| Invalid|Valid| Invalid| There is no supplier order with the given *supplierid* in the database ||
+| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database, there is no supplier order with the given *supplierid* in the database ||
+
+## **Class *RestockOrderController* - method *editRestockOrder***
+
+The input value is the order id and the body of the HTTP PUT Request.
+
+**Criteria for method *editRestockOrder*:**
+	
+ - Validity of *id* and of the order status
+
+
+
+
+
+**Predicates for method *editRestockOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id* and of the order status    |     There is no restock order with the given *id* in the database, if there is the restock order its status is not a valid one |
+|          |     There is a restock order with the given *id* in the database and the status is a valid one   |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* and of the order status      |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no restock order with the given *id* in the database, if there is the restock order its status is not a valid one   ||
+| Valid| Valid|  There is a restock order with the given *id* in the database and the status is a valid one||
+
+## **Class *RestockOrderController* - method *addSkuItemsToRestockOrder***
+
+The input value is the body of the HTTP PUT Request and the order id.
+
+**Criteria for method *addSkuItemsToRestockOrder*:**
+	
+ - Validity of *id* and of the order status 
+ - Validity of product list 
+
+
+
+
+
+**Predicates for method *addSkuItemsToRestockOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id* and of the order status    |     There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED    |
+|          |     There is a restock order with the given *id* in the database and the status is equal to DELIVERED    |
+|    Validity of product list |     All the products are associated to a SKU with and existing SKUID in the database|
+|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database|
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* and of the order status  |     No boundary found     |
+|    Validity of product list |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid|Valid| Valid| There is a restock order with the given *id* in the database, the status is equal to DELIVERED and all the products are associated to a SKU with and existing SKUID in the database  ||
+| Valid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database ||
+| Invalid|Valid| Invalid| There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED ||
+| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED||
+
+## **Class *RestockOrderController* - method * addTransportNote***
+
+The input value is the body of the HTTP PUT Request and the order id.
+
+**Criteria for method * addTransportNote*:**
+	
+ - Validity of *id* and of the order status 
+ - Relationship between deliveryDate and issueDate
+
+
+
+
+
+**Predicates for method * addTransportNote*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id* and of the order status    |     There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY    |
+|          |     There is a restock order with the given *id* in the database and the status is equal to DELIVERY    |
+|   Relationship between deliveryDate and issueDate |     issueDate is before deliveryDate|
+|          |    issueDate is after deliveryDate|
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* and of the order status  |     No boundary found     |
+|   Relationship between deliveryDate and issueDate|     deliveryDate=issueDate     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid|Valid| Valid| There is a restock order with the given *id* in the database, the status is equal to DELIVERY and issueDate is before deliveryDate||
+| Valid|Invalid| Invalid| issueDate is after deliveryDate||
+| Invalid|Valid| Invalid| There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY ||
+| Invalid|Invalid| Invalid| issueDate is after deliveryDate, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY||
+
+## **Class *RestockOrderController* - method *deleteRestockOrder***
+
+The input value is the order id.
+
+**Criteria for method *deleteRestockOrder*:**
+	
+ - Validity of *id*
+
+
+
+
+
+**Predicates for method *deleteRestockOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no restock order with the given *id* in the database|
+|          |     There is a restock order with the given *id* |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no restock order with the given *id* in the database||
+| Valid| Valid|  There is a restock order with the given *id* in the database ||
+
+## **Class *ReturnOrderController* - method *getReturnOrder***
+
+The input value is the order id.
+
+**Criteria for method *getReturnOrder*:**
+	
+ - Validity of *id*
+
+
+
+
+
+**Predicates for method *getReturnOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no return order with the given *id* in the database|
+|          |     There is a return order with the given *id* |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no return order with the given *id* in the database||
+| Valid| Valid|  There is a return order with the given *id* in the database ||
+
+## **Class *ReturnOrderController* - method *createReturnOrder***
+
+The input value is the body of the HTTP POST Request
+
+**Criteria for method *createReturnOrder*:**
+	
+ - Validity of *restockOrderid*
+ - Validity of product list 
+
+
+
+
+
+**Predicates for method *createReturnOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *restockOrderid* |     There is no restock order with the given *restockOrderid* in the database|
+|          |    There is a restock order with the given *restockOrderid* in the database|
+|    Validity of product list |     All the products are associated to a SKU with and existing SKUID in the database|
+|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database|
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *restockOrderid* |     No boundary found     |
+|    Validity of product list|     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|-------:|
+| Valid|Valid| Valid| There is a restock order with the given *restockOrderid* in the database and all the products are associated to a SKU with and existing SKUID in the database  ||
+| Valid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database ||
+| Invalid|Valid| Invalid| There is no restock order with the given *restockOrderid* in the database ||
+| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database, there is no restock order with the given *restockOrderid* in the database ||
+
+## **Class *ReturnOrderController* - method *deleteReturnOrder***
+
+The input value is the order id.
+
+**Criteria for method *deleteReturnOrder*:**
+	
+ - Validity of *id*
+
+
+
+**Predicates for method *deleteReturnOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no return order with the given *id* in the database|
+|          |     There is a return order with the given *id* |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no return order with the given *id* in the database||
+| Valid| Valid|  There is a return order with the given *id* in the database ||
+
+
+## **Class *InternalOrderController* - method *getInternalOrder***
+
+The input value is the order id.
+
+**Criteria for method *getInternalOrder*:**
+	
+ - Validity of *id*
+
+
+
+
+
+**Predicates for method *getInternalOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no internal order with the given *id* in the database|
+|          |     There is a internal order with the given *id* |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no internal order with the given *id* in the database||
+| Valid| Valid|  There is a internal order with the given *id* in the database ||
+
+## **Class *InternalOrderController* - method *createInternalOrder***
+
+The input value is the body of the HTTP POST Request
+
+**Criteria for method *createInternalOrder*:**
+	
+ - Validity of *customerid*
+ - Validity of product list 
+
+
+
+
+
+**Predicates for method *createInternalOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *customerid* |     There is no customer with the given *customerid* in the database|
+|          |    There is a customer with the given *customerid* in the database|
+|    Validity of product list |     All the products are associated to a SKU with and existing SKUID in the database|
+|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database|
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *customerid* |     No boundary found     |
+|    Validity of product list|     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|-------:|
+| Valid|Valid| Valid| There is a customer with the given *customerid* in the database and all the products are associated to a SKU with and existing SKUID in the database  ||
+| Valid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database ||
+| Invalid|Valid| Invalid| There is no customer with the given *customerid* in the database ||
+| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database, there is no customer with the given *customerid* in the database ||
+
+## **Class *InternalOrderController* - method *editInternalOrder***
+
+The input value is the body of the HTTP PUT Request and the order id
+
+**Criteria for method *editInternalOrder*:**
+	
+ - Validity of *id*
+ - Validity and consistency of product list 
+
+
+
+
+
+**Predicates for method *editInternalOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id* |     There is no order with the given *id* in the database|
+|          |    There is a order with the given *id* in the database|
+|    Validity and consistency of product list |     All the products are associated to a SKU with and existing SKUID in the database, the new state must be COMPLETED|
+|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database and/or the new state is not COMPLETED|
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+|    Validity and consistency of product list|     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|-------:|
+| Valid|Valid| Valid| There is a order with the given *id* in the database, all the products are associated to a SKU with an existing SKUID in the database and the new state is COMPLETED ||
+| Valid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database and/or the new state is not COMPLETED ||
+| Invalid|Valid| Invalid| There is no order with the given *id* in the database ||
+| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database and/or the new state is not COMPLETED, there is no order with the given *id* in the database ||
+
+## **Class *InternalOrderController* - method *deleteInternalOrder***
+
+The input value is the order id.
+
+**Criteria for method *deleteInternalOrder*:**
+	
+ - Validity of *id*
+
+
+
+**Predicates for method *deleteInternalOrder*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no internal order with the given *id* in the database|
+|          |     There is an internal order with the given *id* |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no internal order with the given *id* in the database||
+| Valid| Valid|  There is an internal order with the given *id* in the database ||
+
+## **Class *Item* - method *getItem***
+
+The input value is the item id.
+
+**Criteria for method *getItem*:**
+	
+ - Validity of *id*
+
+
+
+**Predicates for method *getItem*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no item with the given *id* in the database|
+|          |     There is an itemr with the given *id* |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no item with the given *id* in the database||
+| Valid| Valid|  There is an item order with the given *id* in the database ||
+
+
+## **Class *Item* - method *createItem***
+
+The input value is the body of the HTTP POST Request.
+
+**Criteria for method *createItem*:**
+	
+ - Price sign
+ - Validity of SKUid per supplierId
+ - Validity of id per supplierId
+ - Validity of SKUid
+ - Validity of supplierId
+
+
+
+**Predicates for method *createItem*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Price sign |     Price is positive|
+|          |     Price is negative |
+|   Validity of SKUid per supplierId |     The supplier with the chosen supplierId already has an item with the same SKUid|
+|          |     The supplier with the chosen supplierId doesn't have an item with the same SKUid|
+|   Validity of id per supplierId |     The supplier with the chosen supplierId already has an item with the same id|
+|          |     The supplier with the chosen supplierId doesn't have an item with the same id|
+|   Validity of SKUid |     There is a SKU with the chosen SKUid in the database|
+|          |     There is no SKU with the chosen SKUid in the database|
+|   Validity of supplierId|     There is a supplier with the chosen supplierid in the database|
+|          |     There is no supplier with the chosen supplierid in the database|
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Price sign |     0|
+|   Validity of SKUid per supplierId |     No boundary found |
+|   Validity of id per supplierId |    No boundary found |
+|   Validity of SKUid |      No boundary found |
+|   Validity of supplierId|      No boundary found |
+
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 |Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Positive|  Valid|Valid|Valid|Valid|Valid| This is the only valid combination of predicates||
+| Positive|  Valid|Valid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the database||
+| Positive|  Valid|Valid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database||
+| Positive|  Valid|Valid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database||
+| Positive|  Valid|Invalid|Valid|Valid|Invalid| The supplier with the chosen supplierId already has an item with the same ids||
+| Positive|  Valid|Invalid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the database||
+| Positive|  Valid|Invalid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id||
+| Positive|  Valid|Invalid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database||
+| Positive|  Invalid|Valid|Valid|Valid|Invalid| The supplier with the chosen supplierId already has an item with the same SKUid||
+| Positive| Invalid|Valid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the databased||
+| Positive|  Invalid|Valid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database||
+| Positive|  Invalid|Valid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database||
+| Positive|Invalid|Invalid|Valid|Valid|Invalid| The supplier with the chosen supplierId already has an item with the same id, the supplier with the chosen supplierId already has an item with the same SKUid||
+| Positive|Invalid|Invalid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the database||
+| Positive|Invalid|Invalid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id||
+| Positive|Invalid|Invalid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database||
+| Negative|  Valid|Valid|Valid|Valid|Invalid| The price is negative||
+| Negative|  Valid|Valid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the database, the price is negative||
+| Negative|  Valid|Valid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database, the price is negative||
+| Negative|  Valid|Valid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative||
+| Negative|  Valid|Invalid|Valid|Valid|Invalid| The supplier with the chosen supplierId already has an item with the same id, the price is negative||
+| Negative|  Valid|Invalid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the database, the price is negative||
+| Negative|  Valid|Invalid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id, the price is negative||
+| Negative|  Valid|Invalid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative||
+| Negative|  Invalid|Valid|Valid|Valid|Invalid| The supplier with the chosen supplierId already has an item with the same SKUid, the price is negative||
+| Negative| Invalid|Valid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the database, the price is negative||
+| Negative|  Invalid|Valid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database, the price is negative||
+| Negative|  Invalid|Valid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative||
+| Negative|Invalid|Invalid|Valid|Valid|Invalid| The supplier with the chosen supplierId already has an item with the same id, the supplier with the chosen supplierId already has an item with the same SKUid, the price is negative||
+| Negative|Invalid|Invalid|Valid|Invalid|Invalid| There is no supplier with the chosen supplierid in the database, the price is negative||
+| Negative|Invalid|Invalid|Invalid|Valid|Invalid| There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id, the price is negative||
+| Negative|Invalid|Invalid|Invalid|Invalid|Invalid| There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative||
+
+## **Class *Item* - method *editItem***
+
+The input value is the item id and the body of the HTTP PUT Request
+
+**Criteria for method *editItem*:**
+	
+ - Validity of *id*
+ - Sign of price
+
+
+
+**Predicates for method *editItem*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no item with the given *id* in the database|
+|          |     There is an item with the given *id* |
+|    Sign of price  |     Sign is positive|
+|          |     Sign is negative |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+|    Sign of price  |     0|
+
+**Combination of predicates**:
+
+| Criteria 1 |  Criteria 2 | Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Valid| Positive|Valid|  There is an item order with the given *id* in the database and the sign is positive ||
+| Valid| Negative|Invalid|  The sign is negative ||
+| Invalid| Positive|Invalid|  There is no item with the given *id* in the database ||
+| Invalid| Negative|Invalid|  The sign is negative, there is no item with the given *id* in the database ||
+
+## **Class *Item* - method *deleteItem***
+
+The input value is the item id.
+
+**Criteria for method *deleteItem*:**
+	
+ - Validity of *id*
+
+
+
+**Predicates for method *deleteItem*:**
+
+| Criteria | Predicate |
+| :--------: | :---------: |
+|    Validity of *id*  |     There is no item with the given *id* in the database|
+|          |     There is an item with the given *id* |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :--------: | :---------------: |
+|    Validity of *id* |     No boundary found     |
+
+**Combination of predicates**:
+
+| Criteria 1 |  Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Invalid|  Invalid| There is no item with the given *id* in the database||
+| Valid| Valid|  There is an item order with the given *id* in the database ||
 
 
 
@@ -1025,6 +2090,3 @@ The input value is the id.
 |||||
 |||||
 ||||||
-
-
-
