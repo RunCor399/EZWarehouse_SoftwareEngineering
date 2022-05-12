@@ -1,0 +1,21 @@
+GET http://localhost:3001/api/returnOrders HTTP/1.1
+content-type: application/json
+
+###
+
+GET http://localhost:3001/api/returnOrders/:id HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:3001/api/returnOrder HTTP/1.1
+content-type: application/json
+
+###
+PUT http://localhost:3001/api/returnOrder/:id HTTP/1.1
+content-type: application/json
+
+###
+GET http://localhost:3001/api/internalOrders HTTP/1.1
+content-type: application/json
+
+###

@@ -18,10 +18,10 @@ class TestResultController {
     async getTestResults(rfid) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         if (this.#controller.checkRFID(rfid))
-            throw new Error(Exceptions.message422)
+        throw new Exceptions(422);
 
         /*let skuitem;
         await this.#dbManager.genericSqlGet(`SELECT *  FROM SKUIrem WHERE RFID= ${rfid};`)
@@ -33,14 +33,14 @@ class TestResultController {
         let skuitem;
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .then(value => skuitem = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
-        if (!skuitem) throw new Error(Exceptions.message404)
+            .catch(() => { throw new Exceptions(500) });
+        if (!skuitem) throw new Exceptions(404)
 
 
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE SKUItemID= "${rfid}";`)
             .then(value => rows = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => {throw new Exceptions(500)});
         return rows;
     }
 
@@ -48,18 +48,18 @@ class TestResultController {
     async getTestResult(rfid, id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id)
             || this.#controller.checkRFID(rfid))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE rfid= "${rfid}" AND ID= ${id};`)
             .then(value => row = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (row === undefined)
-            throw new Error(Exceptions.message404)
+            .catch(error => { throw new Exceptions(500) });
+        if (!row)
+        throw new Exceptions(404)
         return row;
     }
 
@@ -67,8 +67,8 @@ class TestResultController {
     async createTestResult(body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         const rfid = body["rfid"];
         const idTestDescriptor = body["idTestDescriptor"];
         const date = body["Date"];
@@ -77,8 +77,7 @@ class TestResultController {
         if (this.#controller.checkRFID(rfid) ||
             this.#controller.areUndefined(testDescriptor, date, result)
             || this.#controller.areNotNumbers(idTestDescriptor))
-            throw new Error(Exceptions.message422);
-
+            throw new Exceptions(422)
 
         /* let skuitem;
          await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE rfid= "${rfid}"};`)
@@ -90,8 +89,8 @@ class TestResultController {
         let skuitem;
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .then(value => skuitem = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
-        if (!skuitem) throw new Error(Exceptions.message404)
+            .catch(() => { throw new Exceptions(500) });
+        if (!skuitem) throw new Exceptions(404)
 
 
         /*let testDescriptor;
@@ -104,14 +103,14 @@ class TestResultController {
         let testDescriptor;
         await this.#controller.getTestDescriptorController().getTestDesciptor(idTestDescriptor)
             .then(value => testDescriptor = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
-        if (!testDescriptor) throw new Error(Exceptions.message404)
+            .catch(() => { throw new Exceptions(500) });
+        if (!testDescriptor) throw new Exceptions(404)
 
 
         const sqlInstruction = `INSERT INTO TestResult ( testDescID,  SKUItemID, date, result) 
         VALUES ( ${idTestDescriptor}, "${rfid}", "${date}", ${result});`;
         await this.#dbManager.genericSqlRun(sqlInstruction)
-            .catch(error => { throw new Error(Exceptions.message503); });
+            .catch(error => { throw new Exceptions(503); });
 
     }
 
@@ -120,8 +119,8 @@ class TestResultController {
 
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         const newIdTestDesciptor = body["newIdTestDescriptor"];
         const newDate = body["newDate"];
         const newResult = body["newResult"];
@@ -129,7 +128,7 @@ class TestResultController {
         if (this.#controller.areUndefined(newIdTestDesciptor, newDate, newResult, id)
             || this.#controller.areNotNumbers(id)
             || this.#controller.checkRFID(rfid))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
 
         /* let skuitem;
@@ -156,27 +155,27 @@ class TestResultController {
         let skuitem;
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .then(value => skuitem = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
-        if (!skuitem) throw new Error(Exceptions.message404)
+            .catch(() => { throw new Exceptions(500) });
+        if (!skuitem)  throw new Exceptions(404)
 
         let testDescriptor;
         await this.#controller.getTestDescriptorController().getTestDesciptor(idTestDescriptor)
             .then(value => testDescriptor = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
-        if (!testDescriptor) throw new Error(Exceptions.message404)
+            .catch(() => { throw new Exceptions(500) });
+        if (!testDescriptor) throw new Exceptions(404)
 
         let testResult;
         await this.getTestResult(id)
             .then(value => testResult = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
-        if (!testResult) throw new Error(Exceptions.message404)
+            .catch(() => { throw new Exceptions(500) });
+        if (!testResult) throw new Exceptions(404)
 
 
         const sqlInstruction = `UPDATE TestResult SET testDescID= ${idTestDesciptor} 
         AND date= "${newDate}" AND result= ${newResult} WHERE ID= ${id} AND SKUItemID = "${rfid}";`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
-            .catch(error => { throw new Error(Exceptions.message503) });
+            .catch(error => { throw new Exceptions(503) });
     }
 
 
@@ -184,16 +183,15 @@ class TestResultController {
     async deleteTestResult(rfid, id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
-            throw new Error(Exceptions.message401);
-
+        throw new Exceptions(401);
 
         if (this.#controller.checkRFID(rfid) || this.#controller.areUndefined(id)
             || this.#controller.areNotNumbers(id))
-            throw new Error(Exceptions.message422)
+            throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM TestResult WHERE ID= ${id} AND SKUItemID= "${rfid}";`)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+            .catch((error) => { throw new Exceptions(500) });
 
     }
 

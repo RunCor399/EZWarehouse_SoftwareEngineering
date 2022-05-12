@@ -1,0 +1,37 @@
+
+GET http://localhost:3001/api/restockOrders HTTP/1.1
+content-type: application/json
+
+###
+GET http://localhost:3001/api/restockOrdersIssued HTTP/1.1
+content-type: application/json
+
+###
+GET http://localhost:3001/api/restockOrders/:id HTTP/1.1
+content-type: application/json
+
+###
+GET http://localhost:3001/api/restockOrders/:id/returnItems HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:3001/api/restockOrder HTTP/1.1
+content-type: application/json
+
+###
+PUT http://localhost:3001/api/restockOrder/:id HTTP/1.1
+content-type: application/json
+
+###
+PUT http://localhost:3001/api/restockOrder/:id/skuItems HTTP/1.1
+content-type: application/json
+
+###
+PUT http://localhost:3001/api/restockOrder/:id/transportNote HTTP/1.1
+content-type: application/json
+
+###
+DELETE http://localhost:3001/api/restockOrder/:id HTTP/1.1
+content-type: application/json
+
+###

@@ -9,17 +9,13 @@ router.get('/api/skus', async (req, res) => {
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET', req.url);
-  let skus;
-  try {
-    skus = await controller.getSkuController().getAllSku();
-    console.log("skus", skus);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    console.log(responseParams);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
 
-  return res.status(200).json(skus);
+  await controller.getSkuController().getAllSku()
+    .then(skus => {return res.status(200).json(skus);})
+    .catch(error => {return res.status(error.getCode()).send(error.getMessage());});
+
+
+  
 });
 
 //GET /api/skus/:id
@@ -31,6 +27,7 @@ router.get('/api/skus/:id', async (req, res) => {
   console.log('GET', req.url);
   let sku;
 
+  /*
   try {
     sku = await controller.getSkuController().getSku(param);
     console.log("sku", sku)
@@ -41,6 +38,12 @@ router.get('/api/skus/:id', async (req, res) => {
   }
 
   return res.status(200).json(sku);
+  */
+  
+  await controller.getSkuController().getSku(param)
+  .then(sku => {return res.status(200).json(sku);})
+  .catch(error => {return res.status(error.getCode()).send(error.getMessage());});
+
 
 });
 

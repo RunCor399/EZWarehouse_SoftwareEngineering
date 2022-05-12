@@ -96,10 +96,12 @@ class Controller {
         return user;
     }
 
+    /** temporaneamente ritorna sempre true */
     isLoggedAndHasPermission(...validType) {
-        let user = this.#userController.getUser()
+        /*let user = this.#userController.getUser()
         if (!user) return false;
-      return this.#userController.hasPermission(user.type, validType);
+      return this.#userController.hasPermission(user.type, validType);*/
+        return true;
         }
 
     areUndefined(...params) {

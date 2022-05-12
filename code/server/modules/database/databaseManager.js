@@ -6,7 +6,7 @@ const Exceptions = require('../../routers/exceptions');
 class DBManager {
     #db;
     constructor() {
-        this.#db = new sqlite.Database('./modules/database/db.sqlite', (err) => {
+        this.#db = new sqlite.Database('./modules/database/db.db', (err) => {
             if (err) {
                 console.log("Database start error: " + err);
                 throw err;
