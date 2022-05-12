@@ -125,8 +125,9 @@ function createTables(dbManager) {
     const createSKUPerReturnOrder =
         `CREATE TABLE SKUPerReturnOrder(
             id INT,
-            SKUId INT,
-            qty INT, 
+            description VARCHAR(250),
+            price FLOAT,
+            RFID VARCHAR(50),  
             PRIMARY KEY(id, SKUId),
             FOREIGN KEY(SKUId) REFERENCES SKU(id),    
             FOREIGN KEY(id) REFERENCES ReturnOrder(id)
@@ -146,6 +147,8 @@ function createTables(dbManager) {
         `CREATE TABLE SKUPerInternalOrder(
             id INT,
             SKUId INT,
+            description VARCHAR(250),
+            price FLOAT,
             qty INT, 
             PRIMARY KEY(id, SKUId),
             FOREIGN KEY(SKUId) REFERENCES SKU(Id),
@@ -155,6 +158,7 @@ function createTables(dbManager) {
     const createSKUItemsPerInternalOrder =
         `CREATE TABLE SKUItemsPerInternalOrder(
             id INT,
+            SKUID INT,
             RFID VARCHAR(50),
             PRIMARY KEY(id, RFID),
             FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),

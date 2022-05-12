@@ -12,10 +12,10 @@ CREATE TABLE SKU(
 )
 
 CREATE TABLE SKUItem(
-    RFID INT,
+    RFID VARCHAR(50),
     SKUId INT, 
     available INT,
-    dateOfStock DATE,
+    dateOfStock VARCHAR(50),
     PRIMARY KEY (RFID),
     FOREIGN KEY (SKUId) REFERENCES SKU(id)
 );
@@ -53,8 +53,8 @@ CREATE TABLE TestDescriptor(
 CREATE TABLE TestResult(
     id INT,
     idTestDescriptor INT,
-    RFID INT,
-    Date DATE,
+    RFID VARCHAR(50),
+    Date VARCHAR(50),
     Result BOOLEAN,
     PRIMARY KEY (id),
     FOREIGN KEY(idTestDescriptor) REFERENCES TestDescriptor(id),
@@ -75,9 +75,9 @@ CREATE TABLE Users(
 
 CREATE TABLE RestockOrder(
     id INT,
-    issueDate DATE,
+    issueDate VARCHAR(50),
     state VARCHAR(250),
-    shipmentDate DATE, 
+    shipmentDate VARCHAR(50), 
     supplierId INT, 
     PRIMARY KEY(id),
     FOREIGN KEY(supplierId) REFERENCES Users(id)
@@ -97,7 +97,7 @@ CREATE TABLE SKUPerRestockOrder(
 CREATE TABLE SKUItemsPerRestockOrder(
     id INT,
     SKUID INT,
-    RFID INT,
+    RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(id) REFERENCES RestockOrder(id)
@@ -106,7 +106,7 @@ CREATE TABLE SKUItemsPerRestockOrder(
 
 CREATE TABLE  ReturnOrder(
     id INT,
-    returnDate DATE,
+    returnDate VARCHAR(50),
     supplierID INT, 
     restockOrderID INT,
     PRIMARY KEY(id),
@@ -118,7 +118,9 @@ CREATE TABLE  ReturnOrder(
 CREATE TABLE SKUPerReturnOrder(
     id INT,
     SKUId INT,
-    qty INT, 
+    description VARCHAR(250),
+    price FLOAT,
+    RFID VARCHAR(50), 
     PRIMARY KEY(orderID, SKUId),
     FOREIGN KEY(SKUId) REFERENCES SKU(id)    
     FOREIGN KEY(id) REFERENCES ReturnOrder(id)
@@ -127,7 +129,7 @@ CREATE TABLE SKUPerReturnOrder(
 CREATE TABLE SKUItemsPerReturnOrder(
     id INT,
     SKUID INT,
-    RFID INT,
+    RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(id) REFERENCES ReturnOrder(id)
@@ -136,7 +138,7 @@ CREATE TABLE SKUItemsPerReturnOrder(
 
 CREATE TABLE InternalOrder(
     id INT,
-    issueDate DATE,
+    issueDate VARCHAR(50),
     state VARCHAR(250), 
     customerId INT,
     PRIMARY KEY(id),
@@ -147,6 +149,8 @@ CREATE TABLE InternalOrder(
 CREATE TABLE SKUPerInternalOrder(
     id INT,
     SKUId INT,
+    description VARCHAR(250),
+    price FLOAT,
     qty INT, 
     PRIMARY KEY(id, SKUId),
     FOREIGN KEY(SKUId) REFERENCES SKU(Id),
@@ -154,11 +158,10 @@ CREATE TABLE SKUPerInternalOrder(
 )
 
 
-
-
 CREATE TABLE SKUItemsPerInternalOrder(
     id INT,
-    RFID INT,
+    SKUID INT,
+    RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(id) REFERENCES InternalOrder(id)
