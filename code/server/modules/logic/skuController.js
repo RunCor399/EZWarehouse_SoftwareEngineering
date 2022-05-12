@@ -39,7 +39,10 @@ class SkuController {
             throw new Exceptions(401);
 
         let sku;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
+        const params = [id];
+        const query = `SELECT *  FROM SKU WHERE ID=?;`
+
+        await this.#dbManager.genericSqlGet(query, params)
             .then(value => sku = value[0])
             .catch(error => { throw new Exceptions(500) });
 
@@ -126,20 +129,15 @@ class SkuController {
             || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
             throw new Exceptions(422);
 
-        console.log("prova2")
 
-        
-
-        console.log("prova3")
-
+        const query = `SELECT * FROM SKU_in_Position WHERE SKUId = ?`;
+        const params1 = [id];
 
         //check if sku has position
         let position;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${id}`)
+        await this.#dbManager.genericSqlGet(query, params1)
             .then(value => position = value[0])
             .catch(error => { throw Exceptions(503) });
-
-        console.log("prova4", position)
 
 
         if (position) {
@@ -148,43 +146,41 @@ class SkuController {
                 || position.maxVolume < newVolume * newAvailableQuantity)
                 throw new Exceptions(422);
             
-            console.log("prova5")
-
-            /*
             //update position info
-            const sqlUpdate = `UPDATE Position SET occupiedWeight= ${newWeight * newAvailableQuantity} 
-                AND occupiedVolume = ${newVolume * newAvailableQuantity} WHERE ID= ${position.positionId};`;
+            const params2 = [newWeight * newAvailableQuantity, newVolume * newAvailableQuantity, position.positionId]
+            const sqlUpdate = `UPDATE Position SET occupiedWeight = ? 
+                               AND occupiedVolume = ? 
+                               WHERE ID = ?;`;
+
             try {
-                await this.#dbManager.genericSqlRun(sqlUpdate);
+                await this.#dbManager.genericSqlRun(sqlUpdate, params2);
             } catch (error) {
                 new Error(Exceptions.message503);
-            }*/
+            }
 
             this.#controller.getPositionController()
-                .editPositionVer1({
-                    newAisleID: position.aisleID,
-                    newRow: position.row,
-                    newCol: position.col,
-                    newMaxWeight: position.maxWeight,
-                    newMaxVolume: position.maxVolume,
-                    newOccupiedWeight: newWeight * newAvailableQuantity,
-                    newOccupiedVolume: newVolume * newAvailableQuantity,
-                }).catch(error => { throw new Exceptions(500) });
-
-            console.log("prova6")
+                            .editPositionVer1({
+                                newAisleID: position.aisleID,
+                                newRow: position.row,
+                                newCol: position.col,
+                                newMaxWeight: position.maxWeight,
+                                newMaxVolume: position.maxVolume,
+                                newOccupiedWeight: newWeight * newAvailableQuantity,
+                                newOccupiedVolume: newVolume * newAvailableQuantity,
+                            }).catch(error => { throw new Exceptions(500) });
 
         }
 
         //update sku info
+        const params3 = [newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id];
         const sqlInstruction =
-            `UPDATE SKU SET weight= ${newWeight}, volume= ${newVolume}, price= ${newPrice} ,
-             notes= "${newNotes}", description= "${newDescription}", 
-             availableQuantity= ${newAvailableQuantity} WHERE ID=${id};`;
-
-        console.log("prova7")
+            `UPDATE SKU SET weight = ?, volume = ?, price = ? ,
+             notes = ?, description = ?, 
+             availableQuantity= ? WHERE ID = ?;`;
 
 
-        await this.#dbManager.genericSqlRun(sqlInstruction)
+
+        await this.#dbManager.genericSqlRun(sqlInstruction, params3)
             .catch((error) => { throw new Exceptions(503); });
 
         console.log("prova8")
@@ -211,7 +207,9 @@ class SkuController {
 
 
         let position;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Positions WHERE id= ${positionId};`)
+        const query1 = `SELECT * FROM Positions WHERE id = ?;`;
+        const params1 = [positionId];
+        await this.#dbManager.genericSqlGet(query, params1)
             .then(value => position = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
 
@@ -221,24 +219,27 @@ class SkuController {
             throw new Exceptions(422);
 
         let testValue;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE positionId = ${positionId}`)
+        const query2 = `SELECT * FROM SKU_in_Position WHERE positionId = ?;`;
+        const params2 = [positionId]
+        await this.#dbManager.genericSqlGet(query2, params2)
             .then(value => testValue = value[0])
             .catch(error => { throw new Error(Exceptions.message503) });
 
         if (!testValue)
         throw new Exceptions(422);
 
-        const sqlInsert =
-            `INSERT INTO SKU_in_Position SET(SKUId, positionID) 
-            VALUES (${id} ,${positionId});`;
-        await this.#dbManager.genericSqlRun(sqlInsert)
-            .catch((error) => { throw new Error(Exceptions.message503) });
+        const sqlInsert = `INSERT INTO SKU_in_Position SET(SKUId, positionID) 
+                           VALUES (${id} ,${positionId});`;
 
+        const params3 = [id, positionId];
+        await this.#dbManager.genericSqlRun(sqlInsert, params3)
+                             .catch((error) => { throw new Error(Exceptions.message503) });
 
-        const sqlUpdate = `UPDATE Position SET occupiedWeight= ${sku.weight * sku.availableQuantity} 
-        AND occupiedVolume = ${sku.volume * sku.availableQuantity} WHERE ID= ${positionId}`;
+        const params4 = [sku.weight * sku.availableQuantity, sku.volume * sku.availableQuantity, positionId];
+        const sqlUpdate = `UPDATE Position SET occupiedWeight = ?,
+                           occupiedVolume = ? WHERE ID = ?`;
 
-        await this.#dbManager.genericSqlGet(sqlUpdate)
+        await this.#dbManager.genericSqlGet(sqlUpdate, params4)
             .catch((error) => { throw new Error(Exceptions.message503) });
 
     }
@@ -254,8 +255,9 @@ class SkuController {
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
         throw new Exceptions(422);
 
-
-        await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE Id= ${id};`)
+        const query = `DELETE FROM SKU WHERE id= ?;`
+        const params = [id];
+        await this.#dbManager.genericSqlRun(query, params)
             .catch((error) => { throw new Exceptions(503) });
 
     }
