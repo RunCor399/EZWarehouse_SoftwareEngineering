@@ -12,7 +12,7 @@ SKUItemsPerRestockOrder(id, SKUID, RFID)
 
 ReturnOrder(id, returnDate, supplierID, restockOrderID)
 SKUPerReturnOrder(id, SKUId, description, price, RFID)
-SKUItemsPerReturnOrder(id, RFID)
+SKUItemsPerReturnOrder(id, RFID)    //unused
 
 InternalOrder(id, issueDate, state, customerId)
 SKUPerInternalOrder(id, SKUId, description, price, qty)
