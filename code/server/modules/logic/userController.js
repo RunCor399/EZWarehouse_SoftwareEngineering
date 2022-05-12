@@ -50,7 +50,7 @@ class UserController {
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
         return rows;
 
     }
@@ -63,7 +63,7 @@ class UserController {
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
         return rows;
     }
 
@@ -163,7 +163,7 @@ class UserController {
 
         await this.#dbManager.genericSqlRun
             (`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`)
-            .catch((error) => { throw new Exceptions(500) });
+            .catch((error) => { throw error });
 
         //`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType
 
@@ -180,7 +180,7 @@ class UserController {
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM USERS WHERE email="${username}" AND type="${type}";`)
-            .catch((error) => { throw new Exceptions(500) });
+            .catch((error) => { throw error });
 
         //`DELETE FROM USERS WHERE email= ? AND type= ?;` , username, type
 

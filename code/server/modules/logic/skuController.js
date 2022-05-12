@@ -26,8 +26,8 @@ class SkuController {
             .then(value => rows = value)
             .catch(error => { throw error });
 
-       
-        
+        console.log(rows);
+
         return rows;
     }
 
@@ -80,7 +80,7 @@ class SkuController {
          VALUES ( ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
 
     }
@@ -181,40 +181,88 @@ class SkuController {
         let sku;
         await this.getSku(id)
             .then(value => sku = value)
-            .catch(() => { throw new Error(Exceptions.message500) });
-        if (!sku) throw new Error(Exceptions.message404)
+            .catch((error) => { throw error });
+        if (!sku) throw new Exceptions(404);
 
 
         let position;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Positions WHERE id= ${positionId};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Position WHERE positionID= ${positionId};`)
             .then(value => position = value[0])
-            .catch(error => { throw new Error(Exceptions.message503) });
+            .catch(error => { throw error });
 
 
+
+        console.log("test1", position.maxWeight < sku.weight * sku.availableQuantity + position.occupiedWeight);
+        console.log("test2", position.maxVolume < sku.volume * sku.availableQuantity + position.occupiedVolume);
         if (position.maxWeight < sku.weight * sku.availableQuantity
             || position.maxVolume < sku.volume * sku.availableQuantity)
             throw new Exceptions(422);
 
-        let testValue;
+        let positionAlreadyOccupied;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE positionId = ${positionId}`)
-            .then(value => testValue = value[0])
-            .catch(error => { throw new Error(Exceptions.message503) });
+            .then(value => positionAlreadyOccupied = value[0])
+            .catch(error => { throw error });
 
-        if (!testValue)
+        console.log("test positionalreadyoccupied", positionAlreadyOccupied === undefined)
+
+        if (positionAlreadyOccupied)
             throw new Exceptions(422);
 
+
+        let skuHasAlreadyAPosition;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${id}`)
+            .then(value => skuHasAlreadyAPosition = value[0])
+            .catch(error => { throw error });
+        console.log("test skuhasalreadyaposition", skuHasAlreadyAPosition )
+
+        if (skuHasAlreadyAPosition !== undefined) {
+            await this.#dbManager
+                .genericSqlRun(`DELETE FROM SKU_in_Position WHERE SKUId = ${skuHasAlreadyAPosition.SKUId}`)
+                .catch(error => { throw error });
+
+            let occupiedPosition
+            await this.#dbManager.genericSqlGet(`SELECT * FROM Position WHERE positionID= "${skuHasAlreadyAPosition.positionID}";`)
+                .then(value => occupiedPosition = value[0])
+                .catch(error => { throw error });
+
+            console.log("occupiedPositionPre", occupiedPosition)
+            await this.#controller.getPositionController()
+                .editPositionVer1(skuHasAlreadyAPosition.positionID,
+                    {
+                        newAisleID: occupiedPosition.aisleID,
+                        newRow: occupiedPosition.row,
+                        newCol: occupiedPosition.col,
+                        newMaxWeight: position.maxWeight,
+                        newMaxVolume: position.maxVolume,
+                        newOccupiedWeight:  occupiedPosition.occupiedWeight - sku.weight * sku.availableQuantity,
+                        newOccupiedVolume: occupiedPosition.occupiedVolume - sku.volume * sku.availableQuantity 
+                    })
+                .catch(error => { throw error });
+
+        }
+
+
         const sqlInsert =
-            `INSERT INTO SKU_in_Position SET(SKUId, positionID) 
+            `INSERT INTO SKU_in_Position (SKUId, positionID) 
             VALUES (${id} ,${positionId});`;
+
         await this.#dbManager.genericSqlRun(sqlInsert)
-            .catch((error) => { throw new Error(Exceptions.message503) });
+            .catch((error) => { throw error });
 
 
-        const sqlUpdate = `UPDATE Position SET occupiedWeight= ${sku.weight * sku.availableQuantity} 
-        AND occupiedVolume = ${sku.volume * sku.availableQuantity} WHERE ID= ${positionId}`;
 
-        await this.#dbManager.genericSqlGet(sqlUpdate)
-            .catch((error) => { throw new Error(Exceptions.message503) });
+        await this.#controller.getPositionController()
+            .editPositionVer1(positionId,
+                {
+                    newAisleID: position.aisleID,
+                    newRow: position.row,
+                    newCol: position.col,
+                    newMaxWeight: position.maxWeight + position.occupiedWeight,
+                    newMaxVolume: position.maxVolume + position.occupiedVolume,
+                    newOccupiedWeight: sku.weight * sku.availableQuantity,
+                    newOccupiedVolume: sku.volume * sku.availableQuantity
+                })
+            .catch(error => { throw error });
 
     }
 
@@ -231,7 +279,7 @@ class SkuController {
 
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE Id= ${id};`)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
     }
 }

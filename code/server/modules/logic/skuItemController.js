@@ -22,7 +22,7 @@ class SkuItemController {
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM SKUItem")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
         return rows;
     }
 
@@ -66,7 +66,7 @@ class SkuItemController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= "${rfid}";`)
             .then(value => row = value[0])
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
 
         //`SELECT * FROM SKUItem WHERE RFID= ?;`, rfid
         
@@ -158,6 +158,8 @@ class SkuItemController {
         await this.#dbManager.genericSqlRun
             (`DELETE FROM SKUItem WHERE RFID= "${rfid}";`)
             .catch((error) => { throw error });
+
+        //`DELETE FROM SKUItem WHERE RFID= ?;`,rfid
     }
 }
 

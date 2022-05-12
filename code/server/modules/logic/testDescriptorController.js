@@ -23,7 +23,7 @@ class TestDescriptorController {
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
         return rows;
     }
 

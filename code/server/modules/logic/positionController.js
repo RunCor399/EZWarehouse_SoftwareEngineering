@@ -82,13 +82,16 @@ class PositionController {
             || String(id).length !== 12 || String(newAisleID).length !== 4 || String(newRow).length !== 4 || String(newCol).length !== 4)
             throw new Exceptions(422);
 
+        console.log("provaInFunction", id, body)
+
         let positions;
         await this.getAllPositions()
             .then(value => positions = value)
             .catch((error) => { throw new error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
-
+        console.log(positionIDs);
+        
         if (!positionIDs.includes(id))
             throw new Exceptions(404);
 

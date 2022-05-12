@@ -15,12 +15,12 @@ POST http://localhost:3001/api/position HTTP/1.1
 content-type: application/json
 
    {
-            "positionID":"800234543412",
+            "positionID":"800234543413",
             "aisleID": "8002",
             "row": "3454",
-            "col": "3412",
-            "maxWeight": 1000,
-            "maxVolume": 1000
+            "col": "3413",
+            "maxWeight": 1000000,
+            "maxVolume": 1000000
         }
 
 ###
@@ -46,7 +46,7 @@ content-type: application/json
         }
 
 ###
-DELETE http://localhost:3001/api/position/123456789012 HTTP/1.1
+DELETE http://localhost:3001/api/position/800234543412 HTTP/1.1
 content-type: application/json
 
 ###
