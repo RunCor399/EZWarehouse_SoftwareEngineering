@@ -17,9 +17,9 @@ class DBManager {
 
     }
 
-    async genericSqlRun(istruzione) {
+    async genericSqlRun(query, ...params) {
         return new Promise((resolve, reject) => {
-            this.#db.run(istruzione, (err) => {
+            this.#db.run(query, params, (err) => {
                 if (err){
                     console.log("Database run error: err", err);
                     reject(err);
@@ -29,9 +29,9 @@ class DBManager {
         })
     }
 
-    async genericSqlGet(istruzione) {
+    async genericSqlGet(query, ...params) {
         return new Promise((resolve, reject) => {
-            this.#db.all(istruzione, (err, rows) => {
+            this.#db.all(query, (err, rows) => {
                 if (err) {
                     console.log("Database get error: err", err);
                     reject(err);

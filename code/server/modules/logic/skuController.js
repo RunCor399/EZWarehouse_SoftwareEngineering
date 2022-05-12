@@ -1,6 +1,7 @@
 'use strict'
 
 const Exceptions = require('../../routers/exceptions');
+const { param } = require('../../routers/skusRouter');
 const Controller = require('./controller')
 
 class SkuController {
@@ -57,12 +58,15 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
 
+        
         const description = body["description"];
         const weight = body["weight"];
         const volume = body["volume"];
         const notes = body["notes"];
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
+
+        const params = [weight, volume, price, notes, description, availableQuantity]
 
         console.log(body);
 
@@ -71,12 +75,15 @@ class SkuController {
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
             throw new Exceptions(422);
 
+        
 
+        // const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        //  VALUES ( ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
 
         const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
-         VALUES ( ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
+                                VALUES ( ?, ?, ?, ?, ?, ?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction)
+        await this.#dbManager.genericSqlRun(sqlInstruction, params)
             .catch((error) => { throw new Exceptions(503) });
             
 
