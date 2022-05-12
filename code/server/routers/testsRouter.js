@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const Exceptions = require('./exceptions')
 const Controller = require('../modules/logic/controller')
 
 //TEST DESCRIPTOR
@@ -10,18 +9,6 @@ router.get('/api/testDescriptors', async (req, res) => {
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET', req.url);
-
-  /*let testDescriptors;
-
-  try {
-    testDescriptors = await controller.getTestDescriptorController().getAllTestDescriptors();
-    console.log("testDescriptors", testDescriptors)
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-
-  return res.status(200).json(testDescriptors); */
 
   await controller.getTestDescriptorController().getAllTestDescriptors()
     .then((testDescriptors) => { return res.status(200).json(testDescriptors); })
@@ -37,17 +24,6 @@ router.get('/api/testDescriptors/:id', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  /* let testDescriptor;
-
-   try {
-    testDescriptor = await controller.getTestDescriptorController().getTestDescriptor(param);
-    console.log("testDescriptor", testDescriptor);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-
-  return res.status(200).json(testDescriptor); */
   await controller.getTestDescriptorController().getTestDescriptor(param)
     .then((testDescriptor) => { return res.status(200).json(testDescriptor); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -60,15 +36,6 @@ router.post('/api/testDescriptor', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
-  /* 
-    try {
-      await controller.getTestDescriptorController().createTestDescriptor(req.body);
-    } catch (error) {
-      let responseParams = Exceptions.handle(error);
-      return res.status(responseParams.code).send(responseParams.message);
-    }
-  
-    return res.status(201).end(); */
   await controller.getTestDescriptorController().createTestDescriptor(req.body)
     .then((user) => { return res.status(201).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -81,15 +48,8 @@ router.put('/api/testDescriptor/:id', async (req, res) => {
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT', req.url);
-  /* 
-    try {
-      await controller.getTestDescriptorController().editTestDescriptor(param, req.body);
-    } catch (error) {
-      let responseParams = Exceptions.handle(error);
-      return res.status(responseParams.code).send(responseParams.message);
-    }
   
-    return res.status(200).end(); */
+
   await controller.getTestDescriptorController().editTestDescriptor(param, req.body)
     .then(() => { return res.status(200).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -102,14 +62,8 @@ router.delete('/api/testDescriptor/:id', async (req, res) => {
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE', req.url);
-  /* 
-    try {
-      await controller.getTestDescriptorController().deleteTestDescriptor(param);
-    } catch (error) {
-      let responseParams = Exceptions.handle(error);
-      return res.status(responseParams.code).send(responseParams.message);
-    }
-    return res.status(204).end(); */
+  
+
   await controller.getTestDescriptorController().deleteTestDescriptor(param)
     .then(() => { return res.status(204).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -125,17 +79,7 @@ router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET', req.url);
-  /* let testResults;
- 
-    try {
-     testResults = await controller.getTestResultController().getTestResults(param);
-     console.log("testResults", testResults);
-   } catch (error) {
-     let responseParams = Exceptions.handle(error);
-     return res.status(responseParams.code).send(responseParams.message);
-   }
- 
-   return res.status(200).json(testResults); */
+
   await controller.getTestDescriptorController().getTestResults(param)
     .then((user) => { return res.status(200).json(user); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -151,15 +95,6 @@ router.get('/api/skuitems/:rfid/testResults/:id', async (req, res) => {
   console.log('GET', req.url);
   let testResult;
 
-  /*  try {
-     testResult = await controller.getTestResultController().getTestResult(paramRfid, paramId);
-     console.log("testResult", testResult);
-   } catch (error) {
-     let responseParams = Exceptions.handle(error);
-     return res.status(responseParams.code).send(responseParams.message);
-   }
- 
-   return res.status(200).json(testResult); */
   await controller.getTestDescriptorController().getTestResult(paramRfid, paramId)
     .then((user) => { return res.status(200).json(user); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -172,13 +107,6 @@ router.post('/api/skuitems/testResult', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
-  /* try {
-    await controller.getTestResultController().createTestResult(req.body);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-  return res.status(200).end(); */
   await controller.getTestDescriptorController().createTestResult(req.body)
     .then((user) => { return res.status(200).json(user); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -193,13 +121,6 @@ router.put('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('PUT', req.url);
 
-  /*   try {
-      await controller.getTestResultController().editTestResult(paramRfid, paramId, req.body);
-    } catch (error) {
-      let responseParams = Exceptions.handle(error);
-      return res.status(responseParams.code).send(responseParams.message);
-    }
-    return res.status(200).end(); */
   await controller.getTestDescriptorController().editTestResult(paramRfid, paramId, req.body)
     .then((user) => { return res.status(200).json(user); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
@@ -214,13 +135,6 @@ router.delete('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('DELETE', req.url);
 
-  /* try {
-    await controller.getTestResultController().deleteTestResult(paramRfid, paramId);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-  return res.status(200).end(); */
   await controller.getTestDescriptorController().deleteTestResult(paramRfid, paramId)
     .then((user) => { return res.status(200).json(user); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
