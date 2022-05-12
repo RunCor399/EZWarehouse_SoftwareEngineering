@@ -13,7 +13,7 @@ class ReturnOrderController {
     }
 
 
-    /**getter function to retreive all the return orders*/
+    /*TO BE COMPLETED - getter function to retreive all the return orders*/
     async getAllReturnOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM ReturnOrder;";
@@ -32,10 +32,20 @@ class ReturnOrderController {
         await this.#dbManager.genericSqlGet("SELECT * FROM ReturnOrder;")
             .then(value => rows = value)
             .catch(error => { throw error });
+
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        rows.forEach(async (r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ${r.id};`)
+                .then(value => r.products =
+                    /*generation of the dictionary */
+                    value)
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
+
         return rows;
     }
 
-    /**getter function to retreive a single return order, given its ID*/
+    /*TO BE COMPLETED - getter function to retreive a single return order, given its ID*/
     async getReturnOrder(id) {
         /*let row
         const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
@@ -52,10 +62,10 @@ class ReturnOrderController {
 
         /*check if the id is valid*/
         if (!id || isNaN(id))
-            throw new Exceptions(422))
+            throw new Exceptions(422)
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM ReturnOrder WHERE ID= ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM ReturnOrder WHERE id= ${id};`)
             .then((value) => row = value[0])
             .catch((error) => { throw error });
 
@@ -63,10 +73,17 @@ class ReturnOrderController {
         if (!row)
             throw new Exceptions(404);
 
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ${id};`)
+            .then(value => row.products =
+                /*generation of the dictionary */
+                value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+
         return row;
     }
 
-    /**TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
+    /*TO BE CHECKED - function to create a return order*/
     async createReturnOrder(body) {
 
         /*check if the current user is authorized*/
@@ -82,7 +99,7 @@ class ReturnOrderController {
             throw new Exceptions(422)
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID= ${restockOrderId};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id= ${restockOrderId};`)
             .then((value) => row = value[0])
             .catch((error) => { throw error; });
 
@@ -103,7 +120,7 @@ class ReturnOrderController {
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw error });
 
-        const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) 
+        const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
         VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
         try {
             const returnOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
@@ -111,19 +128,19 @@ class ReturnOrderController {
             throw error;
         }
 
+        /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerReturnOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            const sqlInsert = `INSERT INTO SKUPerReturnOrder (id, SKUId, description, price, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.rfid});`;
             try {
-                const returnOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                const returnOrder = await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
                 throw error;
             }
         })
 
-        return returnOrder;
     }
 
-    /**delete function to remove a return order from the table, given its ID*/
+    /*COMPLETED - delete function to remove a return order from the table, given its ID*/
     async deleteReturnOrder(id) {
         /*  const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
           try {

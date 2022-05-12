@@ -14,7 +14,7 @@ class RestockOrderController {
         console.log("restockOrderController started");
     }
 
-    /**getter function to retreive all the restock orders*/
+    /*TO BE COMPLETED - getter function to retreive all the restock orders*/
     async getAllRestockOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder;";
@@ -41,20 +41,36 @@ class RestockOrderController {
             .then(value => r.products = value)
             .catch(error => { throw new Error(Exceptions.message500) });
 
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
-            .then(value => r.skuItems = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
-            
+        /*  TO BE COMPLETED (it's missing something about the generation of the dictionary)*/
+
+        rows.forEach(async (r) => {
+            if (r.state !== 'DELIVERY' || r.state !== 'ISSUED') {
+                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
+                    .then(value => r.products =
+                        /*generation of the dictionary */
+                        value)
+                    .catch(error => { throw new Error(Exceptions.message500) });
+
+                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
+                    .then(value => r.skuItems =
+                        /*generation of the dictionary */
+                        value)
+                    .catch(error => { throw new Error(Exceptions.message500) });
+            }
+
+            if (r.state !== 'ISSUED') {
+                let ship;
+                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id="${id};`)
+                    .then(value => ship = JSON.stringify(value[0]))
+                    .catch(error => { throw new Error(Exceptions.message503) });
+                r.transportNote = ship;
+            }
         })
-        */
-        
-        /* who does the json manipulation?
-        */
 
         return rows;
     }
 
-    /**getter function to retreive all the issued restock orders*/
+    /*TO BE COMPLETED - getter function to retreive all the issued restock orders*/
     async getIssuedRestockOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
@@ -76,7 +92,7 @@ class RestockOrderController {
         return rows;
     }
 
-    /**getter function to retreive a single restock order, given its ID*/
+    /*TO BE COMPLETED - getter function to retreive a single restock order, given its ID*/
     async getRestockOrder(id) {
         /*let rows
         const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
@@ -96,7 +112,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -104,10 +120,29 @@ class RestockOrderController {
         if (!row)
             throw new Exceptions(404)
 
+        let ship;
+        await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id="${id};`)
+            .then(value => ship = JSON.stringify(value[0]))
+            .catch(error => { throw new Error(Exceptions.message503) });
+        row.transportNote = ship;
+
+        /*TO BE COMPLETED*/
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
+            .then(value => row.products =
+                /*generation of the dictionary */
+                value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
+            .then(value => row.skuItems =
+                /*generation of the dictionary */
+                value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+
         return row;
     }
 
-    /*TO CHECK - it's most probably wrong, but it's still something*/
+    /*TO BE CHECKED - function to retreive the sku items to be returned of a restock order*/
     async getRestockOrderToBeReturned(id) {
 
         /* - get Restock Order with id
@@ -121,9 +156,9 @@ class RestockOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401)
 
-        var jsonObj = {};
+        let itemsArray = [];
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -141,7 +176,7 @@ class RestockOrderController {
 
         /*TO BE CHECKED */
         let skuitems;
-        await this.#dbManager.genericSqlGet(`SELECT RFID FROM SKUItemsPerRestockOrder WHERE id = ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${id};`)
             .then(values => skuitems = values)
             .catch(error => { throw error });
 
@@ -152,19 +187,19 @@ class RestockOrderController {
 
         skuitems.forEach(async (sk) => {
             let res;
-            await this.#dbManager.genericSqlGet(`SELECT result FROM TestResult WHERE SKUItemID = ${sk.id};`)
+            await this.#dbManager.genericSqlGet(`SELECT Result FROM TestResult WHERE RFID = ${sk.RFID};`)
                 .then((res) => {
                     if (res === false) {
-                        jsonObj.push({ SKUId: skus, rfid: sk })
+                        itemsArray = [...itemsArray, { "SKUId": sk.SKUID, "rfid": sk.RFID }]
                     }
                 })
                 .catch(error => { throw error });
         })
 
-        return jsonObj;
+        return itemsArray;
     }
 
-    /*TO BE COMPLETED */
+    /*TO BE CHECKED - creation of a restock order*/
     async createRestockOrder(body) {
 
         /*check if the current user is authorized*/
@@ -187,20 +222,17 @@ class RestockOrderController {
         if (!issueDate || !products || !supplierId || isNaN(supplierId))
             throw new Exceptions(422);
 
-        const sqlInstruction = `INSERT INTO RestockOrder (ID, supplierID, issueDate) VALUES (${id + 1},
-             ${supplierId}, ${issueDate});`;
+        const sqlInstruction = `INSERT INTO RestockOrder (id, issueDate, state, shipmentDate, supplierId) VALUES (${id + 1},
+                ${issueDate}, "ISSUED", '', ${supplierId});`;
         try {
             const restockOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             throw new Exceptions(503)
         }
 
-        /*loop of the products to be added into SKUPerRestockOrder:
-        for (sku, skuitem) of products:
-         INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
-        */
+        /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUId, qty) VALUES (${id}, ${elem.SKUId}, ${elem.qty});`;
+            const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (${id + 1}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.qty});`;
             try {
                 const restockOrder = await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
@@ -209,7 +241,7 @@ class RestockOrderController {
         })
     }
 
-    /**function to edit a state of a restock order, given its ID*/
+    /*COMPLETED - function to edit a state of a restock order, given its ID*/
     async editRestockOrder(id, body) {
 
         /*check if the current user is authorized*/
@@ -223,7 +255,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -231,16 +263,16 @@ class RestockOrderController {
         if (!row)
             throw new Exceptions(404);
 
-        const sqlInstruction = `UPDATE RestockOrder SET state = "${newState}" WHERE ID= ${id};`;
+        const sqlInstruction = `UPDATE RestockOrder SET state = "${newState}" WHERE id= ${id};`;
         try {
-            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
+            const restockOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
             throw error;
         }
 
     }
 
-    /*TO BE COMPLETED */
+    /*TO BE CHECKED - function to add a list of sku items to a restock order*/
     async addSkuItemsToRestockOrder(id, body) {
 
         /*check if the current user is authorized*/
@@ -253,13 +285,8 @@ class RestockOrderController {
         if (!skuItems)
             throw new Exceptions(422);
 
-        /*loop of the products to be added into SKUPerRestockOrder:
-        for (sku, skuitem) of products:
-         INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${sku}, ${skuitem});
-        */
-
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -271,11 +298,11 @@ class RestockOrderController {
         if (row.state !== 'DELIVERED')
             throw new Exceptions(422)
 
-        /*TO BE COMPLETED (table changed) */
+        /*TO BE CHECKED - loop of the products to be added into SKUItemsPerRestockOrder*/
         skuItems.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerRestockOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
             try {
-                const restockOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                const restockOrder = await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
                 new error;
             }
@@ -283,7 +310,7 @@ class RestockOrderController {
 
     }
 
-    /*TO BE COMPLETED*/
+    /*TO BE CHECKED - function to add a transport note to a restock order, given its ID*/
     async addTransportNote(id, body) {
 
        /*check if the current user is authorized*/
@@ -300,7 +327,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -312,13 +339,19 @@ class RestockOrderController {
         if (row.state !== 'DELIVERY')
             throw new Exceptions(422)
 
-        /*add error: 422 Unprocessable Entity: deliveryDate is before issueDate (manipulated as strings?)*/
-        /*in the table is a string, but the output must be a dictionary */
+        /*check if the deliveryDate is before the issueDate */
+        if (transportNote.deliveryDate <= row.issueDate)
+            throw new Error(Exceptions.message422);
 
-        return undefined;
+        const sqlInstruction = `UPDATE RestockOrder SET shipmentDate = ${transportNote} WHERE id = ${id};`;
+        try {
+            const restockOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
+        } catch (error) {
+            new Error(Exceptions.message503);
+        }
     }
 
-    /**delete function to remove a restock order from the table, given its ID*/
+    /*COMPLETED - delete function to remove a restock order from the table, given its ID*/
     async deleteRestockOrder(id) {
 
         /*check if the current user is authorized*/

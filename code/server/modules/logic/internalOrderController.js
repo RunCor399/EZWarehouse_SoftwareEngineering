@@ -14,7 +14,7 @@ class InternalOrderController {
     }
 
 
-    /**getter function to retreive all the internal orders*/
+    /*TO BE COMPLETED - getter function to retreive all the internal orders*/
     async getAllInternalOrders() {
         /* let rows;
          const sqlInstruction = "SELECT * FROM InternalOrder;";
@@ -34,11 +34,20 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw  error });
 
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        rows.forEach(async (r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
+                .then(value => r.products =
+                    /*generation of the dictionary */
+                    value)
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
+
         return rows;
 
     }
 
-    /**getter function to retreive all the issued internal orders*/
+    /*TO BE COMPLETED - getter function to retreive all the issued internal orders*/
     async getIssuedInternalOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
@@ -58,11 +67,20 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw error });
 
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        rows.forEach(async (r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
+                .then(value => r.products =
+                    /*generation of the dictionary */
+                    value)
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
+
         return rows;
 
     }
 
-    /**getter function to retreive all the accepted internal orders*/
+    /*TO BE COMPLETED - getter function to retreive all the accepted internal orders*/
     async getAcceptedInternalOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
@@ -81,10 +99,19 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw error });
 
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        rows.forEach(async (r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
+                .then(value => r.products =
+                    /*generation of the dictionary */
+                    value)
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
+
         return rows;
     }
 
-    /**getter function to retreive a single internal order, given its ID*/
+    /*TO BE COMPLETED - getter function to retreive a single internal order, given its ID*/
     async getInternalOrder(id) {
         /*let row;
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
@@ -112,11 +139,18 @@ class InternalOrderController {
         if (!row)
             throw new Exceptions(404);
 
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${id};`)
+            .then(value => row.products =
+                /*generation of the dictionary */
+                value)
+            .catch(error => { throw new Error(Exceptions.message500) });
+
         return row;
 
     }
 
-    /**TODO - products and issueDate are missing in the table */
+    /*TO BE CHECKED - creation of a new internal order*/
     async createInternalOrder(body) {
 
         /*check if the user is authorized */
@@ -156,9 +190,10 @@ class InternalOrderController {
 
         /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (${id}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.qty});`;
             try {
                 await this.#dbManager.genericSqlGet(sqlInsert);
+                const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
                 throw error;
             }
@@ -166,7 +201,7 @@ class InternalOrderController {
 
     }
 
-    /**TO CHECK*/
+    /*TO BE CHECKED - function to edit the state of an internal order, given its ID*/
     async editInternalOrder(id, body) {
 
         /*check if the user is authorized */
@@ -198,15 +233,16 @@ class InternalOrderController {
             if (!products)
                 throw new Exceptions(422);
 
+            /*TO BE CHECKED*/
             products.forEach(async (elem) => {
-                const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+                const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
                 try {
-                    const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                    const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);
                 } catch (error) {
                     throw error;
                 }
             })
-            return internalOrder;
+
         }
         else {
             const sqlInstruction = `UPDATE InternalOrder SET state= "${newState}" WHERE ID= ${id}`;
@@ -220,7 +256,7 @@ class InternalOrderController {
     }
 
 
-    /**delete function to remove an internal order from the table, given its ID */
+    /*COMPLETED - delete function to remove an internal order from the table, given its ID */
     async deleteInternalOrder(id) {
         /* const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
