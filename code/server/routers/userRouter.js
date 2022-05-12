@@ -5,7 +5,7 @@ const Controller = require('../modules/logic/controller')
 
 //USER
 //GET /api/userinfo
-router.get('/api/userinfo', (req, res) => {
+router.get('/api/userinfo', async (req, res) => {
 
 
   /** @type {Controller} */
@@ -127,7 +127,7 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
 });
 
 //POST /api/logout
-router.post('/api/logout',  (req, res) => {
+router.post('/api/logout', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
