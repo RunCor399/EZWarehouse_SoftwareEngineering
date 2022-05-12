@@ -57,6 +57,8 @@ class PositionController {
             `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) 
         VALUES ("${positionID}", ${maxVolume}, ${maxWeight}, "${aisleID}", "${row}", "${col}", ${occupiedWeight}, ${occupiedVolume});`;
 
+        //const sqlInstruction =`INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES ("${positionID}", ${maxVolume}, ${maxWeight}, "${aisleID}", "${row}", "${col}", ${occupiedWeight}, ${occupiedVolume});`;
+
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch(error => { throw error });
     }
@@ -122,9 +124,6 @@ class PositionController {
             || String(oldId).length !== 12 || String(newPositionID).length !== 12)
             throw new Exceptions(422);
 
-        /*   const sqlInstruction = `UPDATE Position SET positionID= ${newPositionID} WHERE positionID= ${oldId};`;
-          await this.#dbManager.genericSqlGet(sqlInstruction)
-              .catch(error => { throw new error }) */
 
         let positions;
         await this.getAllPositions()

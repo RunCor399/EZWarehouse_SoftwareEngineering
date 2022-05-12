@@ -98,6 +98,7 @@ class UserController {
             `INSERT INTO USERS ( email, name, surname, password, type) VALUES
              ("${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
 
+        //const sqlInstruction =`INSERT INTO USERS ( email, name, surname, password, type) VALUES (?,?,?,?,?);` , username, name, surname, hashedPassword, type);
 
         this.#dbManager.genericSqlRun(sqlInstruction).
             catch((error) => { throw new Exceptions(500); });
@@ -116,6 +117,8 @@ class UserController {
         const hashedPassword = MD5(password).toString();
         const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U 
         WHERE email="${username}" AND password="${hashedPassword}" AND type="${type}"`;
+
+        //const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U WHERE email= ? AND password= ? AND type= ?`, username, hashedPassword, type;
 
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction)
@@ -162,6 +165,8 @@ class UserController {
             (`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`)
             .catch((error) => { throw new Exceptions(500) });
 
+        //`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType
+
     }
 
     async deleteUser(username, type) {
@@ -176,6 +181,8 @@ class UserController {
         await this.#dbManager.genericSqlRun
             (`DELETE FROM USERS WHERE email="${username}" AND type="${type}";`)
             .catch((error) => { throw new Exceptions(500) });
+
+        //`DELETE FROM USERS WHERE email= ? AND type= ?;` , username, type
 
     }
 
