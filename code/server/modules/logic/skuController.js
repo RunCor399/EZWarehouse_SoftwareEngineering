@@ -26,9 +26,23 @@ class SkuController {
             .then(value => rows = value)
             .catch(error => { throw error });
 
-        console.log(rows);
+       
+        //console.log("pre",rows);
+        const value = (async  () =>{
+        for(let i=0; i<rows.length; i++){
+            //console.log("info",rows[i]);
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${rows[i].id}`)
+            .then(value =>{ console.log(value[0])
+                rows[i].position = value[0]===undefined ? undefined:value[0].positionID })
+            .catch(error => { throw error });
+            //console.log("info",rows[i].position);
+        }
+    })().finally(() => {console.log("post", rows); return rows;});
 
-        return rows;
+    console.log(value);
+    return value;
+        
+        
     }
 
     /**getter function to retreive a single SKU, given its ID*/
