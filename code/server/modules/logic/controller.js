@@ -109,6 +109,7 @@ class Controller {
         return (params.includes(undefined));
     }
 
+
     areNotNumbers(...params) {
         //console.log(params)
         return params.some((num) => isNaN(Number(num)));

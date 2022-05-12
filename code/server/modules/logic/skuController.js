@@ -71,7 +71,6 @@ class SkuController {
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
             throw new Exceptions(422);
 
-            console.log("provamezza")
 
 
         const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
@@ -80,17 +79,31 @@ class SkuController {
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { throw new Exceptions(503) });
             
-            console.log("provafine")
 
     }
 
     /**TO CHECK - availableQuantity is missing in the SKU table */
     async editSku(id, body) {
-
         //permission check
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
 
+        let sku;
+        await this.getSku(id)
+            .then(value => sku = value)
+            .catch((err) => { throw err });
+        if (!sku){ 
+            throw new Exceptions(404)
+        }
+
+        
+        editParams = {"newDescription":"description", "newWeight":"weight", "newVolume":"volume", "newNotes":"notes", "newPrice":"price", "newAvailableQuantity":"availableQuantity"};
+
+        //If a param in the body is not present, the one relative to the old sku state is taken
+        (Object.keys(editParams)).map((param) => {
+            body[param] === undefined ? body[param] = sku[editParams[param]] : "";
+        });
+        
         //validation of body and id
         const newDescription = body["newDescription"];
         const newWeight = body["newWeight"];
@@ -99,7 +112,8 @@ class SkuController {
         const newPrice = body["newPrice"];
         const newAvailableQuantity = body["newAvailableQuantity"];
 
-        console.log("prova1")
+        
+        
 
         if (this.#controller.areUndefined(newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity, id)
             || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
@@ -107,11 +121,7 @@ class SkuController {
 
         console.log("prova2")
 
-        let sku;
-        await this.getSku(id)
-            .then(value => sku = value)
-            .catch((err) => { throw err });
-        if (!sku) throw new Exceptions(404)
+        
 
         console.log("prova3")
 
@@ -126,7 +136,7 @@ class SkuController {
 
 
         if (position) {
-            //if sku has position, check if position can contains modified sku
+            //if sku has position, check if position can contain modified sku
             if (position.maxWeight < newWeight * newAvailableQuantity
                 || position.maxVolume < newVolume * newAvailableQuantity)
                 throw new Exceptions(422);

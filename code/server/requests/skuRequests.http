@@ -27,6 +27,12 @@ content-type: application/json
 PUT http://localhost:3001/api/sku/1/position HTTP/1.1
 content-type: application/json
 
+{
+        "description" : "a new sku",
+        "volume" : 50,
+        "price" : 20.99
+    }
+
 ###
 DELETE http://localhost:3001/api/skus/1 HTTP/1.1
 content-type: application/json
