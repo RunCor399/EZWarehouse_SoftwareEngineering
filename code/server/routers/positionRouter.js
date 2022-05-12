@@ -1,7 +1,5 @@
-const { application } = require('express');
 const express = require('express')
 const router = express.Router();
-const Exceptions = require('./exceptions');
 const Controller = require('../modules/logic/controller')
 
 //POSITION
