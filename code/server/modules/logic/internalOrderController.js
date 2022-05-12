@@ -14,7 +14,7 @@ class InternalOrderController {
     }
 
 
-    /*TO BE COMPLETED - getter function to retreive all the internal orders*/
+    /*TO BE CHECKED - getter function to retreive all the internal orders*/
     async getAllInternalOrders() {
         /* let rows;
          const sqlInstruction = "SELECT * FROM InternalOrder;";
@@ -32,14 +32,15 @@ class InternalOrderController {
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
             .then((value) => rows = value)
-            .catch((error) => { throw  error });
+            .catch((error) => { throw error });
 
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        /*TO BE CHECKED*/
         rows.forEach(async (r) => {
+            r.products = [];
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
-                .then(value => r.products =
-                    /*generation of the dictionary */
-                    value)
+                .then(value => r.products.forEach(value => {
+                    r.products = [...r.products, value];
+                }))
                 .catch(error => { throw new Error(Exceptions.message500) });
         });
 
@@ -47,7 +48,7 @@ class InternalOrderController {
 
     }
 
-    /*TO BE COMPLETED - getter function to retreive all the issued internal orders*/
+    /*TO BE CHECKED - getter function to retreive all the issued internal orders*/
     async getIssuedInternalOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
@@ -67,12 +68,13 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw error });
 
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        /*TO BE CHECKED*/
         rows.forEach(async (r) => {
+            r.products = [];
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
-                .then(value => r.products =
-                    /*generation of the dictionary */
-                    value)
+                .then(value => r.products.forEach(value => {
+                    r.products = [...r.products, value];
+                }))
                 .catch(error => { throw new Error(Exceptions.message500) });
         });
 
@@ -80,7 +82,7 @@ class InternalOrderController {
 
     }
 
-    /*TO BE COMPLETED - getter function to retreive all the accepted internal orders*/
+    /*TO BE CHECKED - getter function to retreive all the accepted internal orders*/
     async getAcceptedInternalOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
@@ -99,19 +101,20 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw error });
 
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        /*TO BE CHECKED*/
         rows.forEach(async (r) => {
+            r.products = [];
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
-                .then(value => r.products =
-                    /*generation of the dictionary */
-                    value)
+                .then(value => r.products.forEach(value => {
+                    r.products = [...r.products, value];
+                }))
                 .catch(error => { throw new Error(Exceptions.message500) });
         });
 
         return rows;
     }
 
-    /*TO BE COMPLETED - getter function to retreive a single internal order, given its ID*/
+    /*TO BE CHECKED - getter function to retreive a single internal order, given its ID*/
     async getInternalOrder(id) {
         /*let row;
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
@@ -139,11 +142,12 @@ class InternalOrderController {
         if (!row)
             throw new Exceptions(404);
 
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        /*TO BE CHECKED*/
+        row.products = [];
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${id};`)
-            .then(value => row.products =
-                /*generation of the dictionary */
-                value)
+            .then(value => row.products.forEach(value => {
+                row.products = [...row.products, value];
+            }))
             .catch(error => { throw new Error(Exceptions.message500) });
 
         return row;
@@ -177,7 +181,7 @@ class InternalOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new error});
+            .catch(error => { throw new error });
 
 
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
