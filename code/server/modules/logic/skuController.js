@@ -85,8 +85,10 @@ class SkuController {
     async editSku(id, body) {
 
         //permission check
-        if (!this.#controller.isLoggedAndHasPermission("manager"))
+        if (!this.#controller.isLoggedAndHasPermission("manager")){
             throw new Error(Exceptions.message401);
+        }
+           
 
         //validation of body and id
         const newDescription = body["newDescription"];

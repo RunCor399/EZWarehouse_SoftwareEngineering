@@ -41,7 +41,7 @@ test("login as manager", async () => {
 //     expect(skuCountAfter).toBe(skuCountBefore + 1);    
 // });
 
-test("modify sku", async () => {
+/*test("modify sku", async () => {
     //let response = await utilityCalls.login("manager1@ezwh.com", "testpassword");
     
     const id = 1;
@@ -56,7 +56,7 @@ test("modify sku", async () => {
     expect(response.data[id-1].id = id);
     expect(response.data[id-1].description = description);
     expect(response.data[id-1].newAvailableQuantity = newAvailableQuantity);
-});
+});*/
 
 
 
