@@ -28,7 +28,7 @@ class TestDescriptorController {
     }
 
     /**getter function to retreive a single test descriptor given its ID*/
-    async getTestDesciptor(id) {
+    async getTestDescriptor(id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401)
@@ -39,10 +39,10 @@ class TestDescriptorController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ${id};`)
             .then(value => row = value[0])
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
 
         if (!row)
-            throw new Exceptions(500)
+            throw new Exceptions(404)
 
         return row;
     }
@@ -61,29 +61,22 @@ class TestDescriptorController {
             || this.#controller.areNotNumbers(idSKU))
             throw new Exceptions(422);
 
-        /* let sku;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${idSKU};`)
-            .then(value => sku = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (sku === undefined)
-            throw new Error(Exceptions.message404);*/
-
         let sku;
-        await this.getSku(id)
+        await this.#controller.getSkuController().getSku(idSKU)
             .then(value => sku = value)
-            .catch(() => { throw new Exceptions(500) });
+            .catch((error) => { throw error });
         if (!sku) throw new Exceptions(404)
 
 
         const sqlInsert1 = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
-        VALUES ( "${name}", "${procedureDescription}", ${idSKU};`;
-        await this.#dbManager.genericSqlGet(sqlInsert1)
-            .catch((error) => { throw new Exceptions(503) })
+        VALUES ( "${name}", "${procedureDescription}", ${idSKU});`;
+        await this.#dbManager.genericSqlRun(sqlInsert1)
+            .catch((error) => { throw error })
 
     }
 
     /**function to edit a test descriptor, given its ID*/
-    async editTestDesciptor(id, body) {
+    async editTestDescriptor(id, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
@@ -91,40 +84,27 @@ class TestDescriptorController {
         const newName = body["newName"];
         const newProcedureDescription = body["newProcedureDescription"];
         const newIdSKU = body["newIdSKU"];
-
+     
         if (this.#controller.areUndefined(newName, newProcedureDescription, newIdSKU, id)
             || this.#controller.areNotNumbers(newIdSKU, id))
             throw new Exceptions(422);
 
-        /*let sku;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${newIdSKU};`)
-            .then(value => sku = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (sku === undefined)
-            throw new Error(Exceptions.message404);*/
 
         let sku;
-        await this.getSku(newIdSKU)
+        await this.#controller.getSkuController().getSku(newIdSKU)
             .then(value => sku = value)
-            .catch(() => { throw new Exceptions(500) });
+            .catch(() => { throw error });
         if (!sku) throw new Exceptions(404)
-
-        /*let testDescriptor;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM TestDescriptor WHERE ID= ${id};`)
-            .then(value => testDescriptor = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
-        if (testDescriptor === undefined)
-            throw new Error(Exceptions.message404);*/
 
         let testDescriptor;
-        await this.getTestDesciptor(id)
+        await this.getTestDescriptor(id)
             .then(value => testDescriptor = value)
-            .catch(() => { throw new Exceptions(500) });
-        if (!sku) throw new Exceptions(404)
+            .catch(() => { throw error});
+        if (!testDescriptor) throw new Exceptions(404)
 
 
         const sqlUpdate1 = `UPDATE TestDescriptor SET name= "${newName}",
-         description= "${newProcedureDescription}", SKUID = ${newIdSKU} WHERE ID= ${id};`;
+         procedureDescription= "${newProcedureDescription}", idSku = ${newIdSKU} WHERE ID= ${id};`;
 
         await this.#dbManager.genericSqlRun(sqlUpdate1)
             .catch((error) => { throw new Exceptions(503) });

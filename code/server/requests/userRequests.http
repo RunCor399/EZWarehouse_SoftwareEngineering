@@ -1,3 +1,12 @@
+POST http://localhost:3001/api/managerSessions HTTP/1.1
+content-type: application/json
+
+{
+    "username": "manager1@ezwh.com",
+    "password":"testpassword"
+}
+
+###
 GET http://localhost:3001/api/userinfo HTTP/1.1
 content-type: application/json
 
@@ -13,9 +22,23 @@ content-type: application/json
 POST http://localhost:3001/api/newUser HTTP/1.1
 content-type: application/json
 
+{
+        "username":"user2@ezwh.com",
+        "name":"John",
+        "surname" : "Smith",
+        "password" : "testpassword",
+        "type" : "customer"
+
+    }
+
 ###
 POST http://localhost:3001/api/managerSessions HTTP/1.1
 content-type: application/json
+
+{
+    "username": "manager1@ezwh.com",
+    "password":"testpassword"
+}
 
 ###
 POST http://localhost:3001/api/customerSessions HTTP/1.1
@@ -42,11 +65,16 @@ POST http://localhost:3001/api/logout HTTP/1.1
 content-type: application/json
 
 ###
-PUT http://localhost:3001/api/users/:username HTTP/1.1
+PUT http://localhost:3001/api/users/user2@ezwh.com HTTP/1.1
 content-type: application/json
 
+{
+        "oldType" : "customer",
+        "newType" : "clerk"
+    }
+
 ###
-DELETE http://localhost:3001/api/users/:username/:type HTTP/1.1
+DELETE http://localhost:3001/api/users/user2@ezwh.com/clerk HTTP/1.1
 content-type: application/json
 
 ###

@@ -84,8 +84,18 @@ class UserController {
             throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
+
+        let users;
+        await this.getAllUsers()
+        .then(value => users = value)
+        .catch(error => {throw error})
+
+        let usersEmails = users.map(user => user.email)
+        if(usersEmails.includes(username))
+        throw new Exceptions(409);
+
         const sqlInstruction =
-            `INSERT INTO USERS ( username, name, surname, password, type) VALUES
+            `INSERT INTO USERS ( email, name, surname, password, type) VALUES
              ("${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
 
 
@@ -104,19 +114,19 @@ class UserController {
             throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
-        const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
-        WHERE username="${username}" AND password="${hashedPassword}" AND type="${type}"`;
+        const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U 
+        WHERE email="${username}" AND password="${hashedPassword}" AND type="${type}"`;
 
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction)
             .then(value => row = value[0])
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
 
         if (!row)
             throw new Exceptions(401);
 
-        this.#user.id = row.ID;
-        this.#user.username = row.username;
+        this.#user.id = row.id;
+        this.#user.username = row.email;
         this.#user.name = row.name;
         this.#user.surname = row.surname;
         this.#user.type = row.type;
@@ -164,7 +174,7 @@ class UserController {
 
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM USERS WHERE username="${username}" AND type="${type}";`)
+            (`DELETE FROM USERS WHERE email="${username}" AND type="${type}";`)
             .catch((error) => { throw new Exceptions(500) });
 
     }

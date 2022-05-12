@@ -1,4 +1,12 @@
+POST http://localhost:3001/api/managerSessions HTTP/1.1
+content-type: application/json
 
+{
+    "username": "manager1@ezwh.com",
+    "password":"testpassword"
+}
+
+###
 GET http://localhost:3001/api/skuitems HTTP/1.1
 content-type: application/json
 
@@ -16,7 +24,7 @@ content-type: application/json
 
 {
             "RFID":"12345678901234567890123456789015",
-            "SKUId":6,
+            "SKUId":1,
             "Available":1,
             "DateOfStock":"2021/11/29 12:30"
         }

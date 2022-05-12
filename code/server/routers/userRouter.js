@@ -12,9 +12,9 @@ router.get('/api/userinfo', async (req, res) => {
   console.log('GET', req.url);
 
   console.log("prova1");
-
+  let user;
   try {
-    controller.getUserController().getUserAPI()
+    user = controller.getUserController().getUserAPI()
   } catch (error) {
     return res.status(error.getCode()).send(error.getMessage());
   }
