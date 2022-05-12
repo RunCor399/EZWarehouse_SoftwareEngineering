@@ -9,8 +9,8 @@ router.get('/api/returnOrders', async (req, res) => {
     /** @type {Controller} */
     const controller = req.app.get("controller");
     console.log('GET',req.url);
-    let returnOrders;
-
+    
+    /* let returnOrders;
     try {
         returnOrders = await controller.getReturnOrderController().getAllReturnOrders();
         console.log("returnOrders", returnOrders);
@@ -19,11 +19,11 @@ router.get('/api/returnOrders', async (req, res) => {
         return res.status(responseParams.code).send(responseParams.message);
     }
 
-    return res.status(200).json(returnOrders);
+    return res.status(200).json(returnOrders); */
 
-    /*await controller.getSkuController().getUserAPI()
-    .then((user) => { return res.status(200).json(user); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
+    await controller.getReturnOrderController().getAllReturnOrders()
+    .then((returnOrders) => { return res.status(200).json(returnOrders); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 
@@ -33,8 +33,8 @@ router.get('/api/returnOrders/:id', async (req, res) => {
     /** @type {Controller} */
     const controller = req.app.get("controller");
     console.log('GET',req.url);
-    let returnOrder;
-
+    
+/*     let returnOrder;
     try {
         returnOrder = await controller.getReturnOrderController().getReturnOrder(param);
         console.log("returnOrder", returnOrder)
@@ -43,11 +43,11 @@ router.get('/api/returnOrders/:id', async (req, res) => {
         return res.status(responseParams.code).send(responseParams.message);
     }
 
-    return res.status(200).json(returnOrder);
+    return res.status(200).json(returnOrder); */
 
-    /*await controller.getSkuController().getUserAPI()
-    .then((user) => { return res.status(200).json(user); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
+    await controller.getReturnOrderController().getReturnOrder(param)
+    .then((returnOrder) => { return res.status(200).json(returnOrder); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 
@@ -58,17 +58,17 @@ router.post('/api/returnOrder', async (req, res) => {
     const controller = req.app.get("controller");
     console.log('POST',req.url);
 
-    try {
+    /* try {
         await controller.getReturnOrderController().createReturnOrder(req.body);
     } catch (error) {
         let responseParams = Exceptions.handle(error);
         return res.status(responseParams.code).send(responseParams.message);
     }
-    return res.status(200).end();
+    return res.status(200).end(); */
 
-    /*await controller.getSkuController().getUserAPI()
-    .then((user) => { return res.status(200).json(user); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
+    await controller.getReturnOrderController().createReturnOrder(req.body)
+    .then(() => { return res.status(200).end(); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 router.delete('/api/returnOrder/:id', async (req, res) => {
@@ -78,18 +78,18 @@ router.delete('/api/returnOrder/:id', async (req, res) => {
     const controller = req.app.get("controller");
     console.log('DELETE',req.url);
 
-    try {
+   /*  try {
         await controller.getReturnOrderController().deleteReturnOrder(param);
     } catch (error) {
         let responseParams = Exceptions.handle(error);
         return res.status(responseParams.code).send(responseParams.message);
     }
 
-    return res.status(200).end();
+    return res.status(200).end(); */
 
-    /*await controller.getSkuController().getUserAPI()
-    .then((user) => { return res.status(200).json(user); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
+    await controller.getReturnOrderController().deleteReturnOrder(param)
+    .then(() => { return res.status(200).end(); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 
