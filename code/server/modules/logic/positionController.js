@@ -162,6 +162,9 @@ class PositionController {
         await this.#dbManager.genericSqlRun
             (`DELETE FROM Position WHERE positionID= ${id};`)
             .catch((error) => { throw new error });
+        
+        //`DELETE FROM Position WHERE positionID= $?;`, id
+    
     }
 
 }

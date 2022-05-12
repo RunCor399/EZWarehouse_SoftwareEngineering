@@ -45,10 +45,11 @@ class SkuItemController {
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ${id};`)
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
-
+            .catch(error => { throw error });
         if (!rows)
-        throw new Exceptions(404)
+            throw new Exceptions(404)
+        
+        //`SELECT * FROM SKUItem WHERE SKUId= ?;`, id
 
         return rows;
     }
@@ -67,6 +68,8 @@ class SkuItemController {
             .then(value => row = value[0])
             .catch(error => { throw new Exceptions(500) });
 
+        //`SELECT * FROM SKUItem WHERE RFID= ?;`, rfid
+        
         if (!row)
         throw new Exceptions(404)
         return row;
@@ -99,6 +102,8 @@ class SkuItemController {
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
         VALUES ("${RFID}", ${SKUId}, 0, "${dateOfStock}");`;
 
+       // const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`,RFID, SKUId, 0, dateOfStock;
+
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => {
                 throw new Exceptions(503);
@@ -126,7 +131,9 @@ class SkuItemController {
             .then(value => skuitem = value[0])
             .catch(error => { throw error });
         if ( !skuitem)
-        throw new Exceptions(404)
+            throw new Exceptions(404)
+        
+        //`SELECT * FROM SKUItem WHERE RFID= ?;`, oldRFID
 
         console.log(body)
 

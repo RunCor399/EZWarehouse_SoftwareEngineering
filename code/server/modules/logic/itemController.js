@@ -60,6 +60,8 @@ class ItemController {
         await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ${id};`)
             .then(value => row = value[0])
             .catch(error => { throw error });
+        
+        //`SELECT * FROM Item WHERE id= ?;`, id
 
         /*check if the item exists*/
         if (!row)
@@ -93,6 +95,8 @@ class ItemController {
             .catch(error => { throw error });
         if (num1 !== 0)
             throw new Exceptions(422)
+        
+        //'SELECT COUNT(*) FROM Item WHERE SKUid = ${SKUid} AND supplierId= ${supplierId}', SKUid, supplierId
 
         /*check if the supplier already sells an item with the same ID*/
         let num2;
@@ -110,6 +114,8 @@ class ItemController {
 
         if (!sku)
             throw new Exceptions(404);
+        
+        //`SELECT * FROM SKU WHERE id = ?`, SKUId
 
         let row;
         await this.#dbManager.genericSqlRun(`INSERT INTO Item (id, description, price, SKUId, supplierId) 
