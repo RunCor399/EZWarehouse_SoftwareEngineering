@@ -100,11 +100,12 @@ class InternalOrderController {
             .catch((error) => { throw error });
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        let params;
+        const query = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`
         rows.forEach(async (r) => {
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
-                .then(value => r.products =
-                    /*generation of the dictionary */
-                    value)
+            params = [r.id];
+            await this.#dbManager.genericSqlGet(query, params)
+                .then(value => r.products = value) /*generation of the dictionary */    
                 .catch(error => { throw new Error(Exceptions.message500) });
         });
 
@@ -131,7 +132,9 @@ class InternalOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
+        const query1 = `SELECT * FROM InternalOrder WHERE ID = ?;`
+        const params1 = [id];
+        await this.#dbManager.genericSqlGet(query1, params1)
             .then((value) => row = value[0])
             .catch((error) => { throw error });
 
@@ -140,7 +143,9 @@ class InternalOrderController {
             throw new Exceptions(404);
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${id};`)
+        const query2 = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`
+        const params2 = [id];
+        await this.#dbManager.genericSqlGet(query2, params2)
             .then(value => row.products =
                 /*generation of the dictionary */
                 value)
@@ -179,21 +184,23 @@ class InternalOrderController {
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw new error});
 
-
+        const params1 = [id+1, issueDate, customerId];
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
-        VALUES (${id + 1}, "${issueDate}", "ISSUED", ${customerId});`;
+                                VALUES (?, ?, "ISSUED", ?);`;
         try {
-            await this.#dbManager.genericSqlRun(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction, params1);
         } catch (error) {
             new Exceptions(503);
         }
 
         /*TO BE CHECKED*/
+        let params2;
         products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (${id}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.qty});`;
+            params2 = [id, elem.SKUId, elem.description, elem.price, elem.qty];
+            const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
             try {
-                await this.#dbManager.genericSqlGet(sqlInsert);
-                const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);
+                await this.#dbManager.genericSqlRun(sqlInsert, params2);
+  
             } catch (error) {
                 throw error;
             }
@@ -213,7 +220,9 @@ class InternalOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
+        const params1 = [id];
+        const query1 = `SELECT * FROM InternalOrder WHERE ID= ?;`;
+        await this.#dbManager.genericSqlGet(query1, params1)
             .then((value) => row = value[0])
             .catch((error) => { throw error });
 
@@ -234,10 +243,12 @@ class InternalOrderController {
                 throw new Exceptions(422);
 
             /*TO BE CHECKED*/
+            let params2;
             products.forEach(async (elem) => {
-                const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+                params2 = [id, elem.SKUId, elem.rfid];
+                const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (?, ?, ?);`;
                 try {
-                    const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);
+                    await this.#dbManager.genericSqlRun(sqlInsert, params2);
                 } catch (error) {
                     throw error;
                 }
@@ -245,9 +256,10 @@ class InternalOrderController {
 
         }
         else {
-            const sqlInstruction = `UPDATE InternalOrder SET state= "${newState}" WHERE ID= ${id}`;
+            let params3 = [newState, id];
+            const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
             try {
-                await this.#dbManager.genericSqlRun(sqlInstruction);
+                await this.#dbManager.genericSqlRun(sqlInstruction, params3);
             } catch (error) {
                 throw error;
             }
@@ -273,8 +285,9 @@ class InternalOrderController {
         if (!id || isNaN(id))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun
-            (`DELETE FROM InternalOrder WHERE ID= ${id};`)
+        const query = `DELETE FROM InternalOrder WHERE ID = ?;`;
+        const params = [id];
+        await this.#dbManager.genericSqlRun(query, params)
             .catch((error) => { throw error });
     }
 
