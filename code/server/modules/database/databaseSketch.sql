@@ -27,11 +27,7 @@ CREATE TABLE SKU(
 );
 CREATE TABLE SKUItem(
     RFID VARCHAR(50),
-<<<<<<< HEAD
     SKUId INT,
-=======
-    SKUId INT, 
->>>>>>> 8f9d24895f4b73311fc6dd4440c0162ab7277482
     available INT,
     dateOfStock VARCHAR(50),
     PRIMARY KEY (RFID),
@@ -82,13 +78,8 @@ CREATE TABLE RestockOrder(
     id INT,
     issueDate VARCHAR(50),
     state VARCHAR(250),
-<<<<<<< HEAD
     shipmentDate VARCHAR(50),
     supplierId INT,
-=======
-    shipmentDate VARCHAR(50), 
-    supplierId INT, 
->>>>>>> 8f9d24895f4b73311fc6dd4440c0162ab7277482
     PRIMARY KEY(id),
     FOREIGN KEY(supplierId) REFERENCES Users(id)
 );
@@ -113,11 +104,7 @@ CREATE TABLE SKUItemsPerRestockOrder(
 CREATE TABLE ReturnOrder(
     id INT,
     returnDate VARCHAR(50),
-<<<<<<< HEAD
     supplierID INT,
-=======
-    supplierID INT, 
->>>>>>> 8f9d24895f4b73311fc6dd4440c0162ab7277482
     restockOrderID INT,
     PRIMARY KEY(id),
     FOREIGN KEY(supplierID) REFERENCES Users(id),
@@ -126,36 +113,15 @@ CREATE TABLE ReturnOrder(
 CREATE TABLE SKUPerReturnOrder(
     id INT,
     SKUId INT,
-<<<<<<< HEAD
     qty INT,
     PRIMARY KEY(id, SKUId),
     FOREIGN KEY(SKUId) REFERENCES SKU(id),
-=======
-    description VARCHAR(250),
-    price FLOAT,
-    RFID VARCHAR(50), 
-    PRIMARY KEY(orderID, SKUId),
-    FOREIGN KEY(SKUId) REFERENCES SKU(id)    
-    FOREIGN KEY(id) REFERENCES ReturnOrder(id)
-)
-
-CREATE TABLE SKUItemsPerReturnOrder(
-    id INT,
-    SKUID INT,
-    RFID VARCHAR(50),
-    PRIMARY KEY(id, RFID),
-    FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
->>>>>>> 8f9d24895f4b73311fc6dd4440c0162ab7277482
     FOREIGN KEY(id) REFERENCES ReturnOrder(id)
 );
 CREATE TABLE InternalOrder(
     id INT,
     issueDate VARCHAR(50),
-<<<<<<< HEAD
     state VARCHAR(250),
-=======
-    state VARCHAR(250), 
->>>>>>> 8f9d24895f4b73311fc6dd4440c0162ab7277482
     customerId INT,
     PRIMARY KEY(id),
     FOREIGN KEY(customerId) REFERENCES Users(id)
@@ -163,7 +129,6 @@ CREATE TABLE InternalOrder(
 CREATE TABLE SKUPerInternalOrder(
     id INT,
     SKUId INT,
-<<<<<<< HEAD
     qty INT,
     PRIMARY KEY(id, SKUId),
     FOREIGN KEY(SKUId) REFERENCES SKU(Id),
@@ -171,20 +136,6 @@ CREATE TABLE SKUPerInternalOrder(
 );
 CREATE TABLE SKUItemsPerInternalOrder(
     id INT,
-=======
-    description VARCHAR(250),
-    price FLOAT,
-    qty INT, 
-    PRIMARY KEY(id, SKUId),
-    FOREIGN KEY(SKUId) REFERENCES SKU(Id),
-    FOREIGN KEY(id) REFERENCES InternalOrder(id)
-)
-
-
-CREATE TABLE SKUItemsPerInternalOrder(
-    id INT,
-    SKUID INT,
->>>>>>> 8f9d24895f4b73311fc6dd4440c0162ab7277482
     RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
