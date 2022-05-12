@@ -34,10 +34,10 @@ CREATE TABLE SKUItem(
     FOREIGN KEY (SKUId) REFERENCES SKU(id)
 );
 CREATE TABLE Position(
-    positionID INTEGER PRIMARY KEY,
-    aisleID INT,
-    row INT,
-    col INT,
+    positionID TEXT PRIMARY KEY,
+    aisleID TEXT,
+    row TEXT,
+    col TEXT,
     maxWeight INT,
     maxVolume INT,
     occupiedWeight INT,

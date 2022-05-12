@@ -78,7 +78,7 @@ class SkuController {
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { throw new Exceptions(503) });
-            
+
 
     }
 
@@ -88,49 +88,28 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
 
+        const newDescription = !body["newDescription"] ? sku.description : body["newDescription"];
+        const newWeight = !body["newWeight"] ? sku.weight : body["newWeight"];
+        const newVolume = !body["newVolume"] ? sku.volume : body["newVolume"];
+        const newNotes = !body["newNotes"] ? sku.notes : body["newNotes"];
+        const newPrice = !body["newPrice"] ? sku.price : body["newPrice"];
+        const newAvailableQuantity = !body["newAvailableQuantity"] ? sku.availableQuantity : body["newAvailableQuantity"];
+
+        if (this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
+            throw new Exceptions(422)
+
         let sku;
         await this.getSku(id)
             .then(value => sku = value)
             .catch((err) => { throw err });
-        if (!sku){ 
-            throw new Exceptions(404)
-        }
-
-        
-        editParams = {"newDescription":"description", "newWeight":"weight", "newVolume":"volume", "newNotes":"notes", "newPrice":"price", "newAvailableQuantity":"availableQuantity"};
-
-        //If a param in the body is not present, the one relative to the old sku state is taken
-        (Object.keys(editParams)).map((param) => {
-            body[param] === undefined ? body[param] = sku[editParams[param]] : "";
-        });
-        
-        //validation of body and id
-        const newDescription = body["newDescription"];
-        const newWeight = body["newWeight"];
-        const newVolume = body["newVolume"];
-        const newNotes = body["newNotes"];
-        const newPrice = body["newPrice"];
-        const newAvailableQuantity = body["newAvailableQuantity"];
-
-        
-        
-
-        if (this.#controller.areUndefined(newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity, id)
-            || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
-            throw new Exceptions(422);
-
-        console.log("prova2")
-
-        
-
-        console.log("prova3")
-
+        if (!sku) throw new Exceptions(404)
 
         //check if sku has position
         let position;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${id}`)
             .then(value => position = value[0])
-            .catch(error => { throw Exceptions(503) });
+            .catch(error => { throw error });
 
         console.log("prova4", position)
 
@@ -140,7 +119,7 @@ class SkuController {
             if (position.maxWeight < newWeight * newAvailableQuantity
                 || position.maxVolume < newVolume * newAvailableQuantity)
                 throw new Exceptions(422);
-            
+
             console.log("prova5")
 
             /*
@@ -162,7 +141,7 @@ class SkuController {
                     newMaxVolume: position.maxVolume,
                     newOccupiedWeight: newWeight * newAvailableQuantity,
                     newOccupiedVolume: newVolume * newAvailableQuantity,
-                }).catch(error => { throw new Exceptions(500) });
+                }).catch(error => { throw error });
 
             console.log("prova6")
 
@@ -178,7 +157,7 @@ class SkuController {
 
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
-            .catch((error) => { throw new Exceptions(503); });
+            .catch((error) => { throw error });
 
         console.log("prova8")
 
@@ -194,7 +173,7 @@ class SkuController {
         const positionId = body["position"];
 
         if (this.#controller.areUndefined(positionId, id) || this.#controller.areNotNumbers(id))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         let sku;
         await this.getSku(id)
@@ -219,7 +198,7 @@ class SkuController {
             .catch(error => { throw new Error(Exceptions.message503) });
 
         if (!testValue)
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         const sqlInsert =
             `INSERT INTO SKU_in_Position SET(SKUId, positionID) 
@@ -238,14 +217,14 @@ class SkuController {
 
     /**delete function to remove an SKU from the table, given its ID */
     async deleteSku(id) {
-        
+
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
-        
+
         console.log(id);
-        
+
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE Id= ${id};`)

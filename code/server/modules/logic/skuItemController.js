@@ -75,7 +75,6 @@ class SkuItemController {
     /**creation of an SKUItem*/
     async createSkuItem(body) {
 
-        console.log("prova1")
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Exceptions(401);
 
@@ -88,10 +87,12 @@ class SkuItemController {
             || this.#controller.areNotNumbers(SKUId))
             throw new Exceptions(422);
 
+        console.log("prova3")
+
         let sku;
         await this.#controller.getSkuController().getSku(SKUId)
             .then(value => sku = value)
-            .catch(() => { throw new Exceptions(500) });
+            .catch((error) => { throw error });
         if (!sku) throw new Exceptions(404)
 
 
@@ -120,15 +121,17 @@ class SkuItemController {
             || this.#controller.areUndefined(newAvailable, newDateOfStock))
             throw new Exceptions(422);
 
-        let row;
-        await this.#dbManager.genericSqlGet(`SELECT (*) FROM SKUItem WHERE RFID= ${oldRFID};`)
-            .then(value => row = value[0])
-            .catch(error => { throw new Exceptions(503) });
-        if (num === undefined)
+        let skuitem;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= "${oldRFID}";`)
+            .then(value => skuitem = value[0])
+            .catch(error => { throw error });
+        if ( !skuitem)
         throw new Exceptions(404)
 
-        const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}" AND Available= ${newAvailable} 
-        AND DateOfStock= ${newDateOfStock} WHERE RFID= "${oldRFID}";`;
+        console.log(body)
+
+        const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}", Available= ${newAvailable} ,
+         DateOfStock= "${newDateOfStock}" WHERE RFID= "${oldRFID}";`;
         try {
             await this.#dbManager.genericSqlRun(sqlUpdate);
         } catch (error) {
@@ -146,8 +149,8 @@ class SkuItemController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM SKUItem WHERE ID= ${rfid};`)
-            .catch((error) => { throw new Exceptions(503) });
+            (`DELETE FROM SKUItem WHERE RFID= "${rfid}";`)
+            .catch((error) => { throw error });
     }
 }
 

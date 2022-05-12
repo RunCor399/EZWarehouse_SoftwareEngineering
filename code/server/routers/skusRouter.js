@@ -56,7 +56,7 @@ router.put('/api/sku/:id', async (req, res) => {
 
   await controller.getSkuController().editSku(param, req.body)
     .then(() => { res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error);return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //PUT /api/sku/:id/position

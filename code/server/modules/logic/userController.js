@@ -26,13 +26,10 @@ class UserController {
     }
 
     getUserAPI() {
-        console.log("provaUser")
-        console.log(this.#controller.isLoggedAndHasPermission("manager") )
-        console.log(this.#logged)
-        if (this.#controller.isLoggedAndHasPermission("manager") === false
-            || this.#logged === false)
+     
+        if (!this.#controller.isLoggedAndHasPermission("manager") 
+            || !this.#logged )
             throw new Exceptions(401);
-        console.log("provaUser2")
 
         return this.#user;
     }

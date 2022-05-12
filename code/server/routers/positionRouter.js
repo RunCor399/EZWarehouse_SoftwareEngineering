@@ -25,7 +25,7 @@ router.post('/api/position', async (req, res) => {
   console.log('POST',req.url);
 
   await controller.getPositionController().createPosition(req.body)
-    .then((user) => { return res.status(201).end(); })
+    .then(() => { return res.status(201).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
 });
@@ -53,8 +53,8 @@ router.put('/api/position/:positionID/changeID', async (req, res) => {
   console.log('PUT',req.url);
 
   await controller.getPositionController().editPositionVer2(param, req.body)
-    .then((user) => { return res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .then(() => { return res.status(200).end(); })
+    .catch(error => { console.log(error);return res.status(error.getCode()).send(error.getMessage()); });
 
 });
 
