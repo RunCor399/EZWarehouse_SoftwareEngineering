@@ -21,6 +21,10 @@ router.get('/api/restockOrders', async (req, res) => {
   }
 
   return res.status(200).json(restockOrders);
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 router.get('/api/restockOrders/:id', async (req, res) => {
@@ -40,6 +44,10 @@ router.get('/api/restockOrders/:id', async (req, res) => {
   }
   
   return res.status(200).json(restockOrder);
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 router.get('/api/restockOrders/:id/returnItems', async (req, res) => {
@@ -59,6 +67,10 @@ router.get('/api/restockOrders/:id/returnItems', async (req, res) => {
   }
   
   return res.status(200).json(returnItems);
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 
@@ -78,6 +90,10 @@ router.get('/api/restockOrdersIssued', async (req, res) => {
   }
   
   return res.status(200).json(restockOrdersIssued);
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 
@@ -95,6 +111,10 @@ router.post('/api/restockOrder', async (req, res) => {
   }  
 
   return res.status(200).end();
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });  
 
 router.put('/api/restockOrder/:id', async (req, res) => {
@@ -112,6 +132,10 @@ router.put('/api/restockOrder/:id', async (req, res) => {
   }  
 
   return res.status(200).end();
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 })  
 
 router.put('/api/restockOrder/:id/skuItems', async (req, res) => {
@@ -130,6 +154,10 @@ router.put('/api/restockOrder/:id/skuItems', async (req, res) => {
   }
   
   return res.status(200).end();
+
+  /*await controller.getSkuController().getUserAPI()
+  .then((user) => { return res.status(200).json(user); })
+  .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 
@@ -148,6 +176,10 @@ router.put('/api/restockOrder/:id/transportNote', async (req, res) => {
   }
   
   return res.status(200).end();
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 
@@ -166,6 +198,10 @@ router.delete('/api/restockOrder/:id', async (req, res) => {
   }
 
   return res.status(200).end();
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 module.exports = router

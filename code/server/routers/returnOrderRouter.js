@@ -20,6 +20,10 @@ router.get('/api/returnOrders', async (req, res) => {
     }
 
     return res.status(200).json(returnOrders);
+
+    /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 
@@ -40,6 +44,10 @@ router.get('/api/returnOrders/:id', async (req, res) => {
     }
 
     return res.status(200).json(returnOrder);
+
+    /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 
@@ -57,6 +65,10 @@ router.post('/api/returnOrder', async (req, res) => {
         return res.status(responseParams.code).send(responseParams.message);
     }
     return res.status(200).end();
+
+    /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 router.delete('/api/returnOrder/:id', async (req, res) => {
@@ -74,6 +86,10 @@ router.delete('/api/returnOrder/:id', async (req, res) => {
     }
 
     return res.status(200).end();
+
+    /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 

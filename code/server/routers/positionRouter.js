@@ -23,6 +23,10 @@ router.get('/api/positions', async(req, res) => {
 
   return res.status(200).json(positions);
 
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
+
 });
 
 //POST /api/position
@@ -43,6 +47,10 @@ router.post('/api/position', async (req, res) => {
 
   return res.status(201).end();
 
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
+
 });
 
 //PUT /api/position/:positionID
@@ -61,6 +69,10 @@ router.put('/api/position/:positionID', async (req, res) => {
   }
 
   return res.status(200).end();
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 
 });
 
@@ -81,6 +93,10 @@ router.put('/api/position/:positionID/changeID', async (req, res) => {
 
   return res.status(200).end();
 
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
+
 });
 
 //DELETE /api/position/:positionID
@@ -99,6 +115,10 @@ router.delete('/api/position/:positionID', async (req, res) => {
   }
 
   return res.status(204).end();
+
+  /*await controller.getSkuController().getUserAPI()
+    .then((user) => { return res.status(200).json(user); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });*/
 });
 
 module.exports = router;
