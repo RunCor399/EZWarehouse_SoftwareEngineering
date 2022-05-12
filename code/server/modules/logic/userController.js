@@ -28,8 +28,8 @@ class UserController {
     getUserAPI() {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         if (!this.#logged)
             return undefined;
         else return this.#user;
@@ -46,12 +46,12 @@ class UserController {
 
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
             .then(value => rows = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw new Exceptions(500) });
         return rows;
 
     }
@@ -59,12 +59,12 @@ class UserController {
     async getAllUsers() {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .then(value => rows = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw new Exceptions(500)});
         return rows;
     }
 
@@ -73,8 +73,8 @@ class UserController {
     async createUser(body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         const username = body["username"];
         const name = body["name"];
         const surname = body["surname"];
@@ -82,7 +82,7 @@ class UserController {
         const type = body["type"];
 
         if (this.#controller.areUndefined(username, name, surname, password, type))
-            throw new Error(Exceptions.message422);
+        throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
         const sqlInstruction =
@@ -91,7 +91,7 @@ class UserController {
 
 
         this.#dbManager.genericSqlRun(sqlInstruction).
-            catch((error) => { throw new Error((Exceptions.message500)); });
+            catch((error) => { throw new Exceptions(500); });
 
     }
 
@@ -102,7 +102,7 @@ class UserController {
         const password = body["password"];
 
         if (this.#controller.areUndefined(username, password))
-            throw new Error(Exceptions.message422);
+        throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
         const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
@@ -111,11 +111,11 @@ class UserController {
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction)
             .then(value => row = value[0])
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw new Exceptions(500) });
 
         if (!row)
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         this.#user.id = row.ID;
         this.#user.username = row.username;
         this.#user.name = row.name;
@@ -133,7 +133,7 @@ class UserController {
 
     logout() {
         if (!this.#logged)
-            throw new Error(Exceptions.message500);//already logged out
+        throw new Exceptions(500)//already logged out
         this.#logged = false;
         return;
     }
@@ -141,32 +141,32 @@ class UserController {
     async editUser(username, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         const oldType = body["oldType"];
         const newType = body["newType"];
 
         if (this.#controller.areUndefined(username, oldType, newType))
-            throw new Error(Exceptions.message422);
+        throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
             (`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`)
-            .catch((error) => { throw new Error(Exceptions.message500); });
+            .catch((error) => { throw new Exceptions(500) });
 
     }
 
     async deleteUser(username, type) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
-            throw new Error(Exceptions.message401);
-
+            throw new Exceptions(401);
+        
         if (this.#controller.areUndefined(username,type) || type === "manager")
-            throw new Error(Exceptions.message422);
+        throw new Exceptions(422);
 
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM USERS WHERE username="${username}" AND type="${type}";`)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+            .catch((error) => { throw new Exceptions(500) });
 
     }
 

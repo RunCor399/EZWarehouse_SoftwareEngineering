@@ -1,0 +1,25 @@
+
+GET http://localhost:3001/api/skuitems HTTP/1.1
+content-type: application/json
+
+###
+GET http://localhost:3001/api/skuitems/sku/1 HTTP/1.1
+content-type: application/json
+
+###
+GET http://localhost:3001/api/skuitems/:rfid HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:3001/api/skuitem HTTP/1.1
+content-type: application/json
+
+###
+PUT http://localhost:3001/api/skuitems/:rfid HTTP/1.1
+content-type: application/json
+
+###
+DELETE http://localhost:3001/api/skuitems/:rfid HTTP/1.1
+content-type: application/json
+
+

@@ -14,37 +14,40 @@ class InternalOrderController {
     }
 
 
-    /**getter function to retreive all the internal orders*/
+    /*TO BE COMPLETED - getter function to retreive all the internal orders*/
     async getAllInternalOrders() {
         /* let rows;
          const sqlInstruction = "SELECT * FROM InternalOrder;";
          try {
              rows = await this.#dbManager.genericSqlGet(sqlInstruction);
          } catch (error) {
-             new Error(Exceptions.message500);
+             throw new Exceptions(500);
          }
          return rows;*/
 
         /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Exceptions(401);
 
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
             .then((value) => rows = value)
-            .catch((error) => { throw new Error(Exceptions.message500); });
+            .catch((error) => { throw  error });
+
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        rows.forEach(async (r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
+                .then(value => r.products =
+                    /*generation of the dictionary */
+                    value)
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
 
         return rows;
 
     }
 
-    /**getter function to retreive all the issued internal orders*/
+    /*TO BE COMPLETED - getter function to retreive all the issued internal orders*/
     async getIssuedInternalOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
@@ -56,25 +59,28 @@ class InternalOrderController {
         return rows;*/
 
         /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'customer')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
+            throw new Exceptions(401);
 
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
             .then((value) => rows = value)
-            .catch((error) => { throw new Error(Exceptions.message500); });
+            .catch((error) => { throw error });
+
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        rows.forEach(async (r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
+                .then(value => r.products =
+                    /*generation of the dictionary */
+                    value)
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
 
         return rows;
 
     }
 
-    /**getter function to retreive all the accepted internal orders*/
+    /*TO BE COMPLETED - getter function to retreive all the accepted internal orders*/
     async getAcceptedInternalOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
@@ -86,24 +92,26 @@ class InternalOrderController {
         return rows;*/
 
         /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'delivery employee')
-            throw new Error(Exceptions.message401);
-
+        if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
+            throw new Exceptions(401);
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
             .then((value) => rows = value)
-            .catch((error) => { throw new Error(Exceptions.message500); });
+            .catch((error) => { throw error });
+
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        rows.forEach(async (r) => {
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${r.id};`)
+                .then(value => r.products =
+                    /*generation of the dictionary */
+                    value)
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
 
         return rows;
     }
 
-    /**getter function to retreive a single internal order, given its ID*/
+    /*TO BE COMPLETED - getter function to retreive a single internal order, given its ID*/
     async getInternalOrder(id) {
         /*let row;
         const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
@@ -115,44 +123,39 @@ class InternalOrderController {
         return row;*/
 
         /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'delivery employee')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
+            throw new Exceptions(401);
 
         /*check if the id is valid*/
         if (!id || isNaN(id))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
             .then((value) => row = value[0])
-            .catch((error) => { throw new Error(Exceptions.message500); });
+            .catch((error) => { throw error });
 
         /*check if the internal order exists*/
         if (!row)
-            throw new Error(Exceptions.message404)
+            throw new Exceptions(404);
+
+        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ${id};`)
+            .then(value => row.products =
+                /*generation of the dictionary */
+                value)
+            .catch(error => { throw new Error(Exceptions.message500) });
 
         return row;
 
     }
 
-    /**TODO - products and issueDate are missing in the table */
+    /*TO BE CHECKED - creation of a new internal order*/
     async createInternalOrder(body) {
 
         /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'customer')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
+            throw new Exceptions(401);
 
         const issueDate = body["issueDate"];
         const products = body["products"];
@@ -160,7 +163,7 @@ class InternalOrderController {
 
         /*check if the body is valid */
         if (!issueDate || !products || !customerId || isNaN(customerId))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         /*let id;
                 const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
@@ -174,7 +177,7 @@ class InternalOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message503) });
+            .catch(error => { throw new error});
 
 
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
@@ -182,82 +185,78 @@ class InternalOrderController {
         try {
             await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
-            new Error(Exceptions.message503);
+            new Exceptions(503);
         }
 
         /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (${id}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.qty});`;
             try {
-               await this.#dbManager.genericSqlGet(sqlInsert);
+                await this.#dbManager.genericSqlGet(sqlInsert);
+                const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);
             } catch (error) {
-                new Error(Exceptions.message503);
+                throw error;
             }
         })
 
     }
 
-    /**TO CHECK*/
+    /*TO BE CHECKED - function to edit the state of an internal order, given its ID*/
     async editInternalOrder(id, body) {
 
         /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager' && user.type !== 'customer' && user.type !== 'delivery employee')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "deliveryEmployee"))
+            throw new Exceptions(401);
 
         /*check if the id is valid*/
         if (!id || isNaN(id))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID= ${id};`)
             .then((value) => row = value[0])
-            .catch((error) => { throw new Error(Exceptions.message503); });
+            .catch((error) => { throw error });
 
         /*check if the internal order exists*/
         if (!row)
-            throw new Error(Exceptions.message404)
+            throw new Exceptions(404)
 
         const newState = body["newState"];
 
         /*check if the body is valid */
         if (!newState)
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         if (newState === "COMPLETED") {
             const products = body["products"];
 
             if (!products)
-                throw new Error(Exceptions.message422);
+                throw new Exceptions(422);
 
+            /*TO BE CHECKED*/
             products.forEach(async (elem) => {
-                const sqlInsert = `INSERT INTO SKUPerInternalOrder (orderID, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+                const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
                 try {
-                    const internalOrder = await this.#dbManager.genericSqlGet(sqlInsert);
+                    const internalOrder = await this.#dbManager.genericSqlRun(sqlInsert);
                 } catch (error) {
-                    new Error(Exceptions.message503);
+                    throw error;
                 }
             })
-            return internalOrder;
+
         }
         else {
             const sqlInstruction = `UPDATE InternalOrder SET state= "${newState}" WHERE ID= ${id}`;
             try {
                 await this.#dbManager.genericSqlRun(sqlInstruction);
             } catch (error) {
-                new Error(Exceptions.message503);
+                throw error;
             }
         }
 
     }
 
 
-    /**delete function to remove an internal order from the table, given its ID */
+    /*COMPLETED - delete function to remove an internal order from the table, given its ID */
     async deleteInternalOrder(id) {
         /* const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
         try {
@@ -267,22 +266,16 @@ class InternalOrderController {
         } */
 
         /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
-            throw new Error(Exceptions.message401);
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Exceptions(401);
 
         /*check if the id is valid*/
         if (!id || isNaN(id))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM InternalOrder WHERE ID= ${id};`)
-            .catch((error) => { throw new Error(Exceptions.message503) });
+            .catch((error) => { throw error });
     }
 
 }

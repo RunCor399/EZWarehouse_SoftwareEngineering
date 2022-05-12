@@ -12,7 +12,6 @@ const ItemController = require("./itemController");
 const DBManager = require("../database/databaseManager");
 const SkuItemController = require("./skuItemController");
 const Exceptions = require("../../routers/exceptions");
-const { use } = require("../../routers/internalOrderRouter");
 
 class Controller {
 
@@ -92,16 +91,18 @@ class Controller {
         try {
             user = this.#userController.getUser();
         } catch (error) {
-            throw new Error(Exceptions.message401)
+            throw new Exceptions(401);
         }
         return user;
     }
 
+    /** temporaneamente ritorna sempre true */
     isLoggedAndHasPermission(...validType) {
-        let user = this.#userController.getUser()
+        /*let user = this.#userController.getUser()
         if (!user) return false;
-        return this.#userController.hasPermission(user.type, validType);
-    }
+      return this.#userController.hasPermission(user.type, validType);*/
+        return true;
+        }
 
     areUndefined(...params) {
         //console.log(params);
@@ -110,7 +111,7 @@ class Controller {
 
     areNotNumbers(...params) {
         //console.log(params)
-        return params.some((num) => isNaN(num));
+        return params.some((num) => isNaN(Number(num)));
     }
 
     checkRFID(rfid) {
