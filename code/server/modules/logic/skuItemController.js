@@ -37,9 +37,9 @@ class SkuItemController {
             throw new Exceptions(422);
 
         let sku;
-        await this.getSku(id)
+        await this.#controller.getSkuController().getSku(id)
             .then(value => sku = value)
-            .catch(() => { throw new Exceptions(500) });
+            .catch((error) => { throw error });
         if (!sku) throw new Exceptions(404)
 
         let rows;

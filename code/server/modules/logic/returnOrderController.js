@@ -24,20 +24,14 @@ class ReturnOrderController {
         }
         return rows;*/
 
-        /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
-            throw new Error(Exceptions.message401);
+        /*check if the current user is authorized*/
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Exceptions(401)
 
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM ReturnOrder;")
             .then(value => rows = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw error });
         return rows;
     }
 
@@ -52,28 +46,22 @@ class ReturnOrderController {
         }
         return row;*/
 
-        /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
-            throw new Error(Exceptions.message401);
+        /*check if the current user is authorized*/
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Exceptions(401)
 
         /*check if the id is valid*/
         if (!id || isNaN(id))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422))
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM ReturnOrder WHERE ID= ${id};`)
             .then((value) => row = value[0])
-            .catch((error) => { throw new Error(Exceptions.message500); });
+            .catch((error) => { throw error });
 
         /*check if the internal order exists*/
         if (!row)
-            throw new Error(Exceptions.message404)
+            throw new Exceptions(404);
 
         return row;
     }
@@ -81,15 +69,9 @@ class ReturnOrderController {
     /**TO BE COMPLETED - products are missing in the table, while managerID and supplierID are missing in the function */
     async createReturnOrder(body) {
 
-        /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
-            throw new Error(Exceptions.message401);
+        /*check if the current user is authorized*/
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Exceptions(401)
 
         const returnDate = body["returnDate"];
         const products = body["products"];
@@ -97,16 +79,16 @@ class ReturnOrderController {
 
         /*check if the body is valid */
         if (!returnDate || !products || !restockOrderId || isNaN(restockOrderId))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422)
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE ID= ${restockOrderId};`)
             .then((value) => row = value[0])
-            .catch((error) => { throw new Error(Exceptions.message500); });
+            .catch((error) => { throw error; });
 
         /*check if the restock order exists*/
         if (!row)
-            throw new Error(Exceptions.message404)
+            throw new Exceptions(404);
 
         /* const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
 
@@ -119,14 +101,14 @@ class ReturnOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM ReturnOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw error });
 
         const sqlInstruction = `INSERT INTO ReturnOrder (ID, returnDate, restockOrderId) 
         VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
         try {
             const returnOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
         } catch (error) {
-            new Error(Exceptions.message500);
+            throw error;
         }
 
         products.forEach(async (elem) => {
@@ -134,7 +116,7 @@ class ReturnOrderController {
             try {
                 const returnOrder = await this.#dbManager.genericSqlGet(sqlInsert);
             } catch (error) {
-                new Error(Exceptions.message500);
+                throw error;
             }
         })
 
@@ -151,23 +133,17 @@ class ReturnOrderController {
           }
           return returnOrder;*/
 
-        /*check if the user is authorized */
-        let user;
-        try {
-            user = this.#controller.getSession();
-        } catch (error) {
-            throw new Error(Exceptions.message401);
-        }
-        if (user.type !== 'manager')
-            throw new Error(Exceptions.message401);
+        /*check if the current user is authorized*/
+        if (!this.#controller.isLoggedAndHasPermission("manager"))
+            throw new Exceptions(401)
 
         /*check if the id is valid*/
         if (!id || isNaN(id))
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM ReturnOrder WHERE ID= ${id};`)
-            .catch((error) => { throw new Error(Exceptions.message500) });
+            .catch((error) => { throw new error });
     }
 }
 

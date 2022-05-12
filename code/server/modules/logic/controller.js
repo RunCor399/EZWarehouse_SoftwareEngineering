@@ -91,7 +91,7 @@ class Controller {
         try {
             user = this.#userController.getUser();
         } catch (error) {
-            throw new Error(Exceptions.message401)
+            throw new Exceptions(401);
         }
         return user;
     }
@@ -111,7 +111,7 @@ class Controller {
 
     areNotNumbers(...params) {
         //console.log(params)
-        return params.some((num) => isNaN(num));
+        return params.some((num) => isNaN(Number(num)));
     }
 
     checkRFID(rfid) {

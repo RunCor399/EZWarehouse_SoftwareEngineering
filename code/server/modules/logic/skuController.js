@@ -64,11 +64,14 @@ class SkuController {
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
 
+        console.log(body);
+
 
         if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
             throw new Exceptions(422);
 
+            console.log("provamezza")
 
 
         const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
@@ -76,8 +79,8 @@ class SkuController {
 
         await this.#dbManager.genericSqlRun(sqlInstruction)
             .catch((error) => { throw new Exceptions(503) });
-
-
+            
+            console.log("provafine")
 
     }
 
@@ -229,7 +232,9 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
         
-        if (areUndefined(id) || areNotNumbers(id))
+        console.log(id);
+        
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
         throw new Exceptions(422);
 
 

@@ -11,11 +11,11 @@ router.get('/api/skus', async (req, res) => {
   console.log('GET', req.url);
 
   await controller.getSkuController().getAllSku()
-    .then(skus => {return res.status(200).json(skus);})
-    .catch(error => {return res.status(error.getCode()).send(error.getMessage());});
+    .then(skus => { return res.status(200).json(skus); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
 
-  
+
 });
 
 //GET /api/skus/:id
@@ -25,24 +25,10 @@ router.get('/api/skus/:id', async (req, res) => {
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('GET', req.url);
-  let sku;
 
-  /*
-  try {
-    sku = await controller.getSkuController().getSku(param);
-    console.log("sku", sku)
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    console.log(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-
-  return res.status(200).json(sku);
-  */
-  
   await controller.getSkuController().getSku(param)
-  .then(sku => {return res.status(200).json(sku);})
-  .catch(error => {return res.status(error.getCode()).send(error.getMessage());});
+    .then(sku => { return res.status(200).json(sku); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
 
 });
@@ -54,18 +40,11 @@ router.post('/api/sku', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
+  await controller.getSkuController().createSku(req.body)
+    .then(() => { return res.status(201).end(); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
-  try {
-    console.log("prova4")
 
-    await controller.getSkuController().createSku(req.body);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    console.log(responseParams);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-
-  return res.status(201).end();
 });
 
 //PUT /api/sku/:id
@@ -76,52 +55,37 @@ router.put('/api/sku/:id', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('PUT', req.url);
 
-  try {
-    console.log("prova")
-    await controller.getSkuController().editSku(param, req.body);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-
-  return res.status(200).end();
+  await controller.getSkuController().editSku(param, req.body)
+    .then(() => { res.status(200).end(); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //PUT /api/sku/:id/position
-router.put('/api/sku/:id', async (req, res) => {
+router.put('/api/sku/:id/position', async (req, res) => {
   const param = req.params.id;
-  
-/** @type {Controller} */
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT', req.url);
 
-
-  try {
-    await controller.getSkuController().setPosition(param, req.body);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
-
-  return res.status(200).end();
+  await controller.getSkuController().setPosition(param, req.body)
+    .then(() => { res.status(200).end(); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
-//DELETE /api/sku/:id
-router.delete('/api/sku/:id', async (req, res) => {
+//DELETE /api/skus/:id
+router.delete('/api/skus/:id', async (req, res) => {
   const param = req.params.id;
-  
-/** @type {Controller} */
+
+  /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('DELETE', req.url);
 
-  try {
-    await controller.getSkuController().deleteSku(param);
-  } catch (error) {
-    let responseParams = Exceptions.handle(error);
-    return res.status(responseParams.code).send(responseParams.message);
-  }
+  await controller.getSkuController().deleteSku(param)
+  .then(() => { res.status(204).end(); })
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
-  return res.status(204).end();
+
 });
 
 
