@@ -45,7 +45,7 @@ class InternalOrderController {
                 .then(value => r.products.forEach(value => {
                     r.products = [...r.products, value];
                 }))
-                .catch(error => { throw new Error(Exceptions.message500) });
+                .catch(error => { throw error });
         });
 
         return rows;
@@ -114,7 +114,7 @@ class InternalOrderController {
         rows.forEach(async (r) => {
             params = [r.id];
             await this.#dbManager.genericSqlGet(query, params)
-                .then(value => r.products = value) /*generation of the dictionary */    
+                .then(value => r.products = value) /*generation of the dictionary */
                 .catch(error => { throw error });
         });
 
@@ -137,7 +137,7 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
 
@@ -153,7 +153,7 @@ class InternalOrderController {
         if (!row)
             throw new Exceptions(404);
 
-            
+
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
         const query2 = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`;
         const params2 = [id];
@@ -180,31 +180,23 @@ class InternalOrderController {
         const customerId = body["customerId"]
 
         /*check if the body is valid */
-        if (!issueDate || !products || !customerId || isNaN(customerId))
+        if (this.#controller.areUndefined(issueDate, products, customerId) || isNaN(Number(customerId)))
             throw new Exceptions(422);
 
-        /*let id;
-                const sqlGetCount = 'SELECT COUNT(*) FROM InternalOrder'
-        
-                try {
-                    id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];;
-                } catch (error) {
-                    new Error(Exceptions.message500);
-                } */
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw  error });
+            .catch(error => { throw error });
 
-        const params1 = [id+1, issueDate, customerId];
-        const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
+
+        const params1 = [id, issueDate, customerId];
+        const sqlInstruction = `INSERT INTO InternalOrder (id, issueDate, state, customerId) 
                                 VALUES (?, ?, "ISSUED", ?);`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction, params1);
-        } catch (error) {
-            new Exceptions(503);
-        }
+
+        await this.#dbManager.genericSqlRun(sqlInstruction, params1)
+            .catch(error => { throw error })
+
 
         /*TO BE CHECKED*/
         let params2;
@@ -213,7 +205,7 @@ class InternalOrderController {
             const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
             try {
                 await this.#dbManager.genericSqlRun(sqlInsert, params2);
-  
+
             } catch (error) {
                 throw error;
             }
@@ -229,7 +221,7 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
         let row;
@@ -295,7 +287,7 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
         const query = `DELETE FROM InternalOrder WHERE ID = ?;`;

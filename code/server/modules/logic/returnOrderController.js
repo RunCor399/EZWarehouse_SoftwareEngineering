@@ -62,7 +62,7 @@ class ReturnOrderController {
             throw new Exceptions(401)
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422)
 
         let row;
@@ -97,7 +97,7 @@ class ReturnOrderController {
         const restockOrderId = body["restockOrderId"];
 
         /*check if the body is valid */
-        if (!returnDate || !products || !restockOrderId || isNaN(restockOrderId))
+        if (!returnDate || !products || !restockOrderId || isNaN(Number(restockOrderId)))
             throw new Exceptions(422)
 
         let row;
@@ -122,25 +122,21 @@ class ReturnOrderController {
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw error });
 
-        const params1 = [id+1, returnDate, restockOrderId];
+        const params1 = [id + 1, returnDate, restockOrderId];
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
                                 VALUES (?,?,?);`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction, params1);
-        } catch (error) {
-            throw error;
-        }
+
+        await this.#dbManager.genericSqlRun(sqlInstruction, params1)
+            .catch(error => { throw error; })
 
         let params2;
         /*TO BE CHECKED*/
         products.forEach(async (elem) => {
             params2 = [id, elem.SKUId, elem.description, elem.price, elem.rfid]
             const sqlInsert = `INSERT INTO SKUPerReturnOrder (id, SKUId, description, price, RFID) VALUES (?,?,?,?,?);`;
-            try {
-                await this.#dbManager.genericSqlRun(sqlInsert, params2);
-            } catch (error) {
-                throw error;
-            }
+
+            await this.#dbManager.genericSqlRun(sqlInsert, params2)
+                .catch(error => { throw error; })
         })
 
     }
@@ -160,11 +156,11 @@ class ReturnOrderController {
             throw new Exceptions(401)
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM ReturnOrder WHERE ID=?;`, id)
-            .catch((error) => { throw new error });
+            .catch((error) => { throw error });
     }
 }
 
