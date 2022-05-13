@@ -49,9 +49,6 @@ class SkuItemController {
         if (!rows)
             throw new Exceptions(404)
 
-        //`SELECT * FROM SKUItem WHERE SKUId= ${id};`
-
-
         return rows;
     }
 
@@ -68,9 +65,6 @@ class SkuItemController {
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= ?;`, rfid)
             .then(value => row = value[0])
             .catch(error => { throw error });
-
-        //`SELECT * FROM SKUItem WHERE RFID= "${rfid}";`
-
 
         if (!row)
             throw new Exceptions(404)
@@ -99,9 +93,6 @@ class SkuItemController {
             .then(value => sku = value)
             .catch((error) => { throw error });
         if (!sku) throw new Exceptions(404)
-
-
-        //const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)VALUES ("${RFID}", ${SKUId}, 0, "${dateOfStock}");`;
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
@@ -134,13 +125,6 @@ class SkuItemController {
         if (!skuitem)
             throw new Exceptions(404)
 
-
-        //`SELECT * FROM SKUItem WHERE RFID= "${oldRFID}";`
-
-        console.log(body)
-
-        //const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}", Available= ${newAvailable} ,DateOfStock= "${newDateOfStock}" WHERE RFID= "${oldRFID}";`;
-
         const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
 
         await this.#dbManager.genericSqlRun(sqlUpdate, newRFID, newAvailable, newDateOfStock, oldRFID)
@@ -158,7 +142,6 @@ class SkuItemController {
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKUItem WHERE RFID= ?;`,rfid)
             .catch((error) => { throw error });
-        //`DELETE FROM SKUItem WHERE RFID= "${rfid}";`
         
     }
 }

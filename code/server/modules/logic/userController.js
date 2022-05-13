@@ -94,9 +94,6 @@ class UserController {
         if (usersEmails.includes(username))
             throw new Exceptions(409);
 
-        /* const sqlInstruction =
-            `INSERT INTO USERS ( email, name, surname, password, type) VALUES
-             ("${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`; */
 
         const sqlInstruction = `INSERT INTO USERS ( email, name, surname, password, type) VALUES (?,?,?,?,?);`;
 
@@ -115,8 +112,6 @@ class UserController {
             throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
-        /* const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U 
-        WHERE email="${username}" AND password="${hashedPassword}" AND type="${type}"`; */
 
         const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
 
@@ -164,7 +159,6 @@ class UserController {
         await this.#dbManager.genericSqlRun
             (`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType)
             .catch((error) => { throw error });
-        //`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`
 
     }
 
@@ -180,7 +174,6 @@ class UserController {
         await this.#dbManager.genericSqlRun
             (`DELETE FROM USERS WHERE email= ? AND type= ?;` , username, type)
             .catch((error) => { throw error });
-        //`DELETE FROM USERS WHERE email="${username}" AND type="${type}";`
         
 
     }

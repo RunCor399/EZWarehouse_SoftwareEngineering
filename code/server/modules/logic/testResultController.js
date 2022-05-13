@@ -36,7 +36,6 @@ class TestResultController {
             .catch(error => { throw error });
         return rows;
 
-        //`SELECT * FROM TestResult WHERE RFID= "${rfid}";`
 
     }
 
@@ -58,7 +57,6 @@ class TestResultController {
             throw new Exceptions(404)
 
 
-        //`SELECT * FROM TestResult WHERE rfid= "${rfid}" AND ID= ${id};`
 
         return row;
     }
@@ -93,9 +91,6 @@ class TestResultController {
             .then(value => testDescriptor = value)
             .catch(error => { throw error });
         if (!testDescriptor) throw new Exceptions(404)
-
-
-        //const sqlInstruction = `INSERT INTO TestResult ( idTestDescriptor, RFID, date, result) VALUES ( ${idTestDescriptor}, "${rfid}", "${date}", ${result});`;
 
         const sqlInstruction = `INSERT INTO TestResult ( idTestDescriptor, RFID, date, result)  VALUES ( ?, ?, ?, ?);`;
 
@@ -143,9 +138,6 @@ class TestResultController {
         if (!testResult) throw new Exceptions(404);
 
 
-
-        //const sqlInstruction = `UPDATE TestResult SET idtestDescriptor= ${newIdTestDescriptor}, date= "${newDate}", result= ${newResult} WHERE ID= ${id} AND RFID = "${rfid}";`;
-
         const sqlInstruction = `UPDATE TestResult SET idtestDescriptor= ?, date= ?, result=? WHERE ID= ? AND RFID = ?;`
 
         await this.#dbManager.genericSqlRun(sqlInstruction, newIdTestDescriptor, newDate, newResult, id, rfid)
@@ -166,8 +158,6 @@ class TestResultController {
         await this.#dbManager.genericSqlRun
             (`DELETE FROM TestResult WHERE ID= ? AND RFID= ?;`, id, rfid)
             .catch((error) => { throw error });
-
-        //`DELETE FROM TestResult WHERE ID= ${id} AND RFID= "${rfid}";`
 
 
     }

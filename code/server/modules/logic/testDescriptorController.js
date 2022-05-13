@@ -39,7 +39,6 @@ class TestDescriptorController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ?;`, id)
             .catch(error => { throw error });
-        //`SELECT * FROM TestDescriptor WHERE ID= ${id};`
 
         if (!row)
             throw new Exceptions(404)
@@ -66,9 +65,6 @@ class TestDescriptorController {
             .then(value => sku = value)
             .catch((error) => { throw error });
         if (!sku) throw new Exceptions(404)
-
-
-        //const sqlInsert = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) VALUES ( "${name}", "${procedureDescription}", ${idSKU});`;
 
         const sqlInsert = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) VALUES ( ?, ?, ?);`
 
@@ -104,9 +100,6 @@ class TestDescriptorController {
             .catch(error => { throw error });
         if (!testDescriptor) throw new Exceptions(404)
 
-
-        //const sqlUpdate = `UPDATE TestDescriptor SET name= "${newName}", procedureDescription= "${newProcedureDescription}", idSku = ${newIdSKU} WHERE ID= ${id};`;
-
         const sqlUpdate = `UPDATE TestDescriptor SET name= ?, procedureDescription= ?, idSku = ? WHERE ID= ?;`;
 
         await this.#dbManager.genericSqlRun(sqlUpdate, newName, newProcedureDescrition, newIdSKU, id)
@@ -124,9 +117,7 @@ class TestDescriptorController {
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Exceptions(422);
 
-        
-        //`DELETE FROM TestDescriptor WHERE ID= ${id};`
-        await this.#dbManager.genericSqlRun
+                await this.#dbManager.genericSqlRun
             (`DELETE FROM TestDescriptor WHERE ID= ?;`, id)
             .catch((error) => { throw error });
     }

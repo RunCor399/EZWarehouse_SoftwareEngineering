@@ -53,10 +53,6 @@ class PositionController {
             || String(row).length !== 4 || String(col).length !== 4)
             throw new Exceptions(422);
 
-        /*  const sqlInstruction =
-             `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) 
-         VALUES ("${positionID}", ${maxVolume}, ${maxWeight}, "${aisleID}", "${row}", "${col}", ${occupiedWeight}, ${occupiedVolume});`; */
-
         const sqlInstruction = `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES (?,?,?,?,?,?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume)
@@ -165,10 +161,6 @@ class PositionController {
         await this.#dbManager.genericSqlRun
             (`DELETE FROM Position WHERE positionID= $?;`, id)
             .catch((error) => { throw new error });
-
-        //`DELETE FROM Position WHERE positionID= ${id};`
-
-
 
     }
 
