@@ -31,7 +31,7 @@ class SkuItemController {
     async getSkuItems(id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
-        throw new Exceptions(401);
+            throw new Exceptions(401);
 
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Exceptions(422);
@@ -43,13 +43,14 @@ class SkuItemController {
         if (!sku) throw new Exceptions(404)
 
         let rows;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ?;`, id)
             .then(value => rows = value)
             .catch(error => { throw error });
         if (!rows)
             throw new Exceptions(404)
-        
-        //`SELECT * FROM SKUItem WHERE SKUId= ?;`, id
+
+        //`SELECT * FROM SKUItem WHERE SKUId= ${id};`
+
 
         return rows;
     }
@@ -64,14 +65,15 @@ class SkuItemController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= "${rfid}";`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= ?;`, rfid)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
-        //`SELECT * FROM SKUItem WHERE RFID= ?;`, rfid
-        
+        //`SELECT * FROM SKUItem WHERE RFID= "${rfid}";`
+
+
         if (!row)
-        throw new Exceptions(404)
+            throw new Exceptions(404)
         return row;
     }
 
@@ -99,12 +101,11 @@ class SkuItemController {
         if (!sku) throw new Exceptions(404)
 
 
-        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
-        VALUES ("${RFID}", ${SKUId}, 0, "${dateOfStock}");`;
+        //const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)VALUES ("${RFID}", ${SKUId}, 0, "${dateOfStock}");`;
 
-       // const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`,RFID, SKUId, 0, dateOfStock;
+        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction)
+        await this.#dbManager.genericSqlRun(sqlInstruction, RFID, SKUId, 0, dateOfStock)
             .catch((error) => {
                 throw new Exceptions(503);
             });
@@ -127,23 +128,23 @@ class SkuItemController {
             throw new Exceptions(422);
 
         let skuitem;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= "${oldRFID}";`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= ?;`, oldRFID)
             .then(value => skuitem = value[0])
             .catch(error => { throw error });
-        if ( !skuitem)
+        if (!skuitem)
             throw new Exceptions(404)
-        
-        //`SELECT * FROM SKUItem WHERE RFID= ?;`, oldRFID
+
+
+        //`SELECT * FROM SKUItem WHERE RFID= "${oldRFID}";`
 
         console.log(body)
 
-        const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}", Available= ${newAvailable} ,
-         DateOfStock= "${newDateOfStock}" WHERE RFID= "${oldRFID}";`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlUpdate);
-        } catch (error) {
-            throw new Exceptions(503);
-        }
+        //const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}", Available= ${newAvailable} ,DateOfStock= "${newDateOfStock}" WHERE RFID= "${oldRFID}";`;
+
+        const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
+
+        await this.#dbManager.genericSqlRun(sqlUpdate, newRFID, newAvailable, newDateOfStock, oldRFID)
+            .catch(error => { throw error; });
     }
 
     /**delete function to remove an SKUItem from the table, given its ID */
@@ -155,11 +156,10 @@ class SkuItemController {
         if (this.#controller.checkRFID(rfid))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun
-            (`DELETE FROM SKUItem WHERE RFID= "${rfid}";`)
+        await this.#dbManager.genericSqlRun(`DELETE FROM SKUItem WHERE RFID= ?;`,rfid)
             .catch((error) => { throw error });
-
-        //`DELETE FROM SKUItem WHERE RFID= ?;`,rfid
+        //`DELETE FROM SKUItem WHERE RFID= "${rfid}";`
+        
     }
 }
 

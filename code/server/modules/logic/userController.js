@@ -26,9 +26,9 @@ class UserController {
     }
 
     getUserAPI() {
-     
-        if (!this.#controller.isLoggedAndHasPermission("manager") 
-            || !this.#logged )
+
+        if (!this.#controller.isLoggedAndHasPermission("manager")
+            || !this.#logged)
             throw new Exceptions(401);
 
         return this.#user;
@@ -87,21 +87,21 @@ class UserController {
 
         let users;
         await this.getAllUsers()
-        .then(value => users = value)
-        .catch(error => {throw error})
+            .then(value => users = value)
+            .catch(error => { throw error })
 
         let usersEmails = users.map(user => user.email)
-        if(usersEmails.includes(username))
-        throw new Exceptions(409);
+        if (usersEmails.includes(username))
+            throw new Exceptions(409);
 
-        const sqlInstruction =
+        /* const sqlInstruction =
             `INSERT INTO USERS ( email, name, surname, password, type) VALUES
-             ("${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
+             ("${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`; */
 
-        //const sqlInstruction =`INSERT INTO USERS ( email, name, surname, password, type) VALUES (?,?,?,?,?);` , username, name, surname, hashedPassword, type);
+        const sqlInstruction = `INSERT INTO USERS ( email, name, surname, password, type) VALUES (?,?,?,?,?);`;
 
-        this.#dbManager.genericSqlRun(sqlInstruction).
-            catch((error) => { throw new Exceptions(500); });
+        this.#dbManager.genericSqlRun(sqlInstruction, username, name, surname, hashedPassword, type)
+            .catch((error) => { throw error });
 
     }
 
@@ -115,13 +115,13 @@ class UserController {
             throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
-        const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U 
-        WHERE email="${username}" AND password="${hashedPassword}" AND type="${type}"`;
+        /* const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U 
+        WHERE email="${username}" AND password="${hashedPassword}" AND type="${type}"`; */
 
-        //const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U WHERE email= ? AND password= ? AND type= ?`, username, hashedPassword, type;
+        const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
 
         let row;
-        await this.#dbManager.genericSqlGet(sqlInstruction)
+        await this.#dbManager.genericSqlGet(sqlInstruction, username, hashedPassword, type)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -162,10 +162,9 @@ class UserController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
-            (`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`)
+            (`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType)
             .catch((error) => { throw error });
-
-        //`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType
+        //`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`
 
     }
 
@@ -179,10 +178,10 @@ class UserController {
 
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM USERS WHERE email="${username}" AND type="${type}";`)
+            (`DELETE FROM USERS WHERE email= ? AND type= ?;` , username, type)
             .catch((error) => { throw error });
-
-        //`DELETE FROM USERS WHERE email= ? AND type= ?;` , username, type
+        //`DELETE FROM USERS WHERE email="${username}" AND type="${type}";`
+        
 
     }
 

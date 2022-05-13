@@ -53,13 +53,13 @@ class PositionController {
             || String(row).length !== 4 || String(col).length !== 4)
             throw new Exceptions(422);
 
-        const sqlInstruction =
-            `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) 
-        VALUES ("${positionID}", ${maxVolume}, ${maxWeight}, "${aisleID}", "${row}", "${col}", ${occupiedWeight}, ${occupiedVolume});`;
+        /*  const sqlInstruction =
+             `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) 
+         VALUES ("${positionID}", ${maxVolume}, ${maxWeight}, "${aisleID}", "${row}", "${col}", ${occupiedWeight}, ${occupiedVolume});`; */
 
-        //const sqlInstruction =`INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES ("${positionID}", ${maxVolume}, ${maxWeight}, "${aisleID}", "${row}", "${col}", ${occupiedWeight}, ${occupiedVolume});`;
+        const sqlInstruction = `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES (?,?,?,?,?,?,?,?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction)
+        await this.#dbManager.genericSqlRun(sqlInstruction, positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume)
             .catch(error => { throw error });
     }
 
@@ -91,7 +91,7 @@ class PositionController {
 
         const positionIDs = positions.map(pos => String(pos.positionID));
         console.log(positionIDs);
-        
+
         if (!positionIDs.includes(id))
             throw new Exceptions(404);
 
@@ -138,15 +138,15 @@ class PositionController {
 
 
         let position = positions.filter(
-            (pos) =>  pos.positionID === oldId)[0];
+            (pos) => pos.positionID === oldId)[0];
 
         await this.deletePosition(oldId)
             .catch(error => { throw error });
 
         position.positionID = newPositionID
-        position.aisleID = String(newPositionID).substring(0,4)
-        position.row = String(newPositionID).substring(4,8)
-        position.col = String(newPositionID).substring(8,12)
+        position.aisleID = String(newPositionID).substring(0, 4)
+        position.row = String(newPositionID).substring(4, 8)
+        position.col = String(newPositionID).substring(8, 12)
 
         await this.createPosition(position)
             .catch(error => { throw error });
@@ -163,11 +163,13 @@ class PositionController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM Position WHERE positionID= ${id};`)
+            (`DELETE FROM Position WHERE positionID= $?;`, id)
             .catch((error) => { throw new error });
-        
-        //`DELETE FROM Position WHERE positionID= $?;`, id
-    
+
+        //`DELETE FROM Position WHERE positionID= ${id};`
+
+
+
     }
 
 }

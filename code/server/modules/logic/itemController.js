@@ -15,14 +15,7 @@ class ItemController {
 
     /**getter function to retreive all the items*/
     async getAllItems() {
-        /* let rows;
-         const sqlInstruction = "SELECT * FROM Item";
-         try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-         } catch (error) {
-             new Error(Exceptions.message500);
-         }
-         return rows;*/
+
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("supplier"))
@@ -39,14 +32,7 @@ class ItemController {
 
     /**getter function to retreive a single item given its ID*/
     async getItem(id) {
-        /* let row;
-         const sqlInstruction = `SELECT * FROM Item WHERE ID= ${id};`;
-         try {
-             row = await this.#dbManager.genericSqlGet(sqlInstruction);
-         } catch (error) {
-             new Error(Exceptions.message500);
-         }
-         return row;*/
+
 
         /*check if the current user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -57,11 +43,12 @@ class ItemController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
-        
-        //`SELECT * FROM Item WHERE id= ?;`, id
+
+        //`SELECT * FROM Item WHERE id= ${id};`
+
 
         /*check if the item exists*/
         if (!row)
@@ -81,11 +68,11 @@ class ItemController {
         const id = body["id"];
         const description = body["description"];
         const price = body["price"];
-        const SKUid = body["SKUId"]
+        const SKUId = body["SKUId"]
         const supplierId = body["supplierID"];
 
         /*check if the body is valid*/
-        if (!id || !description || !price || !SKUid || !supplierId || isNaN(id) || isNaN(price) || isNaN(SKUid) || isNaN(supplierId))
+        if (!id || !description || !price || !SKUId || !supplierId || isNaN(id) || isNaN(price) || isNaN(SKUId) || isNaN(supplierId))
             throw new Exceptions(422);
 
         /*check if the supplier already sells an item with the same SKUId*/
@@ -95,42 +82,36 @@ class ItemController {
             .catch(error => { throw error });
         if (num1 !== 0)
             throw new Exceptions(422)
-        
+
         //'SELECT COUNT(*) FROM Item WHERE SKUid = ${SKUid} AND supplierId= ${supplierId}', SKUid, supplierId
 
         /*check if the supplier already sells an item with the same ID*/
         let num2;
-        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM Item WHERE id = ${id} AND supplierID = ${supplierId}')
+        await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM Item WHERE id = ? AND supplierID =?', SKUId, supplierId)
             .then(value => num2 = value[0]["COUNT(*)"])
             .catch(error => { throw new error });
         if (num2 !== 0)
             throw new Exceptions(422)
 
+        //'SELECT COUNT(*) FROM Item WHERE id = ${id} AND supplierID = ${supplierId}'
+
         /*check if sku exists in the SKU table*/
         let sku;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id = ${SKUid}`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id = ?`, SKUId)
             .then(value => sku = value[0])
             .catch(error => { throw new error });
 
         if (!sku)
             throw new Exceptions(404);
+        //`SELECT * FROM SKU WHERE id = ${SKUid}`
         
-        //`SELECT * FROM SKU WHERE id = ?`, SKUId
-
-        let row;
         await this.#dbManager.genericSqlRun(`INSERT INTO Item (id, description, price, SKUId, supplierId) 
-            VALUES (${id}, "${description}", ${price}, ${SKUid}, ${supplierId});`)
+        VALUES (?,?,?,?,?);`, id, description, price, SKUId, supplierId)
             .catch(error => { throw error });
 
+        //`INSERT INTO Item (id, description, price, SKUId, supplierId) VALUES (${id}, "${description}", ${price}, ${SKUId}, ${supplierId});`
+        
 
-        /*const sqlInsert1 = `INSERT INTO Item (ID, description, price, SKUId, supplierId) 
-        VALUES (${id}, "${description}", ${price}, ${SKUid}, ${supplierId});`;
-        try {
-            const insert1 = this.#dbManager.genericSqlGet(sqlInsert1);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        */
 
     }
 
@@ -150,38 +131,24 @@ class ItemController {
 
         /*check if the item exists in the Item table*/
         let item;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id = ${id}`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id = ?`, id)
             .then(value => item = value[0])
             .catch(error => { throw error });
-
         if (!item)
             throw new Exceptions(404)
 
-        let row;
-        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= "${newDescription}"
-            AND price= ${newPrice} WHERE SKUid= ${id};`)
+        //`SELECT * FROM Item WHERE id = ${id}`
+
+        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE SKUid= ?;` , newDescription, newPrice, id)
             .catch(error => { throw error });
 
-        /*
-        const sqlInstruction = `UPDATE ITEM SET description= "${newDescription}"
-        AND price= ${newPrice} WHERE SKUid= ${id};`;
-        try {
-            const item = await this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message503);
-        }
-        */
+        //`UPDATE Item SET description= "${newDescription}", price= ${newPrice} WHERE SKUid= ${id};`
+
     }
 
     /**delete function to remove an item from the table, given its ID*/
     async deleteItem(id) {
-        /* const sqlInstruction = `DELETE FROM Item WHERE ID= ${id};`;
-        try {
-            const item = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return item; */
+       
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("supplier"))
@@ -192,8 +159,10 @@ class ItemController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM Item WHERE ID= ${id};`)
+            (`DELETE FROM Item WHERE ID= ?;`, id)
             .catch((error) => { throw error });
+
+        //`DELETE FROM Item WHERE ID= ${id};`
     }
 
 }
