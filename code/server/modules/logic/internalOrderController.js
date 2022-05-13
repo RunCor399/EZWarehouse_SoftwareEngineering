@@ -78,7 +78,7 @@ class InternalOrderController {
             .catch((error) => { throw error });
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
-     
+
         rows.forEach(async (r) => {
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ?;`, r.id)
                 .then(value => r.products = value) /*generation of the dictionary */
@@ -102,9 +102,7 @@ class InternalOrderController {
 
         let row;
         const query1 = `SELECT * FROM InternalOrder WHERE ID = ?;`;
-        const params1 = [id];
-
-        await this.#dbManager.genericSqlGet(query1, params1)
+        await this.#dbManager.genericSqlGet(query1, id)
             .then((value) => row = value[0])
             .catch((error) => { throw error });
 
@@ -114,9 +112,7 @@ class InternalOrderController {
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
         const query2 = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`;
-        const params2 = [id];
-
-        await this.#dbManager.genericSqlGet(query2, params2)
+        await this.#dbManager.genericSqlGet(query2, id)
             .then(value => row.products =
                 /*generation of the dictionary */
                 value)
@@ -148,26 +144,22 @@ class InternalOrderController {
             .catch(error => { throw error });
 
 
-        const params1 = [id, issueDate, customerId];
-        const sqlInstruction = `INSERT INTO InternalOrder (id, issueDate, state, customerId) 
-                                VALUES (?, ?, "ISSUED", ?);`;
+        const sqlInstruction = 
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, params1)
+        await this.#dbManager
+        .genericSqlRun(`INSERT INTO InternalOrder (id, issueDate, state, customerId) VALUES (?, ?, "ISSUED", ?);`,
+        id, issueDate, customerId)
             .catch(error => { throw error })
 
 
         /*TO BE CHECKED*/
-        let params2;
         products.forEach(async (elem) => {
-            params2 = [id, elem.SKUId, elem.description, elem.price, elem.qty];
             const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
-            try {
-                await this.#dbManager.genericSqlRun(sqlInsert, params2);
+            await this.#dbManager.genericSqlRun(sqlInsert, id, elem.SKUId, elem.description, elem.price, elem.qty)
+                .catch(error => { throw error })
 
-            } catch (error) {
-                throw error;
-            }
         })
+        
 
     }
 
@@ -183,9 +175,8 @@ class InternalOrderController {
             throw new Exceptions(422);
 
         let row;
-        const params1 = [id];
         const query1 = `SELECT * FROM InternalOrder WHERE ID= ?;`;
-        await this.#dbManager.genericSqlGet(query1, params1)
+        await this.#dbManager.genericSqlGet(query1, id)
             .then((value) => row = value[0])
             .catch((error) => { throw error });
 
@@ -206,12 +197,10 @@ class InternalOrderController {
                 throw new Exceptions(422);
 
             /*TO BE CHECKED*/
-            let params2;
             products.forEach(async (elem) => {
-                params2 = [id, elem.SKUId, elem.rfid];
                 const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (?, ?, ?);`;
                 try {
-                    await this.#dbManager.genericSqlRun(sqlInsert, params2);
+                    await this.#dbManager.genericSqlRun(sqlInsert, id, elem.SKUId, elem.rfid);
                 } catch (error) {
                     throw error;
                 }
@@ -219,15 +208,11 @@ class InternalOrderController {
 
         }
         else {
-            let params3 = [newState, id];
             const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
-            try {
-                await this.#dbManager.genericSqlRun(sqlInstruction, params3);
-            } catch (error) {
-                throw error;
-            }
-        }
 
+            await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
+                .catch(error => { throw error; })
+        }
     }
 
 
