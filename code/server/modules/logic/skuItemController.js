@@ -22,7 +22,7 @@ class SkuItemController {
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM SKUItem")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
         return rows;
     }
 
@@ -31,7 +31,7 @@ class SkuItemController {
     async getSkuItems(id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
-        throw new Exceptions(401);
+            throw new Exceptions(401);
 
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Exceptions(422);
@@ -43,12 +43,11 @@ class SkuItemController {
         if (!sku) throw new Exceptions(404)
 
         let rows;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ?;`, id)
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
-
+            .catch(error => { throw error });
         if (!rows)
-        throw new Exceptions(404)
+            throw new Exceptions(404)
 
         return rows;
     }
@@ -63,19 +62,18 @@ class SkuItemController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= "${rfid}";`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= ?;`, rfid)
             .then(value => row = value[0])
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
 
         if (!row)
-        throw new Exceptions(404)
+            throw new Exceptions(404)
         return row;
     }
 
     /**creation of an SKUItem*/
     async createSkuItem(body) {
 
-        console.log("prova1")
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Exceptions(401);
 
@@ -88,17 +86,17 @@ class SkuItemController {
             || this.#controller.areNotNumbers(SKUId))
             throw new Exceptions(422);
 
+        console.log("prova3")
+
         let sku;
         await this.#controller.getSkuController().getSku(SKUId)
             .then(value => sku = value)
-            .catch(() => { throw new Exceptions(500) });
+            .catch((error) => { throw error });
         if (!sku) throw new Exceptions(404)
 
+        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
-        const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock)
-        VALUES ("${RFID}", ${SKUId}, 0, "${dateOfStock}");`;
-
-        await this.#dbManager.genericSqlRun(sqlInstruction)
+        await this.#dbManager.genericSqlRun(sqlInstruction, RFID, SKUId, 0, dateOfStock)
             .catch((error) => {
                 throw new Exceptions(503);
             });
@@ -120,20 +118,17 @@ class SkuItemController {
             || this.#controller.areUndefined(newAvailable, newDateOfStock))
             throw new Exceptions(422);
 
-        let row;
-        await this.#dbManager.genericSqlGet(`SELECT (*) FROM SKUItem WHERE RFID= ${oldRFID};`)
-            .then(value => row = value[0])
-            .catch(error => { throw new Exceptions(503) });
-        if (num === undefined)
-        throw new Exceptions(404)
+        let skuitem;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= ?;`, oldRFID)
+            .then(value => skuitem = value[0])
+            .catch(error => { throw error });
+        if (!skuitem)
+            throw new Exceptions(404)
 
-        const sqlUpdate = `UPDATE SKUItem SET RFID= "${newRFID}" AND Available= ${newAvailable} 
-        AND DateOfStock= ${newDateOfStock} WHERE RFID= "${oldRFID}";`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlUpdate);
-        } catch (error) {
-            throw new Exceptions(503);
-        }
+        const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
+
+        await this.#dbManager.genericSqlRun(sqlUpdate, newRFID, newAvailable, newDateOfStock, oldRFID)
+            .catch(error => { throw error; });
     }
 
     /**delete function to remove an SKUItem from the table, given its ID */
@@ -145,9 +140,9 @@ class SkuItemController {
         if (this.#controller.checkRFID(rfid))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun
-            (`DELETE FROM SKUItem WHERE ID= ${rfid};`)
-            .catch((error) => { throw new Exceptions(503) });
+        await this.#dbManager.genericSqlRun(`DELETE FROM SKUItem WHERE RFID= ?;`,rfid)
+            .catch((error) => { throw error });
+        
     }
 }
 

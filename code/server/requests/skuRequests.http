@@ -1,8 +1,17 @@
+POST http://localhost:3001/api/managerSessions HTTP/1.1
+content-type: application/json
+
+{
+    "username": "manager1@ezwh.com",
+    "password":"testpassword"
+}
+
+###
 GET http://localhost:3001/api/skus HTTP/1.1
 content-type: application/json
 
 ###
-GET http://localhost:3001/api/skus/1 HTTP/1.1
+GET http://localhost:3001/api/skus/3 HTTP/1.1
 content-type: application/json
 
 ###
@@ -20,21 +29,27 @@ content-type: application/json
 
 ###
 
-PUT http://localhost:3001/api/sku/1 HTTP/1.1
+PUT http://localhost:3001/api/sku/5 HTTP/1.1
 content-type: application/json
+
+{
+    "newDescription" : "a new sku",
+    "newWeight" : 100,
+    "newVolume" : 50,
+    "newNotes" : "first SKU",
+    "newPrice" : 10.99,
+    "newAvailableQuantity" : 100
+}
 
 ###
 PUT http://localhost:3001/api/sku/1/position HTTP/1.1
 content-type: application/json
 
 {
-        "description" : "a new sku",
-        "volume" : 50,
-        "price" : 20.99
-    }
-
+    "position": "800234543412"
+}
 ###
-DELETE http://localhost:3001/api/skus/1 HTTP/1.1
+DELETE http://localhost:3001/api/skus/5 HTTP/1.1
 content-type: application/json
 
 

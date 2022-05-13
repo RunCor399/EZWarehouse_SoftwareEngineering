@@ -27,19 +27,18 @@ class UserController {
 
     getUserAPI() {
 
-        if (!this.#controller.isLoggedAndHasPermission("manager"))
+        if (!this.#controller.isLoggedAndHasPermission("manager")
+            || !this.#logged)
             throw new Exceptions(401);
-        
-        if (!this.#logged)
-            return undefined;
-        else return this.#user;
+
+        return this.#user;
     }
 
     getUser() {
 
         if (!this.#logged)
-            return undefined;
-        else return this.#user;
+            throw new Exceptions(401);
+        return this.#user;
     }
 
     async getAllSuppliers() {
@@ -47,11 +46,11 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
         return rows;
 
     }
@@ -60,11 +59,11 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         let rows;
         await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .then(value => rows = value)
-            .catch(error => { throw new Exceptions(500)});
+            .catch(error => { throw error });
         return rows;
     }
 
@@ -74,7 +73,7 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         const username = body["username"];
         const name = body["name"];
         const surname = body["surname"];
@@ -82,16 +81,24 @@ class UserController {
         const type = body["type"];
 
         if (this.#controller.areUndefined(username, name, surname, password, type))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
-        const sqlInstruction =
-            `INSERT INTO USERS ( username, name, surname, password, type) VALUES
-             ("${username}" , "${name}", "${surname}", "${hashedPassword}", "${type}");`;
+
+        let users;
+        await this.getAllUsers()
+            .then(value => users = value)
+            .catch(error => { throw error })
+
+        let usersEmails = users.map(user => user.email)
+        if (usersEmails.includes(username))
+            throw new Exceptions(409);
 
 
-        this.#dbManager.genericSqlRun(sqlInstruction).
-            catch((error) => { throw new Exceptions(500); });
+        const sqlInstruction = `INSERT INTO USERS ( email, name, surname, password, type) VALUES (?,?,?,?,?);`;
+
+        this.#dbManager.genericSqlRun(sqlInstruction, username, name, surname, hashedPassword, type)
+            .catch((error) => { throw error });
 
     }
 
@@ -102,22 +109,22 @@ class UserController {
         const password = body["password"];
 
         if (this.#controller.areUndefined(username, password))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
-        const sqlInstruction = `SELECT id, username, name, surname, type FROM USERS U 
-        WHERE username="${username}" AND password="${hashedPassword}" AND type="${type}"`;
+
+        const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
 
         let row;
-        await this.#dbManager.genericSqlGet(sqlInstruction)
+        await this.#dbManager.genericSqlGet(sqlInstruction, username, hashedPassword, type)
             .then(value => row = value[0])
-            .catch(error => { throw new Exceptions(500) });
+            .catch(error => { throw error });
 
         if (!row)
             throw new Exceptions(401);
-        
-        this.#user.id = row.ID;
-        this.#user.username = row.username;
+
+        this.#user.id = row.id;
+        this.#user.username = row.email;
         this.#user.name = row.name;
         this.#user.surname = row.surname;
         this.#user.type = row.type;
@@ -133,7 +140,7 @@ class UserController {
 
     logout() {
         if (!this.#logged)
-        throw new Exceptions(500)//already logged out
+            throw new Exceptions(500)//already logged out
         this.#logged = false;
         return;
     }
@@ -142,16 +149,16 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
+
         const oldType = body["oldType"];
         const newType = body["newType"];
 
         if (this.#controller.areUndefined(username, oldType, newType))
-        throw new Exceptions(422);
+            throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
-            (`UPDATE USERS SET type="${newType}" WHERE type="${oldType}";`)
-            .catch((error) => { throw new Exceptions(500) });
+            (`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType)
+            .catch((error) => { throw error });
 
     }
 
@@ -159,22 +166,23 @@ class UserController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-        
-        if (this.#controller.areUndefined(username,type) || type === "manager")
-        throw new Exceptions(422);
+
+        if (this.#controller.areUndefined(username, type) || type === "manager")
+            throw new Exceptions(422);
 
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM USERS WHERE username="${username}" AND type="${type}";`)
-            .catch((error) => { throw new Exceptions(500) });
+            (`DELETE FROM USERS WHERE email= ? AND type= ?;` , username, type)
+            .catch((error) => { throw error });
+        
 
     }
 
     hasPermission(type, validType) {
         //console.log(type, validType, validType.includes(type))
-        console.log("Type: "+ type);
-        console.log(" validType: "+ validType);
-        console.log(" bool: "+validType.includes(type));
+        console.log("Type: " + type);
+        console.log(" validType: " + validType);
+        console.log(" bool: " + validType.includes(type));
         return validType.includes(type);
     }
 

@@ -34,10 +34,10 @@ CREATE TABLE SKUItem(
     FOREIGN KEY (SKUId) REFERENCES SKU(id)
 );
 CREATE TABLE Position(
-    positionID INTEGER PRIMARY KEY,
-    aisleID INT,
-    row INT,
-    col INT,
+    positionID TEXT PRIMARY KEY,
+    aisleID TEXT,
+    row TEXT,
+    col TEXT,
     maxWeight INT,
     maxVolume INT,
     occupiedWeight INT,
@@ -67,8 +67,8 @@ CREATE TABLE TestResult(
     FOREIGN KEY (RFID) REFERENCES SKUItem(RFID)
 );
 CREATE TABLE Users(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username VARCHAR(250),
+    id INTEGER  PRIMARY KEY AUTOINCREMENT,
+    email VARCHAR(250),
     name VARCHAR(100),
     surname VARCHAR(100),
     type VARCHAR(100),
@@ -152,54 +152,48 @@ CREATE TABLE Item(
     FOREIGN KEY (supplierId) REFERENCES Users(id),
     CONSTRAINT SS_Item UNIQUE(SKUid, supplierId)
 );
-INSERT INTO Users (id, username, name, surname, password, type)
+INSERT INTO Users (email, name, surname, password, type)
 VALUES (
-        1,
         "user1@ezwh.com",
         "name1",
         "surname1",
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "customer"
     );
-INSERT INTO Users (id, username, name, surname, password, type)
+INSERT INTO Users ( email, name, surname, password, type)
 VALUES (
-        2,
         "qualityEmployee1@ezwh.com",
         "name2",
         "surname2",
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "qualityEmployee"
     );
-INSERT INTO Users (id, username, name, surname, password, type)
+INSERT INTO Users (email, name, surname, password, type)
 VALUES (
-        3,
         "clerk1@ezwh.com",
         "name3",
         "surname3",
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "clerk"
     );
-INSERT INTO Users (id, username, name, surname, password, type)
+INSERT INTO Users ( email, name, surname, password, type)
 VALUES (
-        4,
         "deliveryEmployee1@ezwh.com",
         "name4",
         "surname4",
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "deliveryEmployee"
     );
-INSERT INTO Users (id, username, name, surname, password, type)
+INSERT INTO Users ( email, name, surname, password, type)
 VALUES (
-        5,
         "supplier1@ezwh.com",
         "name5",
         "surname5",
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "supplier"
     );
-INSERT INTO Users (id, username, name, surname, password, type)
+INSERT INTO Users (email, name, surname, password, type)
 VALUES (
-        6,
         "manager1@ezwh.com",
         "name6",
         "surname6",

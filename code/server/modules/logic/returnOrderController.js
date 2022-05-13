@@ -13,7 +13,7 @@ class ReturnOrderController {
     }
 
 
-    /*TO BE COMPLETED - getter function to retreive all the return orders*/
+    /*TO BE CHECKED - getter function to retreive all the return orders*/
     async getAllReturnOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM ReturnOrder;";
@@ -33,19 +33,20 @@ class ReturnOrderController {
             .then(value => rows = value)
             .catch(error => { throw error });
 
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        /*TO BE CHECKED*/
         rows.forEach(async (r) => {
+            r.products = [];
             await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ${r.id};`)
-                .then(value => r.products =
-                    /*generation of the dictionary */
-                    value)
+                .then(value => r.products.forEach(value => {
+                    r.products = [...r.products, value];
+                }))
                 .catch(error => { throw new Error(Exceptions.message500) });
         });
 
         return rows;
     }
 
-    /*TO BE COMPLETED - getter function to retreive a single return order, given its ID*/
+    /*TO BE CHECKED - getter function to retreive a single return order, given its ID*/
     async getReturnOrder(id) {
         /*let row
         const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
@@ -73,11 +74,12 @@ class ReturnOrderController {
         if (!row)
             throw new Exceptions(404);
 
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
+        /*TO BE CHECKED*/
+        row.products = [];
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ${id};`)
-            .then(value => row.products =
-                /*generation of the dictionary */
-                value)
+            .then(value => row.products.forEach(value => {
+                row.products = [...row.products, value];
+            }))
             .catch(error => { throw new Error(Exceptions.message500) });
 
         return row;

@@ -14,7 +14,7 @@ class RestockOrderController {
         console.log("restockOrderController started");
     }
 
-    /*TO BE COMPLETED - getter function to retreive all the restock orders*/
+    /*TO BE CHECKED - getter function to retreive all the restock orders*/
     async getAllRestockOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder;";
@@ -34,33 +34,28 @@ class RestockOrderController {
             .then(value => rows = value)
             .catch(error => { throw error });
         
-        /*  TO BE COMPLETED (it's missing something about the generation of the dictionary)
-        
-        rows.forEach((r) => {
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
-            .then(value => r.products = value)
-            .catch(error => { throw new Error(Exceptions.message500) });
-
-        /*  TO BE COMPLETED (it's missing something about the generation of the dictionary)*/
-
+    
+        /*TO BE CHECKED*/
         rows.forEach(async (r) => {
+            r.products = [];
+            r.skuItems = [];
             if (r.state !== 'DELIVERY' || r.state !== 'ISSUED') {
                 await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
-                    .then(value => r.products =
-                        /*generation of the dictionary */
-                        value)
+                    .then(value => r.products.forEach(value => {
+                        r.products = [...r.products, value];
+                    }))
                     .catch(error => { throw new Error(Exceptions.message500) });
 
                 await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
-                    .then(value => r.skuItems =
-                        /*generation of the dictionary */
-                        value)
+                    .then(value => r.skuItems.forEach(value => {
+                        r.skuItems = [...r.skuItems, value];
+                    }))
                     .catch(error => { throw new Error(Exceptions.message500) });
             }
 
             if (r.state !== 'ISSUED') {
                 let ship;
-                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id="${id};`)
+                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE ID="${id};`)
                     .then(value => ship = JSON.stringify(value[0]))
                     .catch(error => { throw new Error(Exceptions.message503) });
                 r.transportNote = ship;
@@ -70,7 +65,7 @@ class RestockOrderController {
         return rows;
     }
 
-    /*TO BE COMPLETED - getter function to retreive all the issued restock orders*/
+    /*TO BE CHECKED - getter function to retreive all the issued restock orders*/
     async getIssuedRestockOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
@@ -89,10 +84,28 @@ class RestockOrderController {
         await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder WHERE state = 'ISSUED';")
             .then(value => rows = value)
             .catch(error => { throw error});
+
+        /*TO BE CHECKED*/
+        rows.forEach(async (r) => {
+            r.products = [];
+            r.skuItems = [];
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
+                .then(value => r.products.forEach(value => {
+                    r.products = [...r.products, value];
+                }))
+                .catch(error => { throw new Error(Exceptions.message500) });
+
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
+                .then(value => r.skuItems.forEach(value => {
+                    r.skuItems = [...r.skuItems, value];
+                }))
+                .catch(error => { throw new Error(Exceptions.message500) });
+        });
+
         return rows;
     }
 
-    /*TO BE COMPLETED - getter function to retreive a single restock order, given its ID*/
+    /*TO BE CHECKED - getter function to retreive a single restock order, given its ID*/
     async getRestockOrder(id) {
         /*let rows
         const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
@@ -126,17 +139,19 @@ class RestockOrderController {
             .catch(error => { throw new Error(Exceptions.message503) });
         row.transportNote = ship;
 
-        /*TO BE COMPLETED*/
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
-            .then(value => row.products =
-                /*generation of the dictionary */
-                value)
+        /*TO BE CHECKED*/
+        row.products = [];
+        row.skuItems = [];
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${row.id};`)
+            .then(value => row.products.forEach(value => {
+                row.products = [...row.products, value];
+            }))
             .catch(error => { throw new Error(Exceptions.message500) });
 
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
-            .then(value => row.skuItems =
-                /*generation of the dictionary */
-                value)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${row.id};`)
+            .then(value => row.skuItems.forEach(value => {
+                row.skuItems = [...row.skuItems, value];
+            }))
             .catch(error => { throw new Error(Exceptions.message500) });
 
         return row;

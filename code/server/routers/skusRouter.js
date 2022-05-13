@@ -10,7 +10,7 @@ router.get('/api/skus', async (req, res) => {
   console.log('GET', req.url);
 
   await controller.getSkuController().getAllSku()
-    .then(skus => { return res.status(200).json(skus); })
+    .then(skus => {  return res.status(200).json(skus); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
 
@@ -56,7 +56,7 @@ router.put('/api/sku/:id', async (req, res) => {
 
   await controller.getSkuController().editSku(param, req.body)
     .then(() => { res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error);return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //PUT /api/sku/:id/position
@@ -69,7 +69,7 @@ router.put('/api/sku/:id/position', async (req, res) => {
 
   await controller.getSkuController().setPosition(param, req.body)
     .then(() => { res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //DELETE /api/skus/:id

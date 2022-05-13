@@ -11,9 +11,15 @@ router.get('/api/userinfo', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().getUserAPI()
-    .then((user) => { return res.status(200).json(user); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+  console.log("prova1");
+  let user;
+  try {
+    user = controller.getUserController().getUserAPI()
+  } catch (error) {
+    return res.status(error.getCode()).send(error.getMessage());
+  }
+  return res.status(200).json(user);
+
 });
 
 //GET /api/suppliers
@@ -21,9 +27,9 @@ router.get('/api/suppliers', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET',req.url);
-  
-  await controller.getSkuController().getAllSuppliers()
+  console.log('GET', req.url);
+
+  await controller.getUserController().getAllSuppliers()
     .then((suppliers) => { return res.status(200).json(suppliers); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -35,7 +41,7 @@ router.get('/api/users', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().getAllUsers()
+  await controller.getUserController().getAllUsers()
     .then((users) => { return res.status(200).json(users); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
@@ -48,7 +54,7 @@ router.post('/api/newUser', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
-  await controller.getSkuController().createUser(req.body)
+  await controller.getUserController().createUser(req.body)
     .then(() => { return res.status(201).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -60,7 +66,7 @@ router.post('/api/managerSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
-  await controller.getSkuController().login(req.body, "manager")
+  await controller.getUserController().login(req.body, "manager")
     .then(() => { return res.status(201).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -72,7 +78,7 @@ router.post('/api/customerSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST', req.url);
 
-  await controller.getSkuController().login(req.body, "customer")
+  await controller.getUserController().login(req.body, "customer")
     .then(() => { return res.status(201).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -84,7 +90,7 @@ router.post('/api/supplierSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().login(req.body, "supplier")
+  await controller.getUserController().login(req.body, "supplier")
     .then(() => { return res.status(201).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -96,7 +102,7 @@ router.post('/api/clerkSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().login(req.body, "clerk")
+  await controller.getUserController().login(req.body, "clerk")
     .then(() => { return res.status(201).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -108,7 +114,7 @@ router.post('/api/qualityEmployeeSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().login(req.body, "qualityEmployee")
+  await controller.getUserController().login(req.body, "qualityEmployee")
     .then(() => { return res.status(201).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -120,9 +126,9 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().login(req.body, "deliveryEmployee")
+  await controller.getUserController().login(req.body, "deliveryEmployee")
     .then(() => { return res.status(201).end() })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //POST /api/logout
@@ -132,28 +138,31 @@ router.post('/api/logout', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('GET', req.url);
 
-  await controller.getSkuController().logout()
-    .then(() => { return res.status(200).end() })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+  try {
+    controller.getUserController().logout()
+  } catch (error) {
+    return res.status(error.getCode()).send(error.getMessage());
+  }
+  return res.status(200).end()
+
 });
 
 
-
-//PUT /api/user/:username
-router.put('/api/user/:username', async (req, res) => {
+//PUT /api/users/:username
+router.put('/api/users/:username', async (req, res) => {
   const param = req.params.username;
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
   console.log('PUT', req.url);
 
-  await controller.getSkuController().editUser(param, req.body)
+  await controller.getUserController().editUser(param, req.body)
     .then(() => { return res.status(200).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
-//DELETE /api/user/:username/:type
-router.delete('/api/user/:username/:type', async (req, res) => {
+//DELETE /api/users/:username/:type
+router.delete('/api/users/:username/:type', async (req, res) => {
   const paramUsername = req.params.username;
   const paramType = req.params.type;
 
@@ -161,7 +170,7 @@ router.delete('/api/user/:username/:type', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('DELETE', req.url);
 
-  await controller.getSkuController().deleteUser(paramUsername, paramType)
+  await controller.getUserController().deleteUser(paramUsername, paramType)
     .then(() => { return res.status(200).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
