@@ -26,14 +26,10 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw error });
 
-        let params;
-        const query = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`;
-
         /*TO BE CHECKED*/
         rows.forEach(async (r) => {
-            params = [r.id];
             r.products = [];
-            await this.#dbManager.genericSqlGet(query, params)
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ?;`, r.id)
                 .then(value => r.products.forEach(value => {
                     r.products = [...r.products, value];
                 }))
@@ -56,13 +52,10 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw error });
 
-        let params;
-        const query = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`;
         /*TO BE CHECKED*/
         rows.forEach(async (r) => {
-            params = [r.id];
             r.products = [];
-            await this.#dbManager.genericSqlGet(query, params)
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ?;`, r.id)
                 .then(value => r.products.forEach(value => {
                     r.products = [...r.products, value];
                 }))
@@ -85,11 +78,9 @@ class InternalOrderController {
             .catch((error) => { throw error });
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
-        let params;
-        const query = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`;
+     
         rows.forEach(async (r) => {
-            params = [r.id];
-            await this.#dbManager.genericSqlGet(query, params)
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ?;`, r.id)
                 .then(value => r.products = value) /*generation of the dictionary */
                 .catch(error => { throw error });
         });
@@ -251,9 +242,7 @@ class InternalOrderController {
         if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
-        const query = `DELETE FROM InternalOrder WHERE ID = ?;`;
-        const params = [id];
-        await this.#dbManager.genericSqlRun(query, params)
+        await this.#dbManager.genericSqlRun(`DELETE FROM InternalOrder WHERE ID = ?;`, id)
             .catch((error) => { throw error });
     }
 

@@ -17,8 +17,9 @@ class DBManager {
 
     }
 
-    async genericSqlRun(query, ...params) {
-        return new Promise((resolve, reject) => {
+    /* async genericSqlRun(query, ...params) {
+        console.log(params);
+                return new Promise((resolve, reject) => {
             this.#db.run(query, params, (err) => {
                 if (err){
                     console.log("Database run error: err", err);
@@ -41,10 +42,11 @@ class DBManager {
                 }
             })
         })
-    }
+    } */
 
 
     async genericSqlRun(query, ...params) {
+        console.log(params);
         return new Promise((resolve, reject) => {
             this.#db.run(query, params, (err) => {
                 if (err){

@@ -27,7 +27,6 @@ class RestockOrderController {
             .catch(error => { throw error });
 
 
-        let params;
         /*TO BE CHECKED*/
         rows.forEach(async (r) => {
             r.products = [];
@@ -218,13 +217,11 @@ class RestockOrderController {
         await this.#dbManager.genericSqlRun(sqlInstruction, params1)
             .catch(error => { throw error });
 
-        let params;
         /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            params2 = [id + 1, elem.SKUId, elem.description, elem.price, elem.qty];
             const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`;
 
-            await this.#dbManager.genericSqlRun(sqlInsert, params2)
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, elem.SKUId, elem.description, elem.price, elem.qty)
                 .catch(error => {
                     throw error;
                 })
@@ -254,10 +251,7 @@ class RestockOrderController {
         if (!row)
             throw new Exceptions(404);
 
-        const params = [newState, id];
-        const sqlInstruction = `UPDATE RestockOrder SET state = ? WHERE id=?;`;
-
-        await this.#dbManager.genericSqlRun(sqlInstruction, params)
+        await this.#dbManager.genericSqlRun(`UPDATE RestockOrder SET state = ? WHERE id=?;`, newState, id)
             .catch(error => { throw error; });
 
     }
@@ -288,13 +282,10 @@ class RestockOrderController {
         if (row.state !== 'DELIVERED')
             throw new Exceptions(422)
 
-        let params;
         /*TO BE CHECKED - loop of the products to be added into SKUItemsPerRestockOrder*/
         skuItems.forEach(async (elem) => {
-            params = [id, elem.SKUId, elem.rfid];
-            const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`;
-            
-                await this.#dbManager.genericSqlRun(sqlInsert, params)
+                await this.#dbManager.genericSqlRun(`INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`,
+                id, elem.SKUId, elem.rfi)
             .catch (error => {throw error});
             })
         }
@@ -334,13 +325,9 @@ class RestockOrderController {
         if (transportNote.deliveryDate <= row.issueDate)
             throw new Error(Exceptions.message422);
 
-        const params = [transportNote, id];
         const sqlInstruction = `UPDATE RestockOrder SET shipmentDate = ? WHERE id = ?;`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction, params);
-        } catch (error) {
-            new error;
-        }
+            await this.#dbManager.genericSqlRun(sqlInstruction, transportNote, id)
+            .catch (error => {throw error})
     }
 
     /*COMPLETED - delete function to remove a restock order from the table, given its ID*/
