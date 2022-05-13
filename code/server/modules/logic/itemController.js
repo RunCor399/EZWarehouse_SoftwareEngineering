@@ -39,7 +39,7 @@ class ItemController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
         let row;
@@ -104,7 +104,7 @@ class ItemController {
         const newPrice = body["newPrice"];
 
         /*check if the body is valid*/
-        if (this.#controller.areUndefined(newDescription,newPrice) || isNaN(newPrice))
+        if (this.#controller.areUndefined(newDescription,newPrice) || isNaN(Number(newPrice)))
             throw new Exceptions(422);
 
         /*check if the item exists in the Item table*/
@@ -129,7 +129,7 @@ class ItemController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (isNaN(id) || !id)
+        if (isNaN(Number(id)) || !id)
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun

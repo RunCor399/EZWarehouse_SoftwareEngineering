@@ -12,6 +12,12 @@ class PositionController {
         console.log("positionController started");
     }
 
+    checkPositionID(positionID, aisleID, row, col) {
+        return (String(positionID).substring(0, 4) === String(aisleID)
+            && String(positionID).substring(4, 8) === String(row)
+            && String(positionID).substring(8, 12) === String (col))
+    }
+
     /**getter function to retreive all positions*/
     async getAllPositions() {
 
@@ -49,8 +55,11 @@ class PositionController {
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||
             this.#controller.areNotNumbers(maxWeight, maxVolume, occupiedWeight, occupiedVolume)
-            || String(positionID).length !== 12 || String(aisleID).length !== 4
-            || String(row).length !== 4 || String(col).length !== 4)
+            || String(positionID).length !== 12 || isNaN(Number(positionID))
+            || String(aisleID).length !== 4 || isNaN(Number(aisleID))
+            || String(row).length !== 4 || isNaN(Number(row))
+            || String(col).length !== 4 || isNaN(Number(col))
+            || !this.checkPositionID(positionID, aisleID, row, col))
             throw new Exceptions(422);
 
         const sqlInstruction = `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES (?,?,?,?,?,?,?,?);`;
@@ -75,7 +84,11 @@ class PositionController {
 
         if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume) ||
             this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
-            || String(id).length !== 12 || String(newAisleID).length !== 4 || String(newRow).length !== 4 || String(newCol).length !== 4)
+            || String(id).length !== 12 || isNaN(Number(id))
+            || String(newAisleID).length !== 4 || isNaN(Number(newAisleID))
+            || String(newRow).length !== 4 || isNaN(Number(newRow))
+            || String(newCol).length !== 4 || isNaN(Number(newCol))
+            || !this.checkPositionID(id, newAisleID, newRow, newCol))
             throw new Exceptions(422);
 
         console.log("provaInFunction", id, body)
@@ -163,6 +176,8 @@ class PositionController {
             .catch((error) => { throw new error });
 
     }
+
+    
 
 }
 

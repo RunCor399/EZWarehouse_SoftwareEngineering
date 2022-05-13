@@ -11,7 +11,7 @@ GET http://localhost:3001/api/skuitems HTTP/1.1
 content-type: application/json
 
 ###
-GET http://localhost:3001/api/skuitems/sku/6 HTTP/1.1
+GET http://localhost:3001/api/skuitems/sku/1 HTTP/1.1
 content-type: application/json
 
 ###
