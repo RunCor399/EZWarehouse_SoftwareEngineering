@@ -10,7 +10,7 @@ router.get('/api/skus', async (req, res) => {
   console.log('GET', req.url);
 
   await controller.getSkuController().getAllSku()
-    .then(skus => { console.log(skus); return res.status(200).json(skus); })
+    .then(skus => {  return res.status(200).json(skus); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 
 

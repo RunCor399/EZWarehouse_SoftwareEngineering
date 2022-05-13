@@ -26,24 +26,54 @@ class SkuController {
             .then(value => rows = value)
             .catch(error => { throw error });
 
-       
-        //console.log("pre",rows);
-        const value = (async  () =>{
-        for(let i=0; i<rows.length; i++){
+
+        //console.log("pre", rows);
+
+        const newRows = await this.getPositionForSKU(this.#dbManager, rows);
+
+        const newNewRows = await this.getTestDescriptorsForSKU(this.#dbManager, newRows);
+
+        return newNewRows;
+
+
+    }
+
+    async getPositionForSKU(dbmanager, rows) {
+
+        for (let i = 0; i < rows.length; i++) {
             //console.log("info",rows[i]);
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${rows[i].id}`)
-            .then(value =>{ console.log(value[0])
-                rows[i].position = value[0]===undefined ? undefined:value[0].positionID })
-            .catch(error => { throw error });
+            await dbmanager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${rows[i].id}`)
+                .then(value => {
+                    //console.log(value[0])
+                    rows[i].position = value[0] === undefined ? undefined : value[0].positionID
+                })
+                .catch(error => { throw error });
             //console.log("info",rows[i].position);
         }
-    })().finally(() => {console.log("post", rows); return rows;});
 
-    console.log(value);
-    return value;
-        
-        
+        //console.log("newRows", rows);
+
+        return rows;
+
     }
+
+    async getTestDescriptorsForSKU(dbmanager, rows) {
+
+        for (let i = 0; i < rows.length; i++) {
+            //console.log("info",rows[i]);
+            await dbmanager.genericSqlGet(`SELECT id FROM TestDescriptor WHERE idSKU = ${rows[i].id}`)
+                .then(value => {
+                    if (!value)
+                        rows[i].testDescriptors = undefined;
+                    else  rows[i].testDescriptors = value.map(v => v.id)})
+                .catch(error => { throw error });
+            //console.log("info",rows[i].position);
+        }
+
+        //console.log("newNewRows", rows);
+        return rows;
+    }
+
 
     /**getter function to retreive a single SKU, given its ID*/
     async getSku(id) {
@@ -54,15 +84,13 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        let sku;
-        await this.#dbManager.genericSqlGet(`SELECT *  FROM SKU WHERE ID= ${id};`)
-            .then(value => sku = value[0])
-            .catch(error => { throw error });
-
-        if (!sku)
+        let skus = await this.getAllSku();
+        let filteredSkus = skus.filter(sku => 
+             Number(sku.id) ===  Number(id));
+        if(!filteredSkus)
             throw new Exceptions(404);
 
-        return sku;
+        return filteredSkus[0];
 
 
     }
@@ -149,7 +177,7 @@ class SkuController {
                 new Error(Exceptions.message503);
             }*/
 
-            this.#controller.getPositionController()
+            await this.#controller.getPositionController()
                 .editPositionVer1({
                     newAisleID: position.aisleID,
                     newRow: position.row,
@@ -227,7 +255,7 @@ class SkuController {
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ${id}`)
             .then(value => skuHasAlreadyAPosition = value[0])
             .catch(error => { throw error });
-        console.log("test skuhasalreadyaposition", skuHasAlreadyAPosition )
+        console.log("test skuhasalreadyaposition", skuHasAlreadyAPosition)
 
         if (skuHasAlreadyAPosition !== undefined) {
             await this.#dbManager
@@ -248,8 +276,8 @@ class SkuController {
                         newCol: occupiedPosition.col,
                         newMaxWeight: position.maxWeight,
                         newMaxVolume: position.maxVolume,
-                        newOccupiedWeight:  occupiedPosition.occupiedWeight - sku.weight * sku.availableQuantity,
-                        newOccupiedVolume: occupiedPosition.occupiedVolume - sku.volume * sku.availableQuantity 
+                        newOccupiedWeight: occupiedPosition.occupiedWeight - sku.weight * sku.availableQuantity,
+                        newOccupiedVolume: occupiedPosition.occupiedVolume - sku.volume * sku.availableQuantity
                     })
                 .catch(error => { throw error });
 

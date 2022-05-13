@@ -98,13 +98,13 @@ class TestDescriptorController {
         let sku;
         await this.#controller.getSkuController().getSku(newIdSKU)
             .then(value => sku = value)
-            .catch(() => { throw error });
+            .catch(error => { throw error });
         if (!sku) throw new Exceptions(404)
 
         let testDescriptor;
         await this.getTestDescriptor(id)
             .then(value => testDescriptor = value)
-            .catch(() => { throw error});
+            .catch(error => { throw error});
         if (!testDescriptor) throw new Exceptions(404)
 
 

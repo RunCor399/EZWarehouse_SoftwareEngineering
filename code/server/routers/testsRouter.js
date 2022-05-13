@@ -52,7 +52,7 @@ router.put('/api/testDescriptor/:id', async (req, res) => {
 
   await controller.getTestDescriptorController().editTestDescriptor(param, req.body)
     .then(() => { return res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //DELETE /api/testDescriptor/:id
