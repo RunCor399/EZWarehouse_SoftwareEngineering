@@ -75,7 +75,7 @@ CREATE TABLE Users(
     password VARCHAR(250)
 );
 CREATE TABLE RestockOrder(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     issueDate VARCHAR(50),
     state VARCHAR(250),
     shipmentDate VARCHAR(50),
@@ -101,7 +101,7 @@ CREATE TABLE SKUItemsPerRestockOrder(
     FOREIGN KEY(id) REFERENCES RestockOrder(id)
 );
 CREATE TABLE ReturnOrder(
-    id INTEGER  PRIMARY KEY AUTOINCREMENT,
+    id INTEGER  PRIMARY KEY,
     returnDate VARCHAR(50),
     supplierID INT,
     restockOrderID INT,
@@ -117,7 +117,7 @@ CREATE TABLE SKUPerReturnOrder(
     FOREIGN KEY(id) REFERENCES ReturnOrder(id)
 );
 CREATE TABLE InternalOrder(
-    id INTEGER  PRIMARY KEY AUTOINCREMENT,
+    id INTEGER  PRIMARY KEY,
     issueDate VARCHAR(50),
     state VARCHAR(250),
     customerId INT,

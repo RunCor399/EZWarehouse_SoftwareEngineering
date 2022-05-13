@@ -1,7 +1,6 @@
 'use strict'
 
 const Exceptions = require('../../routers/exceptions');
-const { param } = require('../../routers/skusRouter');
 const Controller = require('./controller')
 
 class SkuController {

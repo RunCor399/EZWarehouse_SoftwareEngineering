@@ -1,6 +1,5 @@
 'use strict'
 
-const e = require('express');
 const Exceptions = require('../../routers/exceptions');
 const Controller = require('./controller')
 
@@ -17,14 +16,6 @@ class RestockOrderController {
 
     /*TO BE CHECKED - getter function to retreive all the restock orders*/
     async getAllRestockOrders() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM RestockOrder;";
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;*/
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk", "qualityEmployee"))
@@ -69,14 +60,6 @@ class RestockOrderController {
 
     /*TO BE CHECKED - getter function to retreive all the issued restock orders*/
     async getIssuedRestockOrders() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;*/
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager", "supplier"))
@@ -109,14 +92,6 @@ class RestockOrderController {
 
     /*TO BE CHECKED - getter function to retreive a single restock order, given its ID*/
     async getRestockOrder(id) {
-        /*let rows
-        const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return restockOrder;*/
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))

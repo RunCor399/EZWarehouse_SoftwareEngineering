@@ -16,14 +16,6 @@ class InternalOrderController {
 
     /*TO BE CHECKED - getter function to retreive all the internal orders*/
     async getAllInternalOrders() {
-        /* let rows;
-         const sqlInstruction = "SELECT * FROM InternalOrder;";
-         try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-         } catch (error) {
-             throw new Exceptions(500);
-         }
-         return rows;*/
 
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -54,14 +46,6 @@ class InternalOrderController {
 
     /*TO BE CHECKED - getter function to retreive all the issued internal orders*/
     async getIssuedInternalOrders() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ISSUED';";
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;*/
 
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
@@ -91,14 +75,6 @@ class InternalOrderController {
 
     /*TO BE CHECKED - getter function to retreive all the accepted internal orders*/
     async getAcceptedInternalOrders() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';";
-        try {
-            rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;*/
 
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
@@ -123,14 +99,6 @@ class InternalOrderController {
 
     /*TO BE CHECKED - getter function to retreive a single internal order, given its ID*/
     async getInternalOrder(id) {
-        /*let row;
-        const sqlInstruction = `SELECT * FROM InternalOrder WHERE ID= ${id};`;
-        try {
-            row = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return row;*/
 
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
@@ -152,7 +120,6 @@ class InternalOrderController {
         /*check if the internal order exists*/
         if (!row)
             throw new Exceptions(404);
-
 
         /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)*/
         const query2 = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`;
@@ -275,12 +242,6 @@ class InternalOrderController {
 
     /*COMPLETED - delete function to remove an internal order from the table, given its ID */
     async deleteInternalOrder(id) {
-        /* const sqlInstruction = `DELETE FROM InternalOrder WHERE ID= ${id};`;
-        try {
-            await this.#dbManager.genericSqlRun(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        } */
 
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager"))

@@ -15,14 +15,6 @@ class ReturnOrderController {
 
     /*TO BE CHECKED - getter function to retreive all the return orders*/
     async getAllReturnOrders() {
-        /*let rows;
-        const sqlInstruction = "SELECT * FROM ReturnOrder;";
-        try {
-             rows = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return rows;*/
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -48,14 +40,6 @@ class ReturnOrderController {
 
     /*TO BE CHECKED - getter function to retreive a single return order, given its ID*/
     async getReturnOrder(id) {
-        /*let row
-        const sqlInstruction = `SELECT * FROM ReturnOrder WHERE ID= ${id};`;
-        try {
-            row = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return row;*/
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -109,14 +93,6 @@ class ReturnOrderController {
         if (!row)
             throw new Exceptions(404);
 
-        /* const sqlGetCount = 'SELECT COUNT(*) FROM ReturnOrder'
-
-        try {
-            const id = (await this.#dbManager.genericSqlGet(sqlGetCount))[0]["COUNT(*)"];
-        } catch (error) {
-            new Error(Exceptions.message500);
-        } */
-
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM ReturnOrder')
             .then(value => id = value[0]["COUNT(*)"])
@@ -143,13 +119,7 @@ class ReturnOrderController {
 
     /*COMPLETED - delete function to remove a return order from the table, given its ID*/
     async deleteReturnOrder(id) {
-        /*  const sqlInstruction = `DELETE FROM ReturnOrder WHERE ID= ${id};`;
-          try {
-              const returnOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
-          } catch (error) {
-              new Error(Exceptions.message500);
-          }
-          return returnOrder;*/
+
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -160,7 +130,7 @@ class ReturnOrderController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM ReturnOrder WHERE ID=?;`, id)
-            .catch((error) => { throw error });
+            .catch(error => { throw error });
     }
 }
 
