@@ -36,7 +36,7 @@ class ReturnOrderController {
         /*TO BE CHECKED*/
         rows.forEach(async (r) => {
             r.products = [];
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ${r.id};`)
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ?;`, r.id)
                 .then(value => r.products.forEach(value => {
                     r.products = [...r.products, value];
                 }))
@@ -66,7 +66,7 @@ class ReturnOrderController {
             throw new Exceptions(422)
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM ReturnOrder WHERE id= ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM ReturnOrder WHERE id=?;`, id)
             .then((value) => row = value[0])
             .catch((error) => { throw error });
 
@@ -76,7 +76,7 @@ class ReturnOrderController {
 
         /*TO BE CHECKED*/
         row.products = [];
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ?;`, id)
             .then(value => row.products.forEach(value => {
                 row.products = [...row.products, value];
             }))
@@ -101,7 +101,7 @@ class ReturnOrderController {
             throw new Exceptions(422)
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id= ${restockOrderId};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, restockOrderId)
             .then((value) => row = value[0])
             .catch((error) => { throw error; });
 
@@ -122,19 +122,22 @@ class ReturnOrderController {
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw error });
 
+        const params1 = [id+1, returnDate, restockOrderId];
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
-        VALUES (${id + 1}, ${returnDate}, ${restockOrderId});`;
+                                VALUES (?,?,?);`;
         try {
-            const returnOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction, params1);
         } catch (error) {
             throw error;
         }
 
+        let params2;
         /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerReturnOrder (id, SKUId, description, price, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.rfid});`;
+            params2 = [id, elem.SKUId, elem.description, elem.price, elem.rfid]
+            const sqlInsert = `INSERT INTO SKUPerReturnOrder (id, SKUId, description, price, RFID) VALUES (?,?,?,?,?);`;
             try {
-                const returnOrder = await this.#dbManager.genericSqlRun(sqlInsert);
+                await this.#dbManager.genericSqlRun(sqlInsert, params2);
             } catch (error) {
                 throw error;
             }
@@ -160,8 +163,7 @@ class ReturnOrderController {
         if (!id || isNaN(id))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun
-            (`DELETE FROM ReturnOrder WHERE ID= ${id};`)
+        await this.#dbManager.genericSqlRun(`DELETE FROM ReturnOrder WHERE ID=?;`, id)
             .catch((error) => { throw new error });
     }
 }

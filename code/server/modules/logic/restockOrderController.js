@@ -35,18 +35,19 @@ class RestockOrderController {
             .catch(error => { throw error });
         
     
+        let params;
         /*TO BE CHECKED*/
         rows.forEach(async (r) => {
             r.products = [];
             r.skuItems = [];
             if (r.state !== 'DELIVERY' || r.state !== 'ISSUED') {
-                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
+                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ?;`, r.id)
                     .then(value => r.products.forEach(value => {
                         r.products = [...r.products, value];
                     }))
                     .catch(error => { throw new Error(Exceptions.message500) });
 
-                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
+                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ?;`, r.id)
                     .then(value => r.skuItems.forEach(value => {
                         r.skuItems = [...r.skuItems, value];
                     }))
@@ -55,7 +56,7 @@ class RestockOrderController {
 
             if (r.state !== 'ISSUED') {
                 let ship;
-                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE ID="${id};`)
+                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE ID=?;`, id)
                     .then(value => ship = JSON.stringify(value[0]))
                     .catch(error => { throw new Error(Exceptions.message503) });
                 r.transportNote = ship;
@@ -89,13 +90,13 @@ class RestockOrderController {
         rows.forEach(async (r) => {
             r.products = [];
             r.skuItems = [];
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ?;`, r.id)
                 .then(value => r.products.forEach(value => {
                     r.products = [...r.products, value];
                 }))
                 .catch(error => { throw new Error(Exceptions.message500) });
 
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
+            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ?;`, r.id)
                 .then(value => r.skuItems.forEach(value => {
                     r.skuItems = [...r.skuItems, value];
                 }))
@@ -125,7 +126,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -134,7 +135,7 @@ class RestockOrderController {
             throw new Exceptions(404)
 
         let ship;
-        await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id=?;`, id)
             .then(value => ship = JSON.stringify(value[0]))
             .catch(error => { throw new Error(Exceptions.message503) });
         row.transportNote = ship;
@@ -142,13 +143,13 @@ class RestockOrderController {
         /*TO BE CHECKED*/
         row.products = [];
         row.skuItems = [];
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${row.id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ?;`, row.id)
             .then(value => row.products.forEach(value => {
                 row.products = [...row.products, value];
             }))
             .catch(error => { throw new Error(Exceptions.message500) });
 
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${row.id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ?;`, row.id)
             .then(value => row.skuItems.forEach(value => {
                 row.skuItems = [...row.skuItems, value];
             }))
@@ -173,7 +174,7 @@ class RestockOrderController {
 
         let itemsArray = [];
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -191,18 +192,18 @@ class RestockOrderController {
 
         /*TO BE CHECKED */
         let skuitems;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ?;`, id)
             .then(values => skuitems = values)
             .catch(error => { throw error });
 
         let skus;
-        await this.#dbManager.genericSqlGet(`SELECT SKUId FROM SKUPerRestockOrder WHERE id = ${id}`)
+        await this.#dbManager.genericSqlGet(`SELECT SKUId FROM SKUPerRestockOrder WHERE id = ?;`, id)
             .then(values => skus = values)
             .catch(error => { throw error });
 
         skuitems.forEach(async (sk) => {
             let res;
-            await this.#dbManager.genericSqlGet(`SELECT Result FROM TestResult WHERE RFID = ${sk.RFID};`)
+            await this.#dbManager.genericSqlGet(`SELECT Result FROM TestResult WHERE RFID = ?;`, sk.RFID)
                 .then((res) => {
                     if (res === false) {
                         itemsArray = [...itemsArray, { "SKUId": sk.SKUID, "rfid": sk.RFID }]
@@ -237,19 +238,22 @@ class RestockOrderController {
         if (!issueDate || !products || !supplierId || isNaN(supplierId))
             throw new Exceptions(422);
 
-        const sqlInstruction = `INSERT INTO RestockOrder (id, issueDate, state, shipmentDate, supplierId) VALUES (${id + 1},
-                ${issueDate}, "ISSUED", '', ${supplierId});`;
+        const params1 = [id+1, issueDate, supplierId];
+        const sqlInstruction = `INSERT INTO RestockOrder (id, issueDate, state, shipmentDate, supplierId) VALUES (?,
+                ?, "ISSUED", '', ?);`;
         try {
-            const restockOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction, params1);
         } catch (error) {
             throw new Exceptions(503)
         }
 
+        let params;
         /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (${id + 1}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.qty});`;
+            params2 = [id+1, elem.SKUId, elem.description, elem.price, elem.qty];
+            const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`;
             try {
-                const restockOrder = await this.#dbManager.genericSqlRun(sqlInsert);
+                await this.#dbManager.genericSqlRun(sqlInsert, params2);
             } catch (error) {
                 throw new Exceptions(503);
             }
@@ -270,7 +274,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -278,9 +282,10 @@ class RestockOrderController {
         if (!row)
             throw new Exceptions(404);
 
-        const sqlInstruction = `UPDATE RestockOrder SET state = "${newState}" WHERE id= ${id};`;
+        const params = [newState, id];
+        const sqlInstruction = `UPDATE RestockOrder SET state = ? WHERE id=?;`;
         try {
-            const restockOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
+            const restockOrder = await this.#dbManager.genericSqlRun(sqlInstruction, params);
         } catch (error) {
             throw error;
         }
@@ -301,7 +306,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -313,11 +318,13 @@ class RestockOrderController {
         if (row.state !== 'DELIVERED')
             throw new Exceptions(422)
 
+        let params;
         /*TO BE CHECKED - loop of the products to be added into SKUItemsPerRestockOrder*/
         skuItems.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            params = [id, elem.SKUId, elem.rfid];
+            const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`;
             try {
-                const restockOrder = await this.#dbManager.genericSqlRun(sqlInsert);
+                await this.#dbManager.genericSqlRun(sqlInsert, params);
             } catch (error) {
                 new error;
             }
@@ -342,7 +349,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -358,9 +365,10 @@ class RestockOrderController {
         if (transportNote.deliveryDate <= row.issueDate)
             throw new Error(Exceptions.message422);
 
-        const sqlInstruction = `UPDATE RestockOrder SET shipmentDate = ${transportNote} WHERE id = ${id};`;
+        const params = [transportNote, id];
+        const sqlInstruction = `UPDATE RestockOrder SET shipmentDate = ? WHERE id = ?;`;
         try {
-            const restockOrder = await this.#dbManager.genericSqlRun(sqlInstruction);
+            await this.#dbManager.genericSqlRun(sqlInstruction, params);
         } catch (error) {
             new Error(Exceptions.message503);
         }
@@ -377,9 +385,8 @@ class RestockOrderController {
         if (!id || isNaN(id))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun
-            (`DELETE FROM RestockOrder WHERE ID= ${id};`)
-            .catch((error) => { throw error});
+        await this.#dbManager.genericSqlRun(`DELETE FROM RestockOrder WHERE ID=?;`, id)
+                             .catch((error) => { throw error});
 
         /*
         const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;

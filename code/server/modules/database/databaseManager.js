@@ -31,7 +31,7 @@ class DBManager {
 
     async genericSqlGet(query, ...params) {
         return new Promise((resolve, reject) => {
-            this.#db.all(query, (err, rows) => {
+            this.#db.all(query, params, (err, rows) => {
                 if (err) {
                     console.log("Database get error: err", err);
                     reject(err);
