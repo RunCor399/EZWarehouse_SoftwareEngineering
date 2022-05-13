@@ -94,7 +94,7 @@ class PositionController {
         let positions;
         await this.getAllPositions()
             .then(value => positions = value)
-            .catch((error) => { throw new error })
+            .catch((error) => { throw  error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
         console.log(positionIDs);
@@ -138,7 +138,7 @@ class PositionController {
         let positions;
         await this.getAllPositions()
             .then(value => positions = value)
-            .catch((error) => { throw new error })
+            .catch((error) => { throw  error })
         const positionIDs = positions.map(pos => String(pos.positionID))
         if (!positionIDs.includes(oldId))
             throw new Exceptions(404);
@@ -171,7 +171,7 @@ class PositionController {
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM Position WHERE positionID= $?;`, id)
-            .catch((error) => { throw new error });
+            .catch((error) => { throw  error });
 
     }
 

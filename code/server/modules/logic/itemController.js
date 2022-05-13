@@ -83,7 +83,7 @@ class ItemController {
         let sku;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id = ?`, SKUId)
             .then(value => sku = value[0])
-            .catch(error => { throw new error });
+            .catch(error => { throw  error });
         if (!sku)
             throw new Exceptions(404);
 
