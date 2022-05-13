@@ -51,6 +51,11 @@ The input value is the id.
 | :--------: | :---------------: |
 |   Validity of *id*      |     No boundary found      |
 
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|
+| Present |  Valid | There is a SKU with the chosen *id*||
+| Absent  | Invalid | There is no SKU with the chosen *id*|| 
+
 
  ## **Class *skuController* - method *createSKU***
 
@@ -162,14 +167,14 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 | Criteria | Predicate |
 | :--------: | :---------: |
-|   Sign of *weight*       |    *weight* is positive       |
-|          |    *weight* is negative       |
-|   Sign of *volume*       |    *volume* is positive       |
-|          |    *volume* is negative       |
-|   Sign of *availableQuantity*       |    *availableQuantity* is positive       |
-|         |    *availableQuantity* is negative       |
-|   Sign of *price*       |    *price* is positive       |
-|          |    *price* is negative       |
+|   Sign of *newWeight*       |    *newWeight* is positive       |
+|          |    *newWeight* is negative       |
+|   Sign of *newVolume*       |    *newVolume* is positive       |
+|          |    *newVolume* is negative       |
+|   Sign of *newAvailableQuantity*       |    *newAvailableQuantity* is positive       |
+|         |    *newAvailableQuantity* is negative       |
+|   Sign of *newPrice*       |    *newPrice* is positive       |
+|          |    *newPrice* is negative       |
 |    Validity of *id*      |     There is no SKU with the specified *id* in the database      |
 |         |     There is a SKU with the specified *id* in the database     |
 |    Sign of *occupiedWeight-maxWeight*     |     *occupiedWeight-maxWeight* is negative      |
@@ -185,10 +190,10 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 | Criteria | Boundary values |
 | :--------: | :---------------: |
-|   Sign of *weight*       |    0      |
-|   Sign of *volume*       |    0       |
-|   Sign of *availableQuantity*       |    0      |
-|   Sign of *price*       |    0       |
+|   Sign of *newWeight*       |    0      |
+|   Sign of *newVolume*       |    0       |
+|   Sign of *newAvailableQuantity*       |    0      |
+|   Sign of *newPrice*       |    0       |
 |   Validity of *id*      |     No boundary found      |
 |   Sign of *occupiedVolume-maxVolume*       |    0      |
 |   Sign of *occupiedWeight-maxWeight*      |    0       |
@@ -232,7 +237,6 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 | Positive |  Positive | Negative | Negative | Absent | Positive| Negative| Invalid | The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs| |
 | Positive |  Positive | Negative | Negative | Absent | Negative| Positive| Invalid | The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs| |
 | Positive |  Positive | Negative | Negative | Absent | Negative| Negative| Invalid | The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs| |
-
 | Positive |  Negative | Positive | Positive | Present |Positive| Positive| Invalid | The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign| |
 | Positive |  Negative | Positive | Positive | Present |Positive| Negative| Invalid | The new occupied weight exceeds the maxWeight, there is one wrong sign| |
 | Positive |  Negative | Positive | Positive | Present |Negative| Positive| Invalid | The new occupied volume exceeds the maxVolume, there is one wrong sign| |
@@ -288,8 +292,8 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 | :--------: | :---------: |
 |    Validity of *id*      |     There is no SKU with the specified *id* in the database      |
 |          |     There is a SKU with the specified *id* in the database     |
-|    Validity of *position*      |     There is no SKU with the specified *position* in the database      |
-|          |     There is a SKU with the specified *position* in the database     |
+|    Validity of *position*      |     There is no SKU with the specified *position* in the database and the position exists    |
+|          |     There is a SKU with the specified *position* in the database or the *position* doesn't exist   |
 |    Sign of *occupiedWeight-maxWeight*     |     *occupiedWeight-maxWeight* is negative      |
 |          |     *occupiedWeight-maxWeight* is positive   |
 |    Sign of *occupiedVolume-maxVolume*    |     *occupiedVolume-maxVolume*is negative      |
@@ -314,24 +318,22 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 | Criteria 1 | Criteria 2 |  Criteria 3 | Criteria 4 | Valid / Invalid | Description of the test case | Jest test case |
 |:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-| Positive| Positive| Present | Present| Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume||
-| Positive| Positive| Present | Absent | Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database||
-| Positive| Positive| Absent | Present| Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database||
-| Positive| Positive| Absent | Absent | Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database, there is no SKU with such SKUID in the database||
-| Positive| Negative| Present | Present| Invalid | The occupied weight exceeds the maxWeight||
-| Positive| Negative| Present | Absent | Invalid | The occupied weight exceeds the maxWeight there is no position with such positionID in the database||
-| Positive| Negative| Absent | Present| Invalid | The occupied weight exceeds the maxWeight, there is no SKU with such SKUID in the database||
-| Positive| Negative| Absent | Absent | Invalid | The occupied weight exceeds the maxWeight, there is no position with such positionID in the database, there is no SKU with such SKUID in the database||
-
-
-|  Negative| Positive| Present | Present| Invalid | The occupied volume exceeds the maxVolume||
-|  Negative| Positive| Present | Absent | Invalid | The occupied volume exceeds the maxVolume, there is no position with such positionID in the database||
-|  Negative| Positive| Absent | Present| Invalid | The occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database||
-|  Negative| Positive| Absent | Absent | Invalid | The occupied volume exceeds the maxVolume, there is no position with such positionID in the database, there is no SKU with such SKUID in the database||
-|  Negative| Negative| Present | Present| Valid | All the conditions are satisfied||
-|  Negative| Negative| Present | Absent | Invalid |  There is no position with such positionID in the database||
-|  Negative| Negative| Absent | Present| Invalid | There is no SKU with such SKUID in the database||
-|  Negative| Negative| Absent | Absent | Invalid | There is no position with such positionID in the database, there is no SKU with such SKUID in the database||
+| Positive| Positive| Present | Valid| Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume||
+| Positive| Positive| Present | Invalid| Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU||
+| Positive| Positive| Absent | Valid| Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database||
+| Positive| Positive| Absent | Invalid | Invalid | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database, there is no SKU with such SKUID in the database or the poitionID is already associated to a SKU||
+| Positive| Negative| Present | Valid| Invalid | The occupied weight exceeds the maxWeight||
+| Positive| Negative| Present | Invalid | Invalid | The occupied weight exceeds the maxWeight, there is no position with such positionID in the database or the poitionID is already associated to a SKU||
+| Positive| Negative| Absent | Valid| Invalid | The occupied weight exceeds the maxWeight, there is no SKU with such SKUID in the database||
+| Positive| Negative| Absent | Invalid | Invalid | The occupied weight exceeds the maxWeight, there is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database||
+|  Negative| Positive| Present | Valid| Invalid | The occupied volume exceeds the maxVolume||
+|  Negative| Positive| Present | Invalid | Invalid | The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU||
+|  Negative| Positive| Absent | Valid| Invalid | The occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database||
+|  Negative| Positive| Absent | Invalid | Invalid | The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database||
+|  Negative| Negative| Present | Valid| Valid | All the conditions are satisfied||
+|  Negative| Negative| Present | Invalid | Invalid |  There is no position with such positionID in the database or the poitionID is already associated to a SKU||
+|  Negative| Negative| Absent | Valid| Invalid | There is no SKU with such SKUID in the database||
+|  Negative| Negative| Absent | Invalid | Invalid | There is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database||
 
 
 ## **Class *skuController* - method *deleteSKU***
@@ -493,7 +495,6 @@ The input value is the body of the HTTP POST Request.
 |Present| Valid| Not in use| Valid | The rfid is not used by another SKUItem, the date format is valid and the sku id is associated to an existing sku ||
 |Present| Invalid| In use| Invalid | The rfid is already used by another SKUItem, the date format is not valid||
 |Present| Invalid| Not in use| Invalid | The date format is not valid||
-
 |Absent| Valid| In use| Invalid | The rfid is already used by another SKUItem, there is no SKU with the specified id||
 |Absent| Valid| Not in use| Invalid | The rfid is not used by another SKUItem, the date format is valid and the sku id is associated to an existing sku, there is no SKU with the specified id ||
 |Absent| Invalid| In use| Invalid | The rfid is already used by another SKUItem, the date format is not valid, there is no SKU with the specified id||
@@ -502,12 +503,12 @@ The input value is the body of the HTTP POST Request.
 
 ## **Class *skuItemController* - method *editSkuItem***
 
-The input value is the body of the HTTP PUT Request, but also the old rfid
+The input value is the body of the HTTP PUT Request, but also the old rfid.
 
 **Criteria for method *editSkuItem*:**
  - Validity of *oldrfid*	
  - Validity of *rfid*	
- - Sign of *availability*
+ - Sign of *newAvailable*
  - Format of  *dateOfStock*
  
 
@@ -522,7 +523,7 @@ The input value is the body of the HTTP PUT Request, but also the old rfid
 |          |     There is a SKU with the specified *oldrfid* in the database     |
 |    Usage of *rfid*     |     There is no SKU item with the specified *rfid* in the database      |
 |          |     There is a SKU Item with the specified *rfid* in the database     |
-|Sign of *availability* | Sign is positive|
+|Sign of *newAvailable* | Sign is positive|
 | | Sign is negative|
 | Format of  *dateOfStock* | The date format is a valid one (NULL, "YYYY/MM/DD" or"YYYY/MM/DD HH:MM")  |
 |  | The date format is an invalid one |
@@ -537,7 +538,7 @@ The input value is the body of the HTTP PUT Request, but also the old rfid
 | :--------: | :---------------: |
 |    Validity of *oldrfid*     |      No boundary found      |
 |    Usage of *rfid*     |      No boundary found      |
-|Sign of *availability* | 0|
+|Sign of *newAvailable* | 0|
 | Format of  *dateOfStock* |  No boundary found  |
 
 
@@ -611,11 +612,10 @@ The input value is the body of the HTTP POST Request.
  - Usage of *positionid*
  - Sign of *maxWeight*
  - Sign of *maxVolume*
- /* NOT CONSIDERED AS POSSIBLE TESTS -> THE FRONTEND CHECKS THE FORMAT OF AISLE, ROW, COLUMN AS 4 DIGIT STRINGS
  - Format of *aisle*
  - Format of *row*
  - Format of *colummn*
- */
+
 
 
 
@@ -630,6 +630,12 @@ The input value is the body of the HTTP POST Request.
 |          |    Sign is negative     |
 |     Sign of *maxVolume*     |     Sign is positive      |
 |          |    Sign is negative     |
+|     Format of *row*     |     It is a string of 4 digits      |
+|          |    It is not a string of 4 digits     |
+|     Format of *aisle*     |     It is a string of 4 digits      |
+|          |    It is not a string of 4 digits     |
+|     Format of *column*     |     It is a string of 4 digits      |
+|          |    It is not a string of 4 digits     |
 
 
 
@@ -642,22 +648,82 @@ The input value is the body of the HTTP POST Request.
 |    Usage of *positionid*      |     No boundary found     |
 |     Sign of *maxWeight*     |    0      |
 |     Sign of *maxVolume*     |     0      |
+|     Format of *row*     |     No boundary found       |
+|     Format of *aisle*     |     No boundary found      |
+|     Format of *column*     |     No boundary found       |
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2| Criteria 3| Valid / Invalid | Description of the test case | Jest test case |
-|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-| Present | Positive| Positive| Invalid | There is a position with the chosen *positionid*||
-| Present | Positive| Negative| Invalid | There is a position with the chosen *positionid*, the *maxVolume* has a negative value||
-| Present | Negative| Positive| Invalid | There is a position with the chosen *positionid*, the *maxWeight* has a negative value||
-| Present | Negative| Negative| Invalid | There is a position with the chosen *positionid*, the *maxVolume* has a negative value, the *maxWeight* has a negative value||
-| Absent | Positive| Positive| Valid | There is no position with the chosen *positionid*, the signs of *maxVolume* and *maxWeight* are correct||
-| Absent | Positive| Negative| Invalid | The *maxVolume* has a negative value||
-| Absent | Negative| Positive| Invalid | The *maxWeight* has a negative value||
-| Absent | Negative| Negative| Invalid | The *maxVolume* has a negative value, the *maxWeight* has a negative value||
+| Criteria 1 | Criteria 2| Criteria 3| Criteria 4 | Criteria 5| Criteria 6| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Present | Positive| Positive| Valid | Valid| Valid| Invalid | There is a position with the chosen *positionid*||
+| Present | Positive| Positive| Valid | Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong||
+| Present | Positive| Positive| Valid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong||
+| Present | Positive| Positive| Valid | Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong||
+| Present | Positive| Positive| Invalid | Valid| Valid| Invalid | There is a position with the chosen *positionid*, the format of row is wrong||
+| Present | Positive| Positive| Invalid| Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong||
+| Present | Positive| Positive| Invalid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong||
+| Present | Positive| Positive| Invalid| Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong||
+| Present | Positive| Negative| Valid | Valid| Valid| Invalid | There is a position with the chosen *positionid*, the sign of *maxVolume* is negative||
+| Present | Positive| Negative| Valid | Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the sign of *maxVolume* is negative||
+| Present | Positive| Negative| Valid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong, the sign of *maxVolume* is negative||
+| Present | Positive| Negative| Valid | Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the sign of *maxVolume* is negative||
+| Present | Positive| Negative| Invalid | Valid| Valid| Invalid | There is a position with the chosen *positionid*, the format of row is wrong, the sign of *maxVolume* is negative||
+| Present | Positive| Negative| Invalid| Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative||
+| Present | Positive| Negative| Invalid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative||
+| Present | Positive| Negative| Invalid| Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative||
+| Present | Negative| Positive| Valid | Valid| Valid| Invalid | There is a position with the chosen *positionid*, the sign of *maxWeight* is negative||
+| Present | Negative| Positive| Valid | Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the sign of *maxWeight* is negative||
+| Present | Negative| Positive| Valid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong, the sign of *maxWeight* is negative||
+| Present | Negative| Positive| Valid | Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the sign of *maxWeight* is negative||
+| Present | Negative| Positive| Invalid | Valid| Valid| Invalid | There is a position with the chosen *positionid*, the format of row is wrong, the sign of *maxWeight* is negative||
+| Present | Negative| Positive| Invalid| Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong, the sign of *maxWeight* is negative||
+| Present | Negative| Positive| Invalid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative||
+| Present | Negative| Positive| Invalid| Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Valid | Valid| Valid| Invalid | There is a position with the chosen *positionid*, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Valid | Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Valid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Valid | Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Invalid | Valid| Valid| Invalid | There is a position with the chosen *positionid*, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Invalid| Valid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Invalid | Invalid| Valid| Invalid | There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Present | Negative| Negative| Invalid| Invalid| Invalid| Invalid | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent | Positive| Positive| Valid | Valid| Valid| Valid | This is the only valid combination||
+| Absent  | Positive| Positive| Valid | Valid| Invalid| Invalid | The format of column is wrong||
+| Absent  | Positive| Positive| Valid | Invalid| Valid| Invalid | The format of aisle is wrong||
+| Absent | Positive| Positive| Valid | Invalid| Invalid| Invalid | The format of column is wrong, the format of aisle is wrong||
+| Absent  | Positive| Positive| Invalid | Valid| Valid| Invalid | The format of row is wrong||
+| Absent  | Positive| Positive| Invalid| Valid| Invalid| Invalid | The format of column is wrong, the format of row is wrong||
+| Absent  | Positive| Positive| Invalid | Invalid| Valid| Invalid | The format of aisle is wrong, the format of row is wrong||
+| Absent  | Positive| Positive| Invalid| Invalid| Invalid| Invalid | The format of column is wrong, the format of aisle is wrong, the format of row is wrong||
+| Absent  | Positive| Negative| Valid | Valid| Valid| Invalid | The sign of *maxVolume* is negative||
+| Absent  | Positive| Negative| Valid | Valid| Invalid| Invalid | The format of column is wrong, the sign of *maxVolume* is negative||
+| Absent  | Positive| Negative| Valid | Invalid| Valid| Invalid | The format of aisle is wrong, the sign of *maxVolume* is negative||
+| Absent  | Positive| Negative| Valid | Invalid| Invalid| Invalid | The format of aisle is wrong, the sign of *maxVolume* is negative||
+| Absent  | Positive| Negative| Invalid | Valid| Valid| Invalid | The format of row is wrong, the sign of *maxVolume* is negative||
+| Absent  | Positive| Negative| Invalid| Valid| Invalid| Invalid | The format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative||
+| Absent  | Positive| Negative| Invalid | Invalid| Valid| Invalid | The format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative||
+| Absent  | Positive| Negative| Invalid| Invalid| Invalid| Invalid | The format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative||
+| Absent  | Negative| Positive| Valid | Valid| Valid| Invalid | The sign of *maxWeight* is negative||
+| Absent  | Negative| Positive| Valid | Valid| Invalid| Invalid | The format of column is wrong, the sign of *maxWeight* is negative||
+| Absent  | Negative| Positive| Valid | Invalid| Valid| Invalid | The format of aisle is wrong, the sign of *maxWeight* is negative||
+| Absent  | Negative| Positive| Valid | Invalid| Invalid| Invalid | The format of column is wrong, the format of aisle is wrong, the sign of *maxWeight* is negative||
+| Absent  | Negative| Positive| Invalid | Valid| Valid| Invalid | The format of row is wrong, the sign of *maxWeight* is negative||
+| Absent  | Negative| Positive| Invalid| Valid| Invalid| Invalid | The format of column is wrong, the format of row is wrong, the sign of *maxWeight* is negative||
+| Absent  | Negative| Positive| Invalid | Invalid| Valid| Invalid | The format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative||
+| Absent | Negative| Positive| Invalid| Invalid| Invalid| Invalid | The format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Valid | Valid| Valid| Invalid | The sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Valid | Valid| Invalid| Invalid | The format of column is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Valid | Invalid| Valid| Invalid | The format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Valid | Invalid| Invalid| Invalid | The format of column is wrong, the format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Invalid | Valid| Valid| Invalid | The format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Invalid| Valid| Invalid| Invalid | The format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Invalid | Invalid| Valid| Invalid | The format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+| Absent  | Negative| Negative| Invalid| Invalid| Invalid| Invalid | The format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative||
+
 
 ## **Class *positionController* - method *editPosition***
 
@@ -666,18 +732,16 @@ The input value is the body of the HTTP PUT Request and the positionid.
 **Criteria for method *editPosition*:**
 	
  - Validity of *positionid*
- - Usage of *newpositionid*
  - Sign of *newmaxWeight*
  - Sign of *newmaxVolume*
  - Sign of *newoccupiedWeight*
  - Sign of *newoccupiedVolume*
  - Sign of *newmaxWeight-newoccupiedWeight*
  - Sign of *newmaxVolume-newoccupiedVolume*
- /* NOT CONSIDERED AS POSSIBLE TESTS -> THE FRONTEND CHECKS THE FORMAT OF AISLE, ROW, COLUMN AS 4 DIGIT STRINGS
- - Format of *aisle*
- - Format of *row*
- - Format of *colummn*
- */
+ - Format of *newaisle*
+ - Format of *newrow*
+ - Format of *newcolummn*
+
 
 
 
@@ -687,8 +751,6 @@ The input value is the body of the HTTP PUT Request and the positionid.
 | Criteria | Predicate |
 | :--------: | :---------: |
 |    Validity of *positionid*      |     There is no position with the specified *positionid* in the database      |
-|          |     There is a position with the specified *positionid* in the database     |
-|    Usage of *newpositionid*      |     There is no position with the specified *positionid* in the database      |
 |          |     There is a position with the specified *positionid* in the database     |
 |     Sign of *newmaxWeight*     |     Sign is positive      |
 |          |    Sign is negative     |
@@ -702,6 +764,12 @@ The input value is the body of the HTTP PUT Request and the positionid.
 |          |    Sign is negative     |
 |     Sign of *newmaxVolume-newoccupiedVolume*     |     Sign is positive      |
 |          |    Sign is negative     |
+|     Format of *newrow*     |     It is a string of 4 digits      |
+|          |    It is not a string of 4 digits     |
+|     Format of *newaisle*     |     It is a string of 4 digits      |
+|          |    It is not a string of 4 digits     |
+|     Format of *newcolumn*     |     It is a string of 4 digits      |
+|          |    It is not a string of 4 digits     |
 
 
 
@@ -712,54 +780,26 @@ The input value is the body of the HTTP PUT Request and the positionid.
 | Criteria | Boundary values |
 | :--------: | :---------------: |
 |    Validity of *positionid*      |     No boundary found     |
-|    Usage of *newpositionid*      |     No boundary found     |
 |     Sign of *newmaxWeight*     |    0      |
 |     Sign of *newmaxVolume*     |     0      |
 |     Sign of *newoccupiedWeight*     |    0      |
 |     Sign of *newoccupiedVolume*     |     0      |
 |     Sign of *newmaxWeight-newoccupiedWeight*     |    0      |
 |     Sign of *newmaxVolume-newoccupiedVolume*     |     0      |
+|     Format of *newrow*     |     No boundary found       |
+|     Format of *newaisle*     |    No boundary found       |
+|     Format of *newcolumn*     |     No boundary found       |
+
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2| Criteria 3|  Criteria 4 | Criteria 5| Criteria 5| Criteria 7 | Criteria 8| Valid / Invalid | Description of the test case | Jest test case |
-|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-| Valid | Present| Positive| Positive| Positive| Positive| Positive| Positive | Invalid| There is already a position with *newpositionid*||
-| Valid | Present| Positive| Positive| Positive| Positive| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*||
-| Valid | Present| Positive| Positive| Positive| Positive| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*||
-| Valid | Present| Positive| Positive| Positive| Positive| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*||
-| Valid | Present| Positive| Positive| Positive| Negative| Positive| Positive | Invalid| There is already a position with *newpositionid*, there is at least one argument with a negative sign, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive| Positive| Negative| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive| Positive| Negative| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive| Positive| Negative| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive|  Negative| Positive| Positive| Positive | Invalid| There is already a position with *newpositionid*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive| Negative| Positive| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive|  Negative| Positive| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive|  Negative| Positive| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive|  Negative| Negative| Positive| Positive | Invalid| There is already a position with *newpositionid*, there is at least one argument with a negative sign, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive|  Negative| Negative| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive|  Negative| Negative| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Positive|  Negative| Negative| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Positive| Positive| Positive| Positive | Invalid| There is already a position with *newpositionid*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Positive| Positive| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Positive| Positive| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Positive| Positive| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive|Negative| Positive| Negative| Positive| Positive | Invalid| There is already a position with *newpositionid*, there is at least one argument with a negative sign, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Positive| Negative| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Positive| Negative| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Positive| Negative| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative|  Negative| Positive| Positive| Positive | Invalid| There is already a position with *newpositionid*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative| Negative| Positive| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative|  Negative| Positive| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative|  Negative| Positive| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative|  Negative| Negative| Positive| Positive | Invalid| There is already a position with *newpositionid*, there is at least one argument with a negative sign, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative|  Negative| Negative| Positive| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedVolume* is greater than the *newMaxVolume*, there is at least one argument with a negative sign||
-| Valid | Present| Positive|Negative|  Negative| Negative| Negative| Positive | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-| Valid | Present| Positive| Negative|  Negative| Negative| Negative| Negative | Invalid| There is already a position with *newpositionid*, the *newOccupiedWeight* is greater than the *newMaxWeight*, there is at least one argument with a negative sign||
-ALL THE OTHER COMBINATIONS ARE OMITTED BECAUSE OF THEIR HUGE NUMBER
+| Criteria 1 | Criteria 2| Criteria 3|  Criteria 4 | Criteria 5| Criteria 5| Criteria 7 | Criteria 8|Criteria 9 | Criteria 10| Valid / Invalid | Description of the test case | Jest test case |
+|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+
+THE COMBINATIONS ARE OMITTED BECAUSE OF THEIR HUGE NUMBER
 
 ## **Class *positionController* - method *editPositionId***
 
@@ -1523,8 +1563,8 @@ The input value is the body of the HTTP PUT Request and the order id.
 | :--------: | :---------: |
 |    Validity of *id* and of the order status    |     There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED    |
 |          |     There is a restock order with the given *id* in the database and the status is equal to DELIVERED    |
-|    Validity of product list |     All the products are associated to a SKU with and existing SKUID in the database|
-|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database|
+|    Validity of product list |     All the products are associated to a SKUItem with and existing RFID in the database|
+|          |    At least one of the products is not associated to a SKUItem with and existing RFID in the database|
 
 
 
@@ -1540,10 +1580,10 @@ The input value is the body of the HTTP PUT Request and the order id.
 
 | Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
 |:-------:|:-------:|:-------:|:-------:|:-------:|
-| Valid|Valid| Valid| There is a restock order with the given *id* in the database, the status is equal to DELIVERED and all the products are associated to a SKU with and existing SKUID in the database  ||
-| Valid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database ||
+| Valid|Valid| Valid| There is a restock order with the given *id* in the database, the status is equal to DELIVERED and all the products are associated to a SKUItem with and existing RFID in the database  ||
+| Valid|Invalid| Invalid|  At least one of the products is not associated to a SKUItem with and existing RFID in the database||
 | Invalid|Valid| Invalid| There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED ||
-| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED||
+| Invalid|Invalid| Invalid|  At least one of the products is not associated to a SKUItem with and existing RFID in the database, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED||
 
 ## **Class *RestockOrderController* - method * addTransportNote***
 
@@ -1782,8 +1822,8 @@ The input value is the body of the HTTP POST Request
 | :--------: | :---------: |
 |    Validity of *customerid* |     There is no customer with the given *customerid* in the database|
 |          |    There is a customer with the given *customerid* in the database|
-|    Validity of product list |     All the products are associated to a SKU with and existing SKUID in the database|
-|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database|
+|    Validity of product list |     All the products are associated to a SKU with an existing SKUID in the database|
+|          |    At least one of the products is not associated to a SKU with an existing SKUID in the database|
 
 **Boundaries**:
 
@@ -1820,8 +1860,8 @@ The input value is the body of the HTTP PUT Request and the order id
 | :--------: | :---------: |
 |    Validity of *id* |     There is no order with the given *id* in the database|
 |          |    There is a order with the given *id* in the database|
-|    Validity and consistency of product list |     All the products are associated to a SKU with and existing SKUID in the database, the new state must be COMPLETED|
-|          |    At least one of the products is not associated to a SKU with and existing SKUID in the database and/or the new state is not COMPLETED|
+|    Validity and consistency of product list |     All the products are associated to a SKUItem with and existing RFID in the database, the new state must be COMPLETED|
+|          |    At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED|
 
 **Boundaries**:
 
@@ -1834,10 +1874,10 @@ The input value is the body of the HTTP PUT Request and the order id
 
 | Criteria 1 | Criteria 2| Valid / Invalid | Description of the test case | Jest test case |
 |:-------:|:-------:|:-------:|:-------:|-------:|
-| Valid|Valid| Valid| There is a order with the given *id* in the database, all the products are associated to a SKU with an existing SKUID in the database and the new state is COMPLETED ||
-| Valid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database and/or the new state is not COMPLETED ||
+| Valid|Valid| Valid| There is a order with the given *id* in the database,All the products are associated to a SKUItem with and existing RFID in the database and the new state must be COMPLETED ||
+| Valid|Invalid| Invalid| At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED ||
 | Invalid|Valid| Invalid| There is no order with the given *id* in the database ||
-| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKU with and existing SKUID in the database and/or the new state is not COMPLETED, there is no order with the given *id* in the database ||
+| Invalid|Invalid| Invalid| At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED, there is no order with the given *id* in the database ||
 
 ## **Class *InternalOrderController* - method *deleteInternalOrder***
 
