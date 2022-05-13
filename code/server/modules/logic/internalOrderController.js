@@ -82,7 +82,7 @@ class InternalOrderController {
                 .then(value => r.products.forEach(value => {
                     r.products = [...r.products, value];
                 }))
-                .catch(error => { throw new Error(Exceptions.message500) });
+                .catch(error => { throw error });
         });
 
         return rows;
@@ -115,7 +115,7 @@ class InternalOrderController {
             params = [r.id];
             await this.#dbManager.genericSqlGet(query, params)
                 .then(value => r.products = value) /*generation of the dictionary */    
-                .catch(error => { throw new Error(Exceptions.message500) });
+                .catch(error => { throw error });
         });
 
         return rows;
@@ -162,7 +162,7 @@ class InternalOrderController {
             .then(value => row.products =
                 /*generation of the dictionary */
                 value)
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw error });
 
         return row;
 
@@ -195,7 +195,7 @@ class InternalOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new error });
+            .catch(error => { throw  error });
 
         const params1 = [id+1, issueDate, customerId];
         const sqlInstruction = `INSERT INTO InternalOrder (ID, issueDate, state, customerId) 
