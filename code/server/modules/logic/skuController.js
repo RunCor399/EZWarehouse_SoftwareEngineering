@@ -40,7 +40,7 @@ class SkuController {
     }
 
     async getPositionForSKU(dbmanager, rows) {
-        
+
         const query = `SELECT * FROM SKU_in_Position WHERE SKUId = ?;`;
         let params;
 
@@ -73,7 +73,8 @@ class SkuController {
                 .then(value => {
                     if (!value)
                         rows[i].testDescriptors = undefined;
-                    else  rows[i].testDescriptors = value.map(v => v.id)})
+                    else rows[i].testDescriptors = value.map(v => v.id)
+                })
                 .catch(error => { throw error });
             //console.log("info",rows[i].position);
         }
@@ -114,7 +115,7 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
 
-        
+
         const description = body["description"];
         const weight = body["weight"];
         const volume = body["volume"];
@@ -122,7 +123,6 @@ class SkuController {
         const price = body["price"];
         const availableQuantity = body["availableQuantity"];
 
-        const params = [weight, volume, price, notes, description, availableQuantity]
 
         console.log(body);
 
@@ -131,7 +131,8 @@ class SkuController {
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
             throw new Exceptions(422);
 
-        
+        const params = [weight, volume, price, notes, description, availableQuantity]
+
 
         // const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         //  VALUES ( ${weight}, ${volume}, ${price}, "${notes}", "${description}", ${availableQuantity});`;
@@ -141,7 +142,7 @@ class SkuController {
 
         await this.#dbManager.genericSqlRun(sqlInstruction, params)
             .catch((error) => { throw new Exceptions(503) });
-            
+
 
     }
 
@@ -157,18 +158,18 @@ class SkuController {
             .then(value => sku = value)
             .catch((err) => { throw err });
 
-        if (!sku){ 
+        if (!sku) {
             throw new Exceptions(404)
         }
 
-        
-        editParams = {"newDescription":"description", "newWeight":"weight", "newVolume":"volume", "newNotes":"notes", "newPrice":"price", "newAvailableQuantity":"availableQuantity"};
+
+        editParams = { "newDescription": "description", "newWeight": "weight", "newVolume": "volume", "newNotes": "notes", "newPrice": "price", "newAvailableQuantity": "availableQuantity" };
 
         //If a param in the body is not present, the one relative to the old sku state is taken
         (Object.keys(editParams)).map((param) => {
             body[param] === undefined ? body[param] = sku[editParams[param]] : "";
         });
-        
+
         //validation of body and id
         const newDescription = body["newDescription"];
         const newWeight = body["newWeight"];
@@ -201,31 +202,29 @@ class SkuController {
             if (position.maxWeight < newWeight * newAvailableQuantity
                 || position.maxVolume < newVolume * newAvailableQuantity)
                 throw new Exceptions(422);
-            
+
             //update position info
             const params2 = [newWeight * newAvailableQuantity, newVolume * newAvailableQuantity, position.positionId]
             const sqlUpdate = `UPDATE Position SET occupiedWeight = ? 
                                AND occupiedVolume = ? 
                                WHERE ID = ?;`;
 
-            try {
-                await this.#dbManager.genericSqlRun(sqlUpdate, params2);
-            } catch (error) {
-                new Error(Exceptions.message503);
-            }
+            
+            await this.#dbManager.genericSqlRun(sqlUpdate, params2)
+                .catch(error => { throw error });
+}
 
             this.#controller.getPositionController()
-                            .editPositionVer1({
-                                newAisleID: position.aisleID,
-                                newRow: position.row,
-                                newCol: position.col,
-                                newMaxWeight: position.maxWeight,
-                                newMaxVolume: position.maxVolume,
-                                newOccupiedWeight: newWeight * newAvailableQuantity,
-                                newOccupiedVolume: newVolume * newAvailableQuantity,
-                            }).catch(error => { throw new Exceptions(500) });
+                .editPositionVer1({
+                    newAisleID: position.aisleID,
+                    newRow: position.row,
+                    newCol: position.col,
+                    newMaxWeight: position.maxWeight,
+                    newMaxVolume: position.maxVolume,
+                    newOccupiedWeight: newWeight * newAvailableQuantity,
+                    newOccupiedVolume: newVolume * newAvailableQuantity,
+                }).catch(error => { throw error });
 
-        }
 
         //update sku info
         const params3 = [newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id];
@@ -235,7 +234,7 @@ class SkuController {
 
 
         await this.#dbManager.genericSqlRun(sqlInstruction, params3)
-            .catch((error) => { throw new Exceptions(503); });
+            .catch((error) => { throw error; });
 
     }
 
@@ -269,7 +268,7 @@ class SkuController {
 
         console.log("test1", position.maxWeight < sku.weight * sku.availableQuantity + position.occupiedWeight);
         console.log("test2", position.maxVolume < sku.volume * sku.availableQuantity + position.occupiedVolume);
-        
+
         if (position.maxWeight < sku.weight * sku.availableQuantity
             || position.maxVolume < sku.volume * sku.availableQuantity)
             throw new Exceptions(422);
@@ -297,12 +296,12 @@ class SkuController {
             .catch(error => { throw error });
         console.log("test skuhasalreadyaposition", skuHasAlreadyAPosition)
 
-        if (skuHasAlreadyAPosition !== undefined) {
+        if (skuHasAlreadyAPosition) {
             const params4 = [skuHasAlreadyAPosition.SKUId];
             const query4 = `DELETE FROM SKU_in_Position WHERE SKUId = ?;`;
 
             await this.#dbManager.genericSqlRun(query4, params4)
-                                 .catch(error => { throw error });
+                .catch(error => { throw error });
 
             let occupiedPosition
             const query5 = `SELECT * FROM Position WHERE positionID= ?;`;
@@ -314,16 +313,16 @@ class SkuController {
 
             console.log("occupiedPositionPre", occupiedPosition)
             await this.#controller.getPositionController()
-                                  .editPositionVer1(skuHasAlreadyAPosition.positionID,
-                                                    {
-                                                        newAisleID: occupiedPosition.aisleID,
-                                                        newRow: occupiedPosition.row,
-                                                        newCol: occupiedPosition.col,
-                                                        newMaxWeight: position.maxWeight,
-                                                        newMaxVolume: position.maxVolume,
-                                                        newOccupiedWeight: occupiedPosition.occupiedWeight - sku.weight * sku.availableQuantity,
-                                                        newOccupiedVolume: occupiedPosition.occupiedVolume - sku.volume * sku.availableQuantity
-                                                    })
+                .editPositionVer1(skuHasAlreadyAPosition.positionID,
+                    {
+                        newAisleID: occupiedPosition.aisleID,
+                        newRow: occupiedPosition.row,
+                        newCol: occupiedPosition.col,
+                        newMaxWeight: position.maxWeight,
+                        newMaxVolume: position.maxVolume,
+                        newOccupiedWeight: occupiedPosition.occupiedWeight - sku.weight * sku.availableQuantity,
+                        newOccupiedVolume: occupiedPosition.occupiedVolume - sku.volume * sku.availableQuantity
+                    })
                 .catch(error => { throw error });
 
         }
@@ -333,20 +332,20 @@ class SkuController {
                            VALUES (?, ?);`;
 
         await this.#dbManager.genericSqlRun(sqlInsert, params6)
-                             .catch((error) => { throw error });
-                            // or throw 503?
+            .catch((error) => { throw error });
+        // or throw 503?
 
         await this.#controller.getPositionController()
-                              .editPositionVer1(positionId,
-                                                {
-                                                    newAisleID: position.aisleID,
-                                                    newRow: position.row,
-                                                    newCol: position.col,
-                                                    newMaxWeight: position.maxWeight + position.occupiedWeight,
-                                                    newMaxVolume: position.maxVolume + position.occupiedVolume,
-                                                    newOccupiedWeight: sku.weight * sku.availableQuantity,
-                                                    newOccupiedVolume: sku.volume * sku.availableQuantity
-                                                })
+            .editPositionVer1(positionId,
+                {
+                    newAisleID: position.aisleID,
+                    newRow: position.row,
+                    newCol: position.col,
+                    newMaxWeight: position.maxWeight + position.occupiedWeight,
+                    newMaxVolume: position.maxVolume + position.occupiedVolume,
+                    newOccupiedWeight: sku.weight * sku.availableQuantity,
+                    newOccupiedVolume: sku.volume * sku.availableQuantity
+                })
             .catch(error => { throw error });
 
     }
@@ -366,7 +365,7 @@ class SkuController {
         const params = [id];
         await this.#dbManager.genericSqlRun(query, params)
             .catch((error) => { throw error });
-            //or throw new 503?
+        //or throw new 503?
     }
 }
 
