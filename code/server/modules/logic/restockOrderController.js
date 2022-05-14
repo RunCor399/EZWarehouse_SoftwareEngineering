@@ -323,7 +323,7 @@ class RestockOrderController {
 
         /*check if the deliveryDate is before the issueDate */
         if (transportNote.deliveryDate <= row.issueDate)
-            throw new Error(Exceptions.message422);
+            throw new Exceptions(422);
 
         const sqlInstruction = `UPDATE RestockOrder SET shipmentDate = ? WHERE id = ?;`;
             await this.#dbManager.genericSqlRun(sqlInstruction, transportNote, id)

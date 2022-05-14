@@ -25,8 +25,11 @@ class UserController {
 
     }
 
+    /** 
+     * @throws 401 Unauthorized (not logged in) 
+     * @throws 500 Internal Server Error (generic error).
+     */
     getUserAPI() {
-
         if (!this.#controller.isLoggedAndHasPermission("manager")
             || !this.#logged)
             throw new Exceptions(401);
@@ -34,15 +37,21 @@ class UserController {
         return this.#user;
     }
 
+    /**
+     * 
+     * @throws 401 (Not Authorized)
+     */
     getUser() {
-
         if (!this.#logged)
             throw new Exceptions(401);
         return this.#user;
     }
 
+    /** 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error). 
+     */
     async getAllSuppliers() {
-
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
@@ -55,6 +64,10 @@ class UserController {
 
     }
 
+    /** 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error). 
+     */
     async getAllUsers() {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -68,7 +81,11 @@ class UserController {
     }
 
 
-
+    /** 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 409 Conflict (user with same mail and type already exists)
+     * @throws 422 Unprocessable Entity (validation of request body failed or attempt to create manager or administrator accounts)
+     * @throws 503 Service Unavailable (generic error). */
     async createUser(body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -80,7 +97,9 @@ class UserController {
         const password = body["password"];
         const type = body["type"];
 
-        if (this.#controller.areUndefined(username, name, surname, password, type))
+        if (this.#controller.areUndefined(username, name, surname, password, type)
+            || String(password).length < 8
+            || type === "manager")
             throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
@@ -88,7 +107,7 @@ class UserController {
         let users;
         await this.getAllUsers()
             .then(value => users = value)
-            .catch(error => { throw error })
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         let usersEmails = users.map(user => user.email)
         if (usersEmails.includes(username))
@@ -98,10 +117,13 @@ class UserController {
         const sqlInstruction = `INSERT INTO USERS ( email, name, surname, password, type) VALUES (?,?,?,?,?);`;
 
         this.#dbManager.genericSqlRun(sqlInstruction, username, name, surname, hashedPassword, type)
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
     }
 
+    /** 
+     * @throws 401 Unauthorized (wrong username and/or password) 
+     * @throws 500 Internal Server Error (generic error). */
     async login(body, type) {
 
 
@@ -129,15 +151,17 @@ class UserController {
         this.#user.surname = row.surname;
         this.#user.type = row.type;
         this.#logged = true;
-        return (
-            {
-                id: this.#user.id,
-                username: this.#user.username,
-                name: this.#user.name
-            });
+        return ({
+            id: this.#user.id,
+            username: this.#user.username,
+            name: this.#user.name
+        });
 
     }
 
+    /** 
+     * @throws 500 Internal Server Error (generic error). 
+     */
     logout() {
         if (!this.#logged)
             throw new Exceptions(500)//already logged out
@@ -145,6 +169,12 @@ class UserController {
         return;
     }
 
+    /** 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not found (wrong username or oldType fields or user doesn't exists)
+     * @throws 422 Unprocessable Entity (validation of request body or of username failed or attempt to modify rights to administrator or manager)
+     * @throws 503 Service Unavailable (generic error)
+     */
     async editUser(username, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -153,15 +183,31 @@ class UserController {
         const oldType = body["oldType"];
         const newType = body["newType"];
 
-        if (this.#controller.areUndefined(username, oldType, newType))
+        if (this.#controller.areUndefined(username, oldType, newType) || newType === "manager")
             throw new Exceptions(422);
+
+        let users;
+        await this.getAllUsers()
+            .then(value => users = value)
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+
+        let usernames = users.map(us => us.email)
+        if (!usernames.includes(username))
+            throw new Exceptions(404);
+
+        let filteredUsers = users.filter((us) => us.email === username && us.type === oldType)
+        if (!filteredUsers)
+            throw new Exceptions(404);
 
         await this.#dbManager.genericSqlRun
             (`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType)
-            .catch((error) => { throw error });
-
+            .catch((error) => { throw new Exceptions(503) });
     }
 
+    /** 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of username or of type failed or attempt to delete a manager/administrator)
+     * @throws 503 Service Unavailable (generic error). */
     async deleteUser(username, type) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -170,12 +216,9 @@ class UserController {
         if (this.#controller.areUndefined(username, type) || type === "manager")
             throw new Exceptions(422);
 
-
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM USERS WHERE email= ? AND type= ?;` , username, type)
-            .catch((error) => { throw error });
-        
-
+            (`DELETE FROM USERS WHERE email= ? AND type= ?;`, username, type)
+            .catch((error) => { throw new Exceptions(503) });
     }
 
     hasPermission(type, validType) {

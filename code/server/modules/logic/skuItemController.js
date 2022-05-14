@@ -13,7 +13,11 @@ class SkuItemController {
         console.log("skuItemController started");
     }
 
-    /**getter function to retreive all the SKUItems*/
+    /** getter function to retreive all the SKUItems.
+     * Privileges needed: manager
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getAllSkuItems() {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -27,7 +31,13 @@ class SkuItemController {
     }
 
 
-    /**getter function to retreive an array of SKUItems, given the ID of the SKU list related to it*/
+    /**getter function to retreive an array of SKUItems, given the ID of the SKU list related to it.
+     * Privileges needed: manager, customer
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no SKU associated to id)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getSkuItems(id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
@@ -40,7 +50,6 @@ class SkuItemController {
         await this.#controller.getSkuController().getSku(id)
             .then(value => sku = value)
             .catch((error) => { throw error });
-        if (!sku) throw new Exceptions(404)
 
         let rows;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ?;`, id)
@@ -49,10 +58,17 @@ class SkuItemController {
         if (!rows)
             throw new Exceptions(404)
 
+
         return rows;
     }
 
-    /**getter function to retreive a single SKUItem, given its RFID */
+    /**getter function to retreive a single SKUItem, given its RFID.
+     * Privileges needed: manager
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no SKU Item associated to rfid)
+     * @throws 422 Unprocessable Entity (validation of rfid failed)
+     * @throws 500 Internal Server Error (generic error).
+     */
     async getSkuItem(rfid) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -65,13 +81,19 @@ class SkuItemController {
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= ?;`, rfid)
             .then(value => row = value[0])
             .catch(error => { throw error });
-
         if (!row)
             throw new Exceptions(404)
+
         return row;
     }
 
-    /**creation of an SKUItem*/
+    /**creation of an SKUItem.
+     * Privileges needed: manager
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no SKU associated to SKUId)
+     * @throws 422 Unprocessable Entity (validation of request body failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async createSkuItem(body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
@@ -86,24 +108,25 @@ class SkuItemController {
             || this.#controller.areNotNumbers(SKUId))
             throw new Exceptions(422);
 
-        console.log("prova3")
-
         let sku;
         await this.#controller.getSkuController().getSku(SKUId)
             .then(value => sku = value)
-            .catch((error) => { throw error });
-        if (!sku) throw new Exceptions(404)
+            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, RFID, SKUId, 0, dateOfStock)
-            .catch((error) => {
-                throw new Exceptions(503);
-            });
+            .catch((error) => { throw new Exceptions(503) });
 
     }
 
-    /**function to edit an SKUItem*/
+    /**function to edit an SKUItem.
+     * Privileges needed: manager
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no SKU Item associated to rfid)
+     * @throws 422 Unprocessable Entity (validation of request body or of rfid failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async editSkuItem(oldRFID, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -113,25 +136,29 @@ class SkuItemController {
         const newAvailable = body["newAvailable"];
         const newDateOfStock = body["newDateOfStock"];
 
-
-        if (this.#controller.checkRFID(oldRFID) || this.#controller.checkRFID(newRFID)
+        if (this.#controller.checkRFID(oldRFID)
+            || this.#controller.checkRFID(newRFID)
             || this.#controller.areUndefined(newAvailable, newDateOfStock))
             throw new Exceptions(422);
 
         let skuitem;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE RFID= ?;`, oldRFID)
-            .then(value => skuitem = value[0])
-            .catch(error => { throw error });
-        if (!skuitem)
-            throw new Exceptions(404)
+        await this.getSkuItem(oldRFID)
+            .then(row => skuitem = row)
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
 
         await this.#dbManager.genericSqlRun(sqlUpdate, newRFID, newAvailable, newDateOfStock, oldRFID)
-            .catch(error => { throw error; });
+            .catch(error => { throw new Exceptions(503); });
     }
 
-    /**delete function to remove an SKUItem from the table, given its ID */
+    /** delete function to remove an SKUItem from the table, given its ID.
+     * Privileges needed: manager
+     * @param rfid the rfid of skuitem to be deleted
+     * @throws401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of rfid failed)
+     * @throws 503 Service Unavailable (generic error).
+     */
     async deleteSkuItem(rfid) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -140,9 +167,9 @@ class SkuItemController {
         if (this.#controller.checkRFID(rfid))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun(`DELETE FROM SKUItem WHERE RFID= ?;`,rfid)
-            .catch((error) => { throw error });
-        
+        await this.#dbManager.genericSqlRun(`DELETE FROM SKUItem WHERE RFID= ?;`, rfid)
+            .catch((error) => { throw new Exceptions(503) });
+
     }
 }
 

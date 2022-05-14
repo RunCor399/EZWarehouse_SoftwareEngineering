@@ -14,7 +14,10 @@ class TestDescriptorController {
         console.log("testDescriptorController started");
     }
 
-    /**getter function to retreive all test descriptors*/
+    /**getter function to retreive all test descriptors
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getAllTestDescriptors() {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
@@ -27,7 +30,12 @@ class TestDescriptorController {
         return rows;
     }
 
-    /**getter function to retreive a single test descriptor given its ID*/
+    /**getter function to retreive a single test descriptor given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no test descriptor associated id)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getTestDescriptor(id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -38,15 +46,20 @@ class TestDescriptorController {
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ?;`, id)
+            .then(value => row = value[0])
             .catch(error => { throw error });
-
         if (!row)
             throw new Exceptions(404)
 
         return row;
     }
 
-    /**creation of a new test descriptor*/
+    /**creation of a new test descriptor 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no sku associated idSKU)
+     * @throws 422 Unprocessable Entity (validation of request body failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async createTestDescriptor(body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -63,17 +76,21 @@ class TestDescriptorController {
         let sku;
         await this.#controller.getSkuController().getSku(idSKU)
             .then(value => sku = value)
-            .catch((error) => { throw error });
-        if (!sku) throw new Exceptions(404)
+            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); throw error });
 
         const sqlInsert = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) VALUES ( ?, ?, ?);`
 
         await this.#dbManager.genericSqlRun(sqlInsert, name, procedureDescription, idSKU)
-            .catch((error) => { throw error })
+            .catch((error) => { throw new Exceptions(503) })
 
     }
 
-    /**function to edit a test descriptor, given its ID*/
+    /**function to edit a test descriptor, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no test descriptor associated id or no sku associated to IDSku)
+     * @throws 422 Unprocessable Entity (validation of request body or of id failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async editTestDescriptor(id, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -91,24 +108,26 @@ class TestDescriptorController {
         let sku;
         await this.#controller.getSkuController().getSku(newIdSKU)
             .then(value => sku = value)
-            .catch(error => { throw error });
-        if (!sku) throw new Exceptions(404)
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         let testDescriptor;
         await this.getTestDescriptor(id)
             .then(value => testDescriptor = value)
-            .catch(error => { throw error });
-        if (!testDescriptor) throw new Exceptions(404)
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlUpdate = `UPDATE TestDescriptor SET name= ?, procedureDescription= ?, idSku = ? WHERE ID= ?;`;
 
-        await this.#dbManager.genericSqlRun(sqlUpdate, newName, newProcedureDescrition, newIdSKU, id)
-            .catch((error) => { throw error });
+        await this.#dbManager.genericSqlRun(sqlUpdate, newName, newProcedureDescription, newIdSKU, id)
+            .catch((error) => { throw new Exceptions(503) });
 
     }
 
 
-    /**delete function to remove a test descriptor from the table, given its ID*/
+    /**delete function to remove a test descriptor from the table, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async deleteTestDescriptor(id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -117,9 +136,9 @@ class TestDescriptorController {
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
             throw new Exceptions(422);
 
-                await this.#dbManager.genericSqlRun
+        await this.#dbManager.genericSqlRun
             (`DELETE FROM TestDescriptor WHERE ID= ?;`, id)
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
     }
 }
 

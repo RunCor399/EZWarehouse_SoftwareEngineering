@@ -44,27 +44,31 @@ class DBManager {
         })
     } */
 
-
+    /** execute an update/insert/delete given an istruction and params 
+     * @throws 500
+    */
     async genericSqlRun(query, ...params) {
         console.log(params);
         return new Promise((resolve, reject) => {
             this.#db.run(query, params, (err) => {
-                if (err){
+                if (err) {
                     console.log("Database run error: err", err);
-                    reject(err);
+                    reject(new Exceptions(500));
                 }
                 else resolve(true);
             })
         })
     }
-
+    /** execute a select given an istruction and params 
+         * @throws 500
+        */
     async genericSqlGet(query, ...params) {
         return new Promise((resolve, reject) => {
             this.#db.all(query, params, (err, rows) => {
                 if (err) {
                     console.log("Database get error: err", err);
-                    reject(err);
-                    
+                    reject(new Exceptions(500));
+
                 } else {
                     resolve(rows)
                 }

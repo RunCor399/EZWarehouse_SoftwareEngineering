@@ -32,7 +32,7 @@ class ReturnOrderController {
                 .then(value => r.products.forEach(value => {
                     r.products = [...r.products, value];
                 }))
-                .catch(error => { throw new Error(Exceptions.message500) });
+                .catch(error => { throw error });
         });
 
         return rows;
@@ -64,7 +64,7 @@ class ReturnOrderController {
             .then(value => row.products.forEach(value => {
                 row.products = [...row.products, value];
             }))
-            .catch(error => { throw new Error(Exceptions.message500) });
+            .catch(error => { throw error });
 
         return row;
     }
@@ -81,7 +81,7 @@ class ReturnOrderController {
         const restockOrderId = body["restockOrderId"];
 
         /*check if the body is valid */
-        if (!returnDate || !products || !restockOrderId || isNaN(Number(restockOrderId)))
+        if (this.#controller.areUndefined(returnDate,products ,restockOrderId) || isNaN(Number(restockOrderId)))
             throw new Exceptions(422)
 
         let row;
@@ -98,20 +98,18 @@ class ReturnOrderController {
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw error });
 
-        const params1 = [id + 1, returnDate, restockOrderId];
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
                                 VALUES (?,?,?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, params1)
+        await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, returnDate, restockOrderId)
             .catch(error => { throw error; })
 
         let params2;
         /*TO BE CHECKED*/
         products.forEach(async (elem) => {
-            params2 = [id, elem.SKUId, elem.description, elem.price, elem.rfid]
             const sqlInsert = `INSERT INTO SKUPerReturnOrder (id, SKUId, description, price, RFID) VALUES (?,?,?,?,?);`;
 
-            await this.#dbManager.genericSqlRun(sqlInsert, params2)
+            await this.#dbManager.genericSqlRun(sqlInsert, id, elem.SKUId, elem.description, elem.price, elem.rfid)
                 .catch(error => { throw error; })
         })
 

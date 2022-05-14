@@ -13,9 +13,11 @@ class ItemController {
     }
 
 
-    /**getter function to retreive all the items*/
+    /** getter function to retreive all the items
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getAllItems() {
-
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("supplier"))
@@ -26,13 +28,15 @@ class ItemController {
             .then(value => rows = value)
             .catch(error => { throw error });
         return rows;
-
-
     }
 
-    /**getter function to retreive a single item given its ID*/
+    /**getter function to retreive a single item given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no item associated to id)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getItem(id) {
-
 
         /*check if the current user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -55,7 +59,12 @@ class ItemController {
 
     }
 
-    /**creation of a new item in the table*/
+    /**creation of a new item in the table
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (Sku not found)
+     * @throws 422 Unprocessable Entity (validation of request body failed or this supplier already sells an item with the same SKUId or supplier already sells an Item with the same ID)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async createItem(body) {
 
         /*check if the user is authorized */
@@ -69,7 +78,7 @@ class ItemController {
         const supplierId = body["supplierID"];
 
         /*check if the body is valid*/
-        if (this.#controller.areUndefined(id,description,price,SKUId,supplierId) || this.#controller.areNotNumbers(id,price,SKUId,supplierId))
+        if (this.#controller.areUndefined(id, description, price, SKUId, supplierId) || this.#controller.areNotNumbers(id, price, SKUId, supplierId))
             throw new Exceptions(422);
 
         /*check if the supplier already sells an item with the same SKUId*/
@@ -77,23 +86,29 @@ class ItemController {
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE SKUid = ? AND supplierId = ?', SKUId, supplierId)
             .then(value => item = value[0])
             .catch(error => { throw error });
-        if (!item) throw new Exceptions(422);
+        if (item !== undefined) throw new Exceptions(422);
+
+        await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE id=?', id)
+        .then(value => item = value)
+        .catch(error => {if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+        if (item !== undefined) throw new Exceptions(422);
 
         /*check if sku exists in the SKU table*/
-        let sku;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id = ?`, SKUId)
-            .then(value => sku = value[0])
-            .catch(error => { throw  error });
-        if (!sku)
-            throw new Exceptions(404);
+        await this.#controller.getSkuController().getSku(SKUId)
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         await this.#dbManager.genericSqlRun(`INSERT INTO Item (id, description, price, SKUId, supplierId) 
         VALUES (?,?,?,?,?);`, id, description, price, SKUId, supplierId)
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
 
     }
 
-    /**function to edit the properties of a specific item, given its ID*/
+    /**function to edit the properties of a specific item, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not found (Item not existing)
+     * @throws 422 Unprocessable Entity (validation of request body failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async editItem(id, body) {
 
         /*check if the current user is authorized*/
@@ -104,25 +119,23 @@ class ItemController {
         const newPrice = body["newPrice"];
 
         /*check if the body is valid*/
-        if (this.#controller.areUndefined(newDescription,newPrice) || isNaN(Number(newPrice)))
+        if (this.#controller.areUndefined(newDescription, newPrice) || isNaN(Number(newPrice)))
             throw new Exceptions(422);
 
-        /*check if the item exists in the Item table*/
-        let item;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id = ?`, id)
-            .then(value => item = value[0])
-            .catch(error => { throw error });
-        if (!item)
-            throw new Exceptions(404)
+        await this.getItem(id)
+        .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE SKUid= ?;`, newDescription, newPrice, id)
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
 
     }
 
-    /**delete function to remove an item from the table, given its ID*/
+    /**delete function to remove an item from the table, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async deleteItem(id) {
-
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("supplier"))
@@ -134,7 +147,7 @@ class ItemController {
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM Item WHERE ID= ?;`, id)
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
     }
 
 }

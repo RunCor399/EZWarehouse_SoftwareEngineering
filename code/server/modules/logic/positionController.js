@@ -8,7 +8,7 @@ class PositionController {
     #dbManager;
     constructor(controller) {
         this.#controller = controller;
-        this.#dbManager = controller.getDBManager();
+        this.#dbManager = this.#controller.getDBManager();
         console.log("positionController started");
     }
 
@@ -18,7 +18,10 @@ class PositionController {
             && String(positionID).substring(8, 12) === String(col))
     }
 
-    /**getter function to retreive all positions*/
+    /**getter function to retreive all positions
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getAllPositions() {
 
         /*check if the current user is authorized*/
@@ -33,14 +36,16 @@ class PositionController {
         return rows;
     }
 
-    /**creation of a new position inside the warehouse*/
+    /**creation of a new position inside the warehouse
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of request body failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async createPosition(body) {
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
-
-        console.log(body)
 
         const positionID = body["positionID"];
         const aisleID = body["aisleID"];
@@ -54,8 +59,7 @@ class PositionController {
 
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||
-            this.#controller.areNotNumbers(maxWeight, maxVolume, occupiedWeight, occupiedVolume)
-            || this.#controller.areNotNumbers(positionID, aisleID, row, col)
+            this.#controller.areNotNumbers(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
             || String(positionID).length !== 12 || String(aisleID).length !== 4
             || String(row).length !== 4 || String(col).length !== 4
             || !this.checkPositionID(positionID, aisleID, row, col))
@@ -64,10 +68,15 @@ class PositionController {
         const sqlInstruction = `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES (?,?,?,?,?,?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume)
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
     }
 
-    /**function to edit the properties of a specific position, given its ID*/
+    /**function to edit the properties of a specific position, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no position associated to positionID)
+     * @throws 422 Unprocessable Entity (validation of request body or of positionID failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async editPositionVer1(id, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
@@ -82,8 +91,7 @@ class PositionController {
         const newOccupiedVolume = body["newOccupiedVolume"];
 
         if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume) ||
-            this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
-            || this.#controller.areNotNumbers(id, newAisleID, newRow, newCol)
+            this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume, id, newAisleID, newRow, newCol)
             || String(id).length !== 12 || String(newAisleID).length !== 4
             || String(newRow).length !== 4 || String(newCol).length !== 4
             || !this.checkPositionID(id, newAisleID, newRow, newCol))
@@ -94,7 +102,7 @@ class PositionController {
         let positions;
         await this.getAllPositions()
             .then(value => positions = value)
-            .catch((error) => { throw  error })
+            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
         console.log(positionIDs);
@@ -122,7 +130,12 @@ class PositionController {
 
     }
 
-    /**function to edit the ID of a specific position, given its older ID*/
+    /**function to edit the ID of a specific position, given its older ID
+     *  @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no position associated to positionID)
+     * @throws 422 Unprocessable Entity (validation of request body or of positionID failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async editPositionVer2(oldId, body) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -138,7 +151,8 @@ class PositionController {
         let positions;
         await this.getAllPositions()
             .then(value => positions = value)
-            .catch((error) => { throw  error })
+            .catch((error) => { if(error.getCode() === 500) throw new Exceptions(503); else throw error })
+
         const positionIDs = positions.map(pos => String(pos.positionID))
         if (!positionIDs.includes(oldId))
             throw new Exceptions(404);
@@ -160,7 +174,11 @@ class PositionController {
 
     }
 
-    /**delete function to remove a position from the table, given its ID*/
+    /**delete function to remove a position from the table, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of positionID failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async deletePosition(id) {
 
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -171,7 +189,7 @@ class PositionController {
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM Position WHERE positionID= $?;`, id)
-            .catch((error) => { throw  error });
+            .catch((error) => { throw new Exceptions(503) });
 
     }
 
