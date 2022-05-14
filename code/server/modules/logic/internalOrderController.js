@@ -14,7 +14,10 @@ class InternalOrderController {
     }
 
 
-    /*TO BE CHECKED - getter function to retreive all the internal orders*/
+    /**TO BE CHECKED - getter function to retreive all the internal orders
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getAllInternalOrders() {
 
         /*check if the user is authorized */
@@ -40,7 +43,10 @@ class InternalOrderController {
 
     }
 
-    /*TO BE CHECKED - getter function to retreive all the issued internal orders*/
+    /**TO BE CHECKED - getter function to retreive all the issued internal orders
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getIssuedInternalOrders() {
 
         /*check if the user is authorized */
@@ -66,7 +72,10 @@ class InternalOrderController {
 
     }
 
-    /*TO BE CHECKED - getter function to retreive all the accepted internal orders*/
+    /**TO BE CHECKED - getter function to retreive all the accepted internal orders
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getAcceptedInternalOrders() {
 
         /*check if the user is authorized */
@@ -88,7 +97,12 @@ class InternalOrderController {
         return rows;
     }
 
-    /*TO BE CHECKED - getter function to retreive a single internal order, given its ID*/
+    /**TO BE CHECKED - getter function to retreive a single internal order, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no internal order associated to id)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getInternalOrder(id) {
 
         /*check if the user is authorized */
@@ -122,7 +136,11 @@ class InternalOrderController {
 
     }
 
-    /*TO BE CHECKED - creation of a new internal order*/
+    /**TO BE CHECKED - creation of a new internal order
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of request body failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async createInternalOrder(body) {
 
         /*check if the user is authorized */
@@ -143,9 +161,6 @@ class InternalOrderController {
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw error });
 
-
-        const sqlInstruction = 
-
         await this.#dbManager
         .genericSqlRun(`INSERT INTO InternalOrder (id, issueDate, state, customerId) VALUES (?, ?, "ISSUED", ?);`,
         id, issueDate, customerId)
@@ -163,7 +178,12 @@ class InternalOrderController {
 
     }
 
-    /*TO BE CHECKED - function to edit the state of an internal order, given its ID*/
+    /**TO BE CHECKED - function to edit the state of an internal order, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no internal order associated to id)
+     * @throws 422 Unprocessable Entity (validation of request body or of id failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async editInternalOrder(id, body) {
 
         /*check if the user is authorized */
@@ -216,7 +236,11 @@ class InternalOrderController {
     }
 
 
-    /*COMPLETED - delete function to remove an internal order from the table, given its ID */
+    /**COMPLETED - delete function to remove an internal order from the table, given its ID 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async deleteInternalOrder(id) {
 
         /*check if the user is authorized */

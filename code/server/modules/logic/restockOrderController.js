@@ -14,7 +14,10 @@ class RestockOrderController {
         console.log("restockOrderController started");
     }
 
-    /*TO BE CHECKED - getter function to retreive all the restock orders*/
+    /** TO BE CHECKED - getter function to retreive all the restock orders
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error). 
+    */
     async getAllRestockOrders() {
 
         /*check if the current user is authorized*/
@@ -57,7 +60,10 @@ class RestockOrderController {
         return rows;
     }
 
-    /*TO BE CHECKED - getter function to retreive all the issued restock orders*/
+    /**TO BE CHECKED - getter function to retreive all the issued restock orders
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getIssuedRestockOrders() {
 
         /*check if the current user is authorized*/
@@ -89,7 +95,12 @@ class RestockOrderController {
         return rows;
     }
 
-    /*TO BE CHECKED - getter function to retreive a single restock order, given its ID*/
+    /**TO BE CHECKED - getter function to retreive a single restock order, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no restock order associated to id)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getRestockOrder(id) {
 
         /*check if the current user is authorized*/
@@ -133,7 +144,12 @@ class RestockOrderController {
         return row;
     }
 
-    /*TO BE CHECKED - function to retreive the sku items to be returned of a restock order*/
+    /**TO BE CHECKED - function to retreive the sku items to be returned of a restock order
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no restock order associated to id)
+     * @throws 422 Unprocessable Entity (validation of id failed or restock order state != COMPLETEDRETURN)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getRestockOrderToBeReturned(id) {
 
         /* - get Restock Order with id
@@ -190,7 +206,9 @@ class RestockOrderController {
         return itemsArray;
     }
 
-    /*TO BE CHECKED - creation of a restock order*/
+    /**TO BE CHECKED - creation of a restock order
+     * @throws  401 Unauthorized (not logged in or wrong permissions), 422 Unprocessable Entity (validation of request body failed), 503 Service Unavailable (generic error).
+    */
     async createRestockOrder(body) {
 
         /*check if the current user is authorized*/
@@ -205,7 +223,7 @@ class RestockOrderController {
         if (this.#controller.areUndefined(issueDate, products, supplierId), isNaN(Number(supplierId)))
             throw new Exceptions(422);
 
-            let id;
+        let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM RestockOrder')
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw error });
@@ -229,7 +247,12 @@ class RestockOrderController {
         })
     }
 
-    /*COMPLETED - function to edit a state of a restock order, given its ID*/
+    /**COMPLETED - function to edit a state of a restock order, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no restock order associated to id)
+     * @throws 422 Unprocessable Entity (validation of request body or of id failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async editRestockOrder(id, body) {
 
         /*check if the current user is authorized*/
@@ -256,7 +279,12 @@ class RestockOrderController {
 
     }
 
-    /*TO BE CHECKED - function to add a list of sku items to a restock order*/
+    /**TO BE CHECKED - function to add a list of sku items to a restock order 
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no restock order associated to id)
+     * @throws 422 Unprocessable Entity (validation of request body or of id failed or order state != DELIVERED)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async addSkuItemsToRestockOrder(id, body) {
 
         /*check if the current user is authorized*/
@@ -284,15 +312,20 @@ class RestockOrderController {
 
         /*TO BE CHECKED - loop of the products to be added into SKUItemsPerRestockOrder*/
         skuItems.forEach(async (elem) => {
-                await this.#dbManager.genericSqlRun(`INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`,
+            await this.#dbManager.genericSqlRun(`INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`,
                 id, elem.SKUId, elem.rfi)
-            .catch (error => {throw error});
-            })
-        }
+                .catch(error => { throw error });
+        })
+    }
 
-    
 
-    /*TO BE CHECKED - function to add a transport note to a restock order, given its ID*/
+
+    /**TO BE CHECKED - function to add a transport note to a restock order, given its ID
+     *@throws  401 Unauthorized (not logged in or wrong permissions)
+     @throws 404 Not Found (no restock order associated to id)
+     @throws 422 Unprocessable Entity (validation of request body or of id failed or order state != DELIVERY or deliveryDate is before issueDate)
+     @throws 503 Service Unavailable (generic error).
+    */
     async addTransportNote(id, body) {
 
         /*check if the current user is authorized*/
@@ -326,11 +359,15 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         const sqlInstruction = `UPDATE RestockOrder SET shipmentDate = ? WHERE id = ?;`;
-            await this.#dbManager.genericSqlRun(sqlInstruction, transportNote, id)
-            .catch (error => {throw error})
+        await this.#dbManager.genericSqlRun(sqlInstruction, transportNote, id)
+            .catch(error => { throw error })
     }
 
-    /*COMPLETED - delete function to remove a restock order from the table, given its ID*/
+    /** COMPLETED - delete function to remove a restock order from the table, given its ID
+    * @throws 401 Unauthorized (not logged in or wrong permissions)
+    * @throws 422 Unprocessable Entity (validation of id failed)
+    * @throws 503 Service Unavailable (generic error).
+    */
     async deleteRestockOrder(id) {
 
         /*check if the current user is authorized*/
@@ -342,17 +379,8 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM RestockOrder WHERE ID=?;`, id)
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
-        /*
-        const sqlInstruction = `DELETE FROM RestockOrder WHERE ID= ${id};`;
-        try {
-            const restockOrder = await this.#dbManager.genericSqlGet(sqlInstruction);
-        } catch (error) {
-            new Error(Exceptions.message500);
-        }
-        return restockOrder;
-        */
     }
 }
 

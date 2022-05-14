@@ -13,7 +13,10 @@ class ReturnOrderController {
     }
 
 
-    /*TO BE CHECKED - getter function to retreive all the return orders*/
+    /**TO BE CHECKED - getter function to retreive all the return orders
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 500 Internal Server Error (generic error).
+    */
     async getAllReturnOrders() {
 
         /*check if the current user is authorized*/
@@ -38,7 +41,12 @@ class ReturnOrderController {
         return rows;
     }
 
-    /*TO BE CHECKED - getter function to retreive a single return order, given its ID*/
+    /**TO BE CHECKED - getter function to retreive a single return order, given its ID
+    * @throws 401 Unauthorized (not logged in or wrong permissions)
+    * @throws 404 Not Found (no return order associated to id)
+    * @throws 422 Unprocessable Entity (validation of id failed)
+    * @throws 500 Internal Server Error (generic error).
+    */
     async getReturnOrder(id) {
 
         /*check if the current user is authorized*/
@@ -69,7 +77,12 @@ class ReturnOrderController {
         return row;
     }
 
-    /*TO BE CHECKED - function to create a return order*/
+    /**TO BE CHECKED - function to create a return order
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 404 Not Found (no restock order associated to restockOrderId)
+     * @throws 422 Unprocessable Entity (validation of request body failed)
+     * @throws 503 Service Unavailable (generic error).
+    */
     async createReturnOrder(body) {
 
         /*check if the current user is authorized*/
@@ -115,9 +128,12 @@ class ReturnOrderController {
 
     }
 
-    /*COMPLETED - delete function to remove a return order from the table, given its ID*/
+    /**COMPLETED - delete function to remove a return order from the table, given its ID
+     * @throws 401 Unauthorized (not logged in or wrong permissions)
+     * @throws 422 Unprocessable Entity (validation of id failed)
+     * @throws 503 Service Unavailable (generic error)
+    */
     async deleteReturnOrder(id) {
-
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -128,7 +144,7 @@ class ReturnOrderController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM ReturnOrder WHERE ID=?;`, id)
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
     }
 }
 
