@@ -91,7 +91,7 @@ class Controller {
         try {
             user = this.#userController.getUser();
         } catch (error) {
-            throw new Exceptions(401);
+            throw error;
         }
         return user;
     }

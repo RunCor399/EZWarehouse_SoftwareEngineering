@@ -17,33 +17,6 @@ class DBManager {
 
     }
 
-    /* async genericSqlRun(query, ...params) {
-        console.log(params);
-                return new Promise((resolve, reject) => {
-            this.#db.run(query, params, (err) => {
-                if (err){
-                    console.log("Database run error: err", err);
-                    reject(err);
-                }
-                else resolve(true);
-            })
-        })
-    }
-
-    async genericSqlGet(query, ...params) {
-        return new Promise((resolve, reject) => {
-            this.#db.all(query, params, (err, rows) => {
-                if (err) {
-                    console.log("Database get error: err", err);
-                    reject(err);
-                    
-                } else {
-                    resolve(rows)
-                }
-            })
-        })
-    } */
-
     /** execute an update/insert/delete given an istruction and params 
      * @throws 500
     */
@@ -59,6 +32,7 @@ class DBManager {
             })
         })
     }
+    
     /** execute a select given an istruction and params 
          * @throws 500
         */
@@ -68,7 +42,6 @@ class DBManager {
                 if (err) {
                     console.log("Database get error: err", err);
                     reject(new Exceptions(500));
-
                 } else {
                     resolve(rows)
                 }
