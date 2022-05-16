@@ -78,20 +78,6 @@ class RestockOrderController {
         return skuItems;
     }
 
-    /** @throws 500 */
-    async getFailedTests(rfid) {
-        let tests;
-        await this.#dbManager.genericSqlGet(`SELECT Result FROM TestResult WHERE RFID = ?;`, rfid)
-            .then((res) => {
-                if (res === false) {
-                    tests = [...tests, { "SKUId": rows[i].SKUId, "rfid": rows[i].RFID }]
-                }
-            })
-            .catch((error) => { throw error });
-
-        return tests;
-    }
-
     /**TO BE CHECKED - getter function to retreive all the issued restock orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
@@ -196,35 +182,17 @@ class RestockOrderController {
         if (row.state !== 'COMPLETEDRETURN')
             throw new Exceptions(422)
 
-
-        let skuItems;
-        await this.getSKUItemsForOrders(id)
-            .then(value => skuItems = value)
-            .catch((error) => { throw error });
-
-        
-        for (let j = 0; j < skuItems.length; j++) {
-            await this.getFailedTests(skuItems[j].RFID)
-                .then(value => row.skuItems = value)
-                .catch((error) => { throw error });
-
-        }
-        
-        /*
         let failedProducts;
         let failedProductsToReturn = []
         await this.#dbManager.genericSqlGet('SELECT Distinct RFID FROM TestResult WHERE Result = false')
-        .then(value => failedProducts = value);
+            .then(value => failedProducts = value);
 
         for (let j = 0; j < skuItems.length; j++) {
-            if(failedProducts.includes(skuItems[i].rfid))
+            if (failedProducts.includes(skuItems[i].rfid))
                 failedProductsToReturn = [...failedProductsToReturn, skuItems[i]];
-        return failedProductsToReturn;
-            */
+            return failedProductsToReturn;
 
-        return row.skuItems;
-
-
+        }
     }
 
     /**TO BE CHECKED - creation of a restock order
@@ -330,7 +298,7 @@ class RestockOrderController {
 
         const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`
         for (let i = 0; i < skuItems.length; i++) {
-            await this.#dbManager.genericSqlRun(sqlInsert, id , skuItems[i].SKUId, skuItems[i].RFID)
+            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].RFID)
                 .catch((error) => { throw new Exceptions(503) })
         }
 
