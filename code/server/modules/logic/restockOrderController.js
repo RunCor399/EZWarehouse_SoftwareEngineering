@@ -29,34 +29,87 @@ class RestockOrderController {
             .then(value => rows = value)
             .catch(error => { throw error });
 
+        if (!rows) {
+            const newRows = await this.getProductsForOrders(rows);
+            const newRows2 = await this.getTransportNote(rows);
+            const newRows3 = await this.getSKUItemsForOrders(rows);
+
+            return newRows3;
+        }
 
         /*TO BE CHECKED*/
-        rows.forEach(async (r) => {
+        /*rows.forEach(async (r) => {
             r.products = [];
             r.skuItems = [];
             if (r.state !== 'DELIVERY' || r.state !== 'ISSUED') {
-                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ?;`, r.id)
+
+                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
                     .then(value => r.products.forEach(value => {
                         r.products = [...r.products, value];
                     }))
-                    .catch(error => { throw error });
+                    .catch(error => { throw new Error(Exceptions.message500) });
 
-                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ?;`, r.id)
+                await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItemsPerRestockOrder WHERE id = ${r.id};`)
                     .then(value => r.skuItems.forEach(value => {
                         r.skuItems = [...r.skuItems, value];
                     }))
-                    .catch(error => { throw error });
+                    .catch(error => { throw new Error(Exceptions.message500) });
             }
 
             if (r.state !== 'ISSUED') {
                 let ship;
-                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE ID=?;`, id)
+                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE ID="${id};`)
                     .then(value => ship = JSON.stringify(value[0]))
-                    .catch(error => { throw error });
+                    .catch(error => { throw new Error(Exceptions.message503) });
                 r.transportNote = ship;
             }
-        })
+        })*/
 
+        return rows;
+    }
+
+    async getProductsForOrders(rows) {
+        //rows.products = [];
+        for (let i = 0; i < rows.length; i++) {
+            //console.log("info",rows[i]);
+            if (rows[i].state !== 'DELIVERY' || rows[i].state !== 'ISSUED') {
+                await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, rows[i].id)
+                    .then(value => {
+                        rows[i].products = value[0] === undefined ? undefined : value[0]
+                    })
+                    .catch(error => { throw error });
+            }
+        }
+        return rows;
+    }
+
+    async getTransportNote(rows) {
+        //rows.transportNote = [];
+        for (let i = 0; i < rows.length; i++) {
+            //console.log("info",rows[i]);
+            if (rows[i].state !== 'ISSUED') {
+                await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id = ?;`, rows[i].id)
+                    .then(value => {
+                        rows[i].transportNote = value[0] === undefined ? undefined : value[0]
+                    })
+                    .catch(error => { throw error });
+            }
+        }
+        return rows;
+    }
+
+    async getSKUItemsForOrders(rows) {
+        //rows.skuItems = [];
+        for (let i = 0; i < rows.length; i++) {
+            //console.log("info",rows[i]);
+            if (rows[i].state !== 'DELIVERY' || rows[i].state !== 'ISSUED') {
+                await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, rows[i].id)
+                    .then(value => {
+                        rows[i].skuItems = value[0] === undefined ? undefined : value[0]
+                    })
+                    .catch(error => { throw error });
+            }
+        }
         return rows;
     }
 
