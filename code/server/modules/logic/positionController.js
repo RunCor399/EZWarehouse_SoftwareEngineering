@@ -109,10 +109,11 @@ class PositionController {
 
         
         //checks if new generated positionID will match another one already existing
+        const newPositionID = newAisleID + "" + newRow + "" + newCol;
         let exists;
         await this.positionExists(newAisleID + "" + newRow + "" + newCol).then((result) => exists = result );
             
-        if(exists){
+        if(exists && (id != newPositionID)){
             throw new Exceptions(422);
         }
 
@@ -134,7 +135,7 @@ class PositionController {
         await this.deletePosition(id)
             .catch(error => { throw error });
 
-        const newPositionID = newAisleID + "" + newRow + "" + newCol;
+        
 
         let newBody =
         {

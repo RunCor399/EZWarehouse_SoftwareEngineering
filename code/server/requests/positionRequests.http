@@ -24,17 +24,17 @@ content-type: application/json
         }
 
 ###
-PUT http://localhost:3001/api/position/300234543413 HTTP/1.1
+PUT http://localhost:3001/api/position/800434543412 HTTP/1.1
 content-type: application/json
 
   {
-            "newAisleID": "5002",
-            "newRow": "2454",
-            "newCol": "2413",
-            "newMaxWeight": 1200,
-            "newMaxVolume": 600,
-            "newOccupiedWeight": 200,
-            "newOccupiedVolume":100
+            "newAisleID": "8004",
+            "newRow": "3454",
+            "newCol": "3412",
+            "newMaxWeight": 100000,
+            "newMaxVolume": 100000,
+            "newOccupiedWeight": 0,
+            "newOccupiedVolume":0
         }
 
 ###

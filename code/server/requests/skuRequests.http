@@ -11,7 +11,7 @@ GET http://localhost:3001/api/skus HTTP/1.1
 content-type: application/json
 
 ###
-GET http://localhost:3001/api/skus/3 HTTP/1.1
+GET http://localhost:3001/api/skus/1 HTTP/1.1
 content-type: application/json
 
 ###
@@ -19,17 +19,17 @@ POST http://localhost:3001/api/sku HTTP/1.1
 content-type: application/json
 
  {
-        "description" : "abcd",
+        "description" : "ciao",
         "weight" : 100,
         "volume" : 50,
-        "notes" : "first SKU",
-        "price" : 10.99,
-        "availableQuantity" : 50
+        "notes" : "second SKU",
+        "price" : 13.99,
+        "availableQuantity" : 2
     }
 
 ###
 
-PUT http://localhost:3001/api/sku/3 HTTP/1.1
+PUT http://localhost:3001/api/sku/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -42,11 +42,11 @@ content-type: application/json
 }
 
 ###
-PUT http://localhost:3001/api/sku/1/position HTTP/1.1
+PUT http://localhost:3001/api/sku/2/position HTTP/1.1
 content-type: application/json
 
 {
-    "position": "800234543412"
+    "position": "800434543412"
 }
 ###
 DELETE http://localhost:3001/api/skus/5 HTTP/1.1
