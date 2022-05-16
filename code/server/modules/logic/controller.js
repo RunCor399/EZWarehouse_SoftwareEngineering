@@ -12,7 +12,9 @@ const ItemController = require("./itemController");
 const DBManager = require("../database/databaseManager");
 const SkuItemController = require("./skuItemController");
 const Exceptions = require("../../routers/exceptions");
-
+const dayjs = require("dayjs");
+const customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
 class Controller {
 
     #itemController;
@@ -40,6 +42,7 @@ class Controller {
         this.#returnOrderController = new ReturnOrderController(this);
         this.#internalOrderController = new InternalOrderController(this);
         console.log("general Controller started");
+        console.log(this.checkAndFormatDate())
 
     }
 
@@ -140,6 +143,17 @@ class Controller {
             "COMPLETEDRETURN", "COMPLETED"]
         return validStates.includes(String(state));
     }
+
+    checkAndFormatDate(date) {
+
+    
+        if (dayjs(date, "YYYY/MM/DD", true).isValid() || dayjs(date, "YYYY/MM/DD HH:mm", true).isValid()) {
+            let formattedDate = (dayjs(date).hour() === 0 && dayjs(date).minute() === 0) ? dayjs(date).format("YYYY/MM/DD") : dayjs(date).format("YYYY/MM/DD HH:mm")
+            return formattedDate
+        }
+        throw new Exceptions(422);
+    }
+
 }
 
 module.exports = Controller;
