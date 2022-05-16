@@ -42,11 +42,11 @@ content-type: application/json
 }
 
 ###
-PUT http://localhost:3001/api/sku/2/position HTTP/1.1
+PUT http://localhost:3001/api/sku/1/position HTTP/1.1
 content-type: application/json
 
 {
-    "position": "800434543412"
+    "position": "500224542413"
 }
 ###
 DELETE http://localhost:3001/api/skus/5 HTTP/1.1
