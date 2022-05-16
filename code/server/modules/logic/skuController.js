@@ -32,14 +32,16 @@ class SkuController {
             .catch(error => { throw error });
 
         if (!rows) {
-            let newRows; 
-            await this.getPositionForSKU(rows)
-                .then(value => newRows = value)
-            let newNewRows;
-            await this.getTestDescriptorsForSKU(newRows)
-            .then(value => newNewRows = value)
 
-            return newNewRows;
+            for (let i = 0; i < rows.length; i++) {
+                await this.getPositionForSKU(rows[i].id)
+                    .then(value => rows[i].position = value)
+                    .catch(error => { throw error });
+                await this.getTestDescriptorsForSKU(rows[i].id)
+                    .then(value => rows[i].testDescriptors = value)
+                    .catch(error => { throw error });
+
+            }
         }
 
         return rows;
@@ -47,51 +49,31 @@ class SkuController {
 
     }
 
-    /** given an array of skus, this function returns the same
-     * array with position informations
+    /** given sku id, this function returns position informations
      * @param rows the sku existing in the database
      * @throws 500 Internal Server Error (generic error).
       */
-    async getPositionForSKU(rows) {
+    async getPositionForSKU(id) {
 
-
-        for (let i = 0; i < rows.length; i++) {
-            //console.log("info",rows[i]);
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?;`, rows[i].id)
-                .then(value => {
-                    //console.log(value[0])
-                    rows[i].position = value[0] === undefined ? undefined : value[0].positionID
-                })
-                .catch(error => { throw error });
-            //console.log("info",rows[i].position);
-        }
-
-        //console.log("newRows", rows);
-
-        return rows;
+        await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?;`, id)
+            .then(value => { positionID = value[0] === undefined ? undefined : value[0].positionID })
+            .catch(error => { throw error });
+        return positionID;
 
     }
 
-    /** given an array of skus, this function returns the same
-    * array with test descriptors informations
+    /** given an sku id, this function returns the test descriptors informations
     *  @param rows the sku existing in the database
     * @throws 500 Internal Server Error (generic error).*/
-    async getTestDescriptorsForSKU(rows) {
+    async getTestDescriptorsForSKU(id) {
 
-        for (let i = 0; i < rows.length; i++) {
-            await this.#dbManager.genericSqlGet(`SELECT id FROM TestDescriptor WHERE idSKU = ?;`, rows[i].id)
-                .then(value => {
-                    if (!value)
-                        rows[i].testDescriptors = undefined;
-                    else rows[i].testDescriptors = value.map(v => v.id)
-                })
-                .catch(error => { throw error });
-            //console.log("info",rows[i].position);
-        }
-
-        //console.log("newNewRows", rows);
-        return rows;
+        let testDescriptors
+        await this.#dbManager.genericSqlGet(`SELECT id FROM TestDescriptor WHERE idSKU = ?;`, id)
+            .then(value => { testDescriptors = value === undefined ? undefined : value.map(v => v.id) })
+            .catch(error => { throw error });
+        return testDescriptors;
     }
+
 
 
     /**getter function to retreive a single SKU, given its ID.
@@ -116,6 +98,14 @@ class SkuController {
             .catch(error => { throw error })
         if (!sku)
             throw new Exceptions(404);
+
+        await this.getPositionForSKU(id)
+            .then(value => sku.position = value)
+            .catch(error => { throw error });
+
+        await this.getTestDescriptorsForSKU(id)
+            .then(value => sku.testDescriptors = value)
+            .catch(error => { throw error });
 
         return sku;
 
