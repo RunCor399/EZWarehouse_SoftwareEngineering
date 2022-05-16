@@ -110,7 +110,7 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id)) || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
 
@@ -148,7 +148,9 @@ class InternalOrderController {
         const customerId = body["customerId"]
 
         /*check if the body is valid */
-        if (this.#controller.areUndefined(issueDate, products, customerId) || isNaN(Number(customerId)))
+        if (this.#controller.areUndefined(issueDate, products, customerId) 
+        || isNaN(Number(customerId))
+        || !this.#controller.areAllPositive(customerId))
             throw new Exceptions(422);
 
 
@@ -186,7 +188,9 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (this.#controller.areUndefined(id, newState) || isNaN(Number(id)))
+        if (this.#controller.areUndefined(id, newState) 
+        || isNaN(Number(id))
+        || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         if (!this.#controller.checkStateInternalOrders(newState))
@@ -234,7 +238,9 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id 
+            || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM InternalOrder WHERE ID = ?;`, id)

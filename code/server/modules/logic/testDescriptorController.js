@@ -41,7 +41,9 @@ class TestDescriptorController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401)
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id) 
+        || this.#controller.areNotNumbers(id)
+        || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         let row;
@@ -70,7 +72,8 @@ class TestDescriptorController {
         const idSKU = body["idSKU"];
 
         if (this.#controller.areUndefined(name, procedureDescription, idSKU)
-            || this.#controller.areNotNumbers(idSKU))
+            || this.#controller.areNotNumbers(idSKU)
+            || !this.#controller.areAllPositive(idSKU))
             throw new Exceptions(422);
 
         let sku;
@@ -101,7 +104,8 @@ class TestDescriptorController {
         const newIdSKU = body["newIdSKU"];
 
         if (this.#controller.areUndefined(newName, newProcedureDescription, newIdSKU, id)
-            || this.#controller.areNotNumbers(newIdSKU, id))
+            || this.#controller.areNotNumbers(newIdSKU, id)
+            || !this.#controller.areAllPositive(newIdSKU, id))
             throw new Exceptions(422);
 
 
@@ -133,7 +137,9 @@ class TestDescriptorController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id) 
+        || this.#controller.areNotNumbers(id)
+        || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun

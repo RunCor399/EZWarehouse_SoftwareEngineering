@@ -40,6 +40,7 @@ class Controller {
         this.#returnOrderController = new ReturnOrderController(this);
         this.#internalOrderController = new InternalOrderController(this);
         console.log("general Controller started");
+
     }
 
     getUserController() {
@@ -117,6 +118,14 @@ class Controller {
 
     checkRFID(rfid) {
         return (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
+    }
+
+    areAllPositive(...numbers) {
+        for (let i = 0; i < numbers.length; i++) {
+            if (Number(numbers[i]) <= 0)
+                return false;
+        }
+        return true;
     }
 
     checkStateInternalOrders(state) {

@@ -49,8 +49,10 @@ class TestResultController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id)
-            || this.#controller.checkRFID(rfid))
+        if (this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(id)
+            || this.#controller.checkRFID(rfid)
+            || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
         await this.#controller.getSkuItemController().getSkuItem(rfid)
@@ -86,7 +88,8 @@ class TestResultController {
 
         if (this.#controller.checkRFID(rfid) ||
             this.#controller.areUndefined(idTestDescriptor, date, result)
-            || this.#controller.areNotNumbers(idTestDescriptor))
+            || this.#controller.areNotNumbers(idTestDescriptor)
+            || !this.#controller.areAllPositive(idTestDescriptor))
             throw new Exceptions(422)
 
         await this.#controller.getSkuItemController().getSkuItem(rfid)
@@ -118,7 +121,8 @@ class TestResultController {
 
         if (this.#controller.areUndefined(newIdTestDescriptor, newDate, newResult, id)
             || this.#controller.areNotNumbers(id)
-            || this.#controller.checkRFID(rfid))
+            || this.#controller.checkRFID(rfid)
+            || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
 
@@ -147,8 +151,10 @@ class TestResultController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Exceptions(401);
 
-        if (this.#controller.checkRFID(rfid) || this.#controller.areUndefined(id)
-            || this.#controller.areNotNumbers(id))
+        if (this.#controller.checkRFID(rfid)
+            || this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(id)
+            || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun

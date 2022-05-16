@@ -121,7 +121,8 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         let row;
@@ -175,7 +176,8 @@ class RestockOrderController {
             throw new Exceptions(404)
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         /*check if the state of the restock order is COMPLETEDRETURN */
@@ -211,7 +213,9 @@ class RestockOrderController {
         const supplierId = body["supplierId"]
 
         /*check if the body is valid*/
-        if (this.#controller.areUndefined(issueDate, products, supplierId), isNaN(Number(supplierId)))
+        if (this.#controller.areUndefined(issueDate, products, supplierId)
+            || isNaN(Number(supplierId))
+            || !this.#controller.areAllPositive(supplierId))
             throw new Exceptions(422);
 
         let id;
@@ -322,7 +326,8 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         let row;
@@ -359,7 +364,8 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM RestockOrder WHERE ID=?;`, id)

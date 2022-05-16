@@ -43,7 +43,9 @@ class SkuItemController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id) 
+        || this.#controller.areNotNumbers(id)
+        || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         let sku;
@@ -105,7 +107,8 @@ class SkuItemController {
 
         if (this.#controller.checkRFID(RFID)
             || this.#controller.areUndefined(SKUId, dateOfStock)
-            || this.#controller.areNotNumbers(SKUId))
+            || this.#controller.areNotNumbers(SKUId)
+            || !this.#controller.areAllPositive(SKUId))
             throw new Exceptions(422);
 
         let sku;

@@ -3,7 +3,8 @@
 'use strict'
 
 const Exceptions = require('../../routers/exceptions');
-const Controller = require('./controller')
+const Controller = require('./controller');
+const SkuItemController = require('./skuItemController');
 class ItemController {
     /** @type {Controller} */
     #controller;
@@ -45,7 +46,8 @@ class ItemController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         let row;
@@ -81,7 +83,9 @@ class ItemController {
 
 
         /*check if the body is valid*/
-        if (this.#controller.areUndefined(id, description, price, SKUId, supplierId) || this.#controller.areNotNumbers(id, price, SKUId, supplierId))
+        if (this.#controller.areUndefined(id, description, price, SKUId, supplierId)
+            || this.#controller.areNotNumbers(id, price, SKUId, supplierId)
+            || !this.#controller.areAllPositive(id, price, SKUId, supplierId))
             throw new Exceptions(422);
 
         /*check if the supplier already sells an item with the same SKUId*/
@@ -89,19 +93,19 @@ class ItemController {
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE SKUid = ? AND supplierId = ?', SKUId, supplierId)
             .then(value => item = value[0])
             .catch(error => { throw error });
-        if (item !== undefined){
+        if (item !== undefined) {
             throw new Exceptions(422);
-        } 
-            
+        }
+
 
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE id=?', id)
-        .then(value => item = value[0])
-        .catch(error => {if (error.getCode() === 500) throw new Exceptions(503); else throw error })
-        if (item !== undefined){
+            .then(value => item = value[0])
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+        if (item !== undefined) {
             throw new Exceptions(422);
-        } 
+        }
 
-       
+
         /*check if sku exists in the SKU table*/
         await this.#controller.getSkuController().getSku(SKUId)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
@@ -129,11 +133,13 @@ class ItemController {
         const newPrice = body["newPrice"];
 
         /*check if the body is valid*/
-        if (this.#controller.areUndefined(newDescription, newPrice) || isNaN(Number(newPrice)))
+        if (this.#controller.areUndefined(newDescription, newPrice)
+            || isNaN(Number(newPrice))
+            || !this.#controller.areAllPositive(newPrice))
             throw new Exceptions(422);
 
         await this.getItem(id)
-        .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE SKUid= ?;`, newDescription, newPrice, id)
             .catch(error => { throw new Exceptions(503) });
@@ -152,11 +158,12 @@ class ItemController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (isNaN(Number(id)) || !id)
+        if (isNaN(Number(id)) || !id
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE ID= ?;`, id)
-                             .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw new Exceptions(503) });
     }
 
 }

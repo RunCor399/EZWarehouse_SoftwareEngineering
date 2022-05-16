@@ -60,6 +60,7 @@ class PositionController {
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||
             this.#controller.areNotNumbers(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
+            || !this.#controller.areAllPositive(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
             || String(positionID).length !== 12 || String(aisleID).length !== 4
             || String(row).length !== 4 || String(col).length !== 4
             || !this.checkPositionID(positionID, aisleID, row, col))
@@ -101,6 +102,7 @@ class PositionController {
 
         if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume) ||
             this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
+            || !this.#controller.areAllPositive(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
             || String(id).length !== 12 || String(newAisleID).length !== 4
             || String(newRow).length !== 4 || String(newCol).length !== 4){
 

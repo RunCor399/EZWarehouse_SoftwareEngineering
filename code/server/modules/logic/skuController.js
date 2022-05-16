@@ -91,7 +91,7 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id) || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         let sku;
@@ -102,7 +102,7 @@ class SkuController {
         if (!sku)
             throw new Exceptions(404);
 
-        
+
 
         await this.getPositionForSKU(id)
             .then(value => sku.position = value)
@@ -140,7 +140,8 @@ class SkuController {
 
         //validation of the body
         if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
-            || this.#controller.areNotNumbers(weight, volume, price, availableQuantity))
+            || this.#controller.areNotNumbers(weight, volume, price, availableQuantity)
+            || !this.#controller.areAllPositive(weight, volume, price, availableQuantity))
             throw new Exceptions(422);
 
 
@@ -190,7 +191,8 @@ class SkuController {
         const newPrice = body["newPrice"];
         const newAvailableQuantity = body["newAvailableQuantity"];
 
-        if (!id || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id))
+        if (!id || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id)
+            || !this.#controller.areAllPositive(id, newWeight, newVolume, newPrice, newAvailableQuantity))
             throw new Exceptions(422)
 
         //check if sku has position
@@ -225,7 +227,7 @@ class SkuController {
 
     }
 
-    
+
     /** CHECK IF UPDATE OF POSITION PARAMS IS WORKING (WEIGHT, VOLUME)
      * @throws  401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not found (Position not existing or SKU not existing)
@@ -234,20 +236,21 @@ class SkuController {
     */
     async setPosition(id, body) {
         //permission check
-        if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk")){
+        if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk")) {
             throw new Exceptions(401);
         }
-            
+
 
         const positionId = body["position"];
 
         //validation of the body
-        if (this.#controller.areUndefined(positionId, id) || this.#controller.areNotNumbers(id)){
+        if (this.#controller.areUndefined(positionId, id) || this.#controller.areNotNumbers(id)
+            || String(positionId).length !== 12 || !this.#controller.areAllPositive(positionId)) {
             throw new Exceptions(422);
         }
-            
-        
-            
+
+
+
 
         //search sku
         let sku;
@@ -306,7 +309,7 @@ class SkuController {
         await this.#dbManager.genericSqlRun(`INSERT INTO SKU_in_Position (SKUId, positionID) VALUES (?, ?)`, id, positionId)
             .catch((error) => { throw new Exceptions(503) });
 
-        
+
         const updatedNewOccupiedVolume = position.occupiedVolume + (sku.volume * sku.availableQuantity);
         const updatedNewOccupiedWeight = position.occupiedWeight + (sku.weight * sku.availableQuantity);
 
@@ -330,7 +333,9 @@ class SkuController {
             throw new Exceptions(401);
 
         //validation of id
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(id)
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE id= ?;`, id)
