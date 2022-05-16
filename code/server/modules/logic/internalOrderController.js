@@ -155,17 +155,17 @@ class InternalOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503)  });
 
         await this.#dbManager
             .genericSqlRun(`INSERT INTO InternalOrder (id, issueDate, state, customerId) VALUES (?, ?, "ISSUED", ?);`,
                 id + 1, issueDate, customerId)
-            .catch(error => { throw error })
+            .catch(error => { throw new Exceptions(503)  })
 
         const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
         for (let i = 0; i < products.length; i++) {
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
-                .catch(error => { throw error })
+                .catch(error => { throw new Exceptions(503)  })
         }
 
 
@@ -201,7 +201,7 @@ class InternalOrderController {
             throw new Exceptions(404)
 
         if (newState === "COMPLETED") {
-            
+
             const products = body["products"];
             if (!products)
                 throw new Exceptions(422);
@@ -209,7 +209,7 @@ class InternalOrderController {
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (?, ?, ?);`;
             for (let i = 0; i < products.length; i++) {
                 await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SKUId, products[i].RFID)
-                    .catch(error => { throw error });
+                    .catch(error => { throw new Exceptions(503) });
             }
 
         }
@@ -217,7 +217,7 @@ class InternalOrderController {
             const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
 
             await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
-                .catch(error => { throw error; })
+                .catch(error => { throw new Exceptions(503)  })
         }
     }
 
@@ -238,7 +238,7 @@ class InternalOrderController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM InternalOrder WHERE ID = ?;`, id)
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503)  });
     }
 
 }
