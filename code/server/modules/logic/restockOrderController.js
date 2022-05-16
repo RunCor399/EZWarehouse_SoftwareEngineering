@@ -38,7 +38,7 @@ class RestockOrderController {
             .catch(error => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
-            if (rows[i].state !== 'DELIVERY' || rows[i].state !== 'ISSUED') {
+            if (rows[i].state !== 'ISSUED' && rows[i].state !== 'DELIVERY') {
                 await this.getProductsPerOrder(rows[i].id)
                     .then(value => rows[i].products = value)
                     .catch(error => { throw error });
@@ -60,7 +60,7 @@ class RestockOrderController {
         /*rows.forEach(async (r) => {
             r.products = [];
             r.skuItems = [];
-            if (r.state !== 'DELIVERY' || r.state !== 'ISSUED') {
+            if (r.state !== 'DELIVERY' && r.state !== 'ISSUED') {
 
                 await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerRestockOrder WHERE id = ${r.id};`)
                     .then(value => r.products.forEach(value => {
@@ -202,7 +202,7 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
         let row;
@@ -214,7 +214,7 @@ class RestockOrderController {
         if (!row)
             throw new Exceptions(404)
 
-        if (row.state !== 'DELIVERY' || row.state !== 'ISSUED') {
+        if (row.state !== 'DELIVERY' && row.state !== 'ISSUED') {
             await this.getProductsPerOrder(row.id)
                 .then(value => row.products = value)
                 .catch(error => { throw error });
@@ -284,7 +284,7 @@ class RestockOrderController {
             throw new Exceptions(404)
 
         /*check if the id is valid*/
-        if (!id || isNaN(id))
+        if (!id || isNaN(Number(id)))
             throw new Exceptions(422);
 
         /*check if the state of the restock order is COMPLETEDRETURN */
