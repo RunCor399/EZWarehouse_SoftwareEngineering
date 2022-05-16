@@ -1,3 +1,5 @@
+//WORKING 
+
 'use strict'
 
 const Exceptions = require('../../routers/exceptions');
@@ -75,7 +77,8 @@ class ItemController {
         const description = body["description"];
         const price = body["price"];
         const SKUId = body["SKUId"]
-        const supplierId = body["supplierID"];
+        const supplierId = body["supplierId"];
+
 
         /*check if the body is valid*/
         if (this.#controller.areUndefined(id, description, price, SKUId, supplierId) || this.#controller.areNotNumbers(id, price, SKUId, supplierId))
@@ -86,16 +89,23 @@ class ItemController {
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE SKUid = ? AND supplierId = ?', SKUId, supplierId)
             .then(value => item = value[0])
             .catch(error => { throw error });
-        if (item !== undefined) throw new Exceptions(422);
+        if (item !== undefined){
+            throw new Exceptions(422);
+        } 
+            
 
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE id=?', id)
-        .then(value => item = value)
+        .then(value => item = value[0])
         .catch(error => {if (error.getCode() === 500) throw new Exceptions(503); else throw error })
-        if (item !== undefined) throw new Exceptions(422);
+        if (item !== undefined){
+            throw new Exceptions(422);
+        } 
 
+       
         /*check if sku exists in the SKU table*/
         await this.#controller.getSkuController().getSku(SKUId)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+
 
         await this.#dbManager.genericSqlRun(`INSERT INTO Item (id, description, price, SKUId, supplierId) 
         VALUES (?,?,?,?,?);`, id, description, price, SKUId, supplierId)
@@ -145,9 +155,8 @@ class ItemController {
         if (isNaN(Number(id)) || !id)
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun
-            (`DELETE FROM Item WHERE ID= ?;`, id)
-            .catch((error) => { throw new Exceptions(503) });
+        await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE ID= ?;`, id)
+                             .catch((error) => { throw new Exceptions(503) });
     }
 
 }
