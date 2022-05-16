@@ -388,10 +388,10 @@ class RestockOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Exceptions(401)
 
-        const newState = body["newState"];
+        const newState = body["newState"]
 
         /*check if the body is valid*/
-        if (!newState)
+        if (!newState || !this.#controller.checkStateRestockOrders(newState))
             throw new Exceptions(422);
 
         let row;
