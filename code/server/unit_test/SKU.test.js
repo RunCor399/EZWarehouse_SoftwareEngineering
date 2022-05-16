@@ -17,29 +17,30 @@ test("login as manager", async () => {
     expect(response.data.username).toMatch("manager1@ezwh.com");    
 });
 
-// test("get skus", async () => {
-//     const response = await skuAPICalls.getSKUsTest();
-//     console.log(response.data[2].id);
+test("get skus", async () => {
+    const response = await skuAPICalls.getSKUsTest();
+    console.log(response.data[2]);
 
-//     expect(response.status).toBe(200);
-// });
+    expect(response.status).toBe(200);
+});
 
-// test("add sku", async () => {
-//     let responseGet, responseAdd;
-//     let skuCountBefore, skuCountAfter;
+test("add sku", async () => {
+    let responseGet, responseAdd;
+    let skuCountBefore, skuCountAfter;
 
-//     //Check number of SKU's before add
-//     responseGet = await skuAPICalls.getSKUsTest();
-//     skuCountBefore = responseGet.data.length;
+    //Check number of SKU's before add
+    responseGet = await skuAPICalls.getSKUsTest();
+    skuCountBefore = responseGet.data.length;
 
-//     responseAdd = await skuAPICalls.addSKUTest();
+    responseAdd = await skuAPICalls.addSKUTest();
 
-//     //Check number of SKU's after add
-//     responseGet = await skuAPICalls.getSKUsTest();
-//     skuCountAfter = responseGet.data.length;
+    //Check number of SKU's after add
+    responseGet = await skuAPICalls.getSKUsTest();
+    skuCountAfter = responseGet.data.length;
 
-//     expect(skuCountAfter).toBe(skuCountBefore + 1);    
-// });
+    expect(skuCountAfter).toBe(skuCountBefore + 1);  
+
+});
 
 /*test("modify sku", async () => {
     //let response = await utilityCalls.login("manager1@ezwh.com", "testpassword");

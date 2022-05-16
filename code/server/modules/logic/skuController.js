@@ -106,11 +106,11 @@ class SkuController {
 
         await this.getPositionForSKU(id)
             .then(value => sku.position = value)
-            .catch(error => { throw new Exceptions(401) });
+            .catch(error => { throw error });
 
         await this.getTestDescriptorsForSKU(id)
             .then(value => sku.testDescriptors = value)
-            .catch(error => { throw new Exceptions(409) });
+            .catch(error => { throw error });
 
         return sku;
 
@@ -255,7 +255,7 @@ class SkuController {
             .then(value => sku = value)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
-        console.log(sku);
+        //console.log(sku);
         //search position
         let position;
         await this.#dbManager.genericSqlGet(`SELECT * FROM Position WHERE positionID = ?;`, positionId)
@@ -265,24 +265,34 @@ class SkuController {
         if (!position)
             throw new Exceptions(404);
 
-        console.log("test1", position.maxWeight < sku.weight * sku.availableQuantity + position.occupiedWeight);
-        console.log("test2", position.maxVolume < sku.volume * sku.availableQuantity + position.occupiedVolume);
+        //console.log(position.maxWeight, sku.weight * sku.availableQuantity + position.occupiedWeight);
+        //console.log("test1", position.maxWeight < sku.weight * sku.availableQuantity + position.occupiedWeight);
+
+        //console.log(position.maxVolume, sku.volume * sku.availableQuantity + position.occupiedVolume);
+        //console.log("test2", position.maxVolume < sku.volume * sku.availableQuantity + position.occupiedVolume);
 
         //verify if new position can contain sku
-        if (position.maxWeight < sku.weight * sku.availableQuantity
-            || position.maxVolume < sku.volume * sku.availableQuantity)
+        if (position.maxWeight < sku.weight * sku.availableQuantity + position.occupiedWeight
+            || position.maxVolume < sku.volume * sku.availableQuantity + position.occupiedVolume)
             throw new Exceptions(422);
 
-        //verify if position was already occupied
+        //verify if position was already occupied, if position's item is already the given one?
         let positionAlreadyOccupied;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE positionId = ?;`, positionId)
             .then(value => positionAlreadyOccupied = value[0])
             .catch(error => { throw new Exceptions(503) });
-        if (positionAlreadyOccupied !== undefined)
+        if ((positionAlreadyOccupied !== undefined)){
+            if(positionAlreadyOccupied.SKUId === id){
+                return;
+            }
+        
             throw new Exceptions(422);
+        }
+            
 
         //verify if sku had already a position
         let positionOccupiedBySku;
+        //console.log(id);
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?;`, id)
             .then(value => positionOccupiedBySku = value[0])
             .catch(error => { throw new Exceptions(503) });
@@ -296,6 +306,7 @@ class SkuController {
             const updatedOldOccupiedWeight = positionOccupiedBySku.occupiedWeight - (sku.weight * sku.availableQuantity);
             const updatedOldOccupiedVolume = positionOccupiedBySku.occupiedVolume - (sku.volume * sku.availableQuantity);
 
+            console.log(updatedOldOccupiedWeight, updatedOldOccupiedVolume);
             //reset position volume and weight
             await this.#dbManager.genericSqlRun('UPDATE Position SET occupiedWeight = ?, occupiedVolume = ? WHERE positionID = ?', updatedOldOccupiedWeight, updatedOldOccupiedVolume, positionOccupiedBySku.positionID)
                 .catch(error => { throw new Exceptions(503) })
