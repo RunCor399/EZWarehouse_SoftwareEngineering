@@ -18,7 +18,7 @@ class RestockOrderController {
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error). 
     */
-     async getAllRestockOrders() {
+    async getAllRestockOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder;";
         try {
@@ -130,7 +130,7 @@ class RestockOrderController {
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
     */
-     async getIssuedRestockOrders() {
+    async getIssuedRestockOrders() {
         /*let rows;
         const sqlInstruction = "SELECT * FROM RestockOrder WHERE state = 'ISSUED';";
         try {
@@ -187,7 +187,7 @@ class RestockOrderController {
      * @throws 422 Unprocessable Entity (validation of id failed)
      * @throws 500 Internal Server Error (generic error).
     */
-     async getRestockOrder(id) {
+    async getRestockOrder(id) {
         /*let rows
         const sqlInstruction = `SELECT * FROM RestockOrder WHERE ID="${id};`;
         try {
@@ -261,7 +261,7 @@ class RestockOrderController {
      * @throws 422 Unprocessable Entity (validation of id failed or restock order state != COMPLETEDRETURN)
      * @throws 500 Internal Server Error (generic error).
     */
-     async getRestockOrderToBeReturned(id) {
+    async getRestockOrderToBeReturned(id) {
 
         /* - get Restock Order with id
            - check if the state is COMPLETEDRETURN
@@ -359,16 +359,21 @@ class RestockOrderController {
         await this.#dbManager.genericSqlRun(sqlInstruction, issueDate, supplierId)
             .catch(error => { throw error });
 
+        const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
+        for (let i = 0; i < products.length; i++) {
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
+                .catch(error => { throw error; })
+        }
+
         /*TO BE CHECKED*/
-        products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`;
-
-            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, elem.SKUId, elem.description, elem.price, elem.qty)
-                .catch(error => {
-                    throw error;
-                })
-
-        })
+        /*products.forEach(async (elem) => {
+            const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (${id + 1}, ${elem.SKUId}, ${elem.description}, ${elem.price}, ${elem.qty});`;
+            try {
+                const restockOrder = await this.#dbManager.genericSqlRun(sqlInsert);
+            } catch (error) {
+                throw new Exceptions(503);
+            }
+        })*/
     }
 
     /**COMPLETED - function to edit a state of a restock order, given its ID
@@ -434,15 +439,22 @@ class RestockOrderController {
         if (row.state !== 'DELIVERED')
             throw new Exceptions(422)
 
-        /*TO BE CHECKED - loop of the products to be added into SKUItemsPerRestockOrder*/
+        const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`
+        for (let i = 0; i < skuItems.length; i++) {
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, skuItems[i].SKUId, skuItems[i].RFID)
+                .catch(error => { throw error; })
+        }
+
+        /*TO BE CHECKED - loop of the products to be added into SKUItemsPerRestockOrder
         skuItems.forEach(async (elem) => {
-            await this.#dbManager.genericSqlRun(`INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`,
-                id, elem.SKUId, elem.rfi)
-                .catch(error => { throw error });
-        })
+            const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (${id}, ${elem.SKUId}, ${elem.rfid});`;
+            try {
+                const restockOrder = await this.#dbManager.genericSqlRun(sqlInsert);
+            } catch (error) {
+                new error;
+            }
+        })*/
     }
-
-
 
     /**TO BE CHECKED - function to add a transport note to a restock order, given its ID
      *@throws  401 Unauthorized (not logged in or wrong permissions)
