@@ -36,16 +36,6 @@ class InternalOrderController {
                 .catch(error => { throw error })
         }
 
-        /*TO BE CHECKED
-        rows.forEach(async (r) => {
-            r.products = [];
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ?;`, r.id)
-                .then(value => r.products.forEach(value => {
-                    r.products = [...r.products, value];
-                }))
-                .catch(error => { throw error });
-        });*/
-
         return rows;
 
     }
@@ -75,16 +65,6 @@ class InternalOrderController {
             .then((value) => rows = value)
             .catch((error) => { throw error });
 
-        /*TO BE CHECKED
-        rows.forEach(async (r) => {
-            r.products = [];
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ?;`, r.id)
-                .then(value => r.products.forEach(value => {
-                    r.products = [...r.products, value];
-                }))
-                .catch(error => { throw error });
-        });*/
-
         for (let i = 0; i < rows.length; i++) {
             await this.getProductsForInternalOrder(rows[i].id)
                 .then(value => rows[i].products = value)
@@ -107,14 +87,6 @@ class InternalOrderController {
         await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
             .then((value) => rows = value)
             .catch((error) => { throw error });
-
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)
-
-        rows.forEach(async (r) => {
-            await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerInternalOrder WHERE id = ?;`, r.id)
-                .then(value => r.products = value) /*generation of the dictionary 
-                .catch(error => { throw error });
-        });*/
 
         for (let i = 0; i < rows.length; i++) {
             await this.getProductsForInternalOrder(rows[i].id)
@@ -150,14 +122,6 @@ class InternalOrderController {
         /*check if the internal order exists*/
         if (!row)
             throw new Exceptions(404);
-
-        /*TO BE COMPLETED - (it's missing something about the generation of the dictionary)
-        const query2 = `SELECT * FROM SKUPerInternalOrder WHERE id = ?;`;
-        await this.#dbManager.genericSqlGet(query2, id)
-            .then(value => row.products =
-                /*generation of the dictionary 
-                value)
-            .catch(error => { throw error });*/
 
         await this.getProductsForInternalOrder(row.id)
             .then(value => row.products = value)
@@ -195,22 +159,13 @@ class InternalOrderController {
 
         await this.#dbManager
             .genericSqlRun(`INSERT INTO InternalOrder (id, issueDate, state, customerId) VALUES (?, ?, "ISSUED", ?);`,
-                id+1, issueDate, customerId)
+                id + 1, issueDate, customerId)
             .catch(error => { throw error })
 
-
-        /*TO BE CHECKED
-        products.forEach(async (elem) => {
-            const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
-            await this.#dbManager.genericSqlRun(sqlInsert, id, elem.SKUId, elem.description, elem.price, elem.qty)
-                .catch(error => { throw error })
-        })*/
-
-
         const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
-        for (let i = 0; i < products.length; i++) { 
-            await this.#dbManager.genericSqlRun(sqlInsert, id+1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
-            .catch(error => {throw error})
+        for (let i = 0; i < products.length; i++) {
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
+                .catch(error => { throw error })
         }
 
 
@@ -233,14 +188,9 @@ class InternalOrderController {
         /*check if the id is valid*/
         if (this.#controller.areUndefined(id, newState) || isNaN(Number(id)))
             throw new Exceptions(422);
-        
+
         if (!this.#controller.checkStateInternalOrders(newState))
             throw new Exceptions(422);
-
-        /*  const query1 = `SELECT * FROM InternalOrder WHERE ID= ?;`;
-        await this.#dbManager.genericSqlGet(query1, id)
-        .then((value) => row = value[0])
-        .catch((error) => { throw error }); */
 
         /*check if the internal order exists*/
         let row;
@@ -251,27 +201,16 @@ class InternalOrderController {
             throw new Exceptions(404)
 
         if (newState === "COMPLETED") {
+            
             const products = body["products"];
             if (!products)
                 throw new Exceptions(422);
-
-            /*TO BE CHECKED
-            products.forEach(async (elem) => {
-                const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (?, ?, ?);`;
-                try {
-                    await this.#dbManager.genericSqlRun(sqlInsert, id, elem.SKUId, elem.rfid);
-                } catch (error) {
-                    throw error;
-                }
-            })
-            */
 
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (?, ?, ?);`;
             for (let i = 0; i < products.length; i++) {
                 await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SKUId, products[i].RFID)
                     .catch(error => { throw error });
             }
-
 
         }
         else {

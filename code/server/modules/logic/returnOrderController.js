@@ -28,16 +28,6 @@ class ReturnOrderController {
             .then(value => rows = value)
             .catch(error => { throw error });
 
-        /*        rows.forEach(async (r) => {
-                    r.products = [];
-                    await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ?;`, r.id)
-                        .then(value => r.products.forEach(value => {
-                            r.products = [...r.products, value];
-                        }))
-                        .catch(error => { throw error });
-                });*/
-
-
         for (let i = 0; i < rows.length; i++) {
             await this.getProductsPerReturnOrder(rows[i].id)
                 .then(value => rows[i].products = value)
