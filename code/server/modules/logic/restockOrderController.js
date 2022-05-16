@@ -38,7 +38,7 @@ class RestockOrderController {
             .catch(error => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
-            if (rows[i].state !== 'DELIVERY' || rows[i].state !== 'ISSUED') {
+            if (rows[i].state !== 'DELIVERY' && rows[i].state !== 'ISSUED') {
                 await this.getProductsPerOrder(rows[i].id)
                     .then(value => rows[i].products = value)
                     .catch(error => { throw error });
@@ -214,7 +214,7 @@ class RestockOrderController {
         if (!row)
             throw new Exceptions(404)
 
-        if (row.state !== 'DELIVERY' || row.state !== 'ISSUED') {
+        if (row.state !== 'DELIVERY' && row.state !== 'ISSUED') {
             await this.getProductsPerOrder(row.id)
                 .then(value => row.products = value)
                 .catch(error => { throw error });
