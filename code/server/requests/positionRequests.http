@@ -15,8 +15,8 @@ POST http://localhost:3001/api/position HTTP/1.1
 content-type: application/json
 
    {
-            "positionID":"800234543413",
-            "aisleID": "8002",
+            "positionID":"300234543413",
+            "aisleID": "3002",
             "row": "3454",
             "col": "3413",
             "maxWeight": 1000000,
@@ -24,13 +24,13 @@ content-type: application/json
         }
 
 ###
-PUT http://localhost:3001/api/position/800234543412 HTTP/1.1
+PUT http://localhost:3001/api/position/300234543413 HTTP/1.1
 content-type: application/json
 
   {
-            "newAisleID": "8004",
-            "newRow": "3454",
-            "newCol": "3412",
+            "newAisleID": "5002",
+            "newRow": "2454",
+            "newCol": "2413",
             "newMaxWeight": 1200,
             "newMaxVolume": 600,
             "newOccupiedWeight": 200,
@@ -38,15 +38,15 @@ content-type: application/json
         }
 
 ###
-PUT http://localhost:3001/api/position/800234543412/changeID HTTP/1.1
+PUT http://localhost:3001/api/position/123456789012/changeID HTTP/1.1
 content-type: application/json
 
 {
-            "newPositionID": "123456789012"
+            "newPositionID": "800434543412"
         }
 
 ###
-DELETE http://localhost:3001/api/position/800234543412 HTTP/1.1
+DELETE http://localhost:3001/api/position/123456789012 HTTP/1.1
 content-type: application/json
 
 ###

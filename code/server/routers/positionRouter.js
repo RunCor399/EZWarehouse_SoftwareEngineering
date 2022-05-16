@@ -24,6 +24,7 @@ router.post('/api/position', async (req, res) => {
   const controller = req.app.get("controller");
   console.log('POST',req.url);
 
+
   await controller.getPositionController().createPosition(req.body)
     .then(() => { return res.status(201).end(); })
     .catch(error => {console.log(error); return res.status(error.getCode()).send(error.getMessage()); });

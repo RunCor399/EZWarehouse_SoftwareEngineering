@@ -56,7 +56,7 @@ class PositionController {
         const occupiedWeight = !body["occupiedWeight"] ? 0 : body["occupiedWeight"];
         const occupiedVolume = !body["occupiedVolume"] ? 0 : body["occupiedVolume"];
 
-
+        console.log(body);
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||
             this.#controller.areNotNumbers(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
@@ -64,6 +64,14 @@ class PositionController {
             || String(row).length !== 4 || String(col).length !== 4
             || !this.checkPositionID(positionID, aisleID, row, col))
             throw new Exceptions(422);
+
+        let exists;
+        await this.positionExists(positionID).then((result) => exists = result );
+            
+        if(exists){
+            throw new Exceptions(422);
+        }
+        
 
         const sqlInstruction = `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES (?,?,?,?,?,?,?,?);`;
 
@@ -90,12 +98,25 @@ class PositionController {
         const newOccupiedWeight = body["newOccupiedWeight"];
         const newOccupiedVolume = body["newOccupiedVolume"];
 
+
         if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume) ||
-            this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume, id, newAisleID, newRow, newCol)
+            this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
             || String(id).length !== 12 || String(newAisleID).length !== 4
-            || String(newRow).length !== 4 || String(newCol).length !== 4
-            || !this.checkPositionID(id, newAisleID, newRow, newCol))
+            || String(newRow).length !== 4 || String(newCol).length !== 4){
+
+                throw new Exceptions(422);
+            }
+
+        
+        //checks if new generated positionID will match another one already existing
+        let exists;
+        await this.positionExists(newAisleID + "" + newRow + "" + newCol).then((result) => exists = result );
+            
+        if(exists){
             throw new Exceptions(422);
+        }
+
+            
 
         console.log("provaInFunction", id, body)
 
@@ -113,9 +134,11 @@ class PositionController {
         await this.deletePosition(id)
             .catch(error => { throw error });
 
+        const newPositionID = newAisleID + "" + newRow + "" + newCol;
+
         let newBody =
         {
-            positionID: `${newAisleID}${newRow}${newCol}`,
+            positionID: newPositionID,
             aisleID: newAisleID,
             row: newRow,
             col: newCol,
@@ -188,9 +211,27 @@ class PositionController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
-            (`DELETE FROM Position WHERE positionID= $?;`, id)
+            (`DELETE FROM Position WHERE positionID = ?;`, id)
             .catch((error) => { throw new Exceptions(503) });
 
+    }
+
+
+
+    async positionExists(positionID){
+        const query = "SELECT * FROM Position WHERE positionID = ?";
+        let position;
+
+        await this.#dbManager.genericSqlGet(query, positionID)
+                             .then(value => position = value[0]);
+
+
+        
+        //console.log(position !== undefined);
+
+        return new Promise((resolve) => {
+            position !== undefined ? resolve(true) : resolve(false)
+        })
     }
 
 
