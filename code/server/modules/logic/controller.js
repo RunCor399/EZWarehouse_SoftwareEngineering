@@ -102,7 +102,7 @@ class Controller {
         if (!user) return false;
       return this.#userController.hasPermission(user.type, validType);*/
         return true;
-        }
+    }
 
     areUndefined(...params) {
         //console.log(params);
@@ -119,6 +119,18 @@ class Controller {
         return (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
     }
 
+    checkStateInternalOrders(state) {
+        const validStates = ["ISSUED", "ACCEPTED", "REFUSED",
+            "CANCELED, COMPLETED"]
+        return validStates.includes(String(state));
+    }
+
+    checkStateRestockOrders(state) {
+
+        const validStates = ["ISSUED", "DELIVERY", "DELIVERED", "TESTED",
+            "COMPLETEDRETURN", "COMPLETED"]
+        return validStates.includes(String(state));
+    }
 }
 
 module.exports = Controller;
