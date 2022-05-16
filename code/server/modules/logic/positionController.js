@@ -47,7 +47,7 @@ class PositionController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        const positionID = body["positionID"];
+        const positionID = body["positionID"];  //the client calls it barcode
         const aisleID = body["aisleID"];
         const row = body["row"];
         const col = body["col"];
@@ -56,6 +56,7 @@ class PositionController {
         const occupiedWeight = !body["occupiedWeight"] ? 0 : body["occupiedWeight"];
         const occupiedVolume = !body["occupiedVolume"] ? 0 : body["occupiedVolume"];
 
+        console.log(body)
 
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||

@@ -137,11 +137,11 @@ class UserController {
 
         const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
 
+        console.log(username, hashedPassword)
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction, username, hashedPassword, type)
             .then(value => row = value[0])
             .catch(error => { throw error });
-
         if (!row)
             throw new Exceptions(401);
 
@@ -151,6 +151,7 @@ class UserController {
         this.#user.surname = row.surname;
         this.#user.type = row.type;
         this.#logged = true;
+
         return ({
             id: this.#user.id,
             username: this.#user.username,
@@ -183,7 +184,7 @@ class UserController {
         const oldType = body["oldType"];
         const newType = body["newType"];
 
-        if (this.#controller.areUndefined(username, oldType, newType) || newType === "manager")
+        if (this.#controller.areUndefined(username, oldType, newType) || oldType === "manager")
             throw new Exceptions(422);
 
         let users;
