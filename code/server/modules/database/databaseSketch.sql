@@ -125,6 +125,8 @@ CREATE TABLE InternalOrder(
 CREATE TABLE SKUPerInternalOrder(
     id INT,
     SKUId INT,
+    description VARCHAR(50),
+    price FLOAT,
     qty INT,
     PRIMARY KEY(id, SKUId),
     FOREIGN KEY(SKUId) REFERENCES SKU(Id),

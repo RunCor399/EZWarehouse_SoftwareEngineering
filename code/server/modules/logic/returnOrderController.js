@@ -95,7 +95,7 @@ class ReturnOrderController {
             .catch(error => { throw error })
 
         return products;
-        
+
     }
 
     /**TO BE CHECKED - function to create a return order
@@ -124,8 +124,9 @@ class ReturnOrderController {
             .catch((error) => { throw error; });
 
         /*check if the restock order exists*/
-        /* if (!row)
-            throw new Exceptions(404); */
+        if (!row)
+            throw new Exceptions(404);
+        
         for (let i = 0; i < products.length; i++) {
             await this.#controller.getSkuItemController().getSkuItem(products[i].RFID)
                 .catch(error => { throw error })
