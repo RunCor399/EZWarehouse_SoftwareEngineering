@@ -175,7 +175,7 @@ class SkuController {
             .then(value => sku = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
-        editParams = { "newDescription": "description", "newWeight": "weight", "newVolume": "volume", "newNotes": "notes", "newPrice": "price", "newAvailableQuantity": "availableQuantity" };
+        let editParams = { "newDescription": "description", "newWeight": "weight", "newVolume": "volume", "newNotes": "notes", "newPrice": "price", "newAvailableQuantity": "availableQuantity" };
 
         //If a param in the body is not present, the one relative to the old sku state is taken
         (Object.keys(editParams)).map((param) => {
