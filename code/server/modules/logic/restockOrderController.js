@@ -206,7 +206,7 @@ class RestockOrderController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -275,7 +275,7 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id="${id};`)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
