@@ -28,16 +28,6 @@ class ReturnOrderController {
             .then(value => rows = value)
             .catch(error => { throw error });
 
-        /*        rows.forEach(async (r) => {
-                    r.products = [];
-                    await this.#dbManager.genericSqlGet(`SELECT * FROM SKUPerReturnOrder WHERE id = ?;`, r.id)
-                        .then(value => r.products.forEach(value => {
-                            r.products = [...r.products, value];
-                        }))
-                        .catch(error => { throw error });
-                });*/
-
-
         for (let i = 0; i < rows.length; i++) {
             await this.getProductsPerReturnOrder(rows[i].id)
                 .then(value => rows[i].products = value)
@@ -84,7 +74,7 @@ class ReturnOrderController {
         return row;
     }
 
-
+    /** @throws 500 */
     async getProductsPerReturnOrder(id) {
         let products;
         await this.#dbManager.genericSqlGet(`
@@ -92,10 +82,10 @@ class ReturnOrderController {
         FROM SKUItemsPerReturnOrder AS sipro, SKU
         WHERE sipro.id = ? AND sipro.SKUId = SKU.id`, id)
             .then(value => products = value)
-            .catch(error => { throw error })
+            .catch(error => { throw error  })
 
         return products;
-        
+
     }
 
     /**TO BE CHECKED - function to create a return order
@@ -121,31 +111,32 @@ class ReturnOrderController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, restockOrderId)
             .then((value) => row = value[0])
-            .catch((error) => { throw error; });
+            .catch((error) => { throw new Exceptions(503)  });
 
         /*check if the restock order exists*/
-        /* if (!row)
-            throw new Exceptions(404); */
+        if (!row)
+            throw new Exceptions(404);
+        
         for (let i = 0; i < products.length; i++) {
             await this.#controller.getSkuItemController().getSkuItem(products[i].RFID)
-                .catch(error => { throw error })
+                .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); throw error })
         }
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM ReturnOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
 
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
                                 VALUES (?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, returnDate, restockOrderId)
-            .catch(error => { throw error; })
+            .catch(error => { throw new Exceptions(503)  })
 
         const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, RFID) VALUES (?,?,?);`;
         for (let i = 0; i < products.length; i++) {
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].RFID)
-                .catch(error => { throw error; })
+                .catch(error => { throw  new Exceptions(503) ; })
         }
 
 

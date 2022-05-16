@@ -67,7 +67,7 @@ router.post('/api/managerSessions', async (req, res) => {
   console.log('POST', req.url);
 
   await controller.getUserController().login(req.body, "manager")
-    .then(() => { return res.status(201).end() })
+    .then((value) => { return res.status(200).json(value) })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
