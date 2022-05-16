@@ -110,6 +110,8 @@ CREATE TABLE ReturnOrder(
 CREATE TABLE SKUItemsPerReturnOrder(
     id INT,
     SKUId INT,
+    description VARCHAR(50),
+    price FLOAT,
     RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),

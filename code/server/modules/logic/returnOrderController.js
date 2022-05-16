@@ -77,10 +77,10 @@ class ReturnOrderController {
     /** @throws 500 */
     async getProductsPerReturnOrder(id) {
         let products;
-        await this.#dbManager.genericSqlGet(`
-        SELECT sipro.SKUID, description, price, RFID
-        FROM SKUItemsPerReturnOrder AS sipro, SKU
-        WHERE sipro.id = ? AND sipro.SKUId = SKU.id`, id)
+        await this.#dbManager.genericSqlGet(
+        `SELECT SKUID, description, price, RFID
+        FROM SKUItemsPerReturnOrder
+        WHERE id = ? `, id)
             .then(value => products = value)
             .catch(error => { throw error  })
 
@@ -133,9 +133,9 @@ class ReturnOrderController {
         await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, returnDate, restockOrderId)
             .catch(error => { throw new Exceptions(503)  })
 
-        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, RFID) VALUES (?,?,?);`;
+        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?);`;
         for (let i = 0; i < products.length; i++) {
-            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].RFID)
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
                 .catch(error => { throw  new Exceptions(503) ; })
         }
 
