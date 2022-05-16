@@ -6,10 +6,10 @@ DROP TABLE ReturnOrder;
 DROP TABLE SKU;
 DROP TABLE SKUItem;
 DROP TABLE SKUItemsPerInternalOrder;
+DROP TABLE SKUItemsPerReturnOrder;
 DROP TABLE SKUItemsPerRestockOrder;
 DROP TABLE SKUPerInternalOrder;
 DROP TABLE SKUPerRestockOrder;
-DROP TABLE SKUPerReturnOrder;
 DROP TABLE SKU_in_Position;
 DROP TABLE TestDescriptor;
 DROP TABLE TestResult;
@@ -103,18 +103,17 @@ CREATE TABLE SKUItemsPerRestockOrder(
 CREATE TABLE ReturnOrder(
     id INTEGER  PRIMARY KEY,
     returnDate VARCHAR(50),
-    supplierID INT,
     restockOrderID INT,
-    FOREIGN KEY(supplierID) REFERENCES Users(id),
     FOREIGN KEY(id) REFERENCES RestockOrder(id)
 );
-CREATE TABLE SKUPerReturnOrder(
+
+CREATE TABLE SKUItemsPerReturnOrder(
     id INT,
     SKUId INT,
-    qty INT,
-    PRIMARY KEY(id, SKUId),
-    FOREIGN KEY(SKUId) REFERENCES SKU(id),
-    FOREIGN KEY(id) REFERENCES ReturnOrder(id)
+    RFID VARCHAR(50),
+    PRIMARY KEY(id, RFID),
+    FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
+    FOREIGN KEY(id) REFERENCES InternalOrder(id)
 );
 CREATE TABLE InternalOrder(
     id INTEGER  PRIMARY KEY,

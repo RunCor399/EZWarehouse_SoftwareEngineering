@@ -228,11 +228,10 @@ class RestockOrderController {
             .then(value => id = value[0]["COUNT(*)"])
             .catch(error => { throw error });
 
-        const params1 = [id, issueDate, supplierId];
         const sqlInstruction = `INSERT INTO RestockOrder ( id, issueDate, state, shipmentDate, supplierId) 
         VALUES (?, ?, "ISSUED", '', ?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, params1)
+        await this.#dbManager.genericSqlRun(sqlInstruction, issueDate, supplierId)
             .catch(error => { throw error });
 
         /*TO BE CHECKED*/
