@@ -32,8 +32,13 @@ class SkuController {
             .catch(error => { throw error });
 
         if (!rows) {
-            const newRows = await this.getPositionForSKU(rows);
-            const newNewRows = await this.getTestDescriptorsForSKU(newRows);
+            let newRows; 
+            await this.getPositionForSKU(rows)
+                .then(value => newRows = value)
+            let newNewRows;
+            await this.getTestDescriptorsForSKU(newRows)
+            .then(value => newNewRows = value)
+
             return newNewRows;
         }
 
