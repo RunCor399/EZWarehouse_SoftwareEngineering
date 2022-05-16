@@ -198,16 +198,30 @@ class RestockOrderController {
 
 
         let skuItems;
-        await this.getSKUItemsForOrders(row.id)
+        await this.getSKUItemsForOrders(id)
             .then(value => skuItems = value)
             .catch((error) => { throw error });
 
+        
         for (let j = 0; j < skuItems.length; j++) {
             await this.getFailedTests(skuItems[j].RFID)
                 .then(value => row.skuItems = value)
                 .catch((error) => { throw error });
 
         }
+        
+        /*
+        let failedProducts;
+        let failedProductsToReturn = []
+        await this.#dbManager.genericSqlGet('SELECT Distinct RFID FROM TestResult WHERE Result = false')
+        .then(value => failedProducts = value);
+
+        for (let j = 0; j < skuItems.length; j++) {
+            if(failedProducts.includes(skuItems[i].rfid))
+                failedProductsToReturn = [...failedProductsToReturn, skuItems[i]];
+        return failedProductsToReturn;
+            */
+
         return row.skuItems;
 
 
