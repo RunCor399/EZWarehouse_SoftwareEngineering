@@ -53,13 +53,11 @@ class RestockOrderController {
 
     /** @throws 500 */
     async getTransportNote(id) {
-        let transportNote;
-
-        await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id = ?;`, id)
-            .then(value => transportNote = value[0])
+        let transportNote = await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id = ?;`, id)
+            //.then(value => transportNote = value[0])
             .catch((error) => { throw error });
 
-        return transportNote;
+        return transportNote[0];
     }
 
     /** @throws 500 */
@@ -203,6 +201,13 @@ class RestockOrderController {
             || !this.#controller.areAllPositive(supplierId))
             throw new Exceptions(422);
 
+        let dateToSave;
+        try {
+            dateToSave = this.#controller.checkAndFormatDate(issueDate);
+        } catch (error) {
+            throw error;
+        }
+
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM RestockOrder')
             .then(value => id = value[0]["COUNT(*)"])
@@ -211,7 +216,7 @@ class RestockOrderController {
         const sqlInstruction = `INSERT INTO RestockOrder ( id, issueDate, state, shipmentDate, supplierId) 
         VALUES (?, ?, "ISSUED", '', ?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, issueDate, supplierId)
+        await this.#dbManager.genericSqlRun(sqlInstruction, dateToSave, supplierId)
             .catch((error) => { throw new Exceptions(503) });
 
         const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
@@ -240,13 +245,10 @@ class RestockOrderController {
         if (!newState || !this.#controller.checkStateRestockOrders(newState))
             throw new Exceptions(422);
 
-        let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
-            .then(value => row = value[0])
+        let row = await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .catch((error) => { throw new Exceptions(503) });
-
         /*check if the restock order exists*/
-        if (!row)
+        if (!(row[0]))
             throw new Exceptions(404);
 
         await this.#dbManager.genericSqlRun(`UPDATE RestockOrder SET state = ? WHERE id=?;`, newState, id)
@@ -328,8 +330,16 @@ class RestockOrderController {
         if (row.state !== 'DELIVERY')
             throw new Exceptions(422)
 
+        let formattedDeliveryDate, formattedIssueDate;
+        try {
+            formattedDeliveryDate = this.#controller.checkAndFormatDate(transportNote.deliveryDate);
+            formattedIssueDate = this.#controller.checkAndFormatDate(row.issueDate);
+        } catch (error) {
+            throw error;
+        }
+
         /*check if the deliveryDate is before the issueDate */
-        if (transportNote.deliveryDate <= row.issueDate)
+        if (formattedDeliveryDate <= formattedIssueDate)
             throw new Exceptions(422);
 
         const sqlInstruction = `UPDATE RestockOrder SET shipmentDate = ? WHERE id = ?;`;

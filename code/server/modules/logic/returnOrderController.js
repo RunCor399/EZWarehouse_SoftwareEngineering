@@ -103,6 +103,13 @@ class ReturnOrderController {
             || !this.#controller.areAllPositive(restockOrderId))
             throw new Exceptions(422)
 
+        let dateToSave
+        try {
+             dateToSave = this.#controller.checkAndFormatDate(returnDate);
+        } catch (error) {
+            throw error;
+        }
+
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, restockOrderId)
             .then((value) => row = value[0])
@@ -125,7 +132,7 @@ class ReturnOrderController {
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
                                 VALUES (?,?,?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, returnDate, restockOrderId)
+        await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, dateToSave, restockOrderId)
             .catch(error => { throw new Exceptions(503) })
 
         const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?);`;

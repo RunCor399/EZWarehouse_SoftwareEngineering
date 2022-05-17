@@ -86,6 +86,13 @@ class TestResultController {
             || !this.#controller.areAllPositive(idTestDescriptor))
             throw new Exceptions(422)
 
+        let dateToSave;
+        try {
+            dateToSave = this.#controller.checkAndFormatDate(date);
+        } catch (error) {
+            throw error;
+        }
+
         //check if skuitem exists
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
@@ -95,7 +102,7 @@ class TestResultController {
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlInstruction = `INSERT INTO TestResult ( idTestDescriptor, RFID, date, result)  VALUES ( ?, ?, ?, ?);`;
-        await this.#dbManager.genericSqlRun(sqlInstruction, idTestDescriptor, rfid, date, result)
+        await this.#dbManager.genericSqlRun(sqlInstruction, idTestDescriptor, rfid, dateToSave, result)
             .catch(error => { throw new Exceptions(503); });
 
     }
@@ -121,6 +128,13 @@ class TestResultController {
             || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
+        let dateToSave;
+        try {
+            dateToSave = this.#controller.checkAndFormatDate(newDate);
+        } catch (error) {
+            throw error;
+        }
+
         //check if skuitem exists
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
@@ -134,7 +148,7 @@ class TestResultController {
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlInstruction = `UPDATE TestResult SET idtestDescriptor= ?, date= ?, result=? WHERE ID= ? AND RFID = ?;`
-        await this.#dbManager.genericSqlRun(sqlInstruction, newIdTestDescriptor, newDate, newResult, id, rfid)
+        await this.#dbManager.genericSqlRun(sqlInstruction, newIdTestDescriptor, dateToSave, newResult, id, rfid)
             .catch(error => { throw new Exceptions(503) });
     }
 

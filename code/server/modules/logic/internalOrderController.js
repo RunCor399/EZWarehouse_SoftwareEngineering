@@ -27,7 +27,6 @@ class InternalOrderController {
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
             .catch((error) => { throw error });
 
-
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
                 .catch(error => { throw error })
@@ -75,7 +74,7 @@ class InternalOrderController {
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
             throw new Exceptions(401);
-        let rows =  await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
+        let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
             .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
@@ -112,7 +111,7 @@ class InternalOrderController {
         if (!row)
             throw new Exceptions(404);
 
-            row.products = await this.getProductsForInternalOrder(row.id)
+        row.products = await this.getProductsForInternalOrder(row.id)
             .catch(error => { throw error })
 
 
@@ -141,6 +140,13 @@ class InternalOrderController {
             || !this.#controller.areAllPositive(customerId))
             throw new Exceptions(422);
 
+        let dateToSave
+        try {
+            dateToSave = this.#controller.checkAndFormatDate(returnDate);
+        } catch (error) {
+            throw error;
+        }
+
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
@@ -149,7 +155,7 @@ class InternalOrderController {
 
         await this.#dbManager
             .genericSqlRun(`INSERT INTO InternalOrder (id, issueDate, state, customerId) VALUES (?, ?, "ISSUED", ?);`,
-                id + 1, issueDate, customerId)
+                id + 1, dateToSave, customerId)
             .catch(error => { throw new Exceptions(503) })
 
         const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
