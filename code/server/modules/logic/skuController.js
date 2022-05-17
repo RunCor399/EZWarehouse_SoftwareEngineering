@@ -1,16 +1,18 @@
 'use strict'
 
 const Exceptions = require('../../routers/exceptions');
+const skuDAO = require('../dao/skuDAO');
 const Controller = require('./controller')
 
 class SkuController {
     /** @type {Controller} */
     #controller;
     #dbManager;
+    #skuDAO;
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-
+        this.#skuDAO = new skuDAO(this.#dbManager);
         console.log("skuController started");
     }
 
@@ -25,24 +27,26 @@ class SkuController {
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
-
-        let rows = await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
-            .catch(error => { throw error });
-
-        if (!rows) {
-
-            for (let i = 0; i < rows.length; i++) {
-                rows[i].position = await this.getPositionForSKU(rows[i].id)
-                    .catch(error => { throw error });
-                rows[i].testDescriptors = await this.getTestDescriptorsForSKU(rows[i].id)
-                    .catch(error => { throw error });
-
-            }
-        }
-
-        return rows;
-
-
+            
+            const skus = this.#skuDAO.getAllSKU();
+            return skus;
+            
+            
+                    /*let rows = await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
+                        .catch(error => { throw error });
+            
+                    if (!rows) {
+            
+                        for (let i = 0; i < rows.length; i++) {
+                            rows[i].position = await this.getPositionForSKU(rows[i].id)
+                                .catch(error => { throw error });
+                            rows[i].testDescriptors = await this.getTestDescriptorsForSKU(rows[i].id)
+                                .catch(error => { throw error });
+            
+                        }
+                    }
+            
+                    return rows;*/
     }
 
     /** given sku id, this function returns position informations
@@ -91,7 +95,7 @@ class SkuController {
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id) || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
-        let sku;
+        /* let sku;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id=?;`, id)
             .then(value => sku = value[0])
             .catch(error => { throw error })
@@ -106,6 +110,9 @@ class SkuController {
         sku.testDescriptors = await this.getTestDescriptorsForSKU(id)
             .catch(error => { throw error });
 
+        return sku; */
+
+        let sku = this.#skuDAO.getSku(id);
         return sku;
 
     }
