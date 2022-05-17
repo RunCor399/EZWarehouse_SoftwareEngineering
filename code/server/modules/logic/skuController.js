@@ -90,7 +90,7 @@ class SkuController {
         if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id) || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
-        /let sku;
+        let sku;
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id=?;`, id)
             .then(value => sku = value[0])
             .catch(error => { throw error })
