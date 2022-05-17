@@ -27,7 +27,6 @@ class ItemController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM Item")
-            //.then(value => rows = value)
             .catch(error => { throw error });
         return rows;
     }

@@ -27,17 +27,14 @@ class SkuController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
-            //.then(value => rows = value)
             .catch(error => { throw error });
 
         if (!rows) {
 
             for (let i = 0; i < rows.length; i++) {
                 rows[i].position = await this.getPositionForSKU(rows[i].id)
-                    //.then(value => rows[i].position = value)
                     .catch(error => { throw error });
                 rows[i].testDescriptors = await this.getTestDescriptorsForSKU(rows[i].id)
-                    //.then(value => rows[i].testDescriptors = value)
                     .catch(error => { throw error });
 
             }
@@ -104,11 +101,9 @@ class SkuController {
 
 
         sku.position = await this.getPositionForSKU(id)
-            //.then(value => sku.position = value)
             .catch(error => { throw error });
 
         sku.testDescriptors = await this.getTestDescriptorsForSKU(id)
-            //.then(value => sku.testDescriptors = value)
             .catch(error => { throw error });
 
         return sku;
@@ -171,7 +166,6 @@ class SkuController {
             throw new Exceptions(401);
 
         let sku = await this.getSku(id)
-            //.then(value => sku = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         let editParams = { "newDescription": "description", "newWeight": "weight", "newVolume": "volume", "newNotes": "notes", "newPrice": "price", "newAvailableQuantity": "availableQuantity" };
@@ -247,12 +241,8 @@ class SkuController {
             throw new Exceptions(422);
         }
 
-
-
-
         //search sku
         let sku = await this.getSku(id)
-            //.then(value => sku = value)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         //console.log(sku);

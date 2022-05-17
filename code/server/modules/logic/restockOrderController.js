@@ -24,23 +24,19 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         let orders = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;")
-            //.then(value => orders = value)
             .catch((error) => { throw new Exceptions(500) });
 
         for (let i = 0; i < orders.length; i++) {
             if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
                 orders[i].products = await this.getProductsPerOrder(orders[i].id)
-                    //.then(value => orders[i].products = value)
                     .catch((error) => { throw new Exceptions(500) });
 
                 orders[i].skuItems = await this.getSKUItemsPerOrder(orders[i].id)
-                    //.then(value => orders[i].skuItems = value)
                     .catch((error) => { throw new Exceptions(500) });
 
             }
             if (orders[i].state !== 'ISSUED') {
                 orders[i].skuItems = await this.getTransportNote(orders[i].id)
-                    //.then(value => rows[i].skuItems = value)
                     .catch((error) => { throw new Exceptions(500) });
             }
         }
@@ -51,7 +47,6 @@ class RestockOrderController {
     /** @throws 500 */
     async getProductsForOrders(id) {
         let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id)
-            //.then(value => products = value)
             .catch((error) => { throw error });
         return products;
     }
@@ -70,7 +65,6 @@ class RestockOrderController {
     /** @throws 500 */
     async getSKUItemsForOrders(id) {
         let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id)
-            //.then(value => skuItems = value)
             .catch((error) => { throw error });
         return skuItems;
     }
@@ -87,16 +81,13 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder WHERE state = 'ISSUED';")
-            //.then(value => rows = value)
             .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForOrders(rows[i].id)
-                //.then(value => rows[i].products = value)
                 .catch((error) => { throw error });
 
             rows[i].skuItems = await this.getSKUItemsForOrders(rows[i].id)
-                //.then(value => rows[i].skuItems = value)
                 .catch((error) => { throw error });
 
         }
@@ -132,7 +123,6 @@ class RestockOrderController {
 
         if (row.state !== 'DELIVERY' && row.state !== 'ISSUED') {
             row.products = await this.getProductsForOrders(row.id)
-                //.then(value => row.products = value)
                 .catch((error) => { throw error });
 
             row.skuItems = await this.getSKUItemsForOrder(row.id)
@@ -142,7 +132,6 @@ class RestockOrderController {
         }
         if (row.state !== 'ISSUED') {
             row.skuItems = await this.getTransportNote(row.id)
-                //.then(value => row.skuItems = value)
                 .catch((error) => { throw error });
         }
 
@@ -181,7 +170,6 @@ class RestockOrderController {
             throw new Exceptions(422)
 
         let failedProducts = await this.#dbManager.genericSqlGet('SELECT Distinct RFID FROM TestResult WHERE Result = false')
-            //.then(value => failedProducts = value)
             .catch(error => { throw error })
 
         let failedProductsToReturn = []

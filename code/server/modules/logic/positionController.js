@@ -30,7 +30,6 @@ class PositionController {
 
         const sqlInstruction = 'SELECT * FROM Position'
         let rows = await this.#dbManager.genericSqlGet(sqlInstruction)
-            //.then((value) => rows = value)
             .catch(error => { throw error })
         return rows;
     }
@@ -66,7 +65,6 @@ class PositionController {
             throw new Exceptions(422);
 
         let exists = await this.positionExists(positionID)
-            //.then((result) => exists = result)
             .catch(error => {throw error})
             
         if(exists){
@@ -124,7 +122,6 @@ class PositionController {
         console.log("provaInFunction", id, body)
 
         let positions = await this.getAllPositions()
-            //.then(value => positions = value)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
@@ -174,7 +171,6 @@ class PositionController {
 
 
         let positions = await this.getAllPositions()
-            //.then(value => positions = value)
             .catch((error) => { if(error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID))

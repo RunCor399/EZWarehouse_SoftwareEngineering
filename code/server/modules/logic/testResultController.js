@@ -32,7 +32,6 @@ class TestResultController {
             .catch(error => { throw error });
 
         let tests = await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE RFID= ?;`, rfid)
-            //.then(value => tests = value)
             .catch(error => { throw error });
         return tests;
     }
@@ -57,16 +56,12 @@ class TestResultController {
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { throw error });
 
-        let test;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE rfid= ? AND ID= ?;`, rfid, id)
-            .then(value => test = value[0])
+        let test = await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE rfid= ? AND ID= ?;`, rfid, id)
             .catch(error => { throw error });
-        if (!test)
+        if (!(test[0]))
             throw new Exceptions(404)
 
-
-
-        return test;
+        return test[0];
     }
 
     /**creation of a new test result
@@ -91,9 +86,11 @@ class TestResultController {
             || !this.#controller.areAllPositive(idTestDescriptor))
             throw new Exceptions(422)
 
+        //check if skuitem exists
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
+        //check if test descriptor exists
         await this.#controller.getTestDescriptorController().getTestDescriptor(idTestDescriptor)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
@@ -124,13 +121,15 @@ class TestResultController {
             || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
-
+        //check if skuitem exists
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
+        //check if testdescriptor exists
         await this.#controller.getTestDescriptorController().getTestDescriptor(newIdTestDescriptor)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
+        //check if testresult exists
         await this.getTestResult(rfid, id)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 

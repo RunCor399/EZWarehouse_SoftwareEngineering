@@ -25,13 +25,11 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
-            //.then((value) => rows = value)
             .catch((error) => { throw error });
 
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                //.then(value => rows[i].products = value)
                 .catch(error => { throw error })
         }
 
@@ -43,7 +41,6 @@ class InternalOrderController {
         let products = await this.#dbManager.genericSqlGet(
             `SELECT SKUId, description, price, qty
             FROM SKUPerInternalOrder WHERE id = ?;`, id)
-            //.then(value => products = value)
             .catch(error => { throw error });
         return products;
     }
@@ -59,12 +56,10 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
-            //.then((value) => rows = value)
             .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                //.then(value => rows[i].products = value)
                 .catch(error => { throw error })
         }
         return rows;
@@ -81,12 +76,10 @@ class InternalOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
             throw new Exceptions(401);
         let rows =  await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
-            //.then((value) => rows = value)
             .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-               //.then(value => rows[i].products = value)
                 .catch(error => { throw error })
         }
 
@@ -120,7 +113,6 @@ class InternalOrderController {
             throw new Exceptions(404);
 
             row.products = await this.getProductsForInternalOrder(row.id)
-           // .then(value => row.products = value)
             .catch(error => { throw error })
 
 
@@ -193,11 +185,8 @@ class InternalOrderController {
             throw new Exceptions(422);
 
         /*check if the internal order exists*/
-        let row = await this.getInternalOrder(id)
-           // .then(value => row = value)
+        await this.getInternalOrder(id)
             .catch(error => { throw error });
-        if (!row)
-            throw new Exceptions(404)
 
         if (newState === "COMPLETED") {
 

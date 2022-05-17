@@ -24,12 +24,10 @@ class ReturnOrderController {
             throw new Exceptions(401)
 
         let orders = await this.#dbManager.genericSqlGet("SELECT * FROM ReturnOrder;")
-            //.then(value => orders = value)
             .catch(error => { throw error });
 
         for (let i = 0; i < orders.length; i++) {
             orders[i].products = await this.getProductsPerReturnOrder(rows[i].id)
-                //.then(value => rows[i].products = value)
                 .catch(error => { throw error });
         }
 
@@ -67,7 +65,6 @@ class ReturnOrderController {
 
 
         row.products = await this.getProductsPerReturnOrder(row.id)
-            //.then(value => row.products = value)
             .catch(error => { throw error });
 
 
@@ -78,7 +75,6 @@ class ReturnOrderController {
     async getProductsPerReturnOrder(id) {
         let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, description, price, RFID
         FROM SKUItemsPerReturnOrder WHERE id = ? `, id)
-            //.then(value => products = value)
             .catch(error => { throw error })
 
         return products;

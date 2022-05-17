@@ -24,7 +24,6 @@ class TestDescriptorController {
             throw new Exceptions(401);
 
         let tests = await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
-            //.then(value => tests = value)
             .catch(error => { throw error });
         return tests;
     }
@@ -45,14 +44,12 @@ class TestDescriptorController {
         || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
-        let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ?;`, id)
-            .then(value => row = value[0])
+        let row = await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ?;`, id)
             .catch(error => { throw error });
-        if (!row)
+        if (!(row[0]))
             throw new Exceptions(404)
 
-        return row;
+        return row[0];
     }
 
     /**creation of a new test descriptor 
@@ -75,8 +72,8 @@ class TestDescriptorController {
             || !this.#controller.areAllPositive(idSKU))
             throw new Exceptions(422);
 
-        let sku = await this.#controller.getSkuController().getSku(idSKU)
-            //.then(value => sku = value)
+        //check if sku exists
+        await this.#controller.getSkuController().getSku(idSKU)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); throw error });
 
         const sqlInsert = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) VALUES ( ?, ?, ?);`
@@ -106,13 +103,12 @@ class TestDescriptorController {
             || !this.#controller.areAllPositive(newIdSKU, id))
             throw new Exceptions(422);
 
-
-        let sku = await this.#controller.getSkuController().getSku(newIdSKU)
-            //.then(value => sku = value)
+        //check if sku exists
+        await this.#controller.getSkuController().getSku(newIdSKU)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
-        let testDescriptor = await this.getTestDescriptor(id)
-            //.then(value => testDescriptor = value)
+        //check if testdescriptor exists
+        await this.getTestDescriptor(id)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlUpdate = `UPDATE TestDescriptor SET name= ?, procedureDescription= ?, idSku = ? WHERE ID= ?;`;

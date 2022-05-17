@@ -57,7 +57,6 @@ class UserController {
             throw new Exceptions(401);
 
         let suppliers = await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
-            //.then(value => rows = value)
             .catch(error => { throw error });
         return suppliers;
 
@@ -73,7 +72,6 @@ class UserController {
             throw new Exceptions(401);
 
         let users = await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
-            //.then(value => rows = value)
             .catch(error => { throw error });
         return users;
     }
@@ -103,7 +101,6 @@ class UserController {
         const hashedPassword = MD5(password).toString();
 
         let users = await this.getAllUsers()
-            //.then(value => users = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         let usersEmails = users.map(user => user.email)
@@ -185,7 +182,6 @@ class UserController {
             throw new Exceptions(422);
 
         let users = await this.getAllUsers()
-            //.then(value => users = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         let usernames = users.map(us => us.email)
