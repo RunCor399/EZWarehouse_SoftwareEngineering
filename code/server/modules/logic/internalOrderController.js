@@ -24,15 +24,14 @@ class InternalOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
-            .then((value) => rows = value)
+        let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
+            //.then((value) => rows = value)
             .catch((error) => { throw error });
 
 
         for (let i = 0; i < rows.length; i++) {
-            await this.getProductsForInternalOrder(rows[i].id)
-                .then(value => rows[i].products = value)
+            rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
+                //.then(value => rows[i].products = value)
                 .catch(error => { throw error })
         }
 
@@ -41,11 +40,10 @@ class InternalOrderController {
     }
 
     async getProductsForInternalOrder(id) {
-        let products;
-        await this.#dbManager.genericSqlGet(
+        let products = await this.#dbManager.genericSqlGet(
             `SELECT SKUId, description, price, qty
             FROM SKUPerInternalOrder WHERE id = ?;`, id)
-            .then(value => products = value)
+            //.then(value => products = value)
             .catch(error => { throw error });
         return products;
     }
@@ -60,14 +58,13 @@ class InternalOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
             throw new Exceptions(401);
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
-            .then((value) => rows = value)
+        let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
+            //.then((value) => rows = value)
             .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
-            await this.getProductsForInternalOrder(rows[i].id)
-                .then(value => rows[i].products = value)
+            rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
+                //.then(value => rows[i].products = value)
                 .catch(error => { throw error })
         }
         return rows;
@@ -83,14 +80,13 @@ class InternalOrderController {
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
             throw new Exceptions(401);
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
-            .then((value) => rows = value)
+        let rows =  await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
+            //.then((value) => rows = value)
             .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
-            await this.getProductsForInternalOrder(rows[i].id)
-                .then(value => rows[i].products = value)
+            rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
+               //.then(value => rows[i].products = value)
                 .catch(error => { throw error })
         }
 
@@ -123,8 +119,8 @@ class InternalOrderController {
         if (!row)
             throw new Exceptions(404);
 
-        await this.getProductsForInternalOrder(row.id)
-            .then(value => row.products = value)
+            row.products = await this.getProductsForInternalOrder(row.id)
+           // .then(value => row.products = value)
             .catch(error => { throw error })
 
 
@@ -148,26 +144,26 @@ class InternalOrderController {
         const customerId = body["customerId"]
 
         /*check if the body is valid */
-        if (this.#controller.areUndefined(issueDate, products, customerId) 
-        || isNaN(Number(customerId))
-        || !this.#controller.areAllPositive(customerId))
+        if (this.#controller.areUndefined(issueDate, products, customerId)
+            || isNaN(Number(customerId))
+            || !this.#controller.areAllPositive(customerId))
             throw new Exceptions(422);
 
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Exceptions(503)  });
+            .catch(error => { throw new Exceptions(503) });
 
         await this.#dbManager
             .genericSqlRun(`INSERT INTO InternalOrder (id, issueDate, state, customerId) VALUES (?, ?, "ISSUED", ?);`,
                 id + 1, issueDate, customerId)
-            .catch(error => { throw new Exceptions(503)  })
+            .catch(error => { throw new Exceptions(503) })
 
         const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
         for (let i = 0; i < products.length; i++) {
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
-                .catch(error => { throw new Exceptions(503)  })
+                .catch(error => { throw new Exceptions(503) })
         }
 
 
@@ -188,18 +184,17 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (this.#controller.areUndefined(id, newState) 
-        || isNaN(Number(id))
-        || !this.#controller.areAllPositive(id))
+        if (this.#controller.areUndefined(id, newState)
+            || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         if (!this.#controller.checkStateInternalOrders(newState))
             throw new Exceptions(422);
 
         /*check if the internal order exists*/
-        let row;
-        await this.getInternalOrder(id)
-            .then(value => row = value)
+        let row = await this.getInternalOrder(id)
+           // .then(value => row = value)
             .catch(error => { throw error });
         if (!row)
             throw new Exceptions(404)
@@ -221,7 +216,7 @@ class InternalOrderController {
             const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
 
             await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
-                .catch(error => { throw new Exceptions(503)  })
+                .catch(error => { throw new Exceptions(503) })
         }
     }
 
@@ -238,13 +233,13 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id 
+        if (!id
             || isNaN(Number(id))
             || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM InternalOrder WHERE ID = ?;`, id)
-            .catch((error) => { throw new Exceptions(503)  });
+            .catch((error) => { throw new Exceptions(503) });
     }
 
 }

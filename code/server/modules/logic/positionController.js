@@ -29,9 +29,8 @@ class PositionController {
             throw new Exceptions(401)
 
         const sqlInstruction = 'SELECT * FROM Position'
-        let rows;
-        await this.#dbManager.genericSqlGet(sqlInstruction)
-            .then((value) => rows = value)
+        let rows = await this.#dbManager.genericSqlGet(sqlInstruction)
+            //.then((value) => rows = value)
             .catch(error => { throw error })
         return rows;
     }
@@ -66,8 +65,9 @@ class PositionController {
             || !this.checkPositionID(positionID, aisleID, row, col))
             throw new Exceptions(422);
 
-        let exists;
-        await this.positionExists(positionID).then((result) => exists = result );
+        let exists = await this.positionExists(positionID)
+            //.then((result) => exists = result)
+            .catch(error => {throw error})
             
         if(exists){
             throw new Exceptions(422);
@@ -123,9 +123,8 @@ class PositionController {
 
         console.log("provaInFunction", id, body)
 
-        let positions;
-        await this.getAllPositions()
-            .then(value => positions = value)
+        let positions = await this.getAllPositions()
+            //.then(value => positions = value)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
@@ -174,9 +173,8 @@ class PositionController {
             throw new Exceptions(422);
 
 
-        let positions;
-        await this.getAllPositions()
-            .then(value => positions = value)
+        let positions = await this.getAllPositions()
+            //.then(value => positions = value)
             .catch((error) => { if(error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID))

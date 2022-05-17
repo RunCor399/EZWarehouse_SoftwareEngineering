@@ -31,11 +31,10 @@ class TestResultController {
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { throw error });
 
-        let rows;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE RFID= ?;`, rfid)
-            .then(value => rows = value)
+        let tests = await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE RFID= ?;`, rfid)
+            //.then(value => tests = value)
             .catch(error => { throw error });
-        return rows;
+        return tests;
     }
 
     /**getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test
@@ -58,16 +57,16 @@ class TestResultController {
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { throw error });
 
-        let row;
+        let test;
         await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE rfid= ? AND ID= ?;`, rfid, id)
-            .then(value => row = value[0])
+            .then(value => test = value[0])
             .catch(error => { throw error });
-        if (!row)
+        if (!test)
             throw new Exceptions(404)
 
 
 
-        return row;
+        return test;
     }
 
     /**creation of a new test result

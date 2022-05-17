@@ -23,11 +23,10 @@ class TestDescriptorController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Exceptions(401);
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
-            .then(value => rows = value)
+        let tests = await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
+            //.then(value => tests = value)
             .catch(error => { throw error });
-        return rows;
+        return tests;
     }
 
     /**getter function to retreive a single test descriptor given its ID
@@ -76,9 +75,8 @@ class TestDescriptorController {
             || !this.#controller.areAllPositive(idSKU))
             throw new Exceptions(422);
 
-        let sku;
-        await this.#controller.getSkuController().getSku(idSKU)
-            .then(value => sku = value)
+        let sku = await this.#controller.getSkuController().getSku(idSKU)
+            //.then(value => sku = value)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); throw error });
 
         const sqlInsert = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) VALUES ( ?, ?, ?);`
@@ -109,14 +107,12 @@ class TestDescriptorController {
             throw new Exceptions(422);
 
 
-        let sku;
-        await this.#controller.getSkuController().getSku(newIdSKU)
-            .then(value => sku = value)
+        let sku = await this.#controller.getSkuController().getSku(newIdSKU)
+            //.then(value => sku = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
-        let testDescriptor;
-        await this.getTestDescriptor(id)
-            .then(value => testDescriptor = value)
+        let testDescriptor = await this.getTestDescriptor(id)
+            //.then(value => testDescriptor = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlUpdate = `UPDATE TestDescriptor SET name= ?, procedureDescription= ?, idSku = ? WHERE ID= ?;`;

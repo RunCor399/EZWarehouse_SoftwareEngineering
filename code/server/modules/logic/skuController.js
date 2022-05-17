@@ -26,19 +26,18 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
-            .then(value => rows = value)
+        let rows = await this.#dbManager.genericSqlGet("SELECT * FROM SKU")
+            //.then(value => rows = value)
             .catch(error => { throw error });
 
         if (!rows) {
 
             for (let i = 0; i < rows.length; i++) {
-                await this.getPositionForSKU(rows[i].id)
-                    .then(value => rows[i].position = value)
+                rows[i].position = await this.getPositionForSKU(rows[i].id)
+                    //.then(value => rows[i].position = value)
                     .catch(error => { throw error });
-                await this.getTestDescriptorsForSKU(rows[i].id)
-                    .then(value => rows[i].testDescriptors = value)
+                rows[i].testDescriptors = await this.getTestDescriptorsForSKU(rows[i].id)
+                    //.then(value => rows[i].testDescriptors = value)
                     .catch(error => { throw error });
 
             }
@@ -57,7 +56,8 @@ class SkuController {
         let positionID = "";
 
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?;`, id)
-            .then(value => { positionID = (value[0] === undefined ? "" : value[0].positionID) });
+            .then(value => { positionID = (value[0] === undefined ? "" : value[0].positionID) })
+            .catch(error => { throw error });
 
 
         return positionID;
@@ -98,18 +98,17 @@ class SkuController {
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU WHERE id=?;`, id)
             .then(value => sku = value[0])
             .catch(error => { throw error })
-
         if (!sku)
             throw new Exceptions(404);
 
 
 
-        await this.getPositionForSKU(id)
-            .then(value => sku.position = value)
+        sku.position = await this.getPositionForSKU(id)
+            //.then(value => sku.position = value)
             .catch(error => { throw error });
 
-        await this.getTestDescriptorsForSKU(id)
-            .then(value => sku.testDescriptors = value)
+        sku.testDescriptors = await this.getTestDescriptorsForSKU(id)
+            //.then(value => sku.testDescriptors = value)
             .catch(error => { throw error });
 
         return sku;
@@ -171,9 +170,8 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
             throw new Exceptions(401);
 
-        let sku;
-        await this.getSku(id)
-            .then(value => sku = value)
+        let sku = await this.getSku(id)
+            //.then(value => sku = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         let editParams = { "newDescription": "description", "newWeight": "weight", "newVolume": "volume", "newNotes": "notes", "newPrice": "price", "newAvailableQuantity": "availableQuantity" };
@@ -253,9 +251,8 @@ class SkuController {
 
 
         //search sku
-        let sku;
-        await this.getSku(id)
-            .then(value => sku = value)
+        let sku = await this.getSku(id)
+            //.then(value => sku = value)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         //console.log(sku);
@@ -284,14 +281,14 @@ class SkuController {
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE positionId = ?;`, positionId)
             .then(value => positionAlreadyOccupied = value[0])
             .catch(error => { throw new Exceptions(503) });
-        if ((positionAlreadyOccupied !== undefined)){
-            if(positionAlreadyOccupied.SKUId === id){
+        if ((positionAlreadyOccupied !== undefined)) {
+            if (positionAlreadyOccupied.SKUId === id) {
                 return;
             }
-        
+
             throw new Exceptions(422);
         }
-            
+
 
         //verify if sku had already a position
         let positionOccupiedBySku;

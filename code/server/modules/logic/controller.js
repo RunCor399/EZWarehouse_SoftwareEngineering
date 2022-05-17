@@ -42,7 +42,6 @@ class Controller {
         this.#returnOrderController = new ReturnOrderController(this);
         this.#internalOrderController = new InternalOrderController(this);
         console.log("general Controller started");
-        console.log(this.checkAndFormatDate())
 
     }
 
