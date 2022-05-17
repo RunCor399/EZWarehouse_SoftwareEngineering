@@ -4,7 +4,7 @@
 
 const Exceptions = require('../../routers/exceptions');
 const Controller = require('./controller');
-const SkuItemController = require('./skuItemController');
+
 class ItemController {
     /** @type {Controller} */
     #controller;
@@ -29,6 +29,8 @@ class ItemController {
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM Item")
             .catch(error => { throw error });
         return rows;
+
+
     }
 
     /**getter function to retreive a single item given its ID
@@ -43,7 +45,7 @@ class ItemController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        /*check if the id is valid*/
+        //check if the id is valid
         if (!id || isNaN(Number(id))
             || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
@@ -53,7 +55,7 @@ class ItemController {
             .then(value => row = value[0])
             .catch(error => { throw error });
 
-        /*check if the item exists*/
+        //check if the item exists
         if (!row)
             throw new Exceptions(404)
 
@@ -80,13 +82,13 @@ class ItemController {
         const supplierId = body["supplierId"];
 
 
-        /*check if the body is valid*/
+        //check if the body is valid
         if (this.#controller.areUndefined(id, description, price, SKUId, supplierId)
             || this.#controller.areNotNumbers(id, price, SKUId, supplierId)
             || !this.#controller.areAllPositive(id, price, SKUId, supplierId))
             throw new Exceptions(422);
 
-        /*check if the supplier already sells an item with the same SKUId*/
+        //check if the supplier already sells an item with the same SKUId
         let item;
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE SKUid = ? AND supplierId = ?', SKUId, supplierId)
             .then(value => item = value[0])
@@ -104,7 +106,7 @@ class ItemController {
         }
 
 
-        /*check if sku exists in the SKU table*/
+        //check if sku exists in the SKU table
         await this.#controller.getSkuController().getSku(SKUId)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
@@ -163,6 +165,7 @@ class ItemController {
         await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE ID= ?;`, id)
             .catch((error) => { throw new Exceptions(503) });
     }
+
 
 }
 
