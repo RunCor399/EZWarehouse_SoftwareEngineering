@@ -216,11 +216,7 @@ class RestockOrderController {
         const sqlInstruction = `INSERT INTO RestockOrder ( id, issueDate, state, shipmentDate, supplierId) 
         VALUES (?, ?, "ISSUED", '', ?);`;
 
-<<<<<<< HEAD
         await this.#dbManager.genericSqlRun(sqlInstruction, id, dateToSave, supplierId)
-=======
-        await this.#dbManager.genericSqlRun(sqlInstruction, dateToSave, supplierId)
->>>>>>> 83466e21d67c89e295d28f94c67d1e593cb95a40
             .catch((error) => { throw new Exceptions(503) });
 
         const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
