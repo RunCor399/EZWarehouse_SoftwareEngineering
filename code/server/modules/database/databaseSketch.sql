@@ -25,6 +25,7 @@ CREATE TABLE SKU(
     description VARCHAR(250),
     availableQuantity INT
 );
+
 CREATE TABLE SKUItem(
     RFID VARCHAR(50),
     SKUId INT,
