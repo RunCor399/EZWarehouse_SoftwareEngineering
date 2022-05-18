@@ -31,7 +31,7 @@ describe('sku test suite', async () => {
     it('get a sku given an id', async () => {
         const response = await skuAPICalls.getSKUTest(1);
 
-        console.log(response);
+        //console.log(response);
         assert.equal(response.data.id, 1)
         assert.equal(response.data.description, "descriptionTest")
         assert.equal(response.data.weight, 10)
