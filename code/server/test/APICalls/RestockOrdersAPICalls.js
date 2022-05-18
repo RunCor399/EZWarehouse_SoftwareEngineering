@@ -15,6 +15,8 @@ class RestockOrdersAPICalls {
             method: 'get',
             url: this.#baseURL + "/api/restockOrders/",
         });
+
+
     } 
 
 
@@ -34,10 +36,18 @@ class RestockOrdersAPICalls {
 
 
     async getReturnItemsByRestockOrder(id){
-        return axios({
+        const url = this.#baseURL + "/api/restockOrders/" + id + "/returnItems";
+      /*  return axios({
             method: 'get',
             url: this.#baseURL + "/api/restockOrders/" + id + "/returnItems",
-        });
+        });*/
+        const body = {};
+        const headers = {headers: {'content-type': 'text/json'}};
+
+        axios.get(url, body, headers).then(value => response = value)
+                                     .catch(error => response = error.response);
+        
+        return response;
     }
 
     //POST

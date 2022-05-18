@@ -52,13 +52,15 @@ describe('Restock Orders test suite', async () => {
         });
 
         it('Order in a state different from COMPLETEDRETURN', async () => { //it indicates a TEST CASE
-            try{
+           // try{
                 let response = await restockOrdersAPICalls.getReturnItemsByRestockOrder(1);
+                
                 expect(response).to.exist;
-            } catch ({ response }) {
-                //WHEN ASSERTING ERROR CODES, USE A TRY CATCH
                 response.status.should.equal(422);
-            }
+            //} catch ({ response }) {
+                //WHEN ASSERTING ERROR CODES, USE A TRY CATCH
+             //   response.status.should.equal(422);
+            //}
         });
     });
 
