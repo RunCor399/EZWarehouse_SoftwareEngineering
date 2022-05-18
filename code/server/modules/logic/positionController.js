@@ -29,9 +29,7 @@ class PositionController {
             throw new Exceptions(401)
 
         const sqlInstruction = 'SELECT * FROM Position'
-        let rows;
-        await this.#dbManager.genericSqlGet(sqlInstruction)
-            .then((value) => rows = value)
+        let rows = await this.#dbManager.genericSqlGet(sqlInstruction)
             .catch(error => { throw error })
         return rows;
     }
@@ -60,13 +58,14 @@ class PositionController {
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||
             this.#controller.areNotNumbers(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
+            || !this.#controller.areAllPositive(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
             || String(positionID).length !== 12 || String(aisleID).length !== 4
             || String(row).length !== 4 || String(col).length !== 4
             || !this.checkPositionID(positionID, aisleID, row, col))
             throw new Exceptions(422);
 
-        let exists;
-        await this.positionExists(positionID).then((result) => exists = result );
+        let exists = await this.positionExists(positionID)
+            .catch(error => {throw error})
             
         if(exists){
             throw new Exceptions(422);
@@ -101,6 +100,7 @@ class PositionController {
 
         if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume) ||
             this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
+            || !this.#controller.areAllPositive(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
             || String(id).length !== 12 || String(newAisleID).length !== 4
             || String(newRow).length !== 4 || String(newCol).length !== 4){
 
@@ -121,9 +121,7 @@ class PositionController {
 
         console.log("provaInFunction", id, body)
 
-        let positions;
-        await this.getAllPositions()
-            .then(value => positions = value)
+        let positions = await this.getAllPositions()
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
@@ -172,9 +170,7 @@ class PositionController {
             throw new Exceptions(422);
 
 
-        let positions;
-        await this.getAllPositions()
-            .then(value => positions = value)
+        let positions = await this.getAllPositions()
             .catch((error) => { if(error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID))

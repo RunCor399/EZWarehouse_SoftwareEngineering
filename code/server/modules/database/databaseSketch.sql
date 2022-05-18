@@ -78,7 +78,7 @@ CREATE TABLE RestockOrder(
     id INTEGER PRIMARY KEY,
     issueDate VARCHAR(50),
     state VARCHAR(250),
-    shipmentDate VARCHAR(50),
+    transportNote VARCHAR(50),
     supplierId INT,
     FOREIGN KEY(supplierId) REFERENCES Users(id)
 );

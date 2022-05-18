@@ -56,11 +56,9 @@ class UserController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
-            .then(value => rows = value)
+        let suppliers = await this.#dbManager.genericSqlGet("SELECT * FROM USERS U WHERE TYPE='supplier';")
             .catch(error => { throw error });
-        return rows;
+        return suppliers;
 
     }
 
@@ -73,11 +71,9 @@ class UserController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
-            .then(value => rows = value)
+        let users = await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .catch(error => { throw error });
-        return rows;
+        return users;
     }
 
 
@@ -104,9 +100,7 @@ class UserController {
 
         const hashedPassword = MD5(password).toString();
 
-        let users;
-        await this.getAllUsers()
-            .then(value => users = value)
+        let users = await this.getAllUsers()
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         let usersEmails = users.map(user => user.email)
@@ -187,9 +181,7 @@ class UserController {
         if (this.#controller.areUndefined(username, oldType, newType) || oldType === "manager")
             throw new Exceptions(422);
 
-        let users;
-        await this.getAllUsers()
-            .then(value => users = value)
+        let users = await this.getAllUsers()
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         let usernames = users.map(us => us.email)

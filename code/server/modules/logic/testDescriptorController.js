@@ -23,11 +23,9 @@ class TestDescriptorController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Exceptions(401);
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
-            .then(value => rows = value)
+        let tests = await this.#dbManager.genericSqlGet("SELECT * FROM TestDescriptor;")
             .catch(error => { throw error });
-        return rows;
+        return tests;
     }
 
     /**getter function to retreive a single test descriptor given its ID
@@ -41,17 +39,17 @@ class TestDescriptorController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401)
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id) 
+        || this.#controller.areNotNumbers(id)
+        || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
-        let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ?;`, id)
-            .then(value => row = value[0])
+        let row = await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ?;`, id)
             .catch(error => { throw error });
-        if (!row)
+        if (!(row[0]))
             throw new Exceptions(404)
 
-        return row;
+        return row[0];
     }
 
     /**creation of a new test descriptor 
@@ -70,12 +68,12 @@ class TestDescriptorController {
         const idSKU = body["idSKU"];
 
         if (this.#controller.areUndefined(name, procedureDescription, idSKU)
-            || this.#controller.areNotNumbers(idSKU))
+            || this.#controller.areNotNumbers(idSKU)
+            || !this.#controller.areAllPositive(idSKU))
             throw new Exceptions(422);
 
-        let sku;
+        //check if sku exists
         await this.#controller.getSkuController().getSku(idSKU)
-            .then(value => sku = value)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); throw error });
 
         const sqlInsert = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) VALUES ( ?, ?, ?);`
@@ -101,18 +99,16 @@ class TestDescriptorController {
         const newIdSKU = body["newIdSKU"];
 
         if (this.#controller.areUndefined(newName, newProcedureDescription, newIdSKU, id)
-            || this.#controller.areNotNumbers(newIdSKU, id))
+            || this.#controller.areNotNumbers(newIdSKU, id)
+            || !this.#controller.areAllPositive(newIdSKU, id))
             throw new Exceptions(422);
 
-
-        let sku;
+        //check if sku exists
         await this.#controller.getSkuController().getSku(newIdSKU)
-            .then(value => sku = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
-        let testDescriptor;
+        //check if testdescriptor exists
         await this.getTestDescriptor(id)
-            .then(value => testDescriptor = value)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlUpdate = `UPDATE TestDescriptor SET name= ?, procedureDescription= ?, idSku = ? WHERE ID= ?;`;
@@ -133,7 +129,9 @@ class TestDescriptorController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id))
+        if (this.#controller.areUndefined(id) 
+        || this.#controller.areNotNumbers(id)
+        || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun

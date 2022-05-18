@@ -31,11 +31,9 @@ class TestResultController {
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { throw error });
 
-        let rows;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE RFID= ?;`, rfid)
-            .then(value => rows = value)
+        let tests = await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE RFID= ?;`, rfid)
             .catch(error => { throw error });
-        return rows;
+        return tests;
     }
 
     /**getter function to retreive all test results about a particular test related to an SKUItem, given its RFID and the ID of the test result - more than a single test
@@ -49,23 +47,21 @@ class TestResultController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id)
-            || this.#controller.checkRFID(rfid))
+        if (this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(id)
+            || this.#controller.checkRFID(rfid)
+            || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { throw error });
 
-        let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE rfid= ? AND ID= ?;`, rfid, id)
-            .then(value => row = value[0])
+        let test = await this.#dbManager.genericSqlGet(`SELECT * FROM TestResult WHERE rfid= ? AND ID= ?;`, rfid, id)
             .catch(error => { throw error });
-        if (!row)
+        if (!(test[0]))
             throw new Exceptions(404)
 
-
-
-        return row;
+        return test[0];
     }
 
     /**creation of a new test result
@@ -86,17 +82,27 @@ class TestResultController {
 
         if (this.#controller.checkRFID(rfid) ||
             this.#controller.areUndefined(idTestDescriptor, date, result)
-            || this.#controller.areNotNumbers(idTestDescriptor))
+            || this.#controller.areNotNumbers(idTestDescriptor)
+            || !this.#controller.areAllPositive(idTestDescriptor))
             throw new Exceptions(422)
 
+        let dateToSave;
+        try {
+            dateToSave = this.#controller.checkAndFormatDate(date);
+        } catch (error) {
+            throw error;
+        }
+
+        //check if skuitem exists
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
+        //check if test descriptor exists
         await this.#controller.getTestDescriptorController().getTestDescriptor(idTestDescriptor)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlInstruction = `INSERT INTO TestResult ( idTestDescriptor, RFID, date, result)  VALUES ( ?, ?, ?, ?);`;
-        await this.#dbManager.genericSqlRun(sqlInstruction, idTestDescriptor, rfid, date, result)
+        await this.#dbManager.genericSqlRun(sqlInstruction, idTestDescriptor, rfid, dateToSave, result)
             .catch(error => { throw new Exceptions(503); });
 
     }
@@ -118,21 +124,31 @@ class TestResultController {
 
         if (this.#controller.areUndefined(newIdTestDescriptor, newDate, newResult, id)
             || this.#controller.areNotNumbers(id)
-            || this.#controller.checkRFID(rfid))
+            || this.#controller.checkRFID(rfid)
+            || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
+        let dateToSave;
+        try {
+            dateToSave = this.#controller.checkAndFormatDate(newDate);
+        } catch (error) {
+            throw error;
+        }
 
+        //check if skuitem exists
         await this.#controller.getSkuItemController().getSkuItem(rfid)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
+        //check if testdescriptor exists
         await this.#controller.getTestDescriptorController().getTestDescriptor(newIdTestDescriptor)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
+        //check if testresult exists
         await this.getTestResult(rfid, id)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlInstruction = `UPDATE TestResult SET idtestDescriptor= ?, date= ?, result=? WHERE ID= ? AND RFID = ?;`
-        await this.#dbManager.genericSqlRun(sqlInstruction, newIdTestDescriptor, newDate, newResult, id, rfid)
+        await this.#dbManager.genericSqlRun(sqlInstruction, newIdTestDescriptor, dateToSave, newResult, id, rfid)
             .catch(error => { throw new Exceptions(503) });
     }
 
@@ -147,8 +163,10 @@ class TestResultController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "qualityEmployee"))
             throw new Exceptions(401);
 
-        if (this.#controller.checkRFID(rfid) || this.#controller.areUndefined(id)
-            || this.#controller.areNotNumbers(id))
+        if (this.#controller.checkRFID(rfid)
+            || this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(id)
+            || !this.#controller.areAllPositive(id, rfid))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun

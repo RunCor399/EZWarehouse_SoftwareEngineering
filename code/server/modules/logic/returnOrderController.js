@@ -23,21 +23,18 @@ class ReturnOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401)
 
-        let rows;
-        await this.#dbManager.genericSqlGet("SELECT * FROM ReturnOrder;")
-            .then(value => rows = value)
+        let orders = await this.#dbManager.genericSqlGet("SELECT * FROM ReturnOrder;")
             .catch(error => { throw error });
 
-        for (let i = 0; i < rows.length; i++) {
-            await this.getProductsPerReturnOrder(rows[i].id)
-                .then(value => rows[i].products = value)
+        for (let i = 0; i < orders.length; i++) {
+            orders[i].products = await this.getProductsPerReturnOrder(rows[i].id)
                 .catch(error => { throw error });
         }
 
-        console.log(rows[0].products)
+        console.log(orders[0].products)
 
 
-        return rows;
+        return orders;
     }
 
     /**TO BE CHECKED - getter function to retreive a single return order, given its ID
@@ -53,7 +50,8 @@ class ReturnOrderController {
             throw new Exceptions(401)
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422)
 
         let row;
@@ -66,8 +64,7 @@ class ReturnOrderController {
             throw new Exceptions(404);
 
 
-        await this.getProductsPerReturnOrder(row.id)
-            .then(value => row.products = value)
+        row.products = await this.getProductsPerReturnOrder(row.id)
             .catch(error => { throw error });
 
 
@@ -76,13 +73,9 @@ class ReturnOrderController {
 
     /** @throws 500 */
     async getProductsPerReturnOrder(id) {
-        let products;
-        await this.#dbManager.genericSqlGet(
-        `SELECT SKUID, description, price, RFID
-        FROM SKUItemsPerReturnOrder
-        WHERE id = ? `, id)
-            .then(value => products = value)
-            .catch(error => { throw error  })
+        let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, description, price, RFID
+        FROM SKUItemsPerReturnOrder WHERE id = ? `, id)
+            .catch(error => { throw error })
 
         return products;
 
@@ -105,18 +98,27 @@ class ReturnOrderController {
         const restockOrderId = body["restockOrderId"];
 
         /*check if the body is valid */
-        if (this.#controller.areUndefined(returnDate, products, restockOrderId) || isNaN(Number(restockOrderId)))
+        if (this.#controller.areUndefined(returnDate, products, restockOrderId)
+            || isNaN(Number(restockOrderId))
+            || !this.#controller.areAllPositive(restockOrderId))
             throw new Exceptions(422)
+
+        let dateToSave
+        try {
+             dateToSave = this.#controller.checkAndFormatDate(returnDate);
+        } catch (error) {
+            throw error;
+        }
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, restockOrderId)
             .then((value) => row = value[0])
-            .catch((error) => { throw new Exceptions(503)  });
+            .catch((error) => { throw new Exceptions(503) });
 
         /*check if the restock order exists*/
         if (!row)
             throw new Exceptions(404);
-        
+
         for (let i = 0; i < products.length; i++) {
             await this.#controller.getSkuItemController().getSkuItem(products[i].RFID)
                 .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); throw error })
@@ -130,13 +132,13 @@ class ReturnOrderController {
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
                                 VALUES (?,?,?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, returnDate, restockOrderId)
-            .catch(error => { throw new Exceptions(503)  })
+        await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, dateToSave, restockOrderId)
+            .catch(error => { throw new Exceptions(503) })
 
         const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?);`;
         for (let i = 0; i < products.length; i++) {
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
-                .catch(error => { throw  new Exceptions(503) ; })
+                .catch(error => { throw new Exceptions(503); })
         }
 
 
@@ -154,7 +156,8 @@ class ReturnOrderController {
             throw new Exceptions(401)
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)))
+        if (!id || isNaN(Number(id))
+            || !this.#controller.areAllPositive(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM ReturnOrder WHERE ID=?;`, id)

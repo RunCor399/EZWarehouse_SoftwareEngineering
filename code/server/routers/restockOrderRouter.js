@@ -59,7 +59,7 @@ router.post('/api/restockOrder', async (req, res) => {
   console.log('POST', req.url);
 
   await controller.getRestockOrderController().createRestockOrder(req.body)
-    .then((user) => { return res.status(200).end(); })
+    .then((user) => { return res.status(201).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
