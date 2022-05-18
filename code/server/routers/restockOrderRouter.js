@@ -36,7 +36,7 @@ router.get('/api/restockOrders/:id/returnItems', async (req, res) => {
 
   await controller.getRestockOrderController().getRestockOrderToBeReturned(param)
     .then((user) => { return res.status(200).json(user); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage());});
 });
 
 

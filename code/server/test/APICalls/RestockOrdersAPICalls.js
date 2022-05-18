@@ -9,18 +9,39 @@ class RestockOrdersAPICalls {
         this.#baseURL = "http://localhost:3001";
     }
 
-    async getRestockOrdersTest(){
+    //GET
+    async getRestockOrders(){
         return axios({
             method: 'get',
             url: this.#baseURL + "/api/restockOrders/",
-            headers: {
-                'Content-Type': 'application/json',
-            }
         });
     } 
 
 
-    async addRestockOrderTest(){
+    async getIssuedRestockOrders(){
+        return axios({
+            method: 'get',
+            url: this.#baseURL + "/api/restockOrdersIssued/",
+        });
+    } 
+
+    async getRestockOrderById(id){
+        return axios({
+            method: 'get',
+            url: this.#baseURL + "/api/restockOrders/" + id,
+        });
+    } 
+
+
+    async getReturnItemsByRestockOrder(id){
+        return axios({
+            method: 'get',
+            url: this.#baseURL + "/api/restockOrders/" + id + "/returnItems",
+        });
+    }
+
+    //POST
+    async addRestockOrderTest(issueDate, products, supplierId){
         return axios({
             method: 'post',
             url: this.#baseURL + "/api/restockOrder",
@@ -28,10 +49,62 @@ class RestockOrdersAPICalls {
                 'Content-Type': 'application/json',
             },
             data: {
-                issueDate : "2022/08/11 08:08",
-                products: [],
-                supplierId : 1
+                issueDate : issueDate,
+                products: products,
+                supplierId : supplierId
             }
+        });
+    }
+
+
+    //PUT
+    async editRestockOrderState(id, newState){
+        return axios({
+            method: 'put',
+            url: this.#baseURL + "/api/restockOrder/" + id,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: {
+                newState : newState
+            }
+        });
+    }
+
+
+    async addSKUItemsToRestockOrder(id, skuItems){
+        return axios({
+            method: 'put',
+            url: this.#baseURL + "/api/restockOrder/" + id + "/skuItems",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: {
+                skuItems : skuItems
+            }
+        });
+    }
+
+
+    async addTransportNote(id, transportNote){
+        return axios({
+            method: 'put',
+            url: this.#baseURL + "/api/restockOrder/" + id + "/transportNote",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: {
+                transportNote : transportNote
+            }
+        });
+    }
+
+
+    //DELETE
+    async deleteRestockOrder(id){
+        return axios({
+            method: 'delete',
+            url: this.#baseURL + "/api/restockOrder/" + id,
         });
     }
 }

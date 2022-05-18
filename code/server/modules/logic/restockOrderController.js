@@ -168,9 +168,14 @@ class RestockOrderController {
             throw new Exceptions(422)
 
         let failedProducts = await this.#dbManager.genericSqlGet('SELECT Distinct RFID FROM TestResult WHERE Result = false')
-            .catch(error => { throw error })
+            .catch(error => { throw new Exceptions(500) })
 
         let failedProductsToReturn = []
+        let skuItems = row["skuItems"];
+
+        if(skuItems === undefined){
+            return failedProductsToReturn;
+        }
 
         for (let j = 0; j < skuItems.length; j++) {
             if (failedProducts.includes(skuItems[i].rfid))
