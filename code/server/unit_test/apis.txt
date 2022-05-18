@@ -15,6 +15,7 @@ POST /api/position
 PUT /api/position/:positionID
 PUT /api/position/:positionID/changeID
 DELETE /api/position/:positionID
+
 GET /api/testDescriptors
 GET /api/testDescriptors/:id
 POST /api/testDescriptor
@@ -38,6 +39,7 @@ POST /api/deliveryEmployeeSessions
 POST /api/logout
 PUT /api/users/:username
 DELETE /api/users/:username/:type
+
 GET /api/restockOrders
 GET /api/restockOrdersIssued
 GET /api/restockOrders/:id
@@ -51,6 +53,7 @@ GET /api/returnOrders
 GET /api/returnOrders/:id
 POST /api/returnOrder
 PUT /api/returnOrder/:id
+
 GET /api/internalOrders
 GET /api/internalOrdersIssued
 GET /api/internalOrdersAccepted

@@ -5,11 +5,11 @@ const axios = require('axios');
 class SkuAPICalls {
     #baseURL;
 
-    constructor(){
+    constructor() {
         this.#baseURL = "http://localhost:3001";
     }
 
-    async getSKUsTest(){
+    async getSKUsTest() {
         return axios({
             method: 'get',
             url: this.#baseURL + "/api/skus",
@@ -20,17 +20,16 @@ class SkuAPICalls {
     }
 
 
-    async getSKUTest(id){
-        return axios({
-            method: 'get',
-            url: this.#baseURL + "/api/skus/" + id ,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+    async getSKUTest(id) {
+       
+        let response;
+        await axios.get( this.#baseURL + "/api/skus/" + id)
+            .then( value => {response = value})
+            .catch(function (error) {response = error.response;});
+            return response;
     }
 
-    async addSKUTest(){
+    async addSKUTest(description, weight, volume, notes, price, availableQuantity) {
         return axios({
             method: 'post',
             url: this.#baseURL + "/api/sku",
@@ -38,17 +37,17 @@ class SkuAPICalls {
                 'Content-Type': 'application/json',
             },
             data: {
-                description : "a new sku",
-                weight : 100,
-                volume : 50,
-                notes : "first SKU",
-                price : 10.99,
-                availableQuantity : 50
+                description: description,
+                weight: Number(weight),
+                volume: Number(volume),
+                notes: notes,
+                price: Number(price),
+                availableQuantity: Number(availableQuantity)
             }
         });
     }
 
-    async modifySKUTest(id, description, weight, volume, notes, price, newAvailableQuantity){
+    async modifySKUTest(id, description, weight, volume, notes, price, newAvailableQuantity) {
         return axios({
             method: 'put',
             url: this.#baseURL + "/api/sku/" + id,
@@ -56,17 +55,17 @@ class SkuAPICalls {
                 'Content-Type': 'application/json',
             },
             data: {
-                newDescription : description,
-                newWeight : weight,
-                newVolume : volume,
-                newNotes : notes,
-                newPrice : price,
-                newAvailableQuantity : newAvailableQuantity
+                newDescription: description,
+                newWeight: weight,
+                newVolume: volume,
+                newNotes: notes,
+                newPrice: price,
+                newAvailableQuantity: newAvailableQuantity
             }
         });
     }
 
-    async modifySKUPosition(id){
+    async modifySKUPosition(id) {
         return axios({
             method: 'put',
             url: this.#baseURL + "/api/sku/" + id + "/position",
@@ -74,10 +73,19 @@ class SkuAPICalls {
                 'Content-Type': 'application/json',
             },
             data: {
-                position : position,
+                position: position,
             }
         });
     }
+
+    async deleteSKUTest(id) {
+   
+        let response;
+        await axios.delete(this.#baseURL + "/api/skus/" + id)
+        .then( value => {response = value})
+            .catch(error => {response = error.response;});
+            return response;
+}
 }
 
 module.exports = SkuAPICalls;

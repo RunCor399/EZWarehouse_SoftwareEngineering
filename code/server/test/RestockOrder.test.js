@@ -16,7 +16,7 @@ const restockOrdersAPICalls = new RestockOrdersAPICalls();
 
 
 describe('restock order test suite', async () => {
-    it('get restock orders', async () => { //it indicates a TEST CASE
+   /*  it('get restock orders', async () => { //it indicates a TEST CASE
         const response = await restockOrdersAPICalls.getRestockOrdersTest();
 
         console.log(response.body);
@@ -29,5 +29,5 @@ describe('restock order test suite', async () => {
 
         console.log(response.body);
         response.status.should.equal(201);
-    })
+    }) */
 });
