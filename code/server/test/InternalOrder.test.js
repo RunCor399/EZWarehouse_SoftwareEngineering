@@ -43,13 +43,31 @@ describe('internal order test suite', async () => {
 });
 
 describe('POST Request test to Internal Orders', async () => {
+    describe('Add a new Internal Order tests', async () => {
+        it('Successfully add a new Internal Order', async () => {
 
+        });
+
+        /*add error test cases*/
+    });
 });
 
 describe('PUT Request test to Internal Orders', async() => {
+    describe('Edit an existing Internal Order tests', async () => {
+        it('Successfully edit an Internal Order', async () => {
 
+        });
+
+        /*add error test cases*/
+    });
 });
 
 describe('DELETE Request test to Internal Orders', async() => {
-    
+    describe('Delete an Internal Order tests', async () => {
+        it('Successfully delete an Internal Order', async () => {
+
+        });
+
+        /*add error test cases*/
+    });
 })
