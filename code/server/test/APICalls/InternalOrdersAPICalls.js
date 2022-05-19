@@ -13,28 +13,28 @@ class InternalOrdersAPICalls {
     async getInternalOrdersTest() {
         return axios({
             method: 'get',
-            url: this.#baseURL + 'api/internalOrders/',
+            url: this.#baseURL + '/api/internalOrders/',
         });
     }
 
     async getIssuedInternalOrdersTest() {
         return axios({
             method: 'get',
-            url: this.#baseURL + 'api/internalOrdersIssued/',
+            url: this.#baseURL + '/api/internalOrdersIssued/',
         });
     }
 
     async getAcceptedInternalOrdersTest() {
         return axios({
             method: 'get',
-            url: this.#baseURL + 'api/internalOrdersAccepted/',
+            url: this.#baseURL + '/api/internalOrdersAccepted/',
         });
     }
 
     async getInternalOrderByIdTest(id) {
         return axios({
             method: 'get',
-            url: this.#baseURL + 'api/internalOrders/' + id,
+            url: this.#baseURL + '/api/internalOrders/' + id,
         });
     }
 
@@ -42,7 +42,7 @@ class InternalOrdersAPICalls {
     async addInternalOrderTest(issueDate, products, customerId) {
         return axios({
             method: 'post',
-            url: this.#baseURL + 'api/internalOrders',
+            url: this.#baseURL + '/api/internalOrders',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -60,7 +60,7 @@ class InternalOrdersAPICalls {
     async editInternalOrderTest(id, newState) {
         return axios({
             method: 'put',
-            url: this.#baseURL + 'api/internalOrders/' + id,
+            url: this.#baseURL + '/api/internalOrders/' + id,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -74,7 +74,7 @@ class InternalOrdersAPICalls {
     async deleteInternalOrderTest(id) {
         return axios({
             method: 'delete',
-            url: this.#baseURL + 'api/internalOrders/' + id
+            url: this.#baseURL + '/api/internalOrders/' + id
         });
     }
 

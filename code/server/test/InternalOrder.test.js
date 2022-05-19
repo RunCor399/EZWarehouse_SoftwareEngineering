@@ -14,7 +14,7 @@ const baseURL = "http://localhost:3001";
 const utilityCalls = new UtilityCalls();
 const internalOrdersAPICalls = new InternalOrdersAPICalls();
 
-describe('internal order test suite', async () => {
+describe('Internal Orders test suite', async () => {
     describe('Standard Internal Order getters', async () => {
         it('get all internal orders', async () => {
             const response = await internalOrdersAPICalls.getInternalOrdersTest();
@@ -52,7 +52,7 @@ describe('POST Request test to Internal Orders', async () => {
     });
 });
 
-describe('PUT Request test to Internal Orders', async() => {
+describe('PUT Request test to Internal Orders', async () => {
     describe('Edit an existing Internal Order tests', async () => {
         it('Successfully edit an Internal Order', async () => {
 
@@ -62,7 +62,7 @@ describe('PUT Request test to Internal Orders', async() => {
     });
 });
 
-describe('DELETE Request test to Internal Orders', async() => {
+describe('DELETE Request test to Internal Orders', async () => {
     describe('Delete an Internal Order tests', async () => {
         it('Successfully delete an Internal Order', async () => {
 
