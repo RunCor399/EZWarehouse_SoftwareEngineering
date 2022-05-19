@@ -24,7 +24,7 @@ router.get('/api/restockOrders/:id', async (req, res) => {
 
   await controller.getRestockOrderController().getRestockOrder(param)
     .then((restockOrder) => { return res.status(200).json(restockOrder); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error); return res.status(501).send(); });
 });
 
 router.get('/api/restockOrders/:id/returnItems', async (req, res) => {

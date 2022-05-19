@@ -11,111 +11,133 @@ class RestockOrdersAPICalls {
 
     //GET
     async getRestockOrders(){
-        return axios({
-            method: 'get',
-            url: this.#baseURL + "/api/restockOrders/",
-        });
+        const url = this.#baseURL + "/api/restockOrders/";
+        let response;
+
+        await axios.get(url)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
+        return response;
 
 
     } 
 
 
     async getIssuedRestockOrders(){
-        return axios({
-            method: 'get',
-            url: this.#baseURL + "/api/restockOrdersIssued/",
-        });
+        const url = this.#baseURL + "/api/restockOrdersIssued/";
+        let response;
+
+        await axios.get(url)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
+        return response;
     } 
 
     async getRestockOrderById(id){
-        return axios({
-            method: 'get',
-            url: this.#baseURL + "/api/restockOrders/" + id,
-        });
+        const url = this.#baseURL + "/api/restockOrders/" + id;
+        let response;
+
+        await axios.get(url)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
+        return response;
     } 
 
 
     async getReturnItemsByRestockOrder(id){
         const url = this.#baseURL + "/api/restockOrders/" + id + "/returnItems";
-      /*  return axios({
-            method: 'get',
-            url: this.#baseURL + "/api/restockOrders/" + id + "/returnItems",
-        });*/
         const body = {};
         const headers = {headers: {'content-type': 'text/json'}};
+        let response;
 
-        axios.get(url, body, headers).then(value => response = value)
-                                     .catch(error => response = error.response);
-        
+        await axios.get(url, body, headers)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
         return response;
     }
 
     //POST
-    async addRestockOrderTest(issueDate, products, supplierId){
-        return axios({
-            method: 'post',
-            url: this.#baseURL + "/api/restockOrder",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                issueDate : issueDate,
-                products: products,
-                supplierId : supplierId
-            }
-        });
+    async addRestockOrder(issueDate, products, supplierId){
+        const url = this.#baseURL + "/api/restockOrder";
+        const body = {
+            issueDate : issueDate,
+            products: products,
+            supplierId : supplierId
+        }
+        const headers = {headers: {'Content-Type': 'application/json'}};
+        let response;
+
+        await axios.get(url, body, headers)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
+        return response;
+
     }
 
 
     //PUT
     async editRestockOrderState(id, newState){
-        return axios({
-            method: 'put',
-            url: this.#baseURL + "/api/restockOrder/" + id,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                newState : newState
-            }
-        });
+        const url = this.#baseURL + "/api/restockOrder/" + id;
+        const body = {
+            newState : newState
+        }
+        const headers = {headers: {'Content-Type': 'application/json'}};
+        let response;
+
+
+        await axios.put(url, body, headers)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
+        return response;
     }
 
 
     async addSKUItemsToRestockOrder(id, skuItems){
-        return axios({
-            method: 'put',
-            url: this.#baseURL + "/api/restockOrder/" + id + "/skuItems",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                skuItems : skuItems
-            }
-        });
+        const url = this.#baseURL + "/api/restockOrder/" + id + "/skuItems";
+        const body = {
+            skuItems : skuItems
+        }
+        const headers = {headers: {'Content-Type': 'application/json'}};
+        let response;
+
+
+        await axios.put(url, body, headers)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
+        return response;
     }
 
 
     async addTransportNote(id, transportNote){
-        return axios({
-            method: 'put',
-            url: this.#baseURL + "/api/restockOrder/" + id + "/transportNote",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                transportNote : transportNote
-            }
-        });
+        const url = this.#baseURL + "/api/restockOrder/" + id + "/transportNote";
+        const body = {
+            transportNote : transportNote
+        }
+        const headers = {headers: {'Content-Type': 'application/json'}};
+        let response;
+
+        await axios.put(url, body, headers)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
+    
+        return response;
     }
 
 
     //DELETE
     async deleteRestockOrder(id){
-        return axios({
-            method: 'delete',
-            url: this.#baseURL + "/api/restockOrder/" + id,
-        });
+        const url = this.#baseURL + "/api/restockOrder/" + id;
+
+        await axios.delete(url)
+                    .then(value => response = value)
+                    .catch(error => response = error.response);
     }
 }
 

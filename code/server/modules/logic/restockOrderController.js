@@ -53,7 +53,7 @@ class RestockOrderController {
 
     /** @throws 500 */
     async getTransportNote(id) {
-        let transportNote = await this.#dbManager.genericSqlGet(`SELECT shipmentDate FROM RestockOrder WHERE id = ?;`, id)
+        let transportNote = await this.#dbManager.genericSqlGet(`SELECT transportNote FROM RestockOrder WHERE id = ?;`, id)
             //.then(value => transportNote = value[0])
             .catch((error) => { throw error });
 
@@ -123,7 +123,7 @@ class RestockOrderController {
             row.products = await this.getProductsForOrders(row.id)
                 .catch((error) => { throw error });
 
-            row.skuItems = await this.getSKUItemsForOrder(row.id)
+            row.skuItems = await this.getSKUItemsForOrders(row.id)
                 .then(value => row.skuItems = value)
                 .catch((error) => { throw error });
 
@@ -191,7 +191,7 @@ class RestockOrderController {
      * @throws 503 Service Unavailable (generic error).
     */
     async createRestockOrder(body) {
-
+        //IS THIS CHECKING IF SKU's INCLUDED IN BODY EXIST?
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager", "supplier"))
             throw new Exceptions(401)
@@ -218,7 +218,7 @@ class RestockOrderController {
             .then(value => id = value[0]["COUNT(*)"]+1)
             .catch((error) => { throw new Exceptions(503) });
 
-        const sqlInstruction = `INSERT INTO RestockOrder ( id, issueDate, state, shipmentDate, supplierId) 
+        const sqlInstruction = `INSERT INTO RestockOrder ( id, issueDate, state, transportNote, supplierId) 
         VALUES (?, ?, "ISSUED", '', ?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, id, dateToSave, supplierId)
