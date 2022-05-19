@@ -23,7 +23,7 @@ describe('Items test suite', async () => {
         });
 
         it('get item by id', async () => {
-            const response = await itemAPICalls.getItemByIdTest();
+            const response = await itemAPICalls.getItemByIdTest(1);
 
             response.status.should.equal(200);
         });
