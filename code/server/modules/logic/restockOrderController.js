@@ -26,8 +26,8 @@ class RestockOrderController {
         let orders = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;")
             .catch((error) => { throw new Exceptions(500) });
 
-        for (let i = 0; i < orders.length; i++) {
-            if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
+        for (let i = 0; i < orders.length; i++) { // WHERE ARE THIS METHODS?
+          /*  if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
                 orders[i].products = await this.getProductsPerOrder(orders[i].id)
                     .catch((error) => { throw new Exceptions(500) });
 
@@ -38,7 +38,7 @@ class RestockOrderController {
             if (orders[i].state !== 'ISSUED') {
                 orders[i].skuItems = await this.getTransportNote(orders[i].id)
                     .catch((error) => { throw new Exceptions(500) });
-            }
+            }*/
         }
 
         return orders;
@@ -47,7 +47,7 @@ class RestockOrderController {
     /** @throws 500 */
     async getProductsForOrders(id) {
         let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id)
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
         return products;
     }
 
@@ -55,7 +55,7 @@ class RestockOrderController {
     async getTransportNote(id) {
         let transportNote = await this.#dbManager.genericSqlGet(`SELECT transportNote FROM RestockOrder WHERE id = ?;`, id)
             //.then(value => transportNote = value[0])
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         return transportNote[0];
     }
@@ -63,7 +63,7 @@ class RestockOrderController {
     /** @throws 500 */
     async getSKUItemsForOrders(id) {
         let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id)
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
         return skuItems;
     }
 
@@ -79,14 +79,14 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder WHERE state = 'ISSUED';")
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForOrders(rows[i].id)
-                .catch((error) => { throw error });
+                .catch((error) => { throw new Exceptions(503) });
 
             rows[i].skuItems = await this.getSKUItemsForOrders(rows[i].id)
-                .catch((error) => { throw error });
+                .catch((error) => { throw new Exceptions(503) });
 
         }
 
@@ -113,7 +113,7 @@ class RestockOrderController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         /*check if the restock order exists*/
         if (!row)
@@ -121,16 +121,16 @@ class RestockOrderController {
 
         if (row.state !== 'DELIVERY' && row.state !== 'ISSUED') {
             row.products = await this.getProductsForOrders(row.id)
-                .catch((error) => { throw error });
+                .catch((error) => { throw new Exceptions(503) });
 
             row.skuItems = await this.getSKUItemsForOrders(row.id)
                 .then(value => row.skuItems = value)
-                .catch((error) => { throw error });
+                .catch((error) => { throw new Exceptions(503) });
 
         }
         if (row.state !== 'ISSUED') {
             row.skuItems = await this.getTransportNote(row.id)
-                .catch((error) => { throw error });
+                .catch((error) => { throw new Exceptions(503) });
         }
 
 
@@ -152,7 +152,7 @@ class RestockOrderController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         /*check if the restock order exists*/
         if (!row)
@@ -210,7 +210,7 @@ class RestockOrderController {
         try {
             dateToSave = this.#controller.checkAndFormatDate(issueDate);
         } catch (error) {
-            throw error;
+            throw new Exceptions(422);
         }
 
         let id;
@@ -313,7 +313,7 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         /*check if the body is valid */
-        const transportNote = body["transportNote"];
+        const transportNote = body["transportNote"].transportNote;
         if (!transportNote)
             throw new Exceptions(422);
 
@@ -332,23 +332,29 @@ class RestockOrderController {
             throw new Exceptions(404)
 
         /*check if the state of the restock order is DELIVERY*/
-        if (row.state !== 'DELIVERY')
+        if (row.state !== 'DELIVERY'){
             throw new Exceptions(422)
+        }
+            
 
         let formattedDeliveryDate, formattedIssueDate;
         try {
             formattedDeliveryDate = this.#controller.checkAndFormatDate(transportNote.deliveryDate);
             formattedIssueDate = this.#controller.checkAndFormatDate(row.issueDate);
+            
         } catch (error) {
+            
             throw error;
         }
 
         /*check if the deliveryDate is before the issueDate */
-        if (formattedDeliveryDate <= formattedIssueDate)
+        if (formattedDeliveryDate <= formattedIssueDate){
             throw new Exceptions(422);
+        }
+            
 
         const sqlInstruction = `UPDATE RestockOrder SET transportNote = ? WHERE id = ?;`;
-        await this.#dbManager.genericSqlRun(sqlInstruction, transportNote, id)
+        await this.#dbManager.genericSqlRun(sqlInstruction, transportNote.deliveryDate, id)
             .catch((error) => { throw new Exceptions(503) })
     }
 

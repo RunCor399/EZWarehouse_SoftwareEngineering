@@ -1,6 +1,7 @@
 'use strict'
 
 const axios = require('axios');
+const { response } = require('express');
 
 class RestockOrdersAPICalls {
     #baseURL;
@@ -71,7 +72,7 @@ class RestockOrdersAPICalls {
         const headers = {headers: {'Content-Type': 'application/json'}};
         let response;
 
-        await axios.get(url, body, headers)
+        await axios.post(url, body, headers)
                     .then(value => response = value)
                     .catch(error => response = error.response);
     
@@ -134,10 +135,13 @@ class RestockOrdersAPICalls {
     //DELETE
     async deleteRestockOrder(id){
         const url = this.#baseURL + "/api/restockOrder/" + id;
+        let response;
 
         await axios.delete(url)
                     .then(value => response = value)
                     .catch(error => response = error.response);
+
+        return response;
     }
 }
 

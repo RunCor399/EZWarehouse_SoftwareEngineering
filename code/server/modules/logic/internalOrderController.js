@@ -25,11 +25,11 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                .catch(error => { throw error })
+                .catch(error => { throw new Exceptions(503) })
         }
 
         return rows;
@@ -40,7 +40,7 @@ class InternalOrderController {
         let products = await this.#dbManager.genericSqlGet(
             `SELECT SKUId, description, price, qty
             FROM SKUPerInternalOrder WHERE id = ?;`, id)
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
         return products;
     }
 
@@ -55,11 +55,11 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                .catch(error => { throw error })
+                .catch(error => { throw new Exceptions(503) })
         }
         return rows;
 
@@ -75,11 +75,11 @@ class InternalOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
             throw new Exceptions(401);
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                .catch(error => { throw error })
+                .catch(error => { throw new Exceptions(503) })
         }
 
         return rows;
@@ -105,14 +105,14 @@ class InternalOrderController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID = ?;`, id)
             .then((value) => row = value[0])
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         /*check if the internal order exists*/
         if (!row)
             throw new Exceptions(404);
 
         row.products = await this.getProductsForInternalOrder(row.id)
-            .catch(error => { throw error })
+            .catch(error => { throw new Exceptions(503) })
 
 
         return row;
@@ -144,7 +144,7 @@ class InternalOrderController {
         try {
             dateToSave = this.#controller.checkAndFormatDate(returnDate);
         } catch (error) {
-            throw error;
+            throw new Exceptions(503);
         }
 
 
