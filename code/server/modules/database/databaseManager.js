@@ -70,6 +70,23 @@ class DBManager {
             "DELETE FROM SKUItemsPerInternalOrder WHERE 1=1",
             "DELETE FROM Item WHERE 1=1",
 
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKU'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItem'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='Position'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKU_in_Position'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='TestDescriptor'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='TestResult'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='Users'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='RestockOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUPerRestockOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItemsPerRestockOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='ReturnOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItemsPerReturnOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='InternalOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUPerInternalOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItemsPerInternalOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='Item'",
+
             'INSERT INTO Users (email, name, surname, password, type) \
              VALUES  ("user1@ezwh.com","name1","surname1","e16b2ab8d12314bf4efbd6203906ea6c","customer"), \
                     ("qualityEmployee1@ezwh.com", "name2","surname2","e16b2ab8d12314bf4efbd6203906ea6c","qualityEmployee"), \
