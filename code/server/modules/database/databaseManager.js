@@ -70,13 +70,30 @@ class DBManager {
             "DELETE FROM SKUItemsPerInternalOrder WHERE 1=1",
             "DELETE FROM Item WHERE 1=1",
 
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKU'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItem'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='Position'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKU_in_Position'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='TestDescriptor'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='TestResult'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='Users'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='RestockOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUPerRestockOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItemsPerRestockOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='ReturnOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItemsPerReturnOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='InternalOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUPerInternalOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItemsPerInternalOrder'",
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='Item'",
+
             'INSERT INTO Users (email, name, surname, password, type) \
              VALUES  ("user1@ezwh.com","name1","surname1","e16b2ab8d12314bf4efbd6203906ea6c","customer"), \
                     ("qualityEmployee1@ezwh.com", "name2","surname2","e16b2ab8d12314bf4efbd6203906ea6c","qualityEmployee"), \
                     ("clerk1@ezwh.com","name3","surname3","e16b2ab8d12314bf4efbd6203906ea6c","clerk"),  \
                     ("deliveryEmployee1@ezwh.com","name4","surname4","e16b2ab8d12314bf4efbd6203906ea6c","deliveryEmployee"), \
                     ("supplier1@ezwh.com","name5","surname5","e16b2ab8d12314bf4efbd6203906ea6c","supplier"), \
-                    ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")' 
+                    ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
         ];
 
         
@@ -96,6 +113,7 @@ class DBManager {
     }
 
 
+
     async insertRestockOrderTestData(){
 
 
@@ -110,6 +128,74 @@ class DBManager {
         const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
 
         const insertQueries = [insertRestockOrder, insertSKU, insertSKUItems];
+
+        return new Promise((resolve, reject) => {
+            insertQueries.forEach((querySet) => {
+                querySet.forEach((query) => {
+                    this.#db.run(query, (err, rows) => {
+                        if (err) {
+                            console.log("Database get error: err", err);
+                            reject(new Exceptions(500));
+                        } else {
+                            resolve(rows)
+                        }
+                    });
+                }); 
+            });
+    })
+                
+    }
+
+    async insertTestDescriptorTestData(){
+        const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (1, 10, 20, 30, "note", "description", 40);`];
+        const insertSKU2 = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (2, 10, 20, 30, "note", "description", 40);`];
+
+        const insertTestDescriptor = [' INSERT INTO TestDescriptor ("id","name", "procedureDescription", "idSKU") \
+                                     VALUES (1,"test descriptor 1", "description", 1) \
+                                    '];
+
+        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
+
+        const insertQueries = [insertSKU, insertTestDescriptor, insertSKUItems, insertSKU2];
+
+        return new Promise((resolve, reject) => {
+            insertQueries.forEach((querySet) => {
+                querySet.forEach((query) => {
+                    this.#db.run(query, (err, rows) => {
+                        if (err) {
+                            console.log("Database get error: err", err);
+                            reject(new Exceptions(500));
+                        } else {
+                            resolve(rows)
+                        }
+                    });
+                }); 
+            });
+    })
+                   
+    }
+
+    async insertTestResultTestData(){
+        const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (1, 10, 20, 30, "note", "description", 40);`];
+        const insertSKU2 = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (2, 10, 20, 30, "note", "description", 40);`];
+
+        const insertTestDescriptor = [' INSERT INTO TestDescriptor ("id","name", "procedureDescription", "idSKU") \
+                                     VALUES (1,"test descriptor 1", "description", 1) \
+                                    '];
+        const insertTestDescriptor2 = [' INSERT INTO TestDescriptor ("id","name", "procedureDescription", "idSKU") \
+                                    VALUES (2,"test descriptor 1", "description", 1) \
+                                   '];
+
+        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
+        const insertTestResult = [' INSERT INTO TestResult("id", "idTestDescriptor", "RFID", "Date", "Result") \
+                                     VALUES (1, 1, "12345678901234567890123456789016", "2022/01/02 10:10", true) \
+                                    '];
+
+        const insertQueries = [insertSKU, insertTestDescriptor, insertTestDescriptor2, insertSKUItems, insertSKU2, insertTestResult];
 
         return new Promise((resolve, reject) => {
             insertQueries.forEach((querySet) => {

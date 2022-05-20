@@ -145,8 +145,8 @@ class TestResultController {
 
         //check if testresult exists
         await this.getTestResult(rfid, id)
-            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
-
+            .catch((error) => {if (error.getCode() === 500) throw new Exceptions(503); else throw error });
+        
         const sqlInstruction = `UPDATE TestResult SET idtestDescriptor= ?, date= ?, result=? WHERE ID= ? AND RFID = ?;`
         await this.#dbManager.genericSqlRun(sqlInstruction, newIdTestDescriptor, dateToSave, newResult, id, rfid)
             .catch(error => { throw new Exceptions(503) });

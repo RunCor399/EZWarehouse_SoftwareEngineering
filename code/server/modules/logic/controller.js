@@ -92,7 +92,7 @@ class Controller {
     getSession() {
         let user;
         try {
-            user = this.#userController.getUser();
+            user = this.#userController.getUserAPI();
         } catch (error) {
             throw error;
         }

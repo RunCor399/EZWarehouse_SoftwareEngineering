@@ -108,7 +108,7 @@ router.post('/api/skuitems/testResult', async (req, res) => {
   console.log('POST', req.url);
 
   await controller.getTestResultController().createTestResult(req.body)
-    .then((user) => { return res.status(200).json(user); })
+    .then((user) => { return res.status(201).json(user); })
     .catch(error => {  return res.status(error.getCode()).send(error.getMessage()); });
 });
 
@@ -136,7 +136,7 @@ router.delete('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
   console.log('DELETE', req.url);
 
   await controller.getTestResultController().deleteTestResult(paramRfid, paramId)
-    .then((user) => { return res.status(200).json(user); })
+    .then((user) => { return res.status(204).json(user); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 

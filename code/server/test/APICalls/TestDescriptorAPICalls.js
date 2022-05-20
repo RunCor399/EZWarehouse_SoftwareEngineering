@@ -26,9 +26,10 @@ class TestDescriptorAPICalls {
 
     //POST
     async addTestDescriptor(name, procedureDescription, idSKU){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
-            url: this.#baseURL + "/api/testDescriptor/" + id ,
+            url: this.#baseURL + "/api/testDescriptor",
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -37,13 +38,16 @@ class TestDescriptorAPICalls {
                 procedureDescription: procedureDescription,
                 idSKU: idSKU
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
 
     //PUT
     async editTestDescriptor(id, newName, newProcedureDescription, newIdSKU){
-        return axios({
+        let response;
+        await axios({
             method: 'put',
             url: this.#baseURL + "/api/testDescriptor/" + id,
             headers: {
@@ -54,16 +58,21 @@ class TestDescriptorAPICalls {
                 newProcedureDescription: newProcedureDescription, 
                 newIdSKU: newIdSKU
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
 
     //DELETE
     async deleteTestDescriptor(id){
-        return axios({
+        let response;
+        await axios({
             method: 'delete',
             url: this.#baseURL + "/api/testDescriptor/" + id,
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 }
 

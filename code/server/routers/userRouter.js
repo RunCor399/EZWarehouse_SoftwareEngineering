@@ -14,7 +14,7 @@ router.get('/api/userinfo', async (req, res) => {
   console.log("prova1");
   let user;
   try {
-    user = controller.getUserController().getUserAPI()
+    user = controller.getUserController().getUser()
   } catch (error) {
     return res.status(error.getCode()).send(error.getMessage());
   }
@@ -79,7 +79,7 @@ router.post('/api/customerSessions', async (req, res) => {
   console.log('POST', req.url);
 
   await controller.getUserController().login(req.body, "customer")
-    .then(() => { return res.status(201).end() })
+    .then(() => { return res.status(200).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
@@ -91,7 +91,7 @@ router.post('/api/supplierSessions', async (req, res) => {
   console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "supplier")
-    .then(() => { return res.status(201).end() })
+    .then(() => { return res.status(200).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
@@ -103,7 +103,7 @@ router.post('/api/clerkSessions', async (req, res) => {
   console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "clerk")
-    .then(() => { return res.status(201).end() })
+    .then(() => { return res.status(200).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
@@ -115,7 +115,7 @@ router.post('/api/qualityEmployeeSessions', async (req, res) => {
   console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "qualityEmployee")
-    .then(() => { return res.status(201).end() })
+    .then(() => { return res.status(200).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
@@ -127,7 +127,7 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
   console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "deliveryEmployee")
-    .then(() => { return res.status(201).end() })
+    .then(() => { return res.status(200).end() })
     .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
@@ -171,7 +171,7 @@ router.delete('/api/users/:username/:type', async (req, res) => {
   console.log('DELETE', req.url);
 
   await controller.getUserController().deleteUser(paramUsername, paramType)
-    .then(() => { return res.status(200).end() })
+    .then(() => { return res.status(204).end() })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
