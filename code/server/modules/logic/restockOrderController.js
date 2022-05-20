@@ -27,18 +27,18 @@ class RestockOrderController {
             .catch((error) => { throw new Exceptions(500) });
 
         for (let i = 0; i < orders.length; i++) { // WHERE ARE THIS METHODS?
-          /*  if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
-                orders[i].products = await this.getProductsPerOrder(orders[i].id)
+            if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
+                orders[i].products = await this.getProductsForOrders(orders[i].id)
                     .catch((error) => { throw new Exceptions(500) });
 
-                orders[i].skuItems = await this.getSKUItemsPerOrder(orders[i].id)
+                orders[i].skuItems = await this.getSKUItemsForOrders(orders[i].id)
                     .catch((error) => { throw new Exceptions(500) });
 
             }
             if (orders[i].state !== 'ISSUED') {
                 orders[i].skuItems = await this.getTransportNote(orders[i].id)
                     .catch((error) => { throw new Exceptions(500) });
-            }*/
+            }
         }
 
         return orders;
