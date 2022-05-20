@@ -13,7 +13,8 @@ const DBManager = require('../modules/database/databaseManager');
 const baseURL = "http://localhost:3001";
 
 //const utilityCalls = new UtilityCalls();
-const databaseManager = new DBManager();
+//const databaseManager = new DBManager();
+const dbmanager = new DBManager();
 const internalOrdersAPICalls = new InternalOrdersAPICalls();
 
 describe('Internal Orders test suite', async () => {
@@ -48,12 +49,12 @@ describe('Internal Orders test suite', async () => {
             });
 
             it('Negative customerId', async () => {
-                response = await internalOrdersAPICalls.addInternalOrderTest("2022/02/04 13:00", [], -5);
+                response = await internalOrdersAPICalls.addInternalOrderTest("02/02/2022 10:10", [], -5);
                 response.status.should.equal(422);
             });
 
             it('Malformed date', async () => {
-                response = await internalOrdersAPICalls.addInternalOrderTest("05/02/2022 10:10", [], 10);
+                response = await internalOrdersAPICalls.addInternalOrderTest("02/02/2022 10:10", [], -5);
                 response.status.should.equal(422);
             });
         });
