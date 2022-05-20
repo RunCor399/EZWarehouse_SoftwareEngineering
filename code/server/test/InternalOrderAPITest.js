@@ -56,7 +56,6 @@ describe('Internal Orders test suite', async () => {
                 response = await internalOrdersAPICalls.addInternalOrderTest("05/02/2022 10:10", [], 10);
                 response.status.should.equal(422);
             });
-
         });
     });
 
@@ -98,11 +97,16 @@ describe('Internal Orders test suite', async () => {
 
     describe('DELETE Request test to Internal Orders', async () => {
         describe('Delete an Internal Order tests', async () => {
+            let response;
             it('Successfully delete an Internal Order', async () => {
-
+                response = await internalOrdersAPICalls.deleteInternalOrderTest(1);
+                response.status.should.equal(204);
             });
 
-            /*add error test cases*/
+            it('Wrong Internal Order id', async () => {
+                response = await internalOrdersAPICalls.deleteInternalOrderTest('id');
+                response.status.should.equal(422);
+            });
         });
     })
 
