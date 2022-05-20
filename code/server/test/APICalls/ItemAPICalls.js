@@ -11,58 +11,74 @@ class ItemAPICalls {
 
     //GET
     async getItemsTest() {
-        return axios({
-            method: 'get',
-            url: this.#baseURL + '/api/items/'
-        });
+        const url = this.#baseURL + "/api/items/";
+        let response;
+
+        await axios.get(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     async getItemByIdTest(id) {
-        return axios({
-            method: 'get',
-            url: this.#baseURL + '/api/items/' + id
-        });
+        const url = this.#baseURL + "/api/items/" + id;
+        let response;
+
+        await axios.get(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     //POST
     async addItemTest(id, description, price, SKUId, supplierId) {
-        return axios({
-            method: 'post',
-            url: this.#baseURL + '/api/item',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: {
-                id: id,
-                description: description,
-                price: price,
-                SKUId: SKUId,
-                supplierId: supplierId
-            }
-        });
+        const url = this.#baseURL + "/api/item";
+        const body = {
+            id: id,
+            description: description,
+            price: price,
+            SKUId: SKUId,
+            supplierId: supplierId
+        }
+        const headers = { headers: { 'Content-Type': 'application/json' } };
+        let response;
+
+        await axios.post(url, body, headers)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     //PUT
     async editItemTest(id, newDescription, newPrice) {
-        return axios({
-            method: 'put',
-            url: this.#baseURL + '/api/item' + id,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: {
-                newDescription: newDescription,
-                newPrice: newPrice
-            }
-        });
+        const url = this.#baseURL + "/api/item/" + id;
+        const body = {
+            newDescription: newDescription,
+            newPrice: newPrice
+        };
+        const headers = { headers: { 'Content-Type': 'application/json' } };
+        let response;
+
+        await axios.put(url, body, headers)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     //DELETE
     async deleteItemTest(id) {
-        return axios({
-            method: 'delete',
-            url: this.#baseURL + id
-        });
+        const url = this.#baseURL + "/api/items" + id;
+        let response;
+
+        await axios.delete(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 }
 
