@@ -111,7 +111,7 @@ class UserController {
         const sqlInstruction = `INSERT INTO USERS ( email, name, surname, password, type) VALUES (?,?,?,?,?);`;
 
         this.#dbManager.genericSqlRun(sqlInstruction, username, name, surname, hashedPassword, type)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
     }
 
@@ -197,7 +197,7 @@ class UserController {
 
         await this.#dbManager.genericSqlRun
             (`UPDATE USERS SET type= ? WHERE type= ? ;`, newType, oldType)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
     }
 
     /** 
@@ -214,7 +214,7 @@ class UserController {
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM USERS WHERE email= ? AND type= ?;`, username, type)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
     }
 
     hasPermission(type, validType) {

@@ -11,7 +11,7 @@ router.get('/api/returnOrders', async (req, res) => {
 
     await controller.getReturnOrderController().getAllReturnOrders()
     .then((returnOrders) => { return res.status(200).json(returnOrders); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => {console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 
@@ -36,7 +36,7 @@ router.post('/api/returnOrder', async (req, res) => {
     console.log('POST',req.url);
 
     await controller.getReturnOrderController().createReturnOrder(req.body)
-    .then(() => { return res.status(200).end(); })
+    .then(() => { return res.status(201).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
@@ -48,7 +48,7 @@ router.delete('/api/returnOrder/:id', async (req, res) => {
     console.log('DELETE',req.url);
 
     await controller.getReturnOrderController().deleteReturnOrder(param)
-    .then(() => { return res.status(200).end(); })
+    .then(() => { return res.status(204).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 

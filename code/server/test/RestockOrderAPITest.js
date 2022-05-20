@@ -20,7 +20,7 @@ const restockOrdersAPICalls = new RestockOrdersAPICalls();
 describe('Restock Orders Testing', async () => {
     beforeEach(async () => {
         await databaseManager.deleteAllData().then(async () => {
-            await databaseManager.insertRestockOrderTestData();
+            await databaseManager.insertRestockAndReturnOrderTestData();
         });
       });
 

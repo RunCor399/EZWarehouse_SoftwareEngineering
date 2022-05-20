@@ -108,25 +108,28 @@ class Controller {
     }
 
     areUndefined(...params) {
-        //console.log(params);
-        return (params.includes(undefined));
+        const value = (params.includes(undefined));
+       // console.log("undefined included: ", value)
+        return value;
     }
 
 
     areNotNumbers(...params) {
-        //console.log(params)
-        return params.some((num) => isNaN(Number(num)));
+        const value = params.some((num) => isNaN(Number(num)));
+       // console.log("there is a Nan:", value)
+        return value;
     }
 
     checkRFID(rfid) {
         return (!rfid || isNaN(Number(rfid)) || rfid.length !== 32)
     }
 
-    areAllPositive(...numbers) {
+    areAllPositiveOrZero(...numbers) {
         for (let i = 0; i < numbers.length; i++) {
-            if (Number(numbers[i]) <= 0)
+            if (Number(numbers[i]) < 0)
                 return false;
         }
+      //  console.log("positive ok")
         return true;
     }
 

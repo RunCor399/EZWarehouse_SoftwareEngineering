@@ -27,7 +27,7 @@ class SKUItemAPICalls {
 
     async getSKUItemByRFID(RFID) {
         let response;
-        await axios.get(this.#baseURL + '/api/skuitems' + RFID)
+        await axios.get(this.#baseURL + '/api/skuitems/' + RFID)
             .then(value => response = value)
             .catch(error => response = error.response)
         return response;

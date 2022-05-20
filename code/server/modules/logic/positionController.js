@@ -13,9 +13,11 @@ class PositionController {
     }
 
     checkPositionID(positionID, aisleID, row, col) {
-        return (String(positionID).substring(0, 4) === String(aisleID)
+        const value = (String(positionID).substring(0, 4) === String(aisleID)
             && String(positionID).substring(4, 8) === String(row)
             && String(positionID).substring(8, 12) === String(col))
+        console.log("is position ok: ", value);
+        return value;
     }
 
     /**getter function to retreive all positions
@@ -58,16 +60,19 @@ class PositionController {
         /*check if the body is valid*/
         if (this.#controller.areUndefined(positionID, aisleID, row, col, maxWeight, maxVolume) ||
             this.#controller.areNotNumbers(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
-            || !this.#controller.areAllPositive(maxWeight, maxVolume, occupiedWeight, occupiedVolume, positionID, aisleID, row, col)
-            || String(positionID).length !== 12 || String(aisleID).length !== 4
+            || !this.#controller.areAllPositiveOrZero(maxWeight, maxVolume, positionID, aisleID, row, col)
+            || occupiedVolume < 0 || occupiedWeight < 0
+           || String(positionID).length !== 12 || String(aisleID).length !== 4
             || String(row).length !== 4 || String(col).length !== 4
             || !this.checkPositionID(positionID, aisleID, row, col))
             throw new Exceptions(422);
 
         let exists = await this.positionExists(positionID)
             .catch(error => {throw error})
-            
-        if(exists){
+        
+        console.log("exists", exists.length)
+        
+        if(exists.length){
             throw new Exceptions(422);
         }
         
@@ -75,7 +80,7 @@ class PositionController {
         const sqlInstruction = `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES (?,?,?,?,?,?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
     }
 
     /**function to edit the properties of a specific position, given its ID
@@ -100,7 +105,8 @@ class PositionController {
 
         if (this.#controller.areUndefined(id, newAisleID, newRow, newCol, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume) ||
             this.#controller.areNotNumbers(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
-            || !this.#controller.areAllPositive(newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
+            || !this.#controller.areAllPositiveOrZero(newMaxWeight, newMaxVolume)
+            || newOccupiedVolume < 0 || newOccupiedWeight <0
             || String(id).length !== 12 || String(newAisleID).length !== 4
             || String(newRow).length !== 4 || String(newCol).length !== 4){
 
@@ -118,9 +124,6 @@ class PositionController {
         }
 
             
-
-        console.log("provaInFunction", id, body)
-
         let positions = await this.getAllPositions()
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
@@ -164,6 +167,8 @@ class PositionController {
             throw new Exceptions(401);
 
         const newPositionID = body["newPositionID"];
+        console.log(body);
+        console.log("IDS", oldId, newPositionID);
 
         if (this.#controller.areUndefined(oldId, newPositionID)
             || String(oldId).length !== 12 || String(newPositionID).length !== 12)

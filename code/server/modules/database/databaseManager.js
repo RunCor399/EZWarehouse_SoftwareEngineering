@@ -113,21 +113,25 @@ class DBManager {
     }
 
 
-
-    async insertRestockOrderTestData(){
-
-
+    async insertRestockAndReturnOrderTestData(){
         const insertRestockOrder = [' INSERT INTO RestockOrder ("issueDate", "state", "transportNote", "supplierId") \
                                      VALUES ("2021/01/01 01:01", "ISSUED", "", 5), \
                                             ("2022/01/02 10:10", "COMPLETEDRETURN", "", 4) \
                                     '];
+
+        const insertReturnOrder = [`INSERT INTO ReturnOrder (returnDate, restockOrderID)
+                                    VALUES ("2022/02/02", 1);
+        `];
+        
+        const insertSKUItemsPerReturnOrder = [`INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) 
+                                               VALUES (1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
 
         const insertSKU = [`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
                             VALUES ( 10, 20, 30, "note", "description", 40);`];
 
         const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
 
-        const insertQueries = [insertRestockOrder, insertSKU, insertSKUItems];
+        const insertQueries = [insertRestockOrder, insertReturnOrder, insertSKU, insertSKUItemsPerReturnOrder, insertSKUItems];
 
         return new Promise((resolve, reject) => {
             insertQueries.forEach((querySet) => {
@@ -213,6 +217,7 @@ class DBManager {
     })
                    
     }
+
 }
 
 module.exports = DBManager;

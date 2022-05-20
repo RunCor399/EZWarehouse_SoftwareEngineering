@@ -25,11 +25,11 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder;")
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                .catch(error => { throw new Exceptions(503) })
+                .catch(error => { throw error })
         }
 
         return rows;
@@ -40,7 +40,7 @@ class InternalOrderController {
         let products = await this.#dbManager.genericSqlGet(
             `SELECT SKUId, description, price, qty
             FROM SKUPerInternalOrder WHERE id = ?;`, id)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
         return products;
     }
 
@@ -55,11 +55,11 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ISSUED';")
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                .catch(error => { throw new Exceptions(503) })
+                .catch(error => { throw error })
         }
         return rows;
 
@@ -75,11 +75,11 @@ class InternalOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "deliveryEmployee"))
             throw new Exceptions(401);
         let rows = await this.#dbManager.genericSqlGet("SELECT * FROM InternalOrder WHERE state = 'ACCEPTED';")
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
         for (let i = 0; i < rows.length; i++) {
             rows[i].products = await this.getProductsForInternalOrder(rows[i].id)
-                .catch(error => { throw new Exceptions(503) })
+                .catch(error => { throw error })
         }
 
         return rows;
@@ -105,14 +105,14 @@ class InternalOrderController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM InternalOrder WHERE ID = ?;`, id)
             .then((value) => row = value[0])
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
         /*check if the internal order exists*/
         if (!row)
             throw new Exceptions(404);
 
         row.products = await this.getProductsForInternalOrder(row.id)
-            .catch(error => { throw new Exceptions(503) })
+            .catch(error => { throw error })
 
 
         return row;
@@ -151,17 +151,17 @@ class InternalOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM InternalOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
 
         await this.#dbManager
             .genericSqlRun(`INSERT INTO InternalOrder (id, issueDate, state, customerId) VALUES (?, ?, "ISSUED", ?);`,
                 id + 1, dateToSave, customerId)
-            .catch(error => { throw new Exceptions(503) })
+            .catch(error => { throw error })
 
         const sqlInsert = `INSERT INTO SKUPerInternalOrder (id, SKUId, description, price, qty) VALUES (?, ?, ?, ?, ?);`;
         for (let i = 0; i < products.length; i++) {
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
-                .catch(error => { throw new Exceptions(503) })
+                .catch(error => { throw error })
         }
 
 
@@ -203,7 +203,7 @@ class InternalOrderController {
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (?, ?, ?);`;
             for (let i = 0; i < products.length; i++) {
                 await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SKUId, products[i].RFID)
-                    .catch(error => { throw new Exceptions(503) });
+                    .catch(error => { throw error });
             }
 
         }
@@ -211,7 +211,7 @@ class InternalOrderController {
             const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
 
             await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
-                .catch(error => { throw new Exceptions(503) })
+                .catch(error => { throw error })
         }
     }
 
@@ -234,7 +234,7 @@ class InternalOrderController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM InternalOrder WHERE ID = ?;`, id)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
     }
 
 }
