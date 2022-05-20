@@ -19,12 +19,14 @@ const restockOrdersAPICalls = new RestockOrdersAPICalls();
 
 describe.only('Restock Orders Testing', async () => {
     beforeEach(async () => {
-        console.log("executed");
-        // runs once before the first test in this block
-            await databaseManager.deleteAllData().then(async () => {
+        await databaseManager.deleteAllData().then(async () => {
             await databaseManager.insertRestockOrderTestData();
         });
       });
+
+    after(async () => {
+        await databaseManager.deleteAllData();
+    })
 
       describe('Add and get a new Restock', async () => {
         describe('Add a new Restock Order tests', async() => {
