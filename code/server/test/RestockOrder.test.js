@@ -17,7 +17,7 @@ const databaseManager = new DBManager();
 const restockOrdersAPICalls = new RestockOrdersAPICalls();
 
 
-describe('restock', async () => {
+describe('Restock Orders Testing', async () => {
     beforeEach(async () => {
         console.log("executed");
         // runs once before the first test in this block
