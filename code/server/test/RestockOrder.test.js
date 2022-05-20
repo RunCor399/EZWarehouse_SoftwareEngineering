@@ -21,10 +21,10 @@ describe('Restock Orders Testing', async () => {
     beforeEach(async () => {
         console.log("executed");
         // runs once before the first test in this block
-        await databaseManager.deleteAllData().then(async () => {
+     /*    await databaseManager.deleteAllData().then(async () => {
             await databaseManager.insertTestData();
         })
-        
+      */   
       });
 
       describe('Add and get a new Restock', async () => {
