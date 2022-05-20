@@ -89,10 +89,25 @@ describe('Internal Orders test suite', async () => {
     describe('PUT Request test to Internal Orders', async () => {
         describe('Edit an existing Internal Order tests', async () => {
             it('Successfully edit an Internal Order', async () => {
+                let response;
+                response = await internalOrdersAPICalls.editInternalOrderTest(1, "COMPLETED", []);
+                response.status.should.equal(200);
 
+                response = await internalOrdersAPICalls.getInternalOrderByIdTest(1);
+                response.data.state.should.equal("COMPLETED");
             });
 
-            /*add error test cases*/
+            it('Edit non-existing Internal Order', async () => {
+                let response;
+                response = await internalOrdersAPICalls.editInternalOrderTest(-1, "ACCEPTED", []);
+                response.status.should.equal(404);
+            });
+
+            it('Edit Internal Order with improper state', async () => {
+                let response;
+                response = await internalOrdersAPICalls.editInternalOrderTest(-1, 20, []);
+                response.status.should.equal(422);
+            });
         });
     });
 

@@ -73,11 +73,11 @@ class InternalOrdersAPICalls {
     }
 
     //PUT
-    /*it's missing the check on the state*/
-    async editInternalOrderTest(id, newState) {
+    async editInternalOrderTest(id, newState, products) {
         const url = this.#baseURL + "/api/internalOrders/" + id;
         const body = {
-            newState: newState
+            newState: newState,
+            products: products
         }
         const headers = { headers: { 'Content-Type': 'application/json' } };
         let response;
