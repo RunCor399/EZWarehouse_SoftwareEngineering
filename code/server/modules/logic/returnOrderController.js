@@ -27,11 +27,9 @@ class ReturnOrderController {
             .catch(error => { throw error });
 
         for (let i = 0; i < orders.length; i++) {
-            orders[i].products = await this.getProductsPerReturnOrder(rows[i].id)
+            orders[i].products = await this.getProductsPerReturnOrder(orders[i].id)
                 .catch(error => { throw error });
         }
-
-        console.log(orders[0].products)
 
 
         return orders;
@@ -107,13 +105,13 @@ class ReturnOrderController {
         try {
              dateToSave = this.#controller.checkAndFormatDate(returnDate);
         } catch (error) {
-            throw error;
+            throw new Exceptions(422);
         }
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, restockOrderId)
             .then((value) => row = value[0])
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
         /*check if the restock order exists*/
         if (!row)
@@ -127,18 +125,18 @@ class ReturnOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM ReturnOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
 
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
                                 VALUES (?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, dateToSave, restockOrderId)
-            .catch(error => { throw new Exceptions(503) })
+            .catch(error => { throw error })
 
-        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?);`;
+        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?,?,?);`;
         for (let i = 0; i < products.length; i++) {
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
-                .catch(error => { throw new Exceptions(503); })
+                .catch(error => {throw error })
         }
 
 
@@ -161,7 +159,7 @@ class ReturnOrderController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM ReturnOrder WHERE ID=?;`, id)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
     }
 }
 

@@ -146,7 +146,7 @@ class SkuController {
         VALUES ( ?, ?, ?, ?, ?, ?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, weight, volume, price, notes, description, availableQuantity)
-            .catch(() => { throw new Exceptions(503) });
+            .catch(() => { throw error });
     }
 
 
@@ -193,7 +193,7 @@ class SkuController {
     let position;
     await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?`, id)
         .then(value => position = value[0])
-        .catch(error => { throw new Exceptions(503) });
+        .catch(error => { throw error });
 
 
     if (position) {
@@ -208,7 +208,7 @@ class SkuController {
 
 
         await this.#dbManager.genericSqlRun(sqlUpdate, newWeight * newAvailableQuantity, newVolume * newAvailableQuantity, position.positionId)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
     }
 
     //update sku info
@@ -217,7 +217,7 @@ class SkuController {
                                 availableQuantity= ? WHERE ID = ?;`;
 
     await this.#dbManager.genericSqlRun(sqlInstruction, newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id)
-        .catch((error) => { throw new Exceptions(503); });
+        .catch((error) => { throw error });
 
 }
 
@@ -252,7 +252,7 @@ class SkuController {
     let position;
     await this.#dbManager.genericSqlGet(`SELECT * FROM Position WHERE positionID = ?;`, positionId)
         .then(value => position = value[0])
-        .catch(error => { throw new Exceptions(503) });
+        .catch(error => { throw error });
 
     if (!position)
         throw new Exceptions(404);
@@ -272,7 +272,7 @@ class SkuController {
     let positionAlreadyOccupied;
     await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE positionId = ?;`, positionId)
         .then(value => positionAlreadyOccupied = value[0])
-        .catch(error => { throw new Exceptions(503) });
+        .catch(error => { throw error });
     if ((positionAlreadyOccupied !== undefined)) {
         if (positionAlreadyOccupied.SKUId === id) {
             return;
@@ -287,13 +287,13 @@ class SkuController {
     //console.log(id);
     await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?;`, id)
         .then(value => positionOccupiedBySku = value[0])
-        .catch(error => { throw new Exceptions(503) });
+        .catch(error => { throw error });
 
     if (positionOccupiedBySku !== undefined) {
 
         //remove sku from position
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU_in_Position WHERE SKUId = ?;`, positionOccupiedBySku.SKUId)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
 
         const updatedOldOccupiedWeight = positionOccupiedBySku.occupiedWeight - (sku.weight * sku.availableQuantity);
         const updatedOldOccupiedVolume = positionOccupiedBySku.occupiedVolume - (sku.volume * sku.availableQuantity);
@@ -301,13 +301,13 @@ class SkuController {
         console.log(updatedOldOccupiedWeight, updatedOldOccupiedVolume);
         //reset position volume and weight
         await this.#dbManager.genericSqlRun('UPDATE Position SET occupiedWeight = ?, occupiedVolume = ? WHERE positionID = ?', updatedOldOccupiedWeight, updatedOldOccupiedVolume, positionOccupiedBySku.positionID)
-            .catch(error => { throw new Exceptions(503) })
+            .catch(error => { throw error })
 
     }
 
     //set sku in new position
     await this.#dbManager.genericSqlRun(`INSERT INTO SKU_in_Position (SKUId, positionID) VALUES (?, ?)`, id, positionId)
-        .catch((error) => { throw new Exceptions(503) });
+        .catch((error) => { throw error });
 
 
     const updatedNewOccupiedVolume = position.occupiedVolume + (sku.volume * sku.availableQuantity);
@@ -315,7 +315,7 @@ class SkuController {
 
     //update weight and volume of new position
     await this.#dbManager.genericSqlRun('UPDATE Position SET occupiedWeight = ?, occupiedVolume = ? WHERE positionID = ?', updatedNewOccupiedWeight, updatedNewOccupiedVolume, position.positionID)
-        .catch(error => { throw new Exceptions(503) })
+        .catch(error => { throw error })
 
 
 }
@@ -341,7 +341,7 @@ class SkuController {
     //this.#skuDAO.deleteSku(id);
 
     await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE id= ?;`, id)
-        .catch((error) => { throw new Exceptions(503) });
+        .catch((error) => { throw error });
 }
 }
 

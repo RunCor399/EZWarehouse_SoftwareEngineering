@@ -17,10 +17,10 @@ const databaseManager = new DBManager();
 const restockOrdersAPICalls = new RestockOrdersAPICalls();
 
 
-describe('Restock Orders Testing', async () => {
+describe.only('Restock Orders Testing', async () => {
     beforeEach(async () => {
         await databaseManager.deleteAllData().then(async () => {
-            await databaseManager.insertRestockOrderTestData();
+            await databaseManager.insertRestockAndReturnOrderTestData();
         });
       });
 

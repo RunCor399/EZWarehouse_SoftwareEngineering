@@ -103,7 +103,7 @@ class TestResultController {
 
         const sqlInstruction = `INSERT INTO TestResult ( idTestDescriptor, RFID, date, result)  VALUES ( ?, ?, ?, ?);`;
         await this.#dbManager.genericSqlRun(sqlInstruction, idTestDescriptor, rfid, dateToSave, result)
-            .catch(error => { throw new Exceptions(503); });
+            .catch(error => { throw error });
 
     }
 
@@ -149,7 +149,7 @@ class TestResultController {
 
         const sqlInstruction = `UPDATE TestResult SET idtestDescriptor= ?, date= ?, result=? WHERE ID= ? AND RFID = ?;`
         await this.#dbManager.genericSqlRun(sqlInstruction, newIdTestDescriptor, dateToSave, newResult, id, rfid)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
     }
 
 

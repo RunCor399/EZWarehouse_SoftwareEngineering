@@ -113,7 +113,7 @@ class ItemController {
 
         await this.#dbManager.genericSqlRun(`INSERT INTO Item (id, description, price, SKUId, supplierId) 
         VALUES (?,?,?,?,?);`, id, description, price, SKUId, supplierId)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
 
     }
 
@@ -142,7 +142,7 @@ class ItemController {
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE SKUid= ?;`, newDescription, newPrice, id)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
 
     }
 
@@ -163,7 +163,7 @@ class ItemController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE ID= ?;`, id)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
     }
 
 

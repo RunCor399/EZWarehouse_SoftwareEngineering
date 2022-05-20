@@ -111,7 +111,7 @@ class SkuItemController {
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, RFID, SKUId, 0, dateOfStock)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
     }
 
@@ -143,7 +143,7 @@ class SkuItemController {
         const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
 
         await this.#dbManager.genericSqlRun(sqlUpdate, newRFID, newAvailable, newDateOfStock, oldRFID)
-            .catch(error => { throw new Exceptions(503); });
+            .catch(error => { throw error });
     }
 
     /** delete function to remove an SKUItem from the table, given its ID.
@@ -162,7 +162,7 @@ class SkuItemController {
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM SKUItem WHERE RFID= ?;`, rfid)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
     }
 }

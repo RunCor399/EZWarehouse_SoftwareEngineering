@@ -79,7 +79,7 @@ class TestDescriptorController {
         const sqlInsert = `INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) VALUES ( ?, ?, ?);`
 
         await this.#dbManager.genericSqlRun(sqlInsert, name, procedureDescription, idSKU)
-            .catch((error) => { throw new Exceptions(503) })
+            .catch((error) => { throw error })
 
     }
 
@@ -114,7 +114,7 @@ class TestDescriptorController {
         const sqlUpdate = `UPDATE TestDescriptor SET name= ?, procedureDescription= ?, idSku = ? WHERE ID= ?;`;
 
         await this.#dbManager.genericSqlRun(sqlUpdate, newName, newProcedureDescription, newIdSKU, id)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
 
     }
 
@@ -136,7 +136,7 @@ class TestDescriptorController {
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM TestDescriptor WHERE ID= ?;`, id)
-            .catch((error) => { throw new Exceptions(503) });
+            .catch((error) => { throw error });
     }
 }
 

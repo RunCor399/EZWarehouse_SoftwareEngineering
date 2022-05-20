@@ -75,7 +75,7 @@ class PositionController {
         const sqlInstruction = `INSERT INTO Position (positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume) VALUES (?,?,?,?,?,?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, positionID, maxVolume, maxWeight, aisleID, row, col, occupiedWeight, occupiedVolume)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
     }
 
     /**function to edit the properties of a specific position, given its ID
