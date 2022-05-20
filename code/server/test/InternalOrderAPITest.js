@@ -62,25 +62,25 @@ describe('Internal Orders test suite', async () => {
 
     describe('GET Request tests to Internal Orders', async () => {
         it('get all internal orders', async () => {
-            const response = await internalOrdersAPICalls.getInternalOrdersTest();
+            let response = await internalOrdersAPICalls.getInternalOrdersTest();
 
             response.status.should.equal(200);
         });
 
         it('get issued internal orders', async () => {
-            const response = await internalOrdersAPICalls.getIssuedInternalOrdersTest();
+            let response = await internalOrdersAPICalls.getIssuedInternalOrdersTest();
 
             response.status.should.equal(200);
         });
 
         it('get accepted internal orders', async () => {
-            const response = await internalOrdersAPICalls.getAcceptedInternalOrdersTest();
+            let response = await internalOrdersAPICalls.getAcceptedInternalOrdersTest();
 
             response.status.should.equal(200);
         });
 
         it('get internal order by id', async () => {
-            const response = await internalOrdersAPICalls.getInternalOrderByIdTest(1);
+            let response = await internalOrdersAPICalls.getInternalOrderByIdTest(1);
 
             response.status.should.equal(200);
         });
