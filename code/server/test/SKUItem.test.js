@@ -18,7 +18,6 @@ const skuitemAPICalls = new SKUItemAPICalls();
 describe('skuitem test suite', async () => {
     
      before(async ()=>{
-        this.timeout( 30000 );
         const dbmanager = new DBManager();
         await dbmanager.dbClear();
     }) 

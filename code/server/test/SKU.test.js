@@ -21,12 +21,9 @@ const skuAPICalls = new SkuAPICalls();
 describe('sku test suite', async () => {
 
     before(async ()=>{
-        this.timeout( 30000 );
-        const dbmanager = new DBManager;
+        const dbmanager = new DBManager();
         await dbmanager.dbClear();
     })
-
-
 
 
     it('get skus', async () => { //it indicates a TEST CASE
