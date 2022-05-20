@@ -17,7 +17,7 @@ const databaseManager = new DBManager();
 const restockOrdersAPICalls = new RestockOrdersAPICalls();
 
 
-describe.only('Restock Orders Testing', async () => {
+describe('Restock Orders Testing', async () => {
     beforeEach(async () => {
         await databaseManager.deleteAllData().then(async () => {
             await databaseManager.insertRestockOrderTestData();
