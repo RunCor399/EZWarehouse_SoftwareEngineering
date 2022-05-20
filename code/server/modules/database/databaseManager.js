@@ -21,7 +21,7 @@ class DBManager {
      * @throws 500
     */
     async genericSqlRun(query, ...params) {
-        console.log(params);
+        //console.log(params);
         return new Promise((resolve, reject) => {
             this.#db.run(query, params, (err) => {
                 if (err) {
@@ -353,12 +353,8 @@ class DBManager {
 
 
         console.log("Start resetting")
-        console.log("length", sql.length);
-
-        const dbmanager = new DBManager();
         for (let i = 0; i < sql.length; i++) {
-            await dbmanager.genericSqlRun(sql[i])
-                .then(() => { })
+            await this.genericSqlRun(sql[i])
                 .catch(err => { console.log("error") })
         }
 
