@@ -29,12 +29,12 @@ describe('Internal Orders test suite', async () => {
         await databaseManager.deleteAllData();
     })*/
 
-    before(async () => {
+    beforeEach(async () => {
         await dbmanager.deleteAllData();
-    })
-    after(async () => {
+    });
+    afterEach(async () => {
         await dbmanager.deleteAllData();
-    })
+    });
 
     describe('POST Request test to Internal Orders', async () => {
         describe('Add a new Internal Order tests', async () => {
