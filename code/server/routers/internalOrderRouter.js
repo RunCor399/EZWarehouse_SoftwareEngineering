@@ -51,7 +51,7 @@ router.get('/api/internalOrders/:id', async (req, res) => {
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
-router.post('/api/internalOrder', async (req, res) => {
+router.post('/api/internalOrders', async (req, res) => {
   
 
   /** @type {Controller} */
@@ -59,12 +59,12 @@ router.post('/api/internalOrder', async (req, res) => {
   console.log('POST', req.url);
 
   await controller.getInternalOrderController().createInternalOrder(req.body)
-    .then(() => { return res.status(200).end(); })
+    .then(() => { return res.status(201).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 
-router.put('/api/internalOrder/:id', async (req, res) => {
+router.put('/api/internalOrders/:id', async (req, res) => {
   const param = req.params.id;
   
 
@@ -77,7 +77,7 @@ router.put('/api/internalOrder/:id', async (req, res) => {
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
-router.delete('/api/internalOrder/:id', async (req, res) => {
+router.delete('/api/internalOrders/:id', async (req, res) => {
   const param = req.params.id;
   
 
@@ -86,7 +86,7 @@ router.delete('/api/internalOrder/:id', async (req, res) => {
   console.log('DELETE', req.url);
   
   await controller.getSkuController().deleteInternalOrder(param)
-    .then((user) => { return res.status(200).json(user); })
+    .then(() => { return res.status(204).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
   
 });

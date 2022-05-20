@@ -11,7 +11,7 @@ class InternalOrdersAPICalls {
 
     //GET
     async getInternalOrdersTest() {
-        const url = this.#baseURL + "/api/internalOrders/";
+        const url = this.#baseURL + "/api/internalOrders";
         let response;
 
         await axios.get(url)
@@ -22,7 +22,7 @@ class InternalOrdersAPICalls {
     }
 
     async getIssuedInternalOrdersTest() {
-        const url = this.#baseURL + "/api/internalOrdersIssued/";
+        const url = this.#baseURL + "/api/internalOrdersIssued";
         let response;
 
         await axios.get(url)
@@ -33,7 +33,7 @@ class InternalOrdersAPICalls {
     }
 
     async getAcceptedInternalOrdersTest() {
-        const url = this.#baseURL + "/api/internalOrdersAccepted/";
+        const url = this.#baseURL + "/api/internalOrdersAccepted";
         let response;
 
         await axios.get(url)
