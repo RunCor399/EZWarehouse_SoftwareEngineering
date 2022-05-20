@@ -11,15 +11,15 @@ class SKUItemAPICalls {
 
     async getSKUItems() {
         let response;
-        axios.get(this.#baseURL + '/api/skuitems')
-            .then(value => response = value)
-            .catch(error => response = error.response)
+        await axios.get(this.#baseURL + '/api/skuitems')
+            .then(value => { response = value})
+            .catch(error => {response = error.response})
         return response;
     }
 
     async getSKUItemsBySKUId(SKUId) {
         let response;
-        axios.get(this.#baseURL + '/api/skuitems/sku/' + SKUId)
+        await axios.get(this.#baseURL + '/api/skuitems/sku/' + SKUId)
             .then(value => response = value)
             .catch(error => response = error.response)
         return response;
@@ -27,7 +27,7 @@ class SKUItemAPICalls {
 
     async getSKUItemByRFID(RFID) {
         let response;
-        axios.get(this.#baseURL + '/api/skuitems' + RFID)
+        await axios.get(this.#baseURL + '/api/skuitems' + RFID)
             .then(value => response = value)
             .catch(error => response = error.response)
         return response;
@@ -35,7 +35,7 @@ class SKUItemAPICalls {
 
     async addSKUItem(RFID, SKUId, DateOfStock) {
         let response;
-        axios.post(this.#baseURL + '/api/skuitem',
+        await axios.post(this.#baseURL + '/api/skuitem',
             {
                 RFID: RFID,
                 SKUId: SKUId,
@@ -48,7 +48,7 @@ class SKUItemAPICalls {
 
     async modifySKUItemRFID(RFID, newRFID, newAvailable, newDateOfStock) {
         let response;
-        axios.put(this.#baseURL + '/api/skuitems/' + RFID,
+        await axios.put(this.#baseURL + '/api/skuitems/' + RFID,
             {
                 newRFID: newRFID,
                 newAvailable: newAvailable,
@@ -61,7 +61,7 @@ class SKUItemAPICalls {
 
     async deleteSKUItem(RFID) {
         let response;
-        axios.delete(this.#baseURL + '/api/skuitems/' + RFID)
+        await axios.delete(this.#baseURL + '/api/skuitems/' + RFID)
             .then(value => response = value)
             .catch(error => response = error.response)
         return response;

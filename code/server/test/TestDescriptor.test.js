@@ -12,13 +12,14 @@ const TestDescriptorAPICalls = require('./APICalls/TestDescriptorAPICalls');
 const baseURL = "http://localhost:3001";
 
 const utilityCalls = new UtilityCalls();
-const TestDescriptorAPICalls = new TestDescriptorAPICalls();
+const testDescriptorAPICalls = new TestDescriptorAPICalls();
 
 
 describe('Test Descriptor test suite', async () => {
+    
     describe('Standard Test Descriptor getters', async () => {
         it('get all test descriptors', async () => { //it indicates a TEST CASE
-            const response = await TestDescriptorAPICalls.getTestDescriptors();
+            const response = await testDescriptorAPICalls.getTestDescriptors();
 
             //console.log(response);
             response.status.should.equal(200);
@@ -27,7 +28,7 @@ describe('Test Descriptor test suite', async () => {
 
 
         it('get test descriptor by id', async () => { //it indicates a TEST CASE
-            const response = await TestDescriptorAPICalls.getTestDescriptorById(1);
+            const response = await testDescriptorAPICalls.getTestDescriptorById(1);
 
             //console.log(response.data);
             response.status.should.equal(200);
@@ -38,7 +39,7 @@ describe('Test Descriptor test suite', async () => {
     describe('POST Requests tests to Test Descriptor', async () => {
         describe('Add a new Test Descriptor tests', async() => {
             it('Succesfully add a new Test Descriptor', async () => {
-                const response = await TestDescriptorAPICalls.addTestDescriptor("test1", "descrizione test", 1);
+                const response = await testDescriptorAPICalls.addTestDescriptor("test1", "descrizione test", 1);
 
                 console.log(response.body);
                 response.status.should.equal(201);
@@ -76,7 +77,7 @@ describe('Test Descriptor test suite', async () => {
         describe('Edit a Test Descriptor tests', async() => {
             it('Succesfully edit Test Descriptor', async () => {
                 //test descriptor with id 2 in the db
-                const response = await TestDescriptorAPICalls.editTestDescriptor(1, "test1", "descrizione test2", 1);
+                const response = await testDescriptorAPICalls.editTestDescriptor(1, "test1", "descrizione test2", 1);
 
                 console.log(response.body);
                 response.status.should.equal(200);
@@ -113,7 +114,7 @@ describe('Test Descriptor test suite', async () => {
         describe('Delete a Test Descriptor tests', async() => {
             it('Succesfully delete a Test Descriptor', async () => {
                 /*a test descriptor with id 3 must be in the db*/
-                const response = await TestDescriptorAPICalls.deleteTestDescriptor(3);
+                const response = await testDescriptorAPICalls.deleteTestDescriptor(3);
 
                 console.log(response.body);
                 response.status.should.equal(204);
