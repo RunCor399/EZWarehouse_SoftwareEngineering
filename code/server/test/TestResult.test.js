@@ -12,14 +12,14 @@ const TestResultAPICalls = require('./APICalls/TestResultAPICalls');
 const baseURL = "http://localhost:3001";
 
 const utilityCalls = new UtilityCalls();
-const TestResultAPICalls = new TestResultAPICalls();
+const testResultAPICalls = new TestResultAPICalls();
 
 
 describe('Test Result test suite', async () => {
     describe('Standard Test Result getters', async () => {
         it('Succesfully get all test results', async () => { //it indicates a TEST CASE
             /*a test result with rfid=1 should exist*/
-            const response = await TestResultAPICalls.getTestResults(1);
+            const response = await testResultAPICalls.getTestResults(1);
 
             //console.log(response);
             response.status.should.equal(200);
@@ -49,7 +49,7 @@ describe('Test Result test suite', async () => {
         */
         it('Succesfully get a test result ', async () => { //it indicates a TEST CASE
             /*a test result with id=1 for rfid=1 should exist*/
-            const response = await TestResultAPICalls.getTestResultById(1,1);
+            const response = await testResultAPICalls.getTestResultById(1,1);
 
             //console.log(response);
             response.status.should.equal(200);
@@ -84,7 +84,7 @@ describe('Test Result test suite', async () => {
         describe('Add a new Test result tests', async() => {
             it('Succesfully add a new Test result', async () => {
                 /*a rfid with id 1 should exist, a test descriptor with id 2 should exist*/
-                const response = await TestResultAPICalls.addTestResult(1, 2, "2021/11/28", true);
+                const response = await testResultAPICalls.addTestResult(1, 2, "2021/11/28", true);
                 console.log(response.body);
                 response.status.should.equal(201);
             });
@@ -119,7 +119,7 @@ describe('Test Result test suite', async () => {
         describe('Edit a Test Result tests', async() => {
             //a test desc with id=1 exists, a sku item with id=1 exists"
             it('Succesfully edit Test Resut', async () => {
-                const response = await TestResultAPICalls.editTestDescriptor(1, 1, "nuova desc", "2021/11/28", false);
+                const response = await testResultAPICalls.editTestDescriptor(1, 1, "nuova desc", "2021/11/28", false);
                 console.log(response.body);
                 response.status.should.equal(200);
             });
@@ -151,7 +151,7 @@ describe('Test Result test suite', async () => {
         describe('Delete a Test Result tests', async() => {
             it('Succesfully delete a Test Descriptor', async () => {
                 /*a test descriptor with id 2 must be in the db, a skuitem withrfid 2 must be in the database*/
-                const response = await TestResultAPICalls.deleteTestResult(2, 2);
+                const response = await testResultAPICalls.deleteTestResult(2, 2);
 
                 console.log(response.body);
                 response.status.should.equal(204);

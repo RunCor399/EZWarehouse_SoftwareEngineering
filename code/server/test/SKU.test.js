@@ -8,6 +8,7 @@ const axios = require('axios');
 
 const UtilityCalls = require('./APICalls/UtilityCalls');
 const SkuAPICalls = require('./APICalls/SkuAPICalls');
+const DBManager = require('../modules/database/databaseManager');
 
 const baseURL = "http://localhost:3001";
 
@@ -15,7 +16,19 @@ const utilityCalls = new UtilityCalls();
 const skuAPICalls = new SkuAPICalls();
 
 
+//(async () => await utilityCalls.dbreset())()
+
 describe('sku test suite', async () => {
+
+    before(async ()=>{
+        this.timeout( 30000 );
+        const dbmanager = new DBManager;
+        await dbmanager.dbClear();
+    })
+
+
+
+
     it('get skus', async () => { //it indicates a TEST CASE
         const response = await skuAPICalls.getSKUsTest();
 
@@ -44,7 +57,7 @@ describe('sku test suite', async () => {
     it('delete a sku given an id', async() => {
         const response = await skuAPICalls.deleteSKUTest(1);
 
-        console.log(response.status)
+        //console.log(response.status)
 
         response.status.should.equal(204);
     })
@@ -52,7 +65,7 @@ describe('sku test suite', async () => {
     it('get deleted sku', async () => {
         const response = await skuAPICalls.getSKUTest(1);
 
-        console.log(response.status)
+        //console.log(response.status)
         assert(response.status, 404, response.status);
 
         });

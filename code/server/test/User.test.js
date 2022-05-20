@@ -12,25 +12,25 @@ const UserAPICalls = require('./APICalls/UserAPICalls');
 const baseURL = "http://localhost:3001";
 
 const utilityCalls = new UtilityCalls();
-const UserAPICalls = new UserAPICalls();
+const userAPICalls = new UserAPICalls();
 
 
 describe('User test suite', async () => {
     describe('Standard User getters', async () => {
         it('Succesfully get all user info', async () => { //it indicates a TEST CASE
-            const response = await UserAPICalls.getUserInfo();
+            const response = await userAPICalls.getUserInfo();
             //console.log(response);
             response.status.should.equal(200);
         });
 
         it('Succesfully get all suppliers', async () => { //it indicates a TEST CASE
-            const response = await UserAPICalls.getSuppliers();
+            const response = await userAPICalls.getSuppliers();
             //console.log(response);
             response.status.should.equal(200);
         });
 
         it('Succesfully get all users', async () => { //it indicates a TEST CASE
-            const response = await UserAPICalls.getUsers();
+            const response = await userAPICalls.getUsers();
             //console.log(response);
             response.status.should.equal(200);
         });
@@ -40,7 +40,7 @@ describe('User test suite', async () => {
     describe('POST Requests tests to User', async () => {
         describe('Add a new user tests', async() => {
             it('Succesfully add a new user', async () => {
-                const response = await UserAPICalls.newUser("giu@yahoo.it", "giulia", "bianchi", "password", "customer");
+                const response = await userAPICalls.newUser("giu@yahoo.it", "giulia", "bianchi", "password", "customer");
                 console.log(response.body);
                 response.status.should.equal(201);
             });
@@ -68,43 +68,43 @@ describe('User test suite', async () => {
         });
         describe('User session test', async() => {
             it('Succesfully log a manager', async () => {
-                const response = await UserAPICalls.managerSessions("manager1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
+                const response = await userAPICalls.managerSessions("manager1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
                 console.log(response.body);
                 response.status.should.equal(200);
             });
 
             it('Succesfully log a customer', async () => {
-                const response = await UserAPICalls.customerSessions("user1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
+                const response = await userAPICalls.customerSessions("user1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
                 console.log(response.body);
                 response.status.should.equal(200);
             });
             
             it('Succesfully log a supplier', async () => {
-                const response = await UserAPICalls.supplierSessions("supplier1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
+                const response = await userAPICalls.supplierSessions("supplier1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
                 console.log(response.body);
                 response.status.should.equal(200);
             });
 
             it('Succesfully log a clerk', async () => {
-                const response = await UserAPICalls.clerkSessions("clerk1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
+                const response = await userAPICalls.clerkSessions("clerk1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
                 console.log(response.body);
                 response.status.should.equal(200);
             });
 
             it('Succesfully log a quality empolyee', async () => {
-                const response = await UserAPICalls.qualityEmployeeSessions("qualityEmployee1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
+                const response = await userAPICalls.qualityEmployeeSessions("qualityEmployee1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
                 console.log(response.body);
                 response.status.should.equal(200);
             });
 
             it('Succesfully log a delivery empolyee', async () => {
-                const response = await UserAPICalls.deliveryEmployeeSessions("deliveryEmployee1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
+                const response = await userAPICalls.deliveryEmployeeSessions("deliveryEmployee1@ezwh.com", "e16b2ab8d12314bf4efbd6203906ea6c" );
                 console.log(response.body);
                 response.status.should.equal(200);
             });
 
             it('Succesfully logout', async () => {
-                const response = await UserAPICalls.logout();
+                const response = await userAPICalls.logout();
                 console.log(response.body);
                 response.status.should.equal(200);
             });
@@ -116,7 +116,7 @@ describe('User test suite', async () => {
         describe('Edit a user tests', async() => {
             it('Succesfully edit user', async () => {
                 /*creare utente con email user12@ezwh.com e tipo customer*/
-                const response = await UserAPICalls.editUser("user12@ezwh.com", "customer", "clerk");
+                const response = await userAPICalls.editUser("user12@ezwh.com", "customer", "clerk");
                 console.log(response.body);
                 response.status.should.equal(200);
             });
@@ -148,7 +148,7 @@ describe('User test suite', async () => {
         describe('Delete a user tests', async() => {
             it('Succesfully delete a user', async () => {
                 /*a user with username studente@ezwh.com and type customer exists*/
-                const response = await UserAPICalls.editUser("studente@ezwh.com", "customer");
+                const response = await userAPICalls.editUser("studente@ezwh.com", "customer");
                 console.log(response.body);
                 response.status.should.equal(204);
             });
