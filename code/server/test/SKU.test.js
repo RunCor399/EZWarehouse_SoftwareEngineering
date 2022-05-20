@@ -12,6 +12,7 @@ const DBManager = require('../modules/database/databaseManager');
 
 const baseURL = "http://localhost:3001";
 
+const dbmanager = new DBManager()
 const utilityCalls = new UtilityCalls();
 const skuAPICalls = new SkuAPICalls();
 
@@ -20,9 +21,11 @@ const skuAPICalls = new SkuAPICalls();
 
 describe('sku test suite', async () => {
 
-    before(async ()=>{
-        const dbmanager = new DBManager();
-        await dbmanager.dbClear();
+    before(async () => {
+        await dbmanager.deleteAllData();
+    })
+    after(async () => {
+        await dbmanager.deleteAllData();
     })
 
 
@@ -41,7 +44,7 @@ describe('sku test suite', async () => {
     it('get a sku given an id', async () => {
         const response = await skuAPICalls.getSKUTest(1);
 
-        //console.log(response);
+        console.log("response", response);
         assert.equal(response.data.id, 1)
         assert.equal(response.data.description, "descriptionTest")
         assert.equal(response.data.weight, 10)
