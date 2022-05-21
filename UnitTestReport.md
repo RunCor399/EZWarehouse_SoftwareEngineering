@@ -1475,7 +1475,7 @@ The input value is the body of the HTTP POST Request
 **Criteria for method *createRestockOrder*:**
 	
  - Validity of *supplierid*
- - Validity of product list 
+ - Validity of *issueDate* 
 
 
 
@@ -1487,8 +1487,8 @@ The input value is the body of the HTTP POST Request
 | :----------------------: | :---------------------------------------------------------------------------------------------: |
 | Validity of *supplierid* |             There is no supplier order with the given *supplierid* in the database              |
 |                          |              There is a supplier order with the given *supplierid* in the database              |
-| Validity of product list |        All the products are associated to a SKU with and existing SKUID in the database         |
-|                          | At least one of the products is not associated to a SKU with and existing SKUID in the database |
+| Validity of issueDate |        *issueDate* is well-formed and can be inserted         |
+|                          | *issueDate* is incorrect |
 
 
 
@@ -1498,16 +1498,16 @@ The input value is the body of the HTTP POST Request
 |         Criteria         |  Boundary values  |
 | :----------------------: | :---------------: |
 | Validity of *supplierid* | No boundary found |
-| Validity of product list | No boundary found |
+| Validity of *issueDate* | No boundary found |
 
 **Combination of predicates**:
 
 | Criteria 1 | Criteria 2 | Valid / Invalid |                                                                      Description of the test case                                                                       | Jest test case |
 | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |       There is a supplier order with the given *supplierid* in the database and all the products are associated to a SKU with and existing SKUID in the database        |                |
-|   Valid    |  Invalid   |     Invalid     |                                     At least one of the products is not associated to a SKU with and existing SKUID in the database                                     |                |
+|   Valid    |   Valid    |      Valid      |       There is a supplier order with the given *supplierid* in the database and *issueDate* is well-formed        |                |
+|   Valid    |  Invalid   |     Invalid     |                                     *issueDate* is bad-formed                                     |                |
 |  Invalid   |   Valid    |     Invalid     |                                                 There is no supplier order with the given *supplierid* in the database                                                  |                |
-|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKU with and existing SKUID in the database, there is no supplier order with the given *supplierid* in the database |                |
+|  Invalid   |  Invalid   |     Invalid     | *issueDate* is bad-formed, there is no supplier order with the given *supplierid* in the database |                |
 
 ## **Class *RestockOrderController* - method *editRestockOrder***
 
@@ -1703,7 +1703,8 @@ The input value is the body of the HTTP POST Request
 **Criteria for method *createReturnOrder*:**
 	
  - Validity of *restockOrderid*
- - Validity of product list 
+ - Validity of *returnDate* 
+ - Validity of products list
 
 
 
@@ -1715,24 +1716,31 @@ The input value is the body of the HTTP POST Request
 | :--------------------------: | :---------------------------------------------------------------------------------------------: |
 | Validity of *restockOrderid* |            There is no restock order with the given *restockOrderid* in the database            |
 |                              |            There is a restock order with the given *restockOrderid* in the database             |
-|   Validity of product list   |        All the products are associated to a SKU with and existing SKUID in the database         |
-|                              | At least one of the products is not associated to a SKU with and existing SKUID in the database |
+|   Validity of *returnDate*   |        returnDate is valid         |
+|                              |        returnDate is invalid          |
+| Validity of products list    |        All products in the given list exist |
+|                              |        One or more products in the list don't exist |
 
 **Boundaries**:
 
 |           Criteria           |  Boundary values  |
 | :--------------------------: | :---------------: |
 | Validity of *restockOrderid* | No boundary found |
-|   Validity of product list   | No boundary found |
+|   Validity of *returnDate*   | No boundary found |
+|   Validity of products list  | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                        Description of the test case                                                                        | Jest test case |
-| :--------: | :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |      Valid      |       There is a restock order with the given *restockOrderid* in the database and all the products are associated to a SKU with and existing SKUID in the database        |                |
-|   Valid    |  Invalid   |     Invalid     |                                      At least one of the products is not associated to a SKU with and existing SKUID in the database                                       |                |
-|  Invalid   |   Valid    |     Invalid     |                                                 There is no restock order with the given *restockOrderid* in the database                                                  |                |
-|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKU with and existing SKUID in the database, there is no restock order with the given *restockOrderid* in the database |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                                        Description of the test case                                                                        | Jest test case |
+| :--------: | :--------: | :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
+|   Valid    |   Valid    | Valid |      Valid      |       There is a restock order with the given *restockOrderId* in the database, *returnDate* is valid and products list is valid        |                |
+|   Valid    |  Valid     |      Invalid  |  Invalid   |        products list is invalid                                    |                 |
+|   Valid    |  Invalid  | Valid   |      Invalid     |                  *returnDate* is invalid                                       |                |
+|  Valid     |   Invalid  |  Invalid  |   Invalid     |         *returnDate* and products list are invalid                                      |                  |
+|  Invalid   |   Valid    |  Valid|     Invalid     |              There is no restock order with the given *restockOrderId* in the database                                                  |                |
+|  Invalid   |   Valid    | Invalid |   Invalid  |       There is no restock order with the given *restockOrderId* and products list is invalid                        |                |
+|  Invalid   |   Invalid  |  Valid  |   Invalid |   There is no restock order with the given *restockOrderId* and *returnDate* is invalid         |                          |
+|  Invalid   |  Invalid   | Invalid |     Invalid     | *returnDate* is invalid, there is no restock order with the given *restockOrderId* in the database and products list is invalid |                |
 
 ## **Class *ReturnOrderController* - method *deleteReturnOrder***
 

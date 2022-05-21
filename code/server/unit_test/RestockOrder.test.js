@@ -5,10 +5,9 @@
 
 const { expect } = require('chai');
 const Controller = require('../modules/logic/controller');
-const OrderController = require('../modules/logic/restockOrderController');
 
 const controller = new Controller();
-const orderController = controller.getRestockOrderController();
+const restockOrderController = controller.getRestockOrderController();
 const dbManager = controller.getDBManager();
 
 
@@ -30,12 +29,12 @@ describe('RestockOrderController Tests', () => {
                  supplierId : 5
              }
         
-             result = await orderController.getAllRestockOrders();
+             result = await restockOrderController.getAllRestockOrders();
              oldCount = result.length;
         
-             await orderController.createRestockOrder(body);
+             await restockOrderController.createRestockOrder(body);
         
-             result = await orderController.getAllRestockOrders();
+             result = await restockOrderController.getAllRestockOrders();
              newCount = result.length;
     
         
@@ -52,12 +51,12 @@ describe('RestockOrderController Tests', () => {
                  supplierId : 5
              }
         
-             result = await orderController.getAllRestockOrders();
+             result = await restockOrderController.getAllRestockOrders();
              oldCount = result.length;
         
-             await orderController.createRestockOrder(body).catch(() => {});
+             await restockOrderController.createRestockOrder(body).catch(() => {});
         
-             result = await orderController.getAllRestockOrders();
+             result = await restockOrderController.getAllRestockOrders();
              newCount = result.length;
     
         
@@ -75,12 +74,12 @@ describe('RestockOrderController Tests', () => {
                  supplierId : -1
              }
         
-             result = await orderController.getAllRestockOrders();
+             result = await restockOrderController.getAllRestockOrders();
              oldCount = result.length;
         
-             await orderController.createRestockOrder(body).catch(() => {});
+             await restockOrderController.createRestockOrder(body).catch(() => {});
         
-             result = await orderController.getAllRestockOrders();
+             result = await restockOrderController.getAllRestockOrders();
              newCount = result.length;
     
         
@@ -94,9 +93,9 @@ describe('RestockOrderController Tests', () => {
             const body = {newState : "DELIVERED"};
             let newState;
 
-            await orderController.editRestockOrder(1, body);
+            await restockOrderController.editRestockOrder(1, body);
 
-            result = await orderController.getRestockOrder(1);
+            result = await restockOrderController.getRestockOrder(1);
             newState = result['state'];
 
             expect(newState).to.be.equal("DELIVERED");
@@ -107,12 +106,12 @@ describe('RestockOrderController Tests', () => {
             const body = {newState : "INVALID_STATE"};
             let oldState, newState;
 
-            result = await orderController.getRestockOrder(1);
+            result = await restockOrderController.getRestockOrder(1);
             oldState = result['state'];
 
-            await orderController.editRestockOrder(1, body).catch(() => {});
+            await restockOrderController.editRestockOrder(1, body).catch(() => {});
 
-            result = await orderController.getRestockOrder(1);
+            result = await restockOrderController.getRestockOrder(1);
             newState = result['state'];
 
             expect(newState).to.be.equal(oldState);
@@ -123,7 +122,7 @@ describe('RestockOrderController Tests', () => {
             const body = {newState : "DELIVERED"};
 
 
-            result = await orderController.editRestockOrder(-1, body).catch(() => {});
+            result = await restockOrderController.editRestockOrder(-1, body).catch(() => {});
             expect(result).to.be.undefined;
         });
     });
@@ -132,9 +131,9 @@ describe('RestockOrderController Tests', () => {
         test('Successfully delete a Restock Order', async () => {
             let result;
 
-            await orderController.deleteRestockOrder(1);
+            await restockOrderController.deleteRestockOrder(1);
 
-            result = await orderController.getRestockOrder(1).catch(() => {});
+            result = await restockOrderController.getRestockOrder(1).catch(() => {});
             expect(result).to.be.undefined;
 
         });
@@ -142,11 +141,11 @@ describe('RestockOrderController Tests', () => {
         test('Delete a non-existing Restock Order', async () => {
             let result, oldCount, newCount;
 
-            oldCount = (await orderController.getAllRestockOrders()).length;
+            oldCount = (await restockOrderController.getAllRestockOrders()).length;
 
-            await orderController.deleteRestockOrder(-1).catch(() => {});
+            await restockOrderController.deleteRestockOrder(-1).catch(() => {});
 
-            newCount = (await orderController.getAllRestockOrders()).length;
+            newCount = (await restockOrderController.getAllRestockOrders()).length;
 
             expect(oldCount).to.be.equal(newCount);
         });
