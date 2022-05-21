@@ -15,7 +15,7 @@ const baseURL = "http://localhost:3001";
 const databaseManager = new DBManager();
 const returnOrdersAPICalls = new ReturnOrdersAPICalls();
 
-describe.only('Return Orders Tests', async () => {
+describe('Return Orders Tests', async () => {
     beforeEach(async () => {
         await databaseManager.deleteAllData().then(async () => {
             await databaseManager.insertRestockAndReturnOrderTestData();

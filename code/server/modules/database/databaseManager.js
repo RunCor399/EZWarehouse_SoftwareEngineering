@@ -93,7 +93,7 @@ class DBManager {
                     ("clerk1@ezwh.com","name3","surname3","e16b2ab8d12314bf4efbd6203906ea6c","clerk"),  \
                     ("deliveryEmployee1@ezwh.com","name4","surname4","e16b2ab8d12314bf4efbd6203906ea6c","deliveryEmployee"), \
                     ("supplier1@ezwh.com","name5","surname5","e16b2ab8d12314bf4efbd6203906ea6c","supplier"), \
-                    ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")' 
+                    ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
         ];
 
         
@@ -132,6 +132,74 @@ class DBManager {
         const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
 
         const insertQueries = [insertRestockOrder, insertReturnOrder, insertSKU, insertSKUItemsPerReturnOrder, insertSKUItems];
+
+        return new Promise((resolve, reject) => {
+            insertQueries.forEach((querySet) => {
+                querySet.forEach((query) => {
+                    this.#db.run(query, (err, rows) => {
+                        if (err) {
+                            console.log("Database get error: err", err);
+                            reject(new Exceptions(500));
+                        } else {
+                            resolve(rows)
+                        }
+                    });
+                }); 
+            });
+    })
+                
+    }
+
+    async insertTestDescriptorTestData(){
+        const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (1, 10, 20, 30, "note", "description", 40);`];
+        const insertSKU2 = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (2, 10, 20, 30, "note", "description", 40);`];
+
+        const insertTestDescriptor = [' INSERT INTO TestDescriptor ("id","name", "procedureDescription", "idSKU") \
+                                     VALUES (1,"test descriptor 1", "description", 1) \
+                                    '];
+
+        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
+
+        const insertQueries = [insertSKU, insertTestDescriptor, insertSKUItems, insertSKU2];
+
+        return new Promise((resolve, reject) => {
+            insertQueries.forEach((querySet) => {
+                querySet.forEach((query) => {
+                    this.#db.run(query, (err, rows) => {
+                        if (err) {
+                            console.log("Database get error: err", err);
+                            reject(new Exceptions(500));
+                        } else {
+                            resolve(rows)
+                        }
+                    });
+                }); 
+            });
+    })
+                   
+    }
+
+    async insertTestResultTestData(){
+        const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (1, 10, 20, 30, "note", "description", 40);`];
+        const insertSKU2 = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (2, 10, 20, 30, "note", "description", 40);`];
+
+        const insertTestDescriptor = [' INSERT INTO TestDescriptor ("id","name", "procedureDescription", "idSKU") \
+                                     VALUES (1,"test descriptor 1", "description", 1) \
+                                    '];
+        const insertTestDescriptor2 = [' INSERT INTO TestDescriptor ("id","name", "procedureDescription", "idSKU") \
+                                    VALUES (2,"test descriptor 1", "description", 1) \
+                                   '];
+
+        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
+        const insertTestResult = [' INSERT INTO TestResult("id", "idTestDescriptor", "RFID", "Date", "Result") \
+                                     VALUES (1, 1, "12345678901234567890123456789016", "2022/01/02 10:10", true) \
+                                    '];
+
+        const insertQueries = [insertSKU, insertTestDescriptor, insertTestDescriptor2, insertSKUItems, insertSKU2, insertTestResult];
 
         return new Promise((resolve, reject) => {
             insertQueries.forEach((querySet) => {

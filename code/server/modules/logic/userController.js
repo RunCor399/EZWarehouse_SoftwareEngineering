@@ -136,8 +136,11 @@ class UserController {
         await this.#dbManager.genericSqlGet(sqlInstruction, username, hashedPassword, type)
             .then(value => row = value[0])
             .catch(error => { throw error });
+        
+        
         if (!row)
             throw new Exceptions(401);
+        
 
         this.#user.id = row.id;
         this.#user.username = row.email;

@@ -201,3 +201,11 @@ VALUES (
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "manager"
     );
+    INSERT INTO Users (email, name, surname, password, type)
+VALUES (
+        "manager2@ezwh.com",
+        "name7",
+        "surname7",
+        "e16b2ab8d12314bf4efbd6203906ea6c",
+        "manager"
+    );

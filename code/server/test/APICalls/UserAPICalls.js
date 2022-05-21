@@ -11,29 +11,39 @@ class UserAPICalls {
 
     //GET
     async getUserInfo(){
-        return axios({
+        let response;
+        await axios({
             method: 'get',
             url: this.#baseURL + "/api/userinfo",
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     } 
 
     async getSuppliers(){
-        return axios({
+        let response;
+        await axios({
             method: 'get',
             url: this.#baseURL + "/api/suppliers" ,
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async getUsers(){
-        return axios({
+        let response;
+        await axios({
             method: 'get',
             url: this.#baseURL + "/api/users" ,
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     //POST
     async newUser(username, name, surname, password, type){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/newUser",
             headers: {
@@ -46,11 +56,14 @@ class UserAPICalls {
                 password : password, 
                 type : type
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async managerSessions(username, password){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/managerSessions",
             headers: {
@@ -60,11 +73,14 @@ class UserAPICalls {
                 username : username, 
                 password : password
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async customerSessions(username, password){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/customerSessions",
             headers: {
@@ -74,11 +90,14 @@ class UserAPICalls {
                 username : username, 
                 password : password
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async supplierSessions(username, password){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/supplierSessions",
             headers: {
@@ -88,11 +107,14 @@ class UserAPICalls {
                 username : username, 
                 password : password
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async clerkSessions(username, password){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/clerkSessions",
             headers: {
@@ -102,11 +124,14 @@ class UserAPICalls {
                 username : username, 
                 password : password
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async qualityEmployeeSessions(username, password){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/qualityEmployeeSessions",
             headers: {
@@ -116,11 +141,14 @@ class UserAPICalls {
                 username : username, 
                 password : password
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async deliveryEmployeeSessions(username, password){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/deliveryEmployeeSessions",
             headers: {
@@ -130,19 +158,25 @@ class UserAPICalls {
                 username : username, 
                 password : password
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
     async logout(){
-        return axios({
+        let response;
+        await axios({
             method: 'post',
             url: this.#baseURL + "/api/logout",
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     } 
 
     //PUT
     async editUser(username, oldType, newType){
-        return axios({
+        let response;
+        await axios({
             method: 'put',
             url: this.#baseURL + "/api/users/" + username,
             headers: {
@@ -152,16 +186,21 @@ class UserAPICalls {
                 oldType : oldType, 
                 newType : newType
             }
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 
 
     //DELETE
     async deleteUser(username, type){
-        return axios({
+        let response;
+        await axios({
             method: 'delete',
             url: this.#baseURL + "/api/users/" + username +"/"+ type,
-        });
+        }).then(value => { response = value })
+        .catch(function (error) { response = error.response; });
+        return response;
     }
 }
 

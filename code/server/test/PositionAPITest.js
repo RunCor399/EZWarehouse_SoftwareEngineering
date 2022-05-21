@@ -33,32 +33,41 @@ describe('position test suite', async () => {
     });
 
     it('create position', async () => { //it indicates a TEST CASE
-        const response = await positionAPICalls.addPosition(positionID,
-        aisleID, row, col, maxWeight, maxVolume)
+        const response = await positionAPICalls.addPosition("800234543412", "8002",
+        "3454", "3412", 1000, 1000)
 
-        response.status.should.equal(200);
+        response.status.should.equal(201);
         assert.equal(response.data.length, 0, "response.data" + response.data);
     });
 
     it('modify position', async () => { //it indicates a TEST CASE
-        const response = await positionAPICalls.modifyPosition(positionID, newAisleID,
-            newRow, newCOl, newMaxWeight, newMaxVolume, newOccupiedWeight, newOccupiedVolume)
+
+        
+        const response = await positionAPICalls.modifyPosition("800234543412", "8002",
+        "3454", "3412", 2000, 2000, 100, 100)
 
         response.status.should.equal(200);
         assert.equal(response.data.length, 0, "response.data" + response.data);
     });
 
     it('modify positionID', async () => { //it indicates a TEST CASE
-        const response = await positionAPICalls.changePositionID(positionID, newPositionID)
+        const response = await positionAPICalls.changePositionID("800234543412", "800234543413")
 
         response.status.should.equal(200);
         assert.equal(response.data.length, 0, "response.data" + response.data);
     });
-    
-    it('delete position', async () => { //it indicates a TEST CASE
-        const response = await positionAPICalls.deletePosition(positionID)
+
+    it('get positions', async () => { //it indicates a TEST CASE
+        const response = await positionAPICalls.getPositions()
 
         response.status.should.equal(200);
+        assert.equal(response.data.length, 1, "response.data" + response.data);
+    });
+    
+    it('delete position', async () => { //it indicates a TEST CASE
+        const response = await positionAPICalls.deletePosition("800234543413")
+
+        response.status.should.equal(204);
         assert.equal(response.data.length, 0, "response.data" + response.data);
     });
 

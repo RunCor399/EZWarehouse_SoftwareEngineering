@@ -55,12 +55,12 @@ class PositionAPICalls {
     }
 
     async changePositionID(positionID, newPositionID) {
-
+        console.log(newPositionID);
         let response;
-        await axios.put(this.#baseURL + "/api/position/" + positionID + '/'),
+        await axios.put(this.#baseURL + "/api/position/" + positionID + '/changeID',
             {
                 newPositionID : newPositionID
-            }
+            })
             .then(value => { response = value })
             .catch(function (error) { response = error.response; });
         return response;

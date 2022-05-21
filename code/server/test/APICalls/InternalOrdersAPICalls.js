@@ -11,71 +11,95 @@ class InternalOrdersAPICalls {
 
     //GET
     async getInternalOrdersTest() {
-        return axios({
-            method: 'get',
-            url: this.#baseURL + '/api/internalOrders/',
-        });
+        const url = this.#baseURL + "/api/internalOrders";
+        let response;
+
+        await axios.get(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     async getIssuedInternalOrdersTest() {
-        return axios({
-            method: 'get',
-            url: this.#baseURL + '/api/internalOrdersIssued/',
-        });
+        const url = this.#baseURL + "/api/internalOrdersIssued";
+        let response;
+
+        await axios.get(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     async getAcceptedInternalOrdersTest() {
-        return axios({
-            method: 'get',
-            url: this.#baseURL + '/api/internalOrdersAccepted/',
-        });
+        const url = this.#baseURL + "/api/internalOrdersAccepted";
+        let response;
+
+        await axios.get(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     async getInternalOrderByIdTest(id) {
-        return axios({
-            method: 'get',
-            url: this.#baseURL + '/api/internalOrders/' + id,
-        });
+        const url = this.#baseURL + "/api/internalOrders/" + id;
+        let response;
+
+        await axios.get(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     //POST
     async addInternalOrderTest(issueDate, products, customerId) {
-        return axios({
-            method: 'post',
-            url: this.#baseURL + '/api/internalOrders',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                issueDate: issueDate,
-                products: products,
-                customerId: customerId
-            }
-        });
+        const url = this.#baseURL + "/api/internalOrders";
+        const body = {
+            issueDate: issueDate,
+            products: products,
+            customerId: customerId
+        }
+        const headers = { headers: { 'Content-Type': 'application/json' } };
+        let response;
 
+        await axios.post(url, body, headers)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     //PUT
-    /*it's missing the check on the state*/
-    async editInternalOrderTest(id, newState) {
-        return axios({
-            method: 'put',
-            url: this.#baseURL + '/api/internalOrders/' + id,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: {
-                newState: newState
-            }
-        });
+    async editInternalOrderTest(id, newState, products) {
+        const url = this.#baseURL + "/api/internalOrders/" + id;
+        const body = {
+            newState: newState,
+            products: products
+        }
+        const headers = { headers: { 'Content-Type': 'application/json' } };
+        let response;
+
+
+        await axios.put(url, body, headers)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
     //DELETE
     async deleteInternalOrderTest(id) {
-        return axios({
-            method: 'delete',
-            url: this.#baseURL + '/api/internalOrders/' + id
-        });
+        const url = this.#baseURL + "/api/internalOrders/" + id;
+        let response;
+
+        await axios.delete(url)
+            .then(value => response = value)
+            .catch(error => response = error.response);
+
+        return response;
     }
 
 }
