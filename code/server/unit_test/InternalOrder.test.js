@@ -43,11 +43,45 @@ describe('InternalOrderController Tests', () => {
         });
 
         test("Insertion of an Internal Order with malformed date", async () => {
+            let result;
+            let oldCount;
+            let newCount;
+            const body = {
+                issueDate : "999/999/999",
+                state : "ISSUED",
+                customerId : 3
+            };
+            
+            result = await internalOrderController.getAllInternalOrders();
+            oldCount = result.length;
 
+            await internalOrderController.createInternalOrder(body);
+
+            result = await internalOrderController.getAllInternalOrders();
+            newCount = result.length;
+
+            expect(newCount).to.be.equal(oldCount);
         });
 
         test("Insertion of an Internal Order with invalid customerId", async () => {
+            let result;
+            let oldCount;
+            let newCount;
+            const body = {
+                issueDate : "999/999/999",
+                state : "ISSUED",
+                customerId : -10
+            };
+            
+            result = await internalOrderController.getAllInternalOrders();
+            oldCount = result.length;
 
+            await internalOrderController.createInternalOrder(body);
+
+            result = await internalOrderController.getAllInternalOrders();
+            newCount = result.length;
+
+            expect(newCount).to.be.equal(oldCount);
         });
     });
 
