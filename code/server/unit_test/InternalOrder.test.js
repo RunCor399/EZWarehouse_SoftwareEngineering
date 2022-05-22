@@ -26,11 +26,11 @@ describe('InternalOrderController Tests', () => {
             let oldCount;
             let newCount;
             const body = {
-                issueDate : "2022/07/07",
-                state : "ISSUED",
-                customerId : 3
+                issueDate: "2022/07/07",
+                state: "ISSUED",
+                customerId: 3
             };
-            
+
             result = await internalOrderController.getAllInternalOrders();
             oldCount = result.length;
 
@@ -39,7 +39,7 @@ describe('InternalOrderController Tests', () => {
             result = await internalOrderController.getAllInternalOrders();
             newCount = result.length;
 
-            expect(newCount).to.be.equal(oldCount+1);
+            expect(newCount).to.be.equal(oldCount + 1);
         });
 
         test("Insertion of an Internal Order with malformed date", async () => {
@@ -47,11 +47,11 @@ describe('InternalOrderController Tests', () => {
             let oldCount;
             let newCount;
             const body = {
-                issueDate : "999/999/999",
-                state : "ISSUED",
-                customerId : 3
+                issueDate: "999/999/999",
+                state: "ISSUED",
+                customerId: 3
             };
-            
+
             result = await internalOrderController.getAllInternalOrders();
             oldCount = result.length;
 
@@ -68,11 +68,11 @@ describe('InternalOrderController Tests', () => {
             let oldCount;
             let newCount;
             const body = {
-                issueDate : "999/999/999",
-                state : "ISSUED",
-                customerId : -10
+                issueDate: "999/999/999",
+                state: "ISSUED",
+                customerId: -10
             };
-            
+
             result = await internalOrderController.getAllInternalOrders();
             oldCount = result.length;
 
@@ -87,15 +87,38 @@ describe('InternalOrderController Tests', () => {
 
     describe('editInternalOrder method testing', () => {
         test("Successfully edit an Internal Order", async () => {
+            let result;
+            const body = { newState: "ACCEPTED" };
+            let newState;
 
+            await internalOrderController.editInternalOrder(1, body);
+            result = await internalOrderController.getInternalOrder(1);
+            newState = result['state'];
+
+            expect(newState).to.be.equal("ACCEPTED");
         });
 
         test("Edit an Internal Order with an invalid state", async () => {
+            let result;
+            const body = { newState: "INVALID_STATE" };
+            let oldState, newState;
 
+            result = await internalOrderController.getInternalOrder(1);
+            oldState = result['state'];
+
+            await internalOrderController.editInternalOrder(1, body).catch(() => { });
+            result = await internalOrderController.getInternalOrder(1);
+            newState = result['state'];
+
+            expect(newState).to.be.equal(oldState);
         });
 
         test("Edit a non-existing Internal Order", async () => {
+            let result;
+            const body = { newState: "ISSUED" };
 
+            result = await internalOrderController.editInternalOrder(-1, body).catch(() => { });
+            expect(result).to.be.undefined;
         });
     });
 
@@ -113,7 +136,7 @@ describe('InternalOrderController Tests', () => {
 
             oldCount = (await internalOrderController.getAllInternalOrders()).length;
 
-            await internalOrderController.deleteInternalOrder(-1).catch(() => {});
+            await internalOrderController.deleteInternalOrder(-1).catch(() => { });
 
             newCount = (await internalOrderController.getAllInternalOrders()).length;
 
