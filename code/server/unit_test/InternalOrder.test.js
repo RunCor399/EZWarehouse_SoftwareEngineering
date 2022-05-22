@@ -14,9 +14,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-    await dbManager.deleteAllData().then(async () => {
-        await dbManager.insertInternalOrderTestData();
-    })
+    await dbManager.deleteAllData();
 });
 
 describe('InternalOrderController Tests', () => {
