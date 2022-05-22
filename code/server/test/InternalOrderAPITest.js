@@ -29,10 +29,10 @@ describe('Internal Orders test suite', async () => {
         await databaseManager.deleteAllData();
     })*/
 
-    beforeEach(async () => {
+    before(async () => {
         await dbmanager.deleteAllData();
     });
-    afterEach(async () => {
+    after(async () => {
         await dbmanager.deleteAllData();
     });
 

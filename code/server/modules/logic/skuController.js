@@ -52,7 +52,7 @@ class SkuController {
         let positionID = "";
 
         await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?;`, id)
-            .then(value => { positionID = (value[0] === undefined ? "" : value[0].positionID) })
+            .then(value => { positionID = (value[0] === undefined ? "" : ""+value[0].positionID) })
             .catch(error => { throw error });
 
 
@@ -87,7 +87,7 @@ class SkuController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id) || !this.#controller.areAllPositive(id))
+        if (this.#controller.areUndefined(id) || this.#controller.areNotNumbers(id) || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         let sku;
@@ -137,7 +137,7 @@ class SkuController {
         //validation of the body
         if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity)
-            || !this.#controller.areAllPositive(weight, volume, price, availableQuantity))
+            || !this.#controller.areAllPositiveOrZero(weight, volume, price, availableQuantity))
             throw new Exceptions(422);
 
         //this.#skuDAO.createSku(new SKU(weight, volume, price, notes, description, availableQuantity))
@@ -162,7 +162,8 @@ class SkuController {
      * @throws 503 Service Unavailable (generic error).
      */
     async editSku(id, body) {
-
+    
+        
     //permission check
     if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "clerk"))
         throw new Exceptions(401);
@@ -171,7 +172,6 @@ class SkuController {
         .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
     let editParams = { "newDescription": "description", "newWeight": "weight", "newVolume": "volume", "newNotes": "notes", "newPrice": "price", "newAvailableQuantity": "availableQuantity" };
-
     //If a param in the body is not present, the one relative to the old sku state is taken
     (Object.keys(editParams)).map((param) => {
         body[param] === undefined ? body[param] = sku[editParams[param]] : "";
@@ -186,7 +186,7 @@ class SkuController {
     const newAvailableQuantity = body["newAvailableQuantity"];
 
     if (!id || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id)
-        || !this.#controller.areAllPositive(id, newWeight, newVolume, newPrice, newAvailableQuantity))
+        || !this.#controller.areAllPositiveOrZero(id, newWeight, newVolume, newPrice, newAvailableQuantity))
         throw new Exceptions(422)
 
     //check if sku has position
@@ -195,22 +195,19 @@ class SkuController {
         .then(value => position = value[0])
         .catch(error => { throw error });
 
-
     if (position) {
         //if sku has position, check if position can contain modified sku
         if (position.maxWeight < newWeight * newAvailableQuantity
             || position.maxVolume < newVolume * newAvailableQuantity)
             throw new Exceptions(422);
-
         //update position info
         const sqlUpdate = `UPDATE Position SET occupiedWeight = ?, 
-                            occupiedVolume = ? WHERE ID = ?;`;
+                            occupiedVolume = ? WHERE positionID = ?;`;
 
 
         await this.#dbManager.genericSqlRun(sqlUpdate, newWeight * newAvailableQuantity, newVolume * newAvailableQuantity, position.positionId)
             .catch(error => { throw error });
     }
-
     //update sku info
     const sqlInstruction = `UPDATE SKU SET weight = ?, volume = ?, price = ? ,
                                 notes = ?, description = ?, 
@@ -218,7 +215,7 @@ class SkuController {
 
     await this.#dbManager.genericSqlRun(sqlInstruction, newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id)
         .catch((error) => { throw error });
-
+        console.log("arrivo qui ");
 }
 
 
@@ -239,7 +236,7 @@ class SkuController {
 
     //validation of the body
     if (this.#controller.areUndefined(positionId, id) || this.#controller.areNotNumbers(id)
-        || String(positionId).length !== 12 || !this.#controller.areAllPositive(positionId)) {
+        || String(positionId).length !== 12 || !this.#controller.areAllPositiveOrZero(positionId)) {
         throw new Exceptions(422);
     }
 
@@ -335,7 +332,7 @@ class SkuController {
     //validation of id
     if (this.#controller.areUndefined(id)
         || this.#controller.areNotNumbers(id)
-        || !this.#controller.areAllPositive(id))
+        || !this.#controller.areAllPositiveOrZero(id))
         throw new Exceptions(422);
 
     //this.#skuDAO.deleteSku(id);

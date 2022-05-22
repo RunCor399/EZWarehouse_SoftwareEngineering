@@ -1,84 +1,283 @@
 'use strict';
 
-const axios = require('axios');
-const baseURL = "http://localhost:3001";
-
-const UtilityCalls = require('./APICalls/UtilityCalls');
-const SkuAPICalls = require('./APICalls/SkuAPICalls');
-
-const utilityCalls = new UtilityCalls();
-const skuAPICalls = new SkuAPICalls();
 
 
 
-test("login as manager", async () => {
-    const response = await utilityCalls.login("manager1@ezwh.com", "testpassword");
+const { expect } = require('chai');
+const Controller = require('../modules/logic/controller');
+
+const controller = new Controller();
+const skuController = controller.getSkuController();
+const dbManager = controller.getDBManager();
+
+
+beforeEach(async () => {
+    await dbManager.deleteAllData().then(async () => {
+        await dbManager.insertSkuTestData();
+    })
+  });
+afterEach(async () => {
+    await dbManager.deleteAllData().then(async () => {
+        await dbManager.insertSkuTestData();
+    })
+  });
+
+describe('skuController Tests', () => {
+    describe('createSku method testing', () => {
+        test("Successfully add new Sku to Database", async () => {
+            let result;
+            let oldCount;
+            let newCount; 
+            const body = {
+                "description" : "a new sku",
+                "weight" : 100,
+                "volume" : 50,
+                "notes" : "second SKU",
+                "price" : 10.99,
+                "availableQuantity" : 50
+            }        
+        
+             result = await skuController.getAllSku();
+             oldCount = result.length;
+        
+             await skuController.createSku(body);
+        
+             result = await skuController.getAllSku();
+             newCount = result.length;
     
-    expect(response.data.username).toMatch("manager1@ezwh.com");    
-});
-
-test("get skus", async () => {
-    const response = await skuAPICalls.getSKUsTest();
-    console.log(response.data[2]);
-
-    expect(response.status).toBe(200);
-});
-
-test("add sku", async () => {
-    let responseGet, responseAdd;
-    let skuCountBefore, skuCountAfter;
-
-    //Check number of SKU's before add
-    responseGet = await skuAPICalls.getSKUsTest();
-    skuCountBefore = responseGet.data.length;
-
-    responseAdd = await skuAPICalls.addSKUTest();
-
-    //Check number of SKU's after add
-    responseGet = await skuAPICalls.getSKUsTest();
-    skuCountAfter = responseGet.data.length;
-
-    expect(skuCountAfter).toBe(skuCountBefore + 1);  
-
-});
-
-/*test("modify sku", async () => {
-    //let response = await utilityCalls.login("manager1@ezwh.com", "testpassword");
+        
+             expect(newCount).to.be.equal(oldCount+1);
+        });
     
-    const id = 1;
-    const description = "new description";
-    const weight = 20;
-    const volume = 30;
-    const notes = "modified SKU";
-    const price = 5;
-    const newAvailableQuantity = 20
-    response = await skuAPICalls.modifySKUTest(id, description, weight, volume, notes, price, newAvailableQuantity);
-
-    expect(response.data[id-1].id = id);
-    expect(response.data[id-1].description = description);
-    expect(response.data[id-1].newAvailableQuantity = newAvailableQuantity);
-});*/
-
-
-
-
-
-
-
-//MOVE INSIDE SKUItem.test.js
-/*
-
-test("test add skuItem", async () => {
-    const response = await addNewSKUItemTest();
-    console.log(response.status)
-    expect(response).not.toBeNull();    
-    });*/
+        test("Insertion of a sku with a missing value", async () => {
+            let result;
+            let oldCount;
+            let newCount; 
+            const body = {
+                "description" : "a new sku",
+                "weight" : 100,
+                "volume" : 50,
+                "notes" : "second SKU",
+                "price" : 10.99
+            }   
+        
+             result = await skuController.getAllSku();
+             oldCount = result.length;
+        
+             await skuController.createSku(body).catch(() => {});
+        
+             result = await skuController.getAllSku();
+             newCount = result.length;
     
+        
+             expect(newCount).to.be.equal(oldCount);
+        });
+    
+    
+        test("Insertion of a Sku with negative volume", async () => {
+            let result;
+            let oldCount;
+            let newCount; 
+            const body = {
+                "description" : "a new sku",
+                "weight" : 100,
+                "volume" : -50,
+                "notes" : "second SKU",
+                "price" : 10.99,
+                "availableQuantity" : 50
+            }     
+        
+            result = await skuController.getAllSku();
+            oldCount = result.length;
+       
+            await skuController.createSku(body).catch(() => {});
+       
+            result = await skuController.getAllSku();
+            newCount = result.length;
+   
+       
+            expect(newCount).to.be.equal(oldCount);
+        });
+    });
+    
+    describe('editSku method testing', () => {
+        test.only('Successfully edit a sku', async () => {
+            let result;
+            const body = {
+                "newDescription" : "a new sku",
+                "newWeight" : 10,
+                "newVolume" : 10,
+                "newNotes" : "first SKU",
+                "newPrice" : 10.99,
+                "newAvailableQuantity" : 3
+            }
+            
+
+            await skuController.editSku(1, body).catch(() => {});;
+
+            result = await skuController.getSku(1);
+
+            expect(result['description']).to.be.equal("a new sku");
+            expect(result['weight']).to.be.equal(10);
+            expect(result['volume']).to.be.equal(10);
+            expect(result['notes']).to.be.equal("first SKU");
+            expect(result['price']).to.be.equal(10.99);
+            expect(result['availableQuantity']).to.be.equal(3);
+        });
+
+        test('Edit a sku with an invalid new volume', async () => {
+            let result;
+            const body = {
+                "newDescription" : "a new sku",
+                "newWeight" : 10,
+                "newVolume" : -10,
+                "newNotes" : "first SKU",
+                "newPrice" : 10.99,
+                "newAvailableQuantity" : 3
+            }
+            let oldResult, newResult;
+
+            oldResult = await skuController.getSku(1);
+
+            await skuController.editSku(1, body).catch(() => {});
+
+            newResult = await skuController.getSku(1);
+
+            expect(oldResult['description']).to.be.equal(newResult['description']);
+            expect(oldResult['weight']).to.be.equal(newResult['weight']);
+            expect(oldResult['volume']).to.be.equal(newResult['volume']);
+            expect(oldResult['notes']).to.be.equal(newResult['notes']);
+            expect(oldResult['price']).to.be.equal(newResult['price']);
+            expect(oldResult['availableQuantity']).to.be.equal(newResult['availableQuantity']);
+        });
+
+        test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored', async () => {
+            let result;
+            const body = {
+                "newDescription" : "a new sku",
+                "newWeight" : 30,
+                "newVolume" : 30,
+                "newNotes" : "first SKU",
+                "newPrice" : 10.99,
+                "newAvailableQuantity" : 10
+            }
+            let oldResult, newResult;
+
+            oldResult = await skuController.getSku(1);
+
+            await skuController.editSku(1, body).catch(() => {});
+
+            newResult = await skuController.getSku(1);
+
+            expect(oldResult['description']).to.be.equal(newResult['description']);
+            expect(oldResult['weight']).to.be.equal(newResult['weight']);
+            expect(oldResult['volume']).to.be.equal(newResult['volume']);
+            expect(oldResult['notes']).to.be.equal(newResult['notes']);
+            expect(oldResult['price']).to.be.equal(newResult['price']);
+            expect(oldResult['availableQuantity']).to.be.equal(newResult['availableQuantity']);
+        });
+
+        test('Edit a non-existing Sku', async () => {
+            let result;
+            const body  = {
+                "newDescription" : "a new sku",
+                "newWeight" : 10,
+                "newVolume" : 10,
+                "newNotes" : "first SKU",
+                "newPrice" : 10.99,
+                "newAvailableQuantity" : 3
+            }
 
 
+            result = await skuController.editSku(2, body).catch(() => {});
+            expect(result).to.be.undefined;
+        });
+    });
+
+    describe('setPosition method testing', () => {
+        test('Successfully edit a position of a sku', async () => {
+            let result;
+            const body = {
+                "position": "000000000002"
+            }
+            
+            
+
+            await skuController.setPosition(1, body);
+
+            result = await skuController.getPositionForSKU(1);
+
+            expect(result).to.be.equal(String(Number("000000000002")));
+        });
+
+    
+        test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku ', async () => {
+            let result;
+            const body = {
+                "position": "000000000003"
+            }
+
+            let oldPosition, newPosition;
+            oldPosition=await skuController.getPositionForSKU(1);
+
+            result = await skuController.setPosition(1, body).catch(() => {});
+
+            newPosition=await skuController.getPositionForSKU(1);
+            
+            expect(oldPosition).to.be.equal(newPosition);
+        });
+
+        test('Edit a non-existing Sku', async () => {
+            let result;
+            const body = {
+                "position": "000000000002"
+            }
 
 
+            result = await skuController.setPosition(2, body).catch(() => {});
+            expect(result).to.be.undefined;
+        });
 
+        test('Edit a Sku with a non-existing position ', async () => {
+            let result;
+            const body = {
+                "position": "000000000005"
+            }
 
+            let oldPosition, newPosition;
+            oldPosition=await skuController.getPositionForSKU(1);
 
+            result = await skuController.setPosition(1, body).catch(() => {});
+
+            newPosition=await skuController.getPositionForSKU(1);
+            
+            expect(oldPosition).to.be.equal(newPosition);
+        });
+    });
+
+    describe('deleteSku method testing', () => {
+        test('Successfully delete a Sku', async () => {
+            let result;
+
+            await skuController.deleteSku(1);
+
+            result = await skuController.getSku(1).catch(() => {});
+            expect(result).to.be.undefined;
+
+        });
+
+        test('Delete a non-existing Sku', async () => {
+            let result, oldCount, newCount;
+
+            oldCount = (await skuController.getAllSku()).length;
+
+            await skuController.deleteSku(9).catch(() => {});
+
+            newCount = (await skuController.getAllSku()).length;
+
+            expect(oldCount).to.be.equal(newCount);
+        });
+    });
+    
+})
 

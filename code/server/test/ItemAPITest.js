@@ -76,13 +76,13 @@ describe('Items test suite', async () => {
 
             it('Edit non-existing Item', async () => {
                 let response;
-                response = await internalOrdersAPICalls.editInternalOrderTest(-1, "some_text", "price");
+                response = await itemAPICalls.editItemTest(-1, "some_text", "price");
                 response.status.should.equal(404);
             });
 
             it('Edit Item with improper price', async () => {
                 let response;
-                response = await internalOrdersAPICalls.editInternalOrderTest(-1, "some_text", "price");
+                response = await itemAPICalls.editItemTest(-1, "some_text", "price");
                 response.status.should.equal(422);
             });
         });
