@@ -22,7 +22,24 @@ afterEach(async () => {
 describe('InternalOrderController Tests', () => {
     describe('createInternalOrder method testing', () => {
         test("Successfully add a new Internal Order to Database", async () => {
+            let result;
+            let oldCount;
+            let newCount;
+            const body = {
+                issueDate : "2022/07/07",
+                state : "ISSUED",
+                customerId : 3
+            };
+            
+            result = await internalOrderController.getAllInternalOrders();
+            oldCount = result.length;
 
+            await internalOrderController.createInternalOrder(body);
+
+            result = await internalOrderController.getAllInternalOrders();
+            newCount = result.length;
+
+            expect(newCount).to.be.equal(oldCount+1);
         });
 
         test("Insertion of an Internal Order with malformed date", async () => {
@@ -50,11 +67,23 @@ describe('InternalOrderController Tests', () => {
 
     describe('deleteInternalOrder method testing', () => {
         test("Successfully delete an Internal Order", async () => {
+            let result;
+            await internalOrderController.deleteInternalOrder(1);
 
+            result = await internalOrderController.getInternalOrder(1).catch(() => { });
+            expect(result).to.be.undefined;
         });
 
         test("Delete a non-existing Internal Order", async () => {
+            let result, oldCount, newCount;
 
+            oldCount = (await internalOrderController.getAllInternalOrders()).length;
+
+            await internalOrderController.deleteInternalOrder(-1).catch(() => {});
+
+            newCount = (await internalOrderController.getAllInternalOrders()).length;
+
+            expect(oldCount).to.be.equal(newCount);
         });
     });
 });
