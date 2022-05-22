@@ -32,7 +32,7 @@ class DBManager {
             })
         })
     }
-    
+
     /** execute a select given an istruction and params 
          * @throws 500
         */
@@ -51,7 +51,7 @@ class DBManager {
 
     //TESTING PURPOSES
 
-    async deleteAllData(){
+    async deleteAllData() {
         const queries = [
             "DELETE FROM SKU WHERE 1=1",
             "DELETE FROM SKUItem WHERE 1=1",
@@ -96,24 +96,24 @@ class DBManager {
                     ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
         ];
 
-        
+
 
         return new Promise((resolve, reject) => {
-                queries.forEach((query) => {
-                    this.#db.run(query, (err, rows) => {
-                        if (err) {
-                            console.log("Database get error: err", err);
-                            reject(new Exceptions(500));
-                        } else {
-                            resolve(rows)
-                        }
-                    });
+            queries.forEach((query) => {
+                this.#db.run(query, (err, rows) => {
+                    if (err) {
+                        console.log("Database get error: err", err);
+                        reject(new Exceptions(500));
+                    } else {
+                        resolve(rows)
+                    }
                 });
+            });
         })
     }
 
 
-    async insertRestockAndReturnOrderTestData(){
+    async insertRestockAndReturnOrderTestData() {
         const insertRestockOrder = [' INSERT INTO RestockOrder ("issueDate", "state", "transportNote", "supplierId") \
                                      VALUES ("2021/01/01 01:01", "ISSUED", "", 5), \
                                             ("2022/01/02 10:10", "COMPLETEDRETURN", "", 4) \
@@ -122,7 +122,7 @@ class DBManager {
         const insertReturnOrder = [`INSERT INTO ReturnOrder (returnDate, restockOrderID)
                                     VALUES ("2022/02/02", 1);
         `];
-        
+
         const insertSKUItemsPerReturnOrder = [`INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) 
                                                VALUES (1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
 
@@ -144,13 +144,13 @@ class DBManager {
                             resolve(rows)
                         }
                     });
-                }); 
+                });
             });
-    })
-                
+        })
+
     }
 
-    async insertTestDescriptorTestData(){
+    async insertTestDescriptorTestData() {
         const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
         VALUES (1, 10, 20, 30, "note", "description", 40);`];
         const insertSKU2 = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
@@ -175,13 +175,13 @@ class DBManager {
                             resolve(rows)
                         }
                     });
-                }); 
+                });
             });
-    })
-                   
+        })
+
     }
 
-    async insertTestResultTestData(){
+    async insertTestResultTestData() {
         const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
         VALUES (1, 10, 20, 30, "note", "description", 40);`];
         const insertSKU2 = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
@@ -212,17 +212,17 @@ class DBManager {
                             resolve(rows)
                         }
                     });
-                }); 
+                });
             });
-    })
-                   
+        })
+
     }
 
-    async insertSkuTestData(){
+    async insertSkuTestData() {
         const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
         VALUES (1, 30, 30, 30, "note", "description", 1);`];
 
-        
+
 
         const insertPosition = ['INSERT INTO Position("positionID", "aisleID", "row", "col", "maxWeight", "maxVolume", "occupiedWeight", "occupiedVolume") \
                                      VALUES ("000000000001","0001", "0001", "0001", 50, 50, 30, 30) \
@@ -233,12 +233,12 @@ class DBManager {
         const insertPosition3 = ['INSERT INTO Position("positionID", "aisleID", "row", "col", "maxWeight", "maxVolume", "occupiedWeight", "occupiedVolume") \
                                     VALUES ("000000000003","0003", "0003", "0003", 5, 5, 0, 0) \
                                    '];
-        
+
         const insertSkuInPosition = [' INSERT INTO SKU_in_Position("SKUId", "positionID") \
                                     VALUES (1,"000000000001") \
                                    '];
 
-        const insertQueries = [insertSKU, insertPosition, insertPosition2,insertPosition3, insertSkuInPosition];
+        const insertQueries = [insertSKU, insertPosition, insertPosition2, insertPosition3, insertSkuInPosition];
         return new Promise((resolve, reject) => {
             insertQueries.forEach((querySet) => {
                 querySet.forEach((query) => {
@@ -250,10 +250,36 @@ class DBManager {
                             resolve(rows)
                         }
                     });
-                }); 
+                });
             });
-    })
-                   
+        })
+
+    }
+
+    async insertInternalOrderTestData() {
+        const insertInternalOrder = [`INSERT INTO InternalOrder(issueDate, state, customerId) VALUES ("2022/03/21", "ISSUED", 3)`];
+
+        const insertSKUPerInternalOrder = [`INSERT INTO SKUPerInternalOrder(id, SKUId, description, price, qty) VALUES (1, 1, "skuPerInternalOrder", 50.00, 20)`];
+
+        /*check if insertSKUItemsPerInternalOrder and insertSKU are needed*/
+
+        const insertQueries = [insertInternalOrder, insertSKUPerInternalOrder];
+
+        return new Promise((resolve, reject) => {
+            insertQueries.forEach((querySet) => {
+                querySet.forEach((query) => {
+                    this.#db.run(query, (err, rows) => {
+                        if (err) {
+                            console.log("Database get error: err", err);
+                            reject(new Exceptions(500));
+                        } else {
+                            resolve(rows)
+                        }
+                    });
+                });
+            });
+        });
+
     }
 
 }
