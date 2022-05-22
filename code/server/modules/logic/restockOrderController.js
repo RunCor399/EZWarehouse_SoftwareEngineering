@@ -107,7 +107,7 @@ class RestockOrderController {
 
         /*check if the id is valid*/
         if (!id || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         let row;
@@ -160,7 +160,7 @@ class RestockOrderController {
 
         /*check if the id is valid*/
         if (!id || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         /*check if the state of the restock order is COMPLETEDRETURN */
@@ -203,7 +203,7 @@ class RestockOrderController {
         /*check if the body is valid*/
         if (this.#controller.areUndefined(issueDate, products, supplierId)
             || isNaN(Number(supplierId))
-            || !this.#controller.areAllPositive(supplierId))
+            || !this.#controller.areAllPositiveOrZero(supplierId))
             throw new Exceptions(422);
 
         let dateToSave;
@@ -319,7 +319,7 @@ class RestockOrderController {
 
         /*check if the id is valid*/
         if (!id || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         let row;
@@ -371,7 +371,7 @@ class RestockOrderController {
 
         /*check if the id is valid*/
         if (!id || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM RestockOrder WHERE ID=?;`, id)

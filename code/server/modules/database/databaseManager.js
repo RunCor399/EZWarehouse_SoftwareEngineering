@@ -127,9 +127,12 @@ class DBManager {
                                                VALUES (1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
 
         const insertSKU = [`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
-                            VALUES ( 10, 20, 30, "note", "description", 40);`];
+                            VALUES ( 10, 20, 30, "note", "description", 40),
+                                   ( 40, 50, 60, "note2", "description2", 70);`];
 
-        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
+        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+                                 VALUES ("12345678901234567890123456789016",1,10,"2022/02/02"),
+                                        ("78901234567890161234567890123456",2,20, "2022/03/03");`];
 
         const insertQueries = [insertRestockOrder, insertReturnOrder, insertSKU, insertSKUItemsPerReturnOrder, insertSKUItems];
 

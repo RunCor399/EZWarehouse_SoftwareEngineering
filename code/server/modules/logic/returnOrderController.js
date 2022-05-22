@@ -49,7 +49,7 @@ class ReturnOrderController {
 
         /*check if the id is valid*/
         if (!id || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422)
 
         let row;
@@ -98,7 +98,7 @@ class ReturnOrderController {
         /*check if the body is valid */
         if (this.#controller.areUndefined(returnDate, products, restockOrderId)
             || isNaN(Number(restockOrderId))
-            || !this.#controller.areAllPositive(restockOrderId))
+            || !this.#controller.areAllPositiveOrZero(restockOrderId))
             throw new Exceptions(422)
 
         let dateToSave
@@ -119,7 +119,7 @@ class ReturnOrderController {
 
         for (let i = 0; i < products.length; i++) {
             await this.#controller.getSkuItemController().getSkuItem(products[i].RFID)
-                .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); throw error })
+                .catch(error => { /*if (error.getCode() === 500) throw new Exceptions(503); */throw error })
         }
 
         let id;
@@ -155,7 +155,7 @@ class ReturnOrderController {
 
         /*check if the id is valid*/
         if (!id || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM ReturnOrder WHERE ID=?;`, id)

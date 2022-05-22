@@ -12,10 +12,16 @@ const dbManager = controller.getDBManager();
 
 
 beforeEach(async () => {
+    //console.log("executed before rest")
     await dbManager.deleteAllData().then(async () => {
         await dbManager.insertRestockAndReturnOrderTestData();
     })
   });
+
+afterEach(async () => {
+    //console.log("executed after rest");
+    await dbManager.deleteAllData();
+});
 
 describe('RestockOrderController Tests', () => {
     describe('createRestockOrder method testing', () => {
@@ -24,7 +30,7 @@ describe('RestockOrderController Tests', () => {
             let oldCount;
             let newCount; 
             const body = {
-                 issueDate : "2023/01/01",
+                 issueDate : "2023/01/15",
                  products: [],
                  supplierId : 5
              }
@@ -36,7 +42,8 @@ describe('RestockOrderController Tests', () => {
         
              result = await restockOrderController.getAllRestockOrders();
              newCount = result.length;
-    
+             
+             console.log(result);
         
              expect(newCount).to.be.equal(oldCount+1);
         });
