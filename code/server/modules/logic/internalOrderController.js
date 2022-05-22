@@ -200,7 +200,7 @@ class InternalOrderController {
             if (!products)
                 throw new Exceptions(422);
 
-            const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUID, RFID) VALUES (?, ?, ?);`;
+            const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUId, RFID) VALUES (?, ?, ?);`;
             for (let i = 0; i < products.length; i++) {
                 await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SKUId, products[i].RFID)
                     .catch(error => { throw error });

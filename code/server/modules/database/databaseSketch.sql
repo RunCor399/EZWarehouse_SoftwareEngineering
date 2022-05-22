@@ -137,6 +137,7 @@ CREATE TABLE SKUPerInternalOrder(
 );
 CREATE TABLE SKUItemsPerInternalOrder(
     id INT,
+    SKUId INT,
     RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
