@@ -218,6 +218,44 @@ class DBManager {
                    
     }
 
+    async insertSkuTestData(){
+        const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
+        VALUES (1, 30, 30, 30, "note", "description", 1);`];
+
+        
+
+        const insertPosition = ['INSERT INTO Position("positionID", "aisleID", "row", "col", "maxWeight", "maxVolume", "occupiedWeight", "occupiedVolume") \
+                                     VALUES ("000000000001","0001", "0001", "0001", 50, 50, 30, 30) \
+                                    '];
+        const insertPosition2 = ['INSERT INTO Position("positionID", "aisleID", "row", "col", "maxWeight", "maxVolume", "occupiedWeight", "occupiedVolume") \
+                                    VALUES ("000000000002","0002", "0002", "0002", 50, 50, 0, 0) \
+                                   '];
+        const insertPosition3 = ['INSERT INTO Position("positionID", "aisleID", "row", "col", "maxWeight", "maxVolume", "occupiedWeight", "occupiedVolume") \
+                                    VALUES ("000000000003","0003", "0003", "0003", 5, 5, 0, 0) \
+                                   '];
+        
+        const insertSkuInPosition = [' INSERT INTO SKU_in_Position("SKUId", "positionID") \
+                                    VALUES (1,"000000000001") \
+                                   '];
+
+        const insertQueries = [insertSKU, insertPosition, insertPosition2,insertPosition3, insertSkuInPosition];
+        return new Promise((resolve, reject) => {
+            insertQueries.forEach((querySet) => {
+                querySet.forEach((query) => {
+                    this.#db.run(query, (err, rows) => {
+                        if (err) {
+                            console.log("Database get error: err", err);
+                            reject(new Exceptions(500));
+                        } else {
+                            resolve(rows)
+                        }
+                    });
+                }); 
+            });
+    })
+                   
+    }
+
 }
 
 module.exports = DBManager;
