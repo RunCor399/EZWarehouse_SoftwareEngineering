@@ -47,7 +47,7 @@ class ItemController {
 
         //check if the id is valid
         if (!id || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         let row;
@@ -85,7 +85,7 @@ class ItemController {
         //check if the body is valid
         if (this.#controller.areUndefined(id, description, price, SKUId, supplierId)
             || this.#controller.areNotNumbers(id, price, SKUId, supplierId)
-            || !this.#controller.areAllPositive(id, price, SKUId, supplierId))
+            || !this.#controller.areAllPositiveOrZero(id, price, SKUId, supplierId))
             throw new Exceptions(422);
 
         //check if the supplier already sells an item with the same SKUId
@@ -135,7 +135,7 @@ class ItemController {
         /*check if the body is valid*/
         if (this.#controller.areUndefined(newDescription, newPrice)
             || isNaN(Number(newPrice))
-            || !this.#controller.areAllPositive(newPrice))
+            || !this.#controller.areAllPositiveOrZero(newPrice))
             throw new Exceptions(422);
 
         await this.getItem(id)
@@ -159,7 +159,7 @@ class ItemController {
 
         /*check if the id is valid*/
         if (isNaN(Number(id)) || !id
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE ID= ?;`, id)

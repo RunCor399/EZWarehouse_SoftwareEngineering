@@ -26,7 +26,7 @@ router.get('/api/testDescriptors/:id', async (req, res) => {
 
   await controller.getTestDescriptorController().getTestDescriptor(param)
     .then((testDescriptor) => { return res.status(200).json(testDescriptor); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //POST /api/testDescriptor

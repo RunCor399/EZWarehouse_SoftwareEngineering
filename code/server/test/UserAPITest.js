@@ -193,7 +193,7 @@ describe('User test suite', async () => {
 
     describe('DELETE Requests tests to user', async () => {
         describe('Delete a user tests', async() => {
-            it.only('Succesfully delete a user', async () => {
+            it('Succesfully delete a user', async () => {
                 let response = await userAPICalls.managerSessions("manager1@ezwh.com", "testpassword" );
                 response.status.should.equal(200);
                 response = await userAPICalls.deleteUser("user1@ezwh.com", "customer");

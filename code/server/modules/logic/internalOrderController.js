@@ -98,7 +98,7 @@ class InternalOrderController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!id || isNaN(Number(id)) || !this.#controller.areAllPositive(id))
+        if (!id || isNaN(Number(id)) || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
 
@@ -137,7 +137,7 @@ class InternalOrderController {
         /*check if the body is valid */
         if (this.#controller.areUndefined(issueDate, products, customerId)
             || isNaN(Number(customerId))
-            || !this.#controller.areAllPositive(customerId))
+            || !this.#controller.areAllPositiveOrZero(customerId))
             throw new Exceptions(422);
 
         let dateToSave
@@ -184,7 +184,7 @@ class InternalOrderController {
         /*check if the id is valid*/
         if (this.#controller.areUndefined(id, newState)
             || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         if (!this.#controller.checkStateInternalOrders(newState))
@@ -230,7 +230,7 @@ class InternalOrderController {
         /*check if the id is valid*/
         if (!id
             || isNaN(Number(id))
-            || !this.#controller.areAllPositive(id))
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun(`DELETE FROM InternalOrder WHERE ID = ?;`, id)

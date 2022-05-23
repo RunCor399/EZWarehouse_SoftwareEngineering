@@ -50,7 +50,7 @@ class TestResultController {
         if (this.#controller.areUndefined(id)
             || this.#controller.areNotNumbers(id)
             || this.#controller.checkRFID(rfid)
-            || !this.#controller.areAllPositive(id, rfid))
+            || !this.#controller.areAllPositiveOrZero(id, rfid))
             throw new Exceptions(422);
 
         await this.#controller.getSkuItemController().getSkuItem(rfid)
@@ -83,7 +83,7 @@ class TestResultController {
         if (this.#controller.checkRFID(rfid) ||
             this.#controller.areUndefined(idTestDescriptor, date, result)
             || this.#controller.areNotNumbers(idTestDescriptor)
-            || !this.#controller.areAllPositive(idTestDescriptor))
+            || !this.#controller.areAllPositiveOrZero(idTestDescriptor))
             throw new Exceptions(422)
 
         let dateToSave;
@@ -125,7 +125,7 @@ class TestResultController {
         if (this.#controller.areUndefined(newIdTestDescriptor, newDate, newResult, id)
             || this.#controller.areNotNumbers(id)
             || this.#controller.checkRFID(rfid)
-            || !this.#controller.areAllPositive(id, rfid))
+            || !this.#controller.areAllPositiveOrZero(id, rfid))
             throw new Exceptions(422);
 
         let dateToSave;
@@ -166,7 +166,7 @@ class TestResultController {
         if (this.#controller.checkRFID(rfid)
             || this.#controller.areUndefined(id)
             || this.#controller.areNotNumbers(id)
-            || !this.#controller.areAllPositive(id, rfid))
+            || !this.#controller.areAllPositiveOrZero(id, rfid))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
