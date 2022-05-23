@@ -32,9 +32,9 @@ describe('ReturnOrderController Tests', () => {
                                "price":30, "RFID":"78901234567890161234567890123456"
                              }];
             const body = {
-                returnDate : "2022/04/04",
+                returnDate : "2022/04/14",
                 products : products,
-                restockOrderId : 1
+                restockOrderId : 3
             }
 
             oldCount = (await returnOrderController.getAllReturnOrders()).length;
@@ -106,7 +106,7 @@ describe('ReturnOrderController Tests', () => {
             const body = {
                 returnDate : "2022/04/04",
                 products : products,
-                restockOrderId : 1
+                restockOrderId : 3
             }
 
             oldCount = (await returnOrderController.getAllReturnOrders()).length;

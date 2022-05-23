@@ -114,10 +114,12 @@ class DBManager {
 
 
     async insertRestockAndReturnOrderTestData() {
-        const insertRestockOrder = [' INSERT INTO RestockOrder ("issueDate", "state", "transportNote", "supplierId") \
-                                     VALUES ("2021/01/01 01:01", "ISSUED", "", 5), \
-                                            ("2022/01/02 10:10", "COMPLETEDRETURN", "", 4) \
-                                    '];
+        const insertRestockOrder = [` INSERT INTO RestockOrder ("issueDate", "state", "transportNote", "supplierId") 
+                                     VALUES ("2021/01/01 01:01", "ISSUED", "", 5), 
+                                            ("2022/01/02 10:10", "COMPLETEDRETURN", "", 4),
+                                            ("2022/03/02 10:10", "TESTED", "", 4),
+                                            ("2022/04/02 10:10", "COMPLETED", "", 3);
+                                    `];
 
         const insertReturnOrder = [`INSERT INTO ReturnOrder (returnDate, restockOrderID)
                                     VALUES ("2022/02/02", 1);

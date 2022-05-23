@@ -157,8 +157,7 @@ describe('RestockOrderController Tests', () => {
             expect(oldCount).to.be.equal(newCount);
         });
     });
-    
-})
+});
 
 
 
