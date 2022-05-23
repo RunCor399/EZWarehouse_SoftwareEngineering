@@ -19,10 +19,14 @@ const userAPICalls = new UserAPICalls();
 
 describe('User test suite', async () => {
     beforeEach(async () => {
-        await dbmanager.deleteAllData();
+        await dbmanager.deleteAllData().then(async () => {
+            await dbmanager.insertUserTestData();
+        });
     })
     afterEach(async () => {
-        await dbmanager.deleteAllData();
+        await dbmanager.deleteAllData().then(async () => {
+            await dbmanager.insertUserTestData();
+        });
     })
     describe('Standard User getters', async () => {
         it('Succesfully get all user info', async () => { //it indicates a TEST CASE
@@ -180,7 +184,7 @@ describe('User test suite', async () => {
                 response.status.should.equal(200);
             });
 
-            it.only('User not edited, username format is not valid ', async () => {
+            it('User not edited, username format is not valid ', async () => {
                 let response = await userAPICalls.managerSessions("manager1@ezwh.com", "testpassword" );
                 response.status.should.equal(200);
                 response = await userAPICalls.editUser(undefined, "customer", "clerk");
