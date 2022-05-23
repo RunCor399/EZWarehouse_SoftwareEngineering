@@ -76,7 +76,7 @@ describe('Items test suite', async () => {
 
             it('Edit non-existing Item', async () => {
                 let response;
-                response = await itemAPICalls.editItemTest(-1, "some_text", "price");
+                response = await itemAPICalls.editItemTest(-1, "some_text", 50.00);
                 response.status.should.equal(404);
             });
 
@@ -97,7 +97,7 @@ describe('Items test suite', async () => {
             });
 
             it('Wrong Item id', async () => {
-                response = await itemAPICalls.deleteItemTest("id");
+                response = await itemAPICalls.deleteItemTest('id');
                 response.status.should.equal(422);
             });
         });

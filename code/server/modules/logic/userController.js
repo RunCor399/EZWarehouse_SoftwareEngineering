@@ -129,15 +129,13 @@ class UserController {
 
         const hashedPassword = MD5(password).toString();
 
-        const sqlInstruction = `SELECT id, email, name, surname, type FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
-
+        const sqlInstruction = `SELECT * FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
         console.log(username, hashedPassword)
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction, username, hashedPassword, type)
             .then(value => row = value[0])
             .catch(error => { throw error });
-        
-        
+            
         if (!row)
             throw new Exceptions(401);
         
@@ -174,13 +172,17 @@ class UserController {
      * @throws 503 Service Unavailable (generic error)
      */
     async editUser(username, body) {
-
-        if (!this.#controller.isLoggedAndHasPermission("manager"))
+        console.log(username);
+        if(username== "undefined")
+            username=undefined;
+        
+        if (!this.#controller.isLoggedAndHasPermission("manager")){
             throw new Exceptions(401);
+        }
 
         const oldType = body["oldType"];
         const newType = body["newType"];
-
+        
         if (this.#controller.areUndefined(username, oldType, newType) || oldType === "manager")
             throw new Exceptions(422);
 
@@ -205,7 +207,8 @@ class UserController {
      * @throws 422 Unprocessable Entity (validation of username or of type failed or attempt to delete a manager/administrator)
      * @throws 503 Service Unavailable (generic error). */
     async deleteUser(username, type) {
-
+        if(username== "undefined")
+            username=undefined;
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 

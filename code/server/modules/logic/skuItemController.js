@@ -43,7 +43,7 @@ class SkuItemController {
 
         if (this.#controller.areUndefined(id) 
         || this.#controller.areNotNumbers(id)
-        || !this.#controller.areAllPositive(id))
+        || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         //check if sku exists
@@ -101,7 +101,7 @@ class SkuItemController {
         if (this.#controller.checkRFID(RFID)
             || this.#controller.areUndefined(SKUId, dateOfStock)
             || this.#controller.areNotNumbers(SKUId)
-            || !this.#controller.areAllPositive(SKUId))
+            || !this.#controller.areAllPositiveOrZero(SKUId))
             throw new Exceptions(422);
 
         //check if sku exists

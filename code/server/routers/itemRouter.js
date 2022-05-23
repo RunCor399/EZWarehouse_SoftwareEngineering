@@ -26,7 +26,7 @@ router.get('/api/items/:id', async (req, res) => {
 
   await controller.getItemController().getItem(param)
     .then((item) => { return res.status(200).json(item); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error.getMessage()); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //POST /api/item
@@ -39,7 +39,7 @@ router.post('/api/item',async (req, res) => {
 
   await controller.getItemController().createItem(req.body)
     .then(() => { return res.status(201).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => {console.log(error.getMessage()); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //PUT /api/item/:id
@@ -52,7 +52,7 @@ router.put('/api/item/:id', async (req, res) => {
 
   await controller.getItemController().editItem(param, req.body)
     .then(() => { return res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => {console.log(error.getMessage()); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //DELETE /api/items/:id
@@ -66,7 +66,7 @@ router.delete('/api/items/:id', async(req, res) => {
 
   await controller.getItemController().deleteItem(param)
     .then(() => { return res.status(204).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error.getMessage()); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 module.exports = router;

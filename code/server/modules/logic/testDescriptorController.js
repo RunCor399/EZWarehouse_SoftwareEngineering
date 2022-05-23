@@ -41,7 +41,7 @@ class TestDescriptorController {
 
         if (this.#controller.areUndefined(id) 
         || this.#controller.areNotNumbers(id)
-        || !this.#controller.areAllPositive(id))
+        || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         let row = await this.#dbManager.genericSqlGet(`SELECT * FROM TestDescriptor WHERE ID= ?;`, id)
@@ -69,7 +69,7 @@ class TestDescriptorController {
 
         if (this.#controller.areUndefined(name, procedureDescription, idSKU)
             || this.#controller.areNotNumbers(idSKU)
-            || !this.#controller.areAllPositive(idSKU))
+            || !this.#controller.areAllPositiveOrZero(idSKU))
             throw new Exceptions(422);
 
         //check if sku exists
@@ -100,7 +100,7 @@ class TestDescriptorController {
 
         if (this.#controller.areUndefined(newName, newProcedureDescription, newIdSKU, id)
             || this.#controller.areNotNumbers(newIdSKU, id)
-            || !this.#controller.areAllPositive(newIdSKU, id))
+            || !this.#controller.areAllPositiveOrZero(newIdSKU, id))
             throw new Exceptions(422);
 
         //check if sku exists
@@ -131,7 +131,7 @@ class TestDescriptorController {
 
         if (this.#controller.areUndefined(id) 
         || this.#controller.areNotNumbers(id)
-        || !this.#controller.areAllPositive(id))
+        || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         await this.#dbManager.genericSqlRun
