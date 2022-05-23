@@ -13,7 +13,7 @@ class DBManager {
             }
         });
 
-        console.log("DBManager started");
+        //console.log("DBManager started");
 
     }
 
