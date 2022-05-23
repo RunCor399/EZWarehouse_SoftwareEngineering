@@ -30,7 +30,9 @@ describe('Internal Orders test suite', async () => {
     })*/
 
     before(async () => {
-        await dbmanager.deleteAllData();
+        await dbmanager.deleteAllData().then(async () => {
+            await dbmanager.insertInternalOrderTestData();
+        });
     });
     after(async () => {
         await dbmanager.deleteAllData();
@@ -43,9 +45,8 @@ describe('Internal Orders test suite', async () => {
                 response = await internalOrdersAPICalls.addInternalOrderTest("2022/02/02 10:10", [], 2);
                 response.status.should.equal(201);
 
-                /*No data has been added before this add, therefore the id is 1*/
-                response = await internalOrdersAPICalls.getInternalOrderByIdTest(1);
-                response.data.id.should.equal(1);
+                response = await internalOrdersAPICalls.getInternalOrderByIdTest(2);
+                response.data.id.should.equal(2);
             });
 
             it('Negative customerId', async () => {

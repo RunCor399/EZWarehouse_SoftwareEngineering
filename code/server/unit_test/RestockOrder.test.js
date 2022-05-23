@@ -11,6 +11,7 @@ const restockOrderController = controller.getRestockOrderController();
 const dbManager = controller.getDBManager();
 
 
+
 beforeEach(async () => {
     //console.log("executed before rest")
     await dbManager.deleteAllData().then(async () => {
@@ -29,45 +30,37 @@ describe('RestockOrderController Tests', () => {
             let result;
             let oldCount;
             let newCount; 
+            let currId;
             const body = {
                  issueDate : "2023/01/15",
                  products: [],
                  supplierId : 5
              }
-        
-             result = await restockOrderController.getAllRestockOrders();
-             oldCount = result.length;
-        
+
+             currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
              await restockOrderController.createRestockOrder(body);
-        
-             result = await restockOrderController.getAllRestockOrders();
-             newCount = result.length;
-             
-             console.log(result);
-        
-             expect(newCount).to.be.equal(oldCount+1);
+             result = await restockOrderController.getRestockOrder(currId).catch(() => {});
+
+            expect(result).not.to.be.undefined;
         });
     
         test("Insertion of a RestockOrder with malformed date", async () => {
             let result;
             let oldCount;
             let newCount; 
+            let currId
             const body = {
                  issueDate : "123/456/7",
                  products: [],
                  supplierId : 5
              }
         
-             result = await restockOrderController.getAllRestockOrders();
-             oldCount = result.length;
-        
+             currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
              await restockOrderController.createRestockOrder(body).catch(() => {});
-        
-             result = await restockOrderController.getAllRestockOrders();
-             newCount = result.length;
+             result = await restockOrderController.getRestockOrder(currId).catch(() => {});
     
         
-             expect(newCount).to.be.equal(oldCount);
+             expect(result).to.be.undefined;
         });
     
     
@@ -75,22 +68,19 @@ describe('RestockOrderController Tests', () => {
             let result;
             let oldCount;
             let newCount; 
+            let currId;
             const body = {
                  issueDate : "123/456/7",
                  products: [],
                  supplierId : -1
              }
         
-             result = await restockOrderController.getAllRestockOrders();
-             oldCount = result.length;
-        
+             currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
              await restockOrderController.createRestockOrder(body).catch(() => {});
-        
-             result = await restockOrderController.getAllRestockOrders();
-             newCount = result.length;
+             result = await restockOrderController.getRestockOrder(currId).catch(() => {});
     
         
-             expect(newCount).to.be.equal(oldCount);
+             expect(result).to.be.undefined;
         });
     });
     

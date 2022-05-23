@@ -222,7 +222,34 @@ class DBManager {
         })
 
     }
+    async insertUserTestData(){
+        const queries = [
+            'INSERT INTO Users (email, name, surname, password, type) \
+             VALUES  ("user1@ezwh.com","name1","surname1","e16b2ab8d12314bf4efbd6203906ea6c","customer"), \
+                    ("qualityEmployee1@ezwh.com", "name2","surname2","e16b2ab8d12314bf4efbd6203906ea6c","qualityEmployee"), \
+                    ("clerk1@ezwh.com","name3","surname3","e16b2ab8d12314bf4efbd6203906ea6c","clerk"),  \
+                    ("deliveryEmployee1@ezwh.com","name4","surname4","e16b2ab8d12314bf4efbd6203906ea6c","deliveryEmployee"), \
+                    ("supplier1@ezwh.com","name5","surname5","e16b2ab8d12314bf4efbd6203906ea6c","supplier"), \
+                    ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
+        ];
 
+        
+
+        return new Promise((resolve, reject) => {
+            queries.forEach((query) => {
+                this.#db.run(query, (err, rows) => {
+                    if (err) {
+                        console.log("Database get error: err", err);
+                        reject(new Exceptions(500));
+                    } else {
+                        resolve(rows)
+                    }
+                });
+            });
+        })
+
+
+    }
     async insertSkuTestData() {
         const insertSKU = [`INSERT INTO SKU (id, weight, volume, price, notes, description, availableQuantity)
         VALUES (1, 30, 30, 30, "note", "description", 1);`];

@@ -185,6 +185,13 @@ class SkuController {
         const newPrice = body["newPrice"];
         const newAvailableQuantity = body["newAvailableQuantity"];
 
+
+    //check if sku has position
+   /*  let position;
+    await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position SP JOIN Position P WHERE SP.positionID=P.positionID AND SP.SKUId = ?`, id)
+        .then(value => position = value[0])
+        .catch(error => { throw error }); */
+
         if (!id || this.#controller.areNotNumbers(newWeight, newVolume, newPrice, newAvailableQuantity, id)
             || !this.#controller.areAllPositiveOrZero(id, newWeight, newVolume, newPrice, newAvailableQuantity))
             throw new Exceptions(422)
@@ -213,10 +220,13 @@ class SkuController {
                                 notes = ?, description = ?, 
                                 availableQuantity= ? WHERE ID = ?;`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id)
+        /* await this.#dbManager.genericSqlRun(sqlInstruction, newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id)
             .catch((error) => { throw error });
-        console.log("arrivo qui ");
-    }
+        console.log("arrivo qui "); */
+    
+    await this.#dbManager.genericSqlRun(sqlInstruction, newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id)
+        .catch((error) => { throw error });
+}
 
 
     /** CHECK IF UPDATE OF POSITION PARAMS IS WORKING (WEIGHT, VOLUME)
