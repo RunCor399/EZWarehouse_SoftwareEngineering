@@ -101,7 +101,7 @@ describe('skuController Tests', () => {
     });
     
     describe('editSku method testing', () => {
-        test.only('Successfully edit a sku', async () => {
+        test('Successfully edit a sku', async () => {
             let result;
             const body = {
                 "newDescription" : "a new sku",

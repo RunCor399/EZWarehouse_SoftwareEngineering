@@ -191,7 +191,7 @@ class SkuController {
 
     //check if sku has position
     let position;
-    await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position WHERE SKUId = ?`, id)
+    await this.#dbManager.genericSqlGet(`SELECT * FROM SKU_in_Position SP JOIN Position P WHERE SP.positionID=P.positionID AND SP.SKUId = ?`, id)
         .then(value => position = value[0])
         .catch(error => { throw error });
 
@@ -215,7 +215,6 @@ class SkuController {
 
     await this.#dbManager.genericSqlRun(sqlInstruction, newWeight, newVolume, newPrice, newNotes, newDescription, newAvailableQuantity, id)
         .catch((error) => { throw error });
-        console.log("arrivo qui ");
 }
 
 

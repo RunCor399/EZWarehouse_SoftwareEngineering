@@ -180,10 +180,10 @@ describe('User test suite', async () => {
                 response.status.should.equal(200);
             });
 
-            it('User not edited, username format is not valid ', async () => {
+            it.only('User not edited, username format is not valid ', async () => {
                 let response = await userAPICalls.managerSessions("manager1@ezwh.com", "testpassword" );
                 response.status.should.equal(200);
-                response = await UserAPICalls.editUser(undefined, "customer", "clerk");
+                response = await userAPICalls.editUser(undefined, "customer", "clerk");
                 response.status.should.equal(422);
                 response = await userAPICalls.logout();
                 response.status.should.equal(200);

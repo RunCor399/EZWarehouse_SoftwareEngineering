@@ -175,12 +175,12 @@ class UserController {
      */
     async editUser(username, body) {
 
-        if (!this.#controller.isLoggedAndHasPermission("manager"))
+        if (!this.#controller.isLoggedAndHasPermission("manager")){
             throw new Exceptions(401);
-
+        }
         const oldType = body["oldType"];
         const newType = body["newType"];
-
+        console.log(username);
         if (this.#controller.areUndefined(username, oldType, newType) || oldType === "manager")
             throw new Exceptions(422);
 
