@@ -94,21 +94,6 @@ describe('position test suite', async () => {
             response.status.should.equal(422);
         })
 
-        it('', async () => {
-            const response = await positionAPICalls.getPositions('123456789012');
-            response.status.should.equal(404);
-        })
-
-        it('', async () => {
-            const response = await positionAPICalls.changePositionID()
-            response.status.should.equal(422);
-        })
-
-        it('', async () => {
-            const response = await positionAPICalls.modifyPosition()
-            response.status.should.equal(422);
-        })
-
 
 
     })

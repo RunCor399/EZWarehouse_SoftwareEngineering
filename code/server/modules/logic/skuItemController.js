@@ -10,7 +10,7 @@ class SkuItemController {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
 
-        console.log("skuItemController started");
+        //console.log("skuItemController started");
     }
 
     /** getter function to retreive all the SKUItems.
@@ -41,9 +41,9 @@ class SkuItemController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
             throw new Exceptions(401);
 
-        if (this.#controller.areUndefined(id) 
-        || this.#controller.areNotNumbers(id)
-        || !this.#controller.areAllPositiveOrZero(id))
+        if (this.#controller.areUndefined(id)
+            || this.#controller.areNotNumbers(id)
+            || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
         //check if sku exists

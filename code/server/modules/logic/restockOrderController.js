@@ -11,7 +11,7 @@ class RestockOrderController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        console.log("restockOrderController started");
+        //console.log("restockOrderController started");
     }
 
     /** TO BE CHECKED - getter function to retreive all the restock orders

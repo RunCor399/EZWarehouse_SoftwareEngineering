@@ -21,7 +21,7 @@ const positionAPICalls = new PositionAPICalls();
 
 //(async () => await utilityCalls.dbreset())()
 
-describe.only('sku test suite', async () => {
+describe('sku test suite', async () => {
 
     beforeEach(async () => {
         await dbmanager.deleteAllData();

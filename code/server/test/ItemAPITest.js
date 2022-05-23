@@ -8,20 +8,22 @@ const axios = require('axios');
 
 const UtilityCalls = require('./APICalls/UtilityCalls');
 const ItemAPICalls = require('./APICalls/ItemAPICalls');
+const SkuAPICalls = require('./APICalls/SkuAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 
 const baseURL = "http://localhost:3001";
 
 const utilityCalls = new UtilityCalls();
+const skuAPICalls = new SkuAPICalls()
 const itemAPICalls = new ItemAPICalls();
 const dbmanager = new DBManager();
 
 describe('Items test suite', async () => {
 
-    beforeEach(async () => {
+    before(async () => {
         await dbmanager.deleteAllData();
     });
-    afterEach(async () => {
+    after(async () => {
         await dbmanager.deleteAllData();
     });
 
@@ -29,6 +31,10 @@ describe('Items test suite', async () => {
         describe('Add a new Item tests', async () => {
             let response;
             it('Successfully add a new Item', async () => {
+
+                response = await skuAPICalls.addSKUTest("descriptionTest", 10, 20, "noteTest", 10.99, 5);
+                response.status.should.equal(201);
+
                 response = await itemAPICalls.addItemTest(1, "first_item", 9.99, 1, 1);
                 response.status.should.equal(201);
 
@@ -51,12 +57,12 @@ describe('Items test suite', async () => {
     describe('Standard Item getters', async () => {
         it('get all items', async () => {
             let response = await itemAPICalls.getItemsTest();
-
             response.status.should.equal(200);
         });
 
         it('get item by id', async () => {
             let response = await itemAPICalls.getItemByIdTest(1);
+
 
             response.status.should.equal(200);
         });
@@ -67,22 +73,22 @@ describe('Items test suite', async () => {
             it('Successfully edit an Item', async () => {
                 let response;
                 response = await itemAPICalls.editItemTest(1, "newDesc", 10.5);
-                response.status.should.equal(201);
+                response.status.should.equal(200);
 
                 response = await itemAPICalls.getItemByIdTest(1);
-                response.data.newDescription.should.equal("newDesc");
-                response.data.newPrice.should.equal(10.5);
+                assert.equal(response.data.description, "newDesc");
+                assert.equal(response.data.price,10.5);
             });
 
             it('Edit non-existing Item', async () => {
                 let response;
-                response = await itemAPICalls.editItemTest(-1, "some_text", 50.00);
+                response = await itemAPICalls.editItemTest(24, "some_text", 50.00);
                 response.status.should.equal(404);
             });
 
             it('Edit Item with improper price', async () => {
                 let response;
-                response = await itemAPICalls.editItemTest(-1, "some_text", "price");
+                response = await itemAPICalls.editItemTest(1, "some_text", "price");
                 response.status.should.equal(422);
             });
         });

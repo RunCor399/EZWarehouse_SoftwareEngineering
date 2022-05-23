@@ -135,7 +135,8 @@ class Controller {
 
     checkStateInternalOrders(state) {
         const validStates = ["ISSUED", "ACCEPTED", "REFUSED",
-            "CANCELED, COMPLETED"]
+            "CANCELED", "COMPLETED"]
+
         return validStates.includes(String(state));
     }
 
@@ -148,7 +149,9 @@ class Controller {
 
     checkAndFormatDate(date) {
 
-    
+        
+        console.log(dayjs("2022/02/02 10:10","YYYY/MM/DD HH:mm", true).isValid());
+
         if (dayjs(date, "YYYY/MM/DD", true).isValid() || dayjs(date, "YYYY/MM/DD HH:mm", true).isValid()) {
             let formattedDate = (dayjs(date).hour() === 0 && dayjs(date).minute() === 0) ? dayjs(date).format("YYYY/MM/DD") : dayjs(date).format("YYYY/MM/DD HH:mm")
             return formattedDate

@@ -10,7 +10,7 @@ class SkuController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        console.log("skuController started");
+        //console.log("skuController started");
     }
 
     /**getter function to retreive all the SKUs.
