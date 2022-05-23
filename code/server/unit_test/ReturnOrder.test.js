@@ -39,13 +39,22 @@ describe('ReturnOrderController Tests', () => {
 
             oldCount = (await returnOrderController.getAllReturnOrders()).length;
 
-            await returnOrderController.createReturnOrder(body);
+            await returnOrderController.createReturnOrder(body).catch(() => {
+                console.log("error");
+            });
 
             result = await returnOrderController.getAllReturnOrders();
             newCount = result.length;
 
             expect(oldCount).to.be.equal(newCount-1);
             expect(result[1].products.length).to.be.above(0);
+
+            //  currId = ((await returnOrderController.getAllReturnOrders()).length) + 1;
+            //  await returnOrderController.createReturnOrder(body).catch(() => {});
+            //  result = await returnOrderController.getReturnOrder(currId).catch(() => {});
+    
+        
+            //  expect(result).not.to.be.undefined;
 
         });
 

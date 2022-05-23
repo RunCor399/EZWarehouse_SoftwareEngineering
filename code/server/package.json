@@ -17,6 +17,6 @@
   },
   "scripts": {
     "apiTest": "mocha",
-    "test": "jest"
+    "test": "jest --runInBand"
   }
 }
