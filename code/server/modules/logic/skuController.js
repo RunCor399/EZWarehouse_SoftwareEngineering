@@ -137,10 +137,10 @@ class SkuController {
         //validation of the body
         if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity)
-            || !this.#controller.areAllPositiveOrZero(weight, volume, price, availableQuantity))
-            throw new Exceptions(422);
+            || !this.#controller.areAllPositiveOrZero(weight, volume, price, availableQuantity)){
+                throw new Exceptions(422);
+            }
 
-        //this.#skuDAO.createSku(new SKU(weight, volume, price, notes, description, availableQuantity))
 
         const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         VALUES ( ?, ?, ?, ?, ?, ?);`;

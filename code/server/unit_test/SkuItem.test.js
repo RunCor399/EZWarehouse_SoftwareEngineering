@@ -24,18 +24,19 @@ afterEach(async () => {
 
 describe('SKUItemController Tests',  () => {
     describe('createSkuItem method testing', () => {
-        test('', async () => {
+        test('createSku and createSKUitem', async () => {
 
             console.log(1)
-        await skuController.createSku({
-            description: "description",
-            weight: 10,
-            volume: 20,
-            notes: "notes",
-            price: 10.99,
-            availableQuantity: 1
-            }).catch(error => (console.log(error)))
-            console.log(2)
+        await skuController.createSku(
+            {
+                "description" : "a new sku",
+                "weight" : 100,
+                "volume" : 50,
+                "notes" : "second SKU",
+                "price" : 10.99,
+                "availableQuantity" : 50
+            }      
+            ).catch(error => (console.log(error)))
 
         await skuItemController.createSkuItem(
             {
@@ -71,12 +72,6 @@ describe('SKUItemController Tests',  () => {
         skuItemController.deleteSkuItem();
     });
 });
-
-
-
-/*test("", async () => {
-    
-});*/
 
 
 

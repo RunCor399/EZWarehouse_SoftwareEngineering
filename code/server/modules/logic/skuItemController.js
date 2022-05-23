@@ -43,8 +43,11 @@ class SkuItemController {
 
         if (this.#controller.areUndefined(id)
             || this.#controller.areNotNumbers(id)
-            || !this.#controller.areAllPositiveOrZero(id))
+            || !this.#controller.areAllPositiveOrZero(id)) {
+
+            console.log("1")
             throw new Exceptions(422);
+        }
 
         //check if sku exists
         await this.#controller.getSkuController().getSku(id)
@@ -104,13 +107,20 @@ class SkuItemController {
             || !this.#controller.areAllPositiveOrZero(SKUId))
             throw new Exceptions(422);
 
+        let formattedDate
+        try {
+            formattedDate = this.#controller.checkAndFormatDate(dateOfStock)
+        } catch (error) {
+            throw error
+        }
+
         //check if sku exists
         await this.#controller.getSkuController().getSku(SKUId)
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
-        await this.#dbManager.genericSqlRun(sqlInstruction, RFID, SKUId, 0, dateOfStock)
+        await this.#dbManager.genericSqlRun(sqlInstruction, RFID, SKUId, 0, formattedDate)
             .catch((error) => { throw error });
 
     }
@@ -140,9 +150,18 @@ class SkuItemController {
         await this.getSkuItem(oldRFID)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
+        let formattedDate
+        try {
+            formattedDate = this.#controller.checkAndFormatDate(newDateOfStock)
+        } catch (error) {
+            console.log("here",error)
+            throw error
+        }
+
+
         const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
 
-        await this.#dbManager.genericSqlRun(sqlUpdate, newRFID, newAvailable, newDateOfStock, oldRFID)
+        await this.#dbManager.genericSqlRun(sqlUpdate, newRFID, newAvailable, formattedDate, oldRFID)
             .catch(error => { throw error });
     }
 
