@@ -119,7 +119,7 @@ describe('SKUItemController Tests', () => {
     })
 
     describe('editSkuItem method testing', () => {
-        test('create/modify', async () => {
+        test('create and modify', async () => {
 
 
             await skuController.createSku(
@@ -152,7 +152,6 @@ describe('SKUItemController Tests', () => {
 
             const value = await skuItemController.getSkuItem("12345678901234567890123456789018")
                 .catch(error => (console.log("get:", error)))
-            //console.log(value);
             assert.equal(value.RFID, "12345678901234567890123456789018")
         })
 
@@ -220,7 +219,7 @@ describe('SKUItemController Tests', () => {
     })
 
     describe('deleteSkuItem method testing', () => {
-        test('create/delete', async () => {
+        test('create and delete', async () => {
             await skuController.createSku(
                 {
                     "description": "a new sku",
