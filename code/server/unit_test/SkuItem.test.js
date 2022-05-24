@@ -50,7 +50,6 @@ describe('SKUItemController Tests', () => {
 
             const value = await skuItemController.getSkuItem(rfid)
                 .catch(error => (console.log(error)))
-            console.log(value);
             assert.equal(value.RFID, rfid)
 
         })
@@ -69,7 +68,7 @@ describe('SKUItemController Tests', () => {
                     "price": 10.99,
                     "availableQuantity": 50
                 }
-            ).then(console.log("createdSKU")).catch(error => (console.log(error)))
+            ).catch(error => (console.log(error)))
 
             const rfid = '12345678901234567890123456789019';
             await skuItemController.createSkuItem(
@@ -78,7 +77,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).then(console.log("createdSkuItem")).catch(error => (console.log(error)))
+            ).catch(error => (console.log(error)))
 
             await skuItemController.editSkuItem(rfid,
                 {
@@ -86,10 +85,9 @@ describe('SKUItemController Tests', () => {
                     newAvailable: 1,
                     newDateOfStock: "2020/01/01",
                 }
-            ).then(console.log("editedSKUitem")).catch(error => (console.log(error)))
+            ).catch(error => (console.log(error)))
 
             const value = await skuItemController.getSkuItem("12345678901234567890123456789018")
-                .then(console.log("get"))
                 .catch(error => (console.log("get:", error)))
             //console.log(value);
             assert.equal(value.RFID, "12345678901234567890123456789018")
@@ -107,7 +105,7 @@ describe('SKUItemController Tests', () => {
                     "price": 10.99,
                     "availableQuantity": 50
                 }
-            ).then(console.log("createdSKU")).catch(error => (console.log(error)))
+            ).catch(error => (console.log(error)))
 
             const rfid = '12345678901234567890123456789019';
             await skuItemController.createSkuItem(
@@ -116,13 +114,12 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).then(console.log("createdSkuItem")).catch(error => (console.log(error)))
+            ).catch(error => (console.log(error)))
 
 
             await skuItemController.deleteSkuItem(rfid);
 
             const value = await skuItemController.getAllSkuItems()
-                .then(console.log("get"))
                 .catch(error => (console.log("get:", error)))
             assert.equal(value.length, 0)
         });
