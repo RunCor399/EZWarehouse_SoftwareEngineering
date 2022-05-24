@@ -21,65 +21,56 @@ describe('InternalOrderController Tests', () => {
     describe('createInternalOrder method testing', () => {
         test("Successfully add a new Internal Order to Database", async () => {
             let result;
-            let oldCount;
-            let newCount;
+            let currId;
             const body = {
                 issueDate: "2022/07/07",
-                state: "ISSUED",
+                products: [],
                 customerId: 3
             };
 
-            result = await internalOrderController.getAllInternalOrders();
-            oldCount = result.length;
+            currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
 
             await internalOrderController.createInternalOrder(body);
 
-            result = await internalOrderController.getAllInternalOrders();
-            newCount = result.length;
+            result = await internalOrderController.getInternalOrder(currId).catch(() => {});
 
-            expect(newCount).to.be.equal(oldCount + 1);
+            expect(result).not.to.be.undefined;
         });
 
         test("Insertion of an Internal Order with malformed date", async () => {
             let result;
-            let oldCount;
-            let newCount;
+            let currId;
             const body = {
                 issueDate: "999/999/999",
-                state: "ISSUED",
+                products: [],
                 customerId: 3
             };
 
-            result = await internalOrderController.getAllInternalOrders();
-            oldCount = result.length;
+            currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
 
-            await internalOrderController.createInternalOrder(body);
+            await internalOrderController.createInternalOrder(body).catch(() => {});
 
-            result = await internalOrderController.getAllInternalOrders();
-            newCount = result.length;
+            result = await internalOrderController.getInternalOrder(currId).catch(() => {});
 
-            expect(newCount).to.be.equal(oldCount);
+            expect(result).to.be.undefined;
         });
 
         test("Insertion of an Internal Order with invalid customerId", async () => {
             let result;
-            let oldCount;
-            let newCount;
+            let currId;
             const body = {
                 issueDate: "999/999/999",
-                state: "ISSUED",
+                products: [],
                 customerId: -10
             };
 
-            result = await internalOrderController.getAllInternalOrders();
-            oldCount = result.length;
+            currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
 
-            await internalOrderController.createInternalOrder(body);
+            await internalOrderController.createInternalOrder(body).catch(() => {});
 
-            result = await internalOrderController.getAllInternalOrders();
-            newCount = result.length;
+            result = await internalOrderController.getInternalOrder(currId).catch(() => {});
 
-            expect(newCount).to.be.equal(oldCount);
+            expect(result).to.be.undefined;
         });
     });
 
