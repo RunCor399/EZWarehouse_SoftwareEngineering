@@ -69,8 +69,6 @@ describe('Restock Orders Testing', async () => {
 
         it('get restock orders by id', async () => { //it indicates a TEST CASE
             const response = await restockOrdersAPICalls.getRestockOrderById(1);
-
-            //console.log(response.data);
             response.status.should.equal(200);
         });
     });
@@ -189,15 +187,5 @@ describe('Restock Orders Testing', async () => {
         });
     });
 
+})
 
-
-
-
-
-   /* it('add restock order', async () => {
-        const response = await restockOrdersAPICalls.addRestockOrder();
-
-        console.log(response.body);
-        response.status.should.equal(201);
-    })*/
-});
