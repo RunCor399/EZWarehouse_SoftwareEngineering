@@ -27,19 +27,16 @@ afterEach(async () => {
 describe('RestockOrderController Tests', () => {
     describe('createRestockOrder method testing', () => {
         test("Successfully add new Restock Order to Database", async () => {
-            let result;
-            let oldCount;
-            let newCount; 
-            let currId;
+            let result, currId;
             const body = {
                  issueDate : "2023/01/15",
                  products: [],
                  supplierId : 5
              }
 
-             currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
-             await restockOrderController.createRestockOrder(body);
-             result = await restockOrderController.getRestockOrder(currId).catch(() => {});
+            currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
+            await restockOrderController.createRestockOrder(body);
+            result = await restockOrderController.getRestockOrder(currId).catch(() => {});
 
             expect(result).not.to.be.undefined;
         });
