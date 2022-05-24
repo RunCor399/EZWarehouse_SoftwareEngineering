@@ -18,7 +18,7 @@ beforeEach(async () => {
   });
 afterEach(async () => {
     await dbManager.deleteAllData().then(async () => {
-        await dbManager.insertSkuTestData();
+        //await dbManager.insertSkuTestData();
     })
   });
 
