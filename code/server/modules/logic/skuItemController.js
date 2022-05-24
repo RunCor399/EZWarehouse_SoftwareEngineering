@@ -44,8 +44,6 @@ class SkuItemController {
         if (this.#controller.areUndefined(id)
             || this.#controller.areNotNumbers(id)
             || !this.#controller.areAllPositiveOrZero(id)) {
-
-            console.log("1")
             throw new Exceptions(422);
         }
 
@@ -105,18 +103,22 @@ class SkuItemController {
             || this.#controller.areUndefined(SKUId, dateOfStock)
             || this.#controller.areNotNumbers(SKUId)
             || !this.#controller.areAllPositiveOrZero(SKUId))
-            throw new Exceptions(422);
+            throw new Error("1")
+            //throw new Exceptions(422);
 
         let formattedDate
         try {
             formattedDate = this.#controller.checkAndFormatDate(dateOfStock)
         } catch (error) {
+            throw new Error("2")
+
             throw error
         }
 
         //check if sku exists
         await this.#controller.getSkuController().getSku(SKUId)
-            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
+            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); /* else throw error  */throw new Error("3")
+        });
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
