@@ -9,7 +9,7 @@ class PositionController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        console.log("positionController started");
+        //console.log("positionController started");
     }
 
     checkPositionID(positionID, aisleID, row, col) {

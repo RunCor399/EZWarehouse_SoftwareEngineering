@@ -53,7 +53,7 @@ router.post('/api/skuitem', async (req, res) => {
 
   await controller.getSkuItemController().createSkuItem(req.body)
     .then(() => { return res.status(201).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { console.log(error);return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //PUT /api/skuitems/:rfid
@@ -66,7 +66,7 @@ router.put('/api/skuitems/:rfid', async (req, res) => {
 
   await controller.getSkuItemController().editSkuItem(param, req.body)
     .then(() => { return res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => {console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //DELETE /api/skuitems/:rfid

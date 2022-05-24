@@ -71,7 +71,7 @@ class ItemAPICalls {
 
     //DELETE
     async deleteItemTest(id) {
-        const url = this.#baseURL + "/api/items" + id;
+        const url = this.#baseURL + "/api/items/" + id;
         let response;
 
         await axios.delete(url)

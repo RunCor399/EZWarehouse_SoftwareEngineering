@@ -10,7 +10,7 @@ class InternalOrderController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        console.log("internalOrderController started");
+        //console.log("internalOrderController started");
     }
 
 
@@ -142,8 +142,9 @@ class InternalOrderController {
 
         let dateToSave
         try {
-            dateToSave = this.#controller.checkAndFormatDate(returnDate);
+            dateToSave = this.#controller.checkAndFormatDate(issueDate);
         } catch (error) {
+            console.log(error)
             throw new Exceptions(503);
         }
 
@@ -185,10 +186,12 @@ class InternalOrderController {
         if (this.#controller.areUndefined(id, newState)
             || isNaN(Number(id))
             || !this.#controller.areAllPositiveOrZero(id))
-            throw new Exceptions(422);
+                throw new Exceptions(422);
+            
 
-        if (!this.#controller.checkStateInternalOrders(newState))
+        if (!this.#controller.checkStateInternalOrders(newState)){
             throw new Exceptions(422);
+        }
 
         /*check if the internal order exists*/
         await this.getInternalOrder(id)
@@ -207,12 +210,11 @@ class InternalOrderController {
             }
 
         }
-        else {
             const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
 
             await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
                 .catch(error => { throw error })
-        }
+        
     }
 
 

@@ -63,7 +63,7 @@ class SkuAPICalls {
         return response;
     }
 
-    async modifySKUPosition(id) {
+    async modifySKUPosition(id, position) {
 
         let response;
         await axios.put(this.#baseURL + "/api/sku/" + id + "/position",

@@ -1,40 +1,40 @@
 
 class Exceptions {
-    #code;
-    #message;
+    code;
+    message;
     constructor(codeNumber) {
-        this.#code = codeNumber;
-        switch (this.#code) {
+        this.code = codeNumber;
+        switch (this.code) {
             case 401:
-                this.#message = "Unauthorized";
+                this.message = "Unauthorized";
                 break;
             case 404:
-                this.#message = "Not found"
+                this.message = "Not found"
                 break;
             case 409:
-                this.#message = "Conflict";
+                this.message = "Conflict";
                 break;
             case 422:
-                this.#message = "Unprocessable Entity";
+                this.message = "Unprocessable Entity";
                 break;
             case 500:
-                this.#message = "Internal Server Error";
+                this.message = "Internal Server Error";
                 break;
             case 503:
-                this.#message = "Service Unavailable";
+                this.message = "Service Unavailable";
                 break;
             default:
-                this.#message = "Unknown Error";
+                this.message = "Unknown Error";
                 break;
         }
     }
 
     getCode() {
-        return this.#code;
+        return this.code;
     }
 
     getMessage() {
-        return this.#message;
+        return this.message;
     }
 
 

@@ -20,7 +20,7 @@ class UserController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        console.log("testController started");
+       //console.log("testController started");
 
 
     }

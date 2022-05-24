@@ -12,7 +12,7 @@ class ItemController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        console.log("itemController started");
+        //console.log("itemController started");
     }
 
 

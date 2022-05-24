@@ -9,7 +9,7 @@ class ReturnOrderController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        console.log("returnOrderController started");
+        //console.log("returnOrderController started");
     }
 
 
