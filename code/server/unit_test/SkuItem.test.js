@@ -1,8 +1,5 @@
 'use strict';
 
-
-
-
 const { expect, assert } = require('chai');
 const Controller = require('../modules/logic/controller');
 
@@ -53,6 +50,72 @@ describe('SKUItemController Tests', () => {
             assert.equal(value.RFID, rfid)
 
         })
+
+        test('unexistant skuid', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 404);
+
+        })
+
+        test('wrong rfid', async () => {
+            let errorValue;
+            const rfid = 'hello';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 422);
+
+        })
+
+        test('wrong skuid', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: "hello",
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 422);
+
+        })
+
+        test('wrong date', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/1001/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 422);
+
+        })
+
+
     })
 
     describe('editSkuItem method testing', () => {
@@ -92,6 +155,68 @@ describe('SKUItemController Tests', () => {
             //console.log(value);
             assert.equal(value.RFID, "12345678901234567890123456789018")
         })
+
+
+        test('modify unexistant skuitem', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "12345678901234567890123456789018",
+                    newAvailable: 1,
+                    newDateOfStock: "2020/01/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 404);
+
+        })
+
+        test('wrong rfid', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "hello",
+                    newAvailable: 1,
+                    newDateOfStock: "2020/01/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 422);
+
+        })
+
+
+        test('wrong available value', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "12345678901234567890123456789018",
+                    newAvailable: "hello",
+                    newDateOfStock: "2020/01/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 422);
+
+        })
+
+        test('wrong date', async () => {
+            const rfid = '12345678901234567890123456789019';
+            let errorValue;
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "12345678901234567890123456789018",
+                    newAvailable: 1,
+                    newDateOfStock: "2020/2001/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 422);
+        })
+
     })
 
     describe('deleteSkuItem method testing', () => {
@@ -123,6 +248,15 @@ describe('SKUItemController Tests', () => {
                 .catch(error => (console.log("get:", error)))
             assert.equal(value.length, 0)
         });
+
+        test('wrong rfid', async () => {
+            const rfid = 'hello';
+            let errorValue;
+            await skuItemController.deleteSkuItem(rfid)
+                .catch(error => errorValue = error);
+                        
+            assert.equal(422, errorValue.code);
+        })
     })
 });
 

@@ -103,22 +103,18 @@ class SkuItemController {
             || this.#controller.areUndefined(SKUId, dateOfStock)
             || this.#controller.areNotNumbers(SKUId)
             || !this.#controller.areAllPositiveOrZero(SKUId))
-            throw new Error("1")
-            //throw new Exceptions(422);
+            throw new Exceptions(422);
 
         let formattedDate
         try {
             formattedDate = this.#controller.checkAndFormatDate(dateOfStock)
         } catch (error) {
-            throw new Error("2")
-
             throw error
         }
 
         //check if sku exists
         await this.#controller.getSkuController().getSku(SKUId)
-            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); /* else throw error  */throw new Error("3")
-        });
+            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503);  else throw error});
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
@@ -145,21 +141,22 @@ class SkuItemController {
 
         if (this.#controller.checkRFID(oldRFID)
             || this.#controller.checkRFID(newRFID)
-            || this.#controller.areUndefined(newAvailable, newDateOfStock))
+            || this.#controller.areUndefined(newAvailable, newDateOfStock)
+            || isNaN(Number(newAvailable)) || Number(newAvailable) < 0)
             throw new Exceptions(422);
 
-        //check if skuitem exists
-        await this.getSkuItem(oldRFID)
-            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
-
-        let formattedDate
-        try {
-            formattedDate = this.#controller.checkAndFormatDate(newDateOfStock)
-        } catch (error) {
-            console.log("here",error)
-            throw error
-        }
-
+            
+            let formattedDate
+            try {
+                formattedDate = this.#controller.checkAndFormatDate(newDateOfStock)
+            } catch (error) {
+                console.log("here",error)
+                throw error
+            }
+            
+            //check if skuitem exists
+            await this.getSkuItem(oldRFID)
+                .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
 
