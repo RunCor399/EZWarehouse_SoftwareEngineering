@@ -19,7 +19,7 @@ const skuAPICalls = new SkuAPICalls();
 const dbmanager = new DBManager();
 
 
-describe.only('skuitem test suite', async () => {
+describe('skuitem test suite', async () => {
 
     beforeEach(async () => {
         await dbmanager.deleteAllData();

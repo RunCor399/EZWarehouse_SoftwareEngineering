@@ -138,9 +138,7 @@ class SkuController {
         if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity)
             || !this.#controller.areAllPositiveOrZero(weight, volume, price, availableQuantity)) {
-                throw new Error("5")
-
-                //throw new Exceptions(422);
+                throw new Exceptions(422);
             }
 
 
@@ -148,7 +146,7 @@ class SkuController {
         VALUES ( ?, ?, ?, ?, ?, ?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, weight, volume, price, notes, description, availableQuantity)
-            .catch(() => { /*throw  error */             throw new Error("6")
+            .catch(() => { throw  error
         });
     }
 
