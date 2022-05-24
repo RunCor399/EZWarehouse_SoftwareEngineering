@@ -1398,6 +1398,68 @@ The input value the username and the type
 |  Invalid   |   Valid    |     Invalid     |                The user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution                |                |
 |  Invalid   |  Invalid   |     Invalid     | The *type* is an invalid one, the user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution |                |
 
+
+
+## **Class *RestockOrderController* - method *createRestockOrder***
+
+The input value is the body of the HTTP POST Request
+
+**Criteria for method *createRestockOrder*:**
+	
+ - Validity of *supplierid*
+ - Validity of *issueDate* 
+
+
+
+
+
+**Predicates for method *createRestockOrder*:**
+
+|         Criteria         |                               Predicate                                |
+| :----------------------: | :--------------------------------------------------------------------: |
+| Validity of *supplierid* | There is no supplier order with the given *supplierid* in the database |
+|                          | There is a supplier order with the given *supplierid* in the database  |
+|  Validity of issueDate   |             *issueDate* is well-formed and can be inserted             |
+|                          |                        *issueDate* is incorrect                        |
+
+
+
+
+**Boundaries**:
+
+|         Criteria         |  Boundary values  |
+| :----------------------: | :---------------: |
+| Validity of *supplierid* | No boundary found |
+| Validity of *issueDate*  | No boundary found |
+
+**Combination of predicates**:
+
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                     Description of the test case                                     |                       Jest test case                        |
+| :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------: | :---------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      | There is a supplier order with the given *supplierid* in the database and *issueDate* is well-formed |   test("Successfully add new Restock Order to Database")    |
+|   Valid    |  Invalid   |     Invalid     |                                      *issueDate* is bad-formed                                       |    test(Insertion of a RestockOrder with malformed date)    |
+|  Invalid   |   Valid    |     Invalid     |                There is no supplier order with the given *supplierid* in the database                | test("Insertion of a RestockOrder with invalid supplierId") |
+|  Invalid   |  Invalid   |     Invalid     |  *issueDate* is bad-formed, there is no supplier order with the given *supplierid* in the database   |                                                             |
+
+
+
+## 1) Test Case: "Successfully add new Restock Order to Database"
+```
+let result, currId;
+            const body = {
+                 issueDate : "2023/01/15",
+                 products: [],
+                 supplierId : 5
+             }
+
+            currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
+            await restockOrderController.createRestockOrder(body);
+            result = await restockOrderController.getRestockOrder(currId).catch(() => {});
+
+            expect(result).not.to.be.undefined;
+```
+
+
 ## **Class *RestockOrderController* - method *getRestockOrder***
 
 The input value is the order id.
@@ -1468,46 +1530,7 @@ The input value is the order id.
 |  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its status is COMPLETEDRETURN |                |
 |   Valid    |      Valid      |       There is a restock order with the given *id* in the database and the status is different from COMPLETEDRETURN        |                |
 
-## **Class *RestockOrderController* - method *createRestockOrder***
 
-The input value is the body of the HTTP POST Request
-
-**Criteria for method *createRestockOrder*:**
-	
- - Validity of *supplierid*
- - Validity of *issueDate* 
-
-
-
-
-
-**Predicates for method *createRestockOrder*:**
-
-|         Criteria         |                                            Predicate                                            |
-| :----------------------: | :---------------------------------------------------------------------------------------------: |
-| Validity of *supplierid* |             There is no supplier order with the given *supplierid* in the database              |
-|                          |              There is a supplier order with the given *supplierid* in the database              |
-| Validity of issueDate |        *issueDate* is well-formed and can be inserted         |
-|                          | *issueDate* is incorrect |
-
-
-
-
-**Boundaries**:
-
-|         Criteria         |  Boundary values  |
-| :----------------------: | :---------------: |
-| Validity of *supplierid* | No boundary found |
-| Validity of *issueDate* | No boundary found |
-
-**Combination of predicates**:
-
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                      Description of the test case                                                                       | Jest test case |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |       There is a supplier order with the given *supplierid* in the database and *issueDate* is well-formed        |   test("Successfully add new Restock Order to Database")             |
-|   Valid    |  Invalid   |     Invalid     |                                     *issueDate* is bad-formed |     test(Insertion of a RestockOrder with malformed date)           |
-|  Invalid   |   Valid    |     Invalid     |                                                 There is no supplier order with the given *supplierid* in the database                                                  |    test("Insertion of a RestockOrder with invalid supplierId")            |
-|  Invalid   |  Invalid   |     Invalid     | *issueDate* is bad-formed, there is no supplier order with the given *supplierid* in the database |                |
 
 ## **Class *RestockOrderController* - method *editRestockOrder***
 
@@ -1523,8 +1546,8 @@ The input value is the order id and the body of the HTTP PUT Request.
 
 **Predicates for method *editRestockOrder*:**
 
-|                 Criteria                 |                                                         Predicate                                                          |
-| :--------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
+|                 Criteria                 |                                                          Predicate                                                          |
+| :--------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: |
 | Validity of *id* and of the order status | There is no restock order with the given *id* in the database, if there is the restock order its *state* is not a valid one |
 |                                          |                 There is a restock order with the given *id* in the database and the *state* is a valid one                 |
 
@@ -1533,17 +1556,17 @@ The input value is the order id and the body of the HTTP PUT Request.
 
 **Boundaries**:
 
-|                 Criteria                 |  Boundary values  |
-| :--------------------------------------: | :---------------: |
+|                 Criteria                  |  Boundary values  |
+| :---------------------------------------: | :---------------: |
 | Validity of *id* and of the order *state* | No boundary found |
 
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                                                Description of the test case                                                | Jest test case |
-| :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its *state* is not a valid one |     test('Edit a non-existing Restock Order')  and test("Edit a Restock Order with an invalid state")        |
-|   Valid    |      Valid      |                 There is a restock order with the given *id* in the database and the *state* is a valid one                 |       test('Successfully edit a Restock Order')         |
+| Criteria 1 | Valid / Invalid |                                                Description of the test case                                                 |                                          Jest test case                                           |
+| :--------: | :-------------: | :-------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: |
+|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its *state* is not a valid one | test('Edit a non-existing Restock Order')  and test("Edit a Restock Order with an invalid state") |
+|   Valid    |      Valid      |                 There is a restock order with the given *id* in the database and the *state* is a valid one                 |                             test('Successfully edit a Restock Order')                             |
 
 ## **Class *RestockOrderController* - method *addSkuItemsToRestockOrder***
 
@@ -1657,10 +1680,10 @@ The input value is the order id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                 Description of the test case                  | Jest test case |
-| :--------: | :-------------: | :-----------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database |   test('Delete a non-existing Restock Order')             |
-|   Valid    |      Valid      | There is a restock order with the given *id* in the database  |   test('Successfully delete a Restock Order')             |
+| Criteria 1 | Valid / Invalid |                 Description of the test case                  |               Jest test case                |
+| :--------: | :-------------: | :-----------------------------------------------------------: | :-----------------------------------------: |
+|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database | test('Delete a non-existing Restock Order') |
+|   Valid    |      Valid      | There is a restock order with the given *id* in the database  | test('Successfully delete a Restock Order') |
 
 ## **Class *ReturnOrderController* - method *getReturnOrder***
 
@@ -1713,14 +1736,14 @@ The input value is the body of the HTTP POST Request
 
 **Predicates for method *createReturnOrder*:**
 
-|           Criteria           |                                            Predicate                                            |
-| :--------------------------: | :---------------------------------------------------------------------------------------------: |
-| Validity of *restockOrderid* |            There is no restock order with the given *restockOrderid* in the database            |
-|                              |            There is a restock order with the given *restockOrderid* in the database             |
-|   Validity of *returnDate*   |        returnDate is valid         |
-|                              |        returnDate is invalid          |
-| Validity of products list    |        All products in the given list exist |
-|                              |        One or more products in the list don't exist |
+|           Criteria           |                                 Predicate                                 |
+| :--------------------------: | :-----------------------------------------------------------------------: |
+| Validity of *restockOrderid* | There is no restock order with the given *restockOrderid* in the database |
+|                              | There is a restock order with the given *restockOrderid* in the database  |
+|   Validity of *returnDate*   |                            returnDate is valid                            |
+|                              |                           returnDate is invalid                           |
+|  Validity of products list   |                   All products in the given list exist                    |
+|                              |               One or more products in the list don't exist                |
 
 **Boundaries**:
 
@@ -1728,20 +1751,20 @@ The input value is the body of the HTTP POST Request
 | :--------------------------: | :---------------: |
 | Validity of *restockOrderid* | No boundary found |
 |   Validity of *returnDate*   | No boundary found |
-|   Validity of products list  | No boundary found |
+|  Validity of products list   | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                                        Description of the test case                                                                        | Jest test case |
-| :--------: | :--------: | :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    | Valid |      Valid      |       There is a restock order with the given *restockOrderId* in the database, *returnDate* is valid and products list is valid        |                |
-|   Valid    |  Valid     |      Invalid  |  Invalid   |        products list is invalid                                    |                 |
-|   Valid    |  Invalid  | Valid   |      Invalid     |                  *returnDate* is invalid                                       |                |
-|  Valid     |   Invalid  |  Invalid  |   Invalid     |         *returnDate* and products list are invalid                                      |                  |
-|  Invalid   |   Valid    |  Valid|     Invalid     |              There is no restock order with the given *restockOrderId* in the database                                                  |                |
-|  Invalid   |   Valid    | Invalid |   Invalid  |       There is no restock order with the given *restockOrderId* and products list is invalid                        |                |
-|  Invalid   |   Invalid  |  Valid  |   Invalid |   There is no restock order with the given *restockOrderId* and *returnDate* is invalid         |                          |
-|  Invalid   |  Invalid   | Invalid |     Invalid     | *returnDate* is invalid, there is no restock order with the given *restockOrderId* in the database and products list is invalid |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                  Description of the test case                                                   | Jest test case |
+| :--------: | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------: | -------------: |
+|   Valid    |   Valid    |   Valid    |      Valid      |   There is a restock order with the given *restockOrderId* in the database, *returnDate* is valid and products list is valid    |                |
+|   Valid    |   Valid    |  Invalid   |     Invalid     |                                                    products list is invalid                                                     |                |
+|   Valid    |  Invalid   |   Valid    |     Invalid     |                                                     *returnDate* is invalid                                                     |                |
+|   Valid    |  Invalid   |  Invalid   |     Invalid     |                                           *returnDate* and products list are invalid                                            |                |
+|  Invalid   |   Valid    |   Valid    |     Invalid     |                            There is no restock order with the given *restockOrderId* in the database                            |                |
+|  Invalid   |   Valid    |  Invalid   |     Invalid     |                     There is no restock order with the given *restockOrderId* and products list is invalid                      |                |
+|  Invalid   |  Invalid   |   Valid    |     Invalid     |                      There is no restock order with the given *restockOrderId* and *returnDate* is invalid                      |                |
+|  Invalid   |  Invalid   |  Invalid   |     Invalid     | *returnDate* is invalid, there is no restock order with the given *restockOrderId* in the database and products list is invalid |                |
 
 ## **Class *ReturnOrderController* - method *deleteReturnOrder***
 
@@ -2117,38 +2140,41 @@ The input value is the item id.
     <For traceability write the class and method name that contains the test case>
 
 
-| Unit name | Jest test case |
-| --------- | -------------- |
-|    restockOrderController.js  createRestockOrder(body)     |      test("Successfully add new Restock Order to Database")          |
-|           |     test("Insertion of a RestockOrder with malformed date")           |
-|           |     test("Insertion of a RestockOrder with invalid supplierId"           |  
-|   restockOrderController.js  editRestockOrder(id, body)         |     test('Successfully edit a Restock Order')          |
-|           |      test('Edit a Restock Order with an invalid state')         |
-|           |         test('Edit a non-existing Restock Order'      |
-|  restockOrderController.js  deleteRestockOrder(id)         |      test('Successfully delete a Restock Order'         |
-|           |      test('Delete a non-existing Restock Order')         |
-|    returnOrderController.js createReturnOrder(body)      |     test('Successfully create a new Return Order')          |
-|           |      test('Creation of a Return Order with an invalid Restock Order id')             |
-|           |                   |
-|           |                   |
-|           |                   |
-|           |                   |
-|           |                   |
+| Unit name                                               | Jest test case                                                      |
+| ------------------------------------------------------- | ------------------------------------------------------------------- |
+| restockOrderController.js -> createRestockOrder(body)   | test("Successfully add new Restock Order to Database")              |
+|                                                         | test("Insertion of a RestockOrder with malformed date")             |
+|                                                         | test("Insertion of a RestockOrder with invalid supplierId"          |
+| restockOrderController.js -> editRestockOrder(id, body) | test('Successfully edit a Restock Order')                           |
+|                                                         | test('Edit a Restock Order with an invalid state')                  |
+|                                                         | test('Edit a non-existing Restock Order'                            |
+| restockOrderController.js -> deleteRestockOrder(id)     | test('Successfully delete a Restock Order'                          |
+|                                                         | test('Delete a non-existing Restock Order')                         |
+
+
+
+
+| Unit name                                               | Jest test case                                                      |
+| ------------------------------------------------------- | ------------------------------------------------------------------- |
+| returnOrderController.js -> createReturnOrder(body)     | test('Successfully create a new Return Order')                      |
+|                                                         | test('Creation of a Return Order with an invalid Restock Order id') |
+|                                                         |                                                                     |
+|                                                         |                                                                     |
+|                                                         |                                                                     |
+|                                                         |                                                                     |
+|                                                         |                                                                     |
 
 
 ### Code coverage report
+Since we weren't supposed to implement UnitTests with the design adopted (because of the lack of data structures kept in memory apart from the data in the Database),
+we have only implemented few unit tests on some of the controllers that we deemed to be the most important ones.
+For this reason the coverage statistics are not as good as they should be.
 
-    <Add here the screenshot report of the statement and branch coverage obtained using
-    the coverage tool. >
+On the other hand we have focused our efforts in developing and testing thoroughly (through API and Integration tests) all the given API's specified in the Requirements  
+    
 
 
 ### Loop coverage analysis
+We don't have any significant loop to report in our UnitTests for the motives explained above
 
-    <Identify significant loops in the units and reports the test cases
-    developed to cover zero, one or multiple iterations >
 
-| Unit name | Loop rows | Number of iterations | Jest test case |
-| --------- | --------- | -------------------- | -------------- |
-|           |           |                      |                |
-|           |           |                      |                |
-|           |           |                      |                |  |

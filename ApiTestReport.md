@@ -8,7 +8,17 @@ Version:
 
 - [Dependency graph](#dependency graph)
 
-- [Integration approach](#integration)
+- [Integration and API Test Report](#integration-and-api-test-report)
+- [Contents](#contents)
+- [Dependency graph](#dependency-graph)
+- [Integration approach](#integration-approach)
+- [Integration Tests](#integration-tests)
+  - [Restock Orders Controllers Test Suite](#restock-orders-controllers-test-suite)
+  - [Test Suite 2](#test-suite-2)
+  - [Test Suite n](#test-suite-n)
+- [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
+- [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
+    - [](#)
 
 - [Tests](#tests)
 
@@ -24,32 +34,34 @@ Version:
      <report the here the dependency graph of the classes in EzWH, using plantuml or other tool>
      
 # Integration approach
+To implement Integration tests we have used a mixed approach between Top-Down and Bottom-Up, this is because our Integration and Unit Tests are merged together in several test suites.
+The reason of this choice is that in our Unit Tests we were obliged to test together more than one class (it'd have been useless to test only a single Controller that can't perform any operation without the database) at a time because of our application design, which is in contrast with the definition of "Unit Test".
 
-    <Write here the integration sequence you adopted, in general terms (top down, bottom up, mixed) and as sequence
-    (ex: step1: class A, step 2: class A+B, step 3: class A+B+C, etc)> 
-    <Some steps may  correspond to unit testing (ex step1 in ex above), presented in other document UnitTestReport.md>
-    <One step will  correspond to API testing>
+
     
 
 
 #  Integration Tests
 
+
    <define below a table for each integration step. For each integration step report the group of classes under test, and the names of
      Jest test cases applied to them, and the mock ups used, if any> Jest test cases should be here code/server/unit_test
 
-## Step 1
-| Classes  | mock up used |Jest test cases |
+## Restock Orders Controllers Test Suite 
+| Classes  | Jest test cases |
 |--|--|--|
+|controller.js - restockOrderController.js - dbManager.js| test(1) |
+|controller.js - restockOrderController.js - dbManager.js| test(2) | 
+
+
+
+## Test Suite 2
+| Classes  | Jest test cases |
+|--|--|
 ||||
 
 
-## Step 2
-| Classes  | mock up used |Jest test cases |
-|--|--|--|
-||||
-
-
-## Step n 
+## Test Suite n 
 
    
 | Classes  | mock up used |Jest test cases |
@@ -57,23 +69,6 @@ Version:
 ||||
 
 
-
-
-# API testing - Scenarios
-
-
-<If needed, define here additional scenarios for the application. Scenarios should be named
- referring the UC in the OfficialRequirements that they detail>
-
-## Scenario UCx.y
-
-| Scenario |  name |
-| ------------- |:-------------:| 
-|  Precondition     |  |
-|  Post condition     |   |
-| Step#        | Description  |
-|  1     |  ... |  
-|  2     |  ... |
 
 
 
@@ -88,7 +83,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 | Scenario ID | Functional Requirements covered | Mocha  Test(s) | 
 | ----------- | ------------------------------- | ----------- | 
-|  ..         | FRx                             |             |             
+|  ..         | FRx                             |    ASK if needed to write each test case         |             
 |  ..         | FRy                             |             |             
 | ...         |                                 |             |             
 | ...         |                                 |             |             
@@ -107,5 +102,8 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 | Non Functional Requirement | Test name |
 | -------------------------- | --------- |
-|                            |           |
-
+|          NFR2                 |   All        |
+|          NFR3                 |   All        |
+|          NFR4                |          |
+|          NFR6                |           |
+|          NFR9                |           |
