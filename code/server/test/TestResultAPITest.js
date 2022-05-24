@@ -71,7 +71,6 @@ describe('Test Result test suite', async () => {
         describe('Add a new Test result tests', async() => {
             it('Succesfully add a new Test result', async () => {
                 let response = await testResultAPICalls.addTestResult("12345678901234567890123456789016", 2, "2021/11/28 11:10", true);
-                console.log(response.body);
                 response.status.should.equal(201);
                 response = await testResultAPICalls.getTestResultById("12345678901234567890123456789016",2);
                 response.status.should.equal(200);    

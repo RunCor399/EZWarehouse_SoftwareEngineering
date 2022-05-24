@@ -112,7 +112,6 @@ describe('User test suite', async () => {
 
             it('Succesfully log a customer', async () => {
                 let response = await userAPICalls.customerSessions("user1@ezwh.com", "testpassword" );
-                console.log(response.body);
                 response.status.should.equal(200);
                 response = await userAPICalls.logout();
                 response.status.should.equal(200);
@@ -120,7 +119,6 @@ describe('User test suite', async () => {
             
             it('Succesfully log a supplier', async () => {
                 let response = await userAPICalls.supplierSessions("supplier1@ezwh.com", "testpassword" );
-                console.log(response.body);
                 response.status.should.equal(200);
                 response = await userAPICalls.logout();
                 response.status.should.equal(200);
@@ -128,7 +126,6 @@ describe('User test suite', async () => {
 
             it('Succesfully log a clerk', async () => {
                 let response = await userAPICalls.clerkSessions("clerk1@ezwh.com", "testpassword" );
-                console.log(response.body);
                 response.status.should.equal(200);
                 response = await userAPICalls.logout();
                 response.status.should.equal(200);
@@ -137,7 +134,6 @@ describe('User test suite', async () => {
 
             it('Succesfully log a quality empolyee', async () => {
                 let response = await userAPICalls.qualityEmployeeSessions("qualityEmployee1@ezwh.com", "testpassword" );
-                console.log(response.body);
                 response.status.should.equal(200);
                 response = await userAPICalls.logout();
                 response.status.should.equal(200);
@@ -145,7 +141,6 @@ describe('User test suite', async () => {
 
             it('Succesfully log a delivery empolyee', async () => {
                 let response = await userAPICalls.deliveryEmployeeSessions("deliveryEmployee1@ezwh.com", "testpassword" );
-                console.log(response.body);
                 response.status.should.equal(200);
                 response = await userAPICalls.logout();
                 response.status.should.equal(200);
@@ -153,7 +148,6 @@ describe('User test suite', async () => {
 
             it('Succesfully logout', async () => {
                 let response = await userAPICalls.deliveryEmployeeSessions("deliveryEmployee1@ezwh.com", "testpassword" );
-                console.log(response.body);
                 response = await userAPICalls.logout();
                 response.status.should.equal(200);
             });

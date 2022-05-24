@@ -19,15 +19,7 @@ const internalOrdersAPICalls = new InternalOrdersAPICalls();
 
 describe('Internal Orders test suite', async () => {
 
-    /*beforeEach(async () => {
-        await databaseManager.deleteAllData().then(async () => {
-            //insert internal order data
-        });
-      });
 
-    after(async () => {
-        await databaseManager.deleteAllData();
-    })*/
 
     before(async () => {
         await dbmanager.deleteAllData().then(async () => {

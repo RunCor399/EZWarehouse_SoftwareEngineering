@@ -29,7 +29,6 @@ describe('Test Descriptor test suite', async () => {
     describe('Standard Test Descriptor getters', async () => {
         it('get all test descriptors', async () => { //it indicates a TEST CASE
             const response = await testDescriptorAPICalls.getTestDescriptors();
-            console.log(response.data);
             response.status.should.equal(200);
 
         });
@@ -65,7 +64,6 @@ describe('Test Descriptor test suite', async () => {
             
             it('Test Descriptor not added, validation of request body failed ', async () => {
                 let response = await testDescriptorAPICalls.addTestDescriptor("test1", "descrizione test", "ciao");
-                console.log(response.status);
                 response.status.should.equal(422);
             });
         });
@@ -85,13 +83,11 @@ describe('Test Descriptor test suite', async () => {
             
             it('Test Descriptor not edited, no test descriptor associated to id ', async () => {
                 const response = await testDescriptorAPICalls.editTestDescriptor(10, "test1", "descrizione test2", 2);
-                console.log(response.body);
                 response.status.should.equal(404);
             });
             
             it('Test Descriptor not edited, validation of request body failed because of string id', async () => {
                 const response = await testDescriptorAPICalls.editTestDescriptor(1, "test1", "descrizione test2", "ciao");
-                console.log(response.body);
                 response.status.should.equal(422);  
             });
         });
