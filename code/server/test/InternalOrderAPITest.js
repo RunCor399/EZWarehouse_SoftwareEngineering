@@ -86,6 +86,7 @@ describe('Internal Orders test suite', async () => {
                 response = await internalOrdersAPICalls.editInternalOrderTest(1, "COMPLETED", []);
                 response.status.should.equal(200);
 
+
                 response = await internalOrdersAPICalls.getInternalOrderByIdTest(1);
                 response.data.state.should.equal("COMPLETED");
             });
