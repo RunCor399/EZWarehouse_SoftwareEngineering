@@ -121,7 +121,7 @@ describe('InternalOrderController Tests', () => {
         });
 
         test("Delete a non-existing Internal Order", async () => {
-            let result, oldCount, newCount;
+            let oldCount, newCount;
 
             oldCount = (await internalOrderController.getAllInternalOrders()).length;
 
