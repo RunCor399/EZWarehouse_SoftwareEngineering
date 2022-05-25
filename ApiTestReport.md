@@ -191,7 +191,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 9.3           | FR 6                            | Successfully delete an internal order               |
 | 11.1          | FR 7                            | Successfully add a new Item                         |
 | 11.2          | FR 7                            | Successfully edit an Item                           |
-| ...           |                                 |                                                     |
+|               |                                 |                                                     |
 
 
 
