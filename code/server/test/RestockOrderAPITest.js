@@ -131,7 +131,7 @@ describe('Restock Orders Testing', async () => {
             });
 
             it('State of Restock Order different from DELIVERED', async () => {
-                const list = {"skuItems" : [{"SKUId":1, "rfid":"12345678901234567890123456789016"}]};
+                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 await restockOrdersAPICalls.editRestockOrderState(1, "ISSUED");
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(1, list);
@@ -141,7 +141,7 @@ describe('Restock Orders Testing', async () => {
             });
 
             it('State of Restock Order different from DELIVERED', async () => {
-                const list = {"skuItems" : [{"SKUId":1, "rfid":"12345678901234567890123456789016"}]};
+                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(100, list);
 
@@ -154,7 +154,8 @@ describe('Restock Orders Testing', async () => {
             it('Successfully add a transportNote to a Restock Order', async () => {
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERY");
 
-                const transportNote = {"transportNote" : {"deliveryDate":"2022/03/03"}};
+                //const transportNote = {"transportNote" : {"deliveryDate":"2022/03/03"}};
+                const transportNote = {"deliveryDate":"2022/03/03"};
                 let response = await restockOrdersAPICalls.addTransportNote(1, transportNote);
 
                 response.status.should.equal(200);
@@ -163,7 +164,7 @@ describe('Restock Orders Testing', async () => {
             it('Add transportNote to Restock Order with state different from DELIVERY', async () => {
                 await restockOrdersAPICalls.editRestockOrderState(1, "ISSUED");
                 
-                const transportNote = {"transportNote" : {"deliveryDate":"2022/03/03"}};
+                const transportNote = {"deliveryDate":"2022/03/03"};
                 let response = await restockOrdersAPICalls.addTransportNote(1, transportNote);
 
                 response.status.should.equal(422);
@@ -172,7 +173,7 @@ describe('Restock Orders Testing', async () => {
             it('Add transportNote to Restock Order with issueDate newer than delivery date', async () => {
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERY");
                 
-                const transportNote = {"transportNote" : {"deliveryDate":"2012/03/03"}};
+                const transportNote = {"deliveryDate":"2012/03/03"};
                 let response = await restockOrdersAPICalls.addTransportNote(1, transportNote);
 
                 response.status.should.equal(422);

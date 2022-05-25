@@ -13,7 +13,6 @@ const dbManager = controller.getDBManager();
 
 
 beforeEach(async () => {
-    //console.log("executed before rest")
     await dbManager.deleteAllData().then(async () => {
         await dbManager.insertRestockAndReturnOrderTestData();
     })
@@ -57,6 +56,7 @@ describe('RestockOrderController Tests', () => {
         
              expect(result).to.be.undefined;
         });
+
     
     
         test("Insertion of a RestockOrder with invalid supplierId", async () => {
@@ -115,6 +115,32 @@ describe('RestockOrderController Tests', () => {
             result = await restockOrderController.editRestockOrder(-1, body).catch(() => {});
             expect(result).to.be.undefined;
         });
+
+
+        test.only("Add SKU Items to Restock Order", async () => {
+            let result;
+
+            const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
+                
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
+            await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list});
+
+            result = await restockOrderController.getRestockOrder(1);
+
+            
+
+           expect(result.products.length).to.be.equal(1);
+           expect(result.products.length).to.be.equal(1);
+        });
+
+        test("Failed to add SKU Items due to invalid SKU", async () => {
+            let result;
+
+            const list = {skuItems : {"skuItems" : [{"SKUId":100, "rfid":"01234567812345678990123456789016"}]}};
+                
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
+            let response = await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list}).catch(() => {});
+        });
     });
 
     describe('deleteRestockOrder method testing', () => {
@@ -139,6 +165,60 @@ describe('RestockOrderController Tests', () => {
 
             expect(oldCount).to.be.equal(newCount);
         });
+    });
+
+
+    describe('getMethodsTesting',  () => {
+        let result;
+
+        test('Get Products in a Restock Order Test', async () => {
+           result = await restockOrderController.getProductsForOrders(1);
+           
+           expect(result.length).to.be.equal(0);
+        })
+
+        test('Add and Get a Transport Note in a Restock Order Test', async () => {
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERY"});
+
+
+            const transportNote =  {transportNote:{"deliveryDate":"2022/03/03"}};
+
+            await restockOrderController.addTransportNote(1, transportNote)
+            result = await restockOrderController.getTransportNote(1);
+
+            expect(result).not.to.be.undefined;
+         });
+
+         test('Failed to add transportNote due to state', async () => {
+            await restockOrderController.editRestockOrder(1, {newState:"COMPLETED"});
+
+            const transportNote =  {transportNote:{"deliveryDate":"2022/03/03"}};
+
+            await restockOrderController.addTransportNote(1, transportNote).catch(() => {})
+            result = await restockOrderController.getTransportNote(1);
+
+            expect(result["transportNote"]).to.be.equal('');
+         });
+
+         test('Failed to add transportNote due to invalid date', async () => {
+
+            const transportNote =  {transportNote:{"deliveryDate":"12345"}};
+
+            await restockOrderController.addTransportNote(1, transportNote).catch(() => {})
+            result = await restockOrderController.getTransportNote(1);
+
+            expect(result["transportNote"]).to.be.equal('');
+         });
+
+         test('Failed to add transportNote due to old delivery date', async () => {
+
+            const transportNote =  {transportNote:{"deliveryDate":"2020/01/01"}};
+
+            await restockOrderController.addTransportNote(1, transportNote).catch(() => {})
+            result = await restockOrderController.getTransportNote(1);
+
+            expect(result["transportNote"]).to.be.equal('');
+         });
     });
 });
 

@@ -127,6 +127,7 @@ class RestockOrderController {
                 .then(value => row.skuItems = value)
                 .catch((error) => { throw error });
 
+
         }
         if (row.state !== 'ISSUED') {
             row.transportNote = await this.getTransportNote(row.id)
@@ -273,7 +274,6 @@ class RestockOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk"))
             throw new Exceptions(401)
 
-        console.log(body)
 
         const skuItems = body["skuItems"];
 
@@ -291,22 +291,26 @@ class RestockOrderController {
             throw new Exceptions(404);
 
         /*check if the state of the restock order is DELIVERED*/
-        if (row.state !== 'DELIVERED')
+        if (row.state !== 'DELIVERED'){
             throw new Exceptions(422)
+        }
 
-        console.log(skuItems);
+        //console.log(skuItems);
 
-        let skuidInfo; let num;
+        let skuidInfo;
+        let num;
         const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`
         const sqlInsert2 = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
         const sqlUpdate = `UPDATE SKUPerRestockOrder SET qty = qty + 1 WHERE SKUid = ?`
+        
         for (let i = 0; i < skuItems.length; i++) {
             await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid)
                 .catch((error) => { throw error })
             skuidInfo = await this.#controller.getSkuController().getSku(skuItems[i].SKUId)
 
-            num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?".skuidInfo.id)
+            num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?", skuidInfo.id)
                 .catch(error => { throw new Exceptions(503) });
+                
             if (num.length === 0) {
                 await this.#dbManager.genericSqlRun(sqlInsert2, id, skuidInfo.id, skuidInfo.description, skuidInfo.price, 1)
                     .catch((error) => { throw new Exceptions(503) })
@@ -333,11 +337,14 @@ class RestockOrderController {
     if (!this.#controller.isLoggedAndHasPermission("manager", "supplier"))
         throw new Exceptions(401)
 
-    /*check if the body is valid */
-    const transportNote = body["transportNote"].transportNote;
-    if (!transportNote)
-        throw new Exceptions(422);
+        /*check if the body is valid */
 
+        const transportNote = body["transportNote"];
+
+        if (!transportNote){
+            throw new Exceptions(422);
+        }
+            
     /*check if the id is valid*/
     if (!id || isNaN(Number(id))
         || !this.#controller.areAllPositiveOrZero(id))
@@ -364,7 +371,6 @@ class RestockOrderController {
         formattedIssueDate = this.#controller.checkAndFormatDate(row.issueDate);
 
     } catch (error) {
-
         throw error;
     }
 
