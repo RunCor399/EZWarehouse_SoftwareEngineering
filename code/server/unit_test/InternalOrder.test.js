@@ -151,4 +151,14 @@ describe('InternalOrderController Tests', () => {
             expect(oldCount).to.be.equal(newCount);
         });
     });
+
+    describe("Get Methods Testing", () => {
+        let result;
+
+        test('Get Products in an Internal Order Test', async () => {
+           result = await internalOrderController.getProductsForInternalOrder(1);
+           
+           expect(result.length).to.be.equal(1);
+        });
+    });
 });
