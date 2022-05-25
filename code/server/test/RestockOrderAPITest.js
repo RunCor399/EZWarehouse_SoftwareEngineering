@@ -24,9 +24,9 @@ describe('Restock Orders Testing', async () => {
         });
       });
 
-    after(async () => {
+    /* after(async () => {
         await databaseManager.deleteAllData();
-    })
+    }) */
 
       describe('Add and get a new Restock', async () => {
         describe('Add a new Restock Order tests', async() => {
@@ -118,18 +118,20 @@ describe('Restock Orders Testing', async () => {
         });
 
         describe('Add a list of SKUItems to a Restock Order by id', async () => {
-            it('Successfully add a list of SKUItems', async () => {
-                const list = {"skuItems" : [{"SKUId":1, "rfid":"12345678901234567890123456789016"}]};
+            it.only('Successfully add a list of SKUItems', async () => {
+                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERED");
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(1, list);
 
                 
+                let result = await restockOrdersAPICalls.getRestockOrderById(1);
+                console.log(result.data);
                 response.status.should.equal(200);
             });
 
             it('State of Restock Order different from DELIVERED', async () => {
-                const list = {"skuItems" : [{"SKUId":1, "rfid":"12345678901234567890123456789016"}]};
+                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 await restockOrdersAPICalls.editRestockOrderState(1, "ISSUED");
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(1, list);
@@ -139,7 +141,7 @@ describe('Restock Orders Testing', async () => {
             });
 
             it('State of Restock Order different from DELIVERED', async () => {
-                const list = {"skuItems" : [{"SKUId":1, "rfid":"12345678901234567890123456789016"}]};
+                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(100, list);
 

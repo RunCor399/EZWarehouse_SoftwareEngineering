@@ -1,8 +1,8 @@
 # Integration and API Test Report
 
-Date:
+Date: 25/05/2022
 
-Version:
+Version: 1.0
 
 # Contents
 
@@ -16,6 +16,7 @@ Version:
   - [Restock Orders Controllers Test Suite](#restock-orders-controllers-test-suite)
   - [Return Orders Controllers Test Suite](#return-orders-controllers-test-suite)
   - [Internal Orders Controllers Test Suite](#internal-orders-controllers-test-suite)
+  - [SkuItem Controller Test Suite](#skuitem-controller-test-suite)
   - [Test Suite n](#test-suite-n)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
@@ -32,7 +33,7 @@ Version:
 
 # Dependency graph 
 
-     <report the here the dependency graph of the classes in EzWH, using plantuml or other tool>
+<img src="images/DependencyGraph.png" alt="PackageDiagram" width="600"/>
      
 # Integration approach
 To implement Integration tests we have used a mixed approach between Top-Down and Bottom-Up, this is because our Integration and Unit Tests are merged together in several test suites.
@@ -84,6 +85,35 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 | controller.js - internalOrderController.js - dbManager.js | test("Edit a non-existing Internal Order")                     |
 | controller.js - internalOrderController.js - dbManager.js | test("Successfully delete an Internal Order")                  |
 | controller.js - internalOrderController.js - dbManager.js | test("Delete a non-existing Internal Order")                   |
+
+
+## SkuItem Controller Test Suite
+
+   
+| Classes                                             | Jest test cases                                                   |
+| --------------------------------------------------- | ----------------------------------------------------------------- |
+| controller.js - skuItemController.js - dbManager.js | test('successfull use of getAllSkuItems')                         |
+| controller.js - skuItemController.js - dbManager.js | test('successfull use of getSkuItems')                            |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to use getSkuItems with a non-existant skuid')      |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to use getSkuItems with a invalid skuid')           |
+| controller.js - skuItemController.js - dbManager.js | test('successfull use of getSkuItem')                             |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to use getSkuItem with a non-existant rfid')        |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to use getSkuItem with an invalid rfid')            |
+| controller.js - skuItemController.js - dbManager.js | test('successful use of createSku and createSKUitem')             |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to create SkuItem with non-existent SKUId')         |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to create SkuItem with invalid rfid')               |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to create SkuItem with an already used rfid')       |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to create SkuItem with invalid SKUId')              |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to create SkuItem with invalid date')               |
+| controller.js - skuItemController.js - dbManager.js | test('successful use of createSkuItem and editSkuItem')           |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to edit a non-existant SkuItem')                    |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to edit a SkuItem with an invalid rfid')            |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to edit a SkuItem with an invalid available value') |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to edit a SkuItem with an invalid date')            |
+| controller.js - skuItemController.js - dbManager.js | test('successful use of createSkuItem and deleteSkuItem')         |
+| controller.js - skuItemController.js - dbManager.js | test('attempt to delete a SkuItem with an invalid rfid')          |
+
+
 
 
 ## Test Suite n 

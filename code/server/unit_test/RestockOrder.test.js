@@ -13,16 +13,15 @@ const dbManager = controller.getDBManager();
 
 
 beforeEach(async () => {
-    //console.log("executed before rest")
     await dbManager.deleteAllData().then(async () => {
         await dbManager.insertRestockAndReturnOrderTestData();
     })
   });
 
-// afterEach(async () => {
-//     //console.log("executed after rest");
-//     await dbManager.deleteAllData();
-// });
+afterEach(async () => {
+    //console.log("executed after rest");
+    await dbManager.deleteAllData();
+});
 
 describe('RestockOrderController Tests', () => {
     describe('createRestockOrder method testing', () => {
@@ -117,19 +116,21 @@ describe('RestockOrderController Tests', () => {
             expect(result).to.be.undefined;
         });
 
-        //products IS EMPTY BECAUSE THE METHOD IN THE CONTROLLER DOESN'T GET THOSE (GETS ONLY skuItems)
+
         test.only("Add SKU Items to Restock Order", async () => {
             let result;
 
-            const list = {"skuItems" : [{"SKUId":1, "rfid":"12345678901234567890123456789016"}]};
+            const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
             await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
-            await restockOrderController.addSkuItemsToRestockOrder(1, list);
+            await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list});
 
             result = await restockOrderController.getRestockOrder(1);
 
             
-            console.log(result);
+
+           expect(result.products.length).to.be.equal(1);
+           expect(result.products.length).to.be.equal(1);
         });
 
         test("Failed to add SKU Items due to invalid SKU", async () => {
@@ -138,7 +139,7 @@ describe('RestockOrderController Tests', () => {
             const list = {skuItems : {"skuItems" : [{"SKUId":100, "rfid":"01234567812345678990123456789016"}]}};
                 
             await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
-            let response = await restockOrderController.addSkuItemsToRestockOrder(1, list).catch(() => {});
+            let response = await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list}).catch(() => {});
         });
     });
 
