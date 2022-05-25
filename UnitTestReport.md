@@ -2029,40 +2029,6 @@ The input value is the order id.
 |   Valid    |      Valid      | There is a return order with the given *id* in the database  |                |
 
 
-## **Class *InternalOrderController* - method *getInternalOrder***
-
-The input value is the order id.
-
-**Criteria for method *getInternalOrder*:**
-	
- - Validity of *id*
-
-
-
-
-
-**Predicates for method *getInternalOrder*:**
-
-|     Criteria     |                           Predicate                            |
-| :--------------: | :------------------------------------------------------------: |
-| Validity of *id* | There is no internal order with the given *id* in the database |
-|                  |         There is a internal order with the given *id*          |
-
-
-
-
-**Boundaries**:
-
-|     Criteria     |  Boundary values  |
-| :--------------: | :---------------: |
-| Validity of *id* | No boundary found |
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid |                  Description of the test case                  | Jest test case |
-| :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database |                |
-|   Valid    |      Valid      | There is a internal order with the given *id* in the database  |                |
 
 ## **Class *InternalOrderController* - method *createInternalOrder***
 
@@ -2072,8 +2038,6 @@ The input value is the body of the HTTP POST Request
 	
  - Validity of *customerid*
  - Validity of issueDate
-
-
 
 
 
@@ -2289,6 +2253,36 @@ The input value is the order id.
 
     expect(oldCount).to.be.equal(newCount);
 ```
+
+## **Class *InternalOrderController* - method *getInternalOrder***
+
+The input value is the order id.
+
+**Criteria for method *getInternalOrder*:**
+	
+ - Validity of *id*
+
+
+**Predicates for method *getInternalOrder*:**
+
+|     Criteria     |                           Predicate                            |
+| :--------------: | :------------------------------------------------------------: |
+| Validity of *id* | There is no internal order with the given *id* in the database |
+|                  |         There is a internal order with the given *id*          |
+
+
+**Boundaries**:
+
+|     Criteria     |  Boundary values  |
+| :--------------: | :---------------: |
+| Validity of *id* | No boundary found |
+
+**Combination of predicates**:
+
+| Criteria 1 | Valid / Invalid |                  Description of the test case                  | Jest test case |
+| :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
+|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database |                |
+|   Valid    |      Valid      | There is a internal order with the given *id* in the database  |                |
 
 ## **Class *Item* - method *getItem***
 
