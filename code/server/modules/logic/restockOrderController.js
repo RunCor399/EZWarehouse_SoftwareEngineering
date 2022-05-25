@@ -127,6 +127,8 @@ class RestockOrderController {
                 .then(value => row.skuItems = value)
                 .catch((error) => { throw error });
 
+            console.log(row);
+
         }
         if (row.state !== 'ISSUED') {
             row.skuItems = await this.getTransportNote(row.id)
@@ -289,14 +291,16 @@ class RestockOrderController {
             throw new Exceptions(404);
 
         /*check if the state of the restock order is DELIVERED*/
-        if (row.state !== 'DELIVERED')
+        if (row.state !== 'DELIVERED'){
             throw new Exceptions(422)
-
+        }
+        
         const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`
         for (let i = 0; i < skuItems.length; i++) {
-            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].RFID)
+            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid)
                 .catch((error) => { throw error })
         }
+
 
     }
 
@@ -313,7 +317,9 @@ class RestockOrderController {
             throw new Exceptions(401)
 
         /*check if the body is valid */
-        const transportNote = body["transportNote"].transportNote;
+
+        const transportNote = body["transportNote"];
+
         if (!transportNote)
             throw new Exceptions(422);
 
@@ -343,7 +349,6 @@ class RestockOrderController {
             formattedIssueDate = this.#controller.checkAndFormatDate(row.issueDate);
             
         } catch (error) {
-            
             throw error;
         }
 

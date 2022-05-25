@@ -152,7 +152,8 @@ describe('Restock Orders Testing', async () => {
             it('Successfully add a transportNote to a Restock Order', async () => {
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERY");
 
-                const transportNote = {"transportNote" : {"deliveryDate":"2022/03/03"}};
+                //const transportNote = {"transportNote" : {"deliveryDate":"2022/03/03"}};
+                const transportNote = {"deliveryDate":"2022/03/03"};
                 let response = await restockOrdersAPICalls.addTransportNote(1, transportNote);
 
                 response.status.should.equal(200);
@@ -161,7 +162,7 @@ describe('Restock Orders Testing', async () => {
             it('Add transportNote to Restock Order with state different from DELIVERY', async () => {
                 await restockOrdersAPICalls.editRestockOrderState(1, "ISSUED");
                 
-                const transportNote = {"transportNote" : {"deliveryDate":"2022/03/03"}};
+                const transportNote = {"deliveryDate":"2022/03/03"};
                 let response = await restockOrdersAPICalls.addTransportNote(1, transportNote);
 
                 response.status.should.equal(422);
@@ -170,7 +171,7 @@ describe('Restock Orders Testing', async () => {
             it('Add transportNote to Restock Order with issueDate newer than delivery date', async () => {
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERY");
                 
-                const transportNote = {"transportNote" : {"deliveryDate":"2012/03/03"}};
+                const transportNote = {"deliveryDate":"2012/03/03"};
                 let response = await restockOrdersAPICalls.addTransportNote(1, transportNote);
 
                 response.status.should.equal(422);
