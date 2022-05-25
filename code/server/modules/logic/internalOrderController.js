@@ -44,7 +44,7 @@ class InternalOrderController {
             FROM SKUPerInternalOrder WHERE id = ?;`;
         }
         else{
-            final_query = `SELECT SKUId, description, price, SI.rfid
+            final_query = `SELECT SPI.SKUId, SPI.description, SPI.price, SI.rfid
             FROM SKUPerInternalOrder SPI, SKUItem SI  WHERE id = ? AND SPI.SKUId = SI.SKUId;`;
         }
 
@@ -118,6 +118,7 @@ class InternalOrderController {
             .catch((error) => { throw error });
 
         /*check if the internal order exists*/
+        console.log(row);
         if (!row)
             throw new Exceptions(404);
 
