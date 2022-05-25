@@ -157,6 +157,7 @@ describe('PositionController Tests', () => {
                 }).catch(err => errorValue = err)
             assert.equal(errorValue.code, 422);
         })
+
         test('attempt of editPositionVer1 with non-existant position', async () => {
 
             let errorValue;
@@ -202,6 +203,7 @@ describe('PositionController Tests', () => {
                 }).catch(err => errorValue = err)
             assert.equal(errorValue.code, 422);
         })
+
         test('attempt of editPositionVer1 with negative volume', async () => {
             let errorValue;
             await positionController.editPositionVer1("123456789012",
@@ -216,6 +218,7 @@ describe('PositionController Tests', () => {
                 }).catch(err => errorValue = err)
             assert.equal(errorValue.code, 422);
         })
+
         test('attempt of editPositionVer1 with negative occupiedWeight', async () => {
             let errorValue;
             await positionController.editPositionVer1("123456789012",
@@ -230,6 +233,7 @@ describe('PositionController Tests', () => {
                 }).catch(err => errorValue = err)
             assert.equal(errorValue.code, 422);
         })
+        
         test('attempt of editPositionVer1 with negative occupiedVolume', async () => {
             let errorValue;
             await positionController.editPositionVer1("123456789012",
