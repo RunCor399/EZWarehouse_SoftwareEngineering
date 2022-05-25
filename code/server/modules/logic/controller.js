@@ -99,7 +99,7 @@ class Controller {
         return user;
     }
 
-    /** temporaneamente ritorna sempre true */
+    /** temporaneamente ritorna sempre true prima di usare passport.js*/
     isLoggedAndHasPermission(...validType) {
         /*let user = this.#userController.getUser()
         if (!user) return false;
