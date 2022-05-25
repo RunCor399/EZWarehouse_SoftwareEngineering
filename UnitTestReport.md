@@ -2301,6 +2301,21 @@ The input value is the body of the HTTP POST Request.
 |  Invalid   |   Valid    |     Invalid     |                                 There is no SKU item with *rfid*                                 |                |
 |  Invalid   |  Invalid   |     Invalid     | There is no test descriptor with the specified *descriptorid*, there is no SKU item with *rfid*  |                |
 
+## 1) Test Case: ""
+```
+
+```
+
+## 2) Test Case: ""
+```
+
+```
+
+## 3) Test Case: ""
+```
+
+```
+
 ## **Class *TestResultController* - method *editTestResult***
 
 The input value is the rfid, the id of the test descriptor and the body of the HTTP PUT Request.
@@ -2346,6 +2361,21 @@ The input value is the rfid, the id of the test descriptor and the body of the H
 |  Invalid   |  Invalid   |   Valid    |     Invalid     |                         There is no SKU item with *rfid*, there is no test descrptor with the chosen *newdescriptorid*                          |                |
 |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                         There is no SKU item with *rfid*, there is no test descrptor with the chosen *newdescriptorid*                          |                |
 
+## 1) Test Case: ""
+```
+
+```
+
+## 2) Test Case: ""
+```
+
+```
+
+## 3) Test Case: ""
+```
+
+```
+
 ## **Class *TestResultController* - method *deleteTestResult***
 
 The input value is the rfid and the id of a test result.
@@ -2382,6 +2412,16 @@ The input value is the rfid and the id of a test result.
 |   Valid    |  Invalid   |     Invalid     |                  There is no test result with the specified *id*                   |                |
 |  Invalid   |   Valid    |     Invalid     |                          There is no SKU item with *rfid*                          |                |
 |  Invalid   |  Invalid   |     Invalid     | There is no test result with the specified *id*, there is no SKU item with *rfid*  |                |
+
+## 1) Test Case: ""
+```
+
+```
+
+## 2) Test Case: ""
+```
+
+```
 
 ## **Class *UserController* - method *createUser***
 
@@ -4340,6 +4380,17 @@ test('attempt of deleteItem with invalid id', async () => {
 |                                                             | test("Edit a Test Descriptor with a non-existent SKU")         |
 | testDescriptorController.js -> deleteTestDescriptor(id)     | test("Successfully delete a Test Descriptor")                  |
 |                                                             | test("Delete a non-existing Test Descriptor")                  |
+
+| Unit name                                                 | Jest test case |
+| --------------------------------------------------------- | -------------- |
+| testResultController.js -> createtestResult(body)         | test("")       |
+|                                                           | test("")       |
+|                                                           | test("")       |
+| testResultController.js -> editTestResult(rfid, id, body) | test("")       |
+|                                                           | test("")       |
+|                                                           | test("")       |
+| testResultrController.js -> deleteTestResult(rfid, id)    | test("")       |
+|                                                           | test("")       |
 
 
 ### Code coverage report
