@@ -42,6 +42,7 @@ class UserController {
      * @throws 401 (Not Authorized)
      */
     getUser() {
+        console.log("log check", this.#logged)
         if (!this.#logged){
             throw new Exceptions(401);
         }
@@ -147,7 +148,7 @@ class UserController {
         this.#user.surname = row.surname;
         this.#user.type = row.type;
         this.#logged = true;
-        console.log(this.#logged);
+        console.log("logged", this.#logged);
 
         return ({
             id: this.#user.id,
@@ -161,7 +162,7 @@ class UserController {
      * @throws 500 Internal Server Error (generic error). 
      */
     logout() {
-        console.log(this.#logged);
+        //console.log(this.#logged);
         if (!this.#logged)
             throw new Exceptions(500)//already logged out
         this.#logged = false;
