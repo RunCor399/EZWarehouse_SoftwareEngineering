@@ -376,10 +376,10 @@ The input value is the Skuid.
 
 **Predicates for method *getSkuItems*:**
 
-|      Criteria       |                         Predicate                          |
-| :-----------------: | :--------------------------------------------------------: |
-| Validity of *SKUid* | There is no SKU with the specified *SKUid* in the database |
-|                     | There is a SKU with the specified *SKUid* in the database  |
+|      Criteria       |                                  Predicate                                  |
+| :-----------------: | :-------------------------------------------------------------------------: |
+| Validity of *SKUid* | There is no SKU with the specified *SKUid* in the database or it is Invalid |
+|                     |          There is a SKU with the specified *SKUid* in the database          |
 
 
 
@@ -396,10 +396,66 @@ The input value is the Skuid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid |      Description of the test case       | Jest test case |
-| :--------: | :-------------: | :-------------------------------------: | :------------: |
-|  Present   |      Valid      | There is a SKU with the chosen *SKUid*  |                |
-|   Absent   |     Invalid     | There is no SKU with the chosen *SKUid* |                |
+| Criteria 1 | Valid / Invalid |               Description of the test case               |                                                     Jest test case                                                     |
+| :--------: | :-------------: | :------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
+|  Present   |      Valid      |          There is a SKU with the chosen *SKUid*          |                                         test('successful use of getSkuItems')                                          |
+|   Absent   |     Invalid     | There is no SKU with the chosen *SKUid* or it is invalid | test('attempt to use getSkuItems with a non-existant skuid') / test('attempt to use getSkuItems with a invalid skuid') |
+
+
+## 1) Test Case: successful use of getSkuItems
+```
+ test('successful use of getSkuItems', async () => {
+
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "second sku", 50)
+                .catch(() => { throw error });
+
+            const rfid1 = '12345678901234567890123456789019'
+            const rfid2 = '12345678901234567890123456789010'
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid1,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid2,
+                    SKUId: 2,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            const items = await skuItemController.getSkuItems(1).catch(error => { throw error })
+            assert.equal(items.length, 1)
+            assert.equal(items[0].RFID, rfid1)
+        })
+```
+
+## 2) Test case : attempt to use getSkuItems with a non-existant skuid
+```
+test('attempt to use getSkuItems with a non-existant skuid', async () => {
+            let errorValue;
+            const items = await skuItemController.getSkuItems(1).catch(error => { errorValue = error })
+            assert.equal(errorValue.code, 404)
+        })
+```
+
+## 3) Test case : attempt to use getSkuItems with an invalid skuId
+```
+test('attempt to use getSkuItems with an invalid skuid', async () => {
+            let errorValue;
+            const items = await skuItemController.getSkuItems("hello").catch(error => { errorValue = error })
+            assert.equal(errorValue.code, 422)
+        })
+```
 
 ## **Class *skuItemController* - method *getSkuItem***
 
@@ -414,10 +470,10 @@ The input value is the SkuItemid.
 
 **Predicates for method *getSkuItem*:**
 
-|        Criteria         |                              Predicate                              |
-| :---------------------: | :-----------------------------------------------------------------: |
-| Validity of *SKUItemid* | There is no SKU Item with the specified *SKUItemid* in the database |
-|                         | There is a SKU Item with the specified *SKUItemid* in the database  |
+|        Criteria         |                                      Predicate                                       |
+| :---------------------: | :----------------------------------------------------------------------------------: |
+| Validity of *SKUItemid* | There is no SKU Item with the specified *SKUItemid* in the database or it is invalid |
+|                         |          There is a SKU Item with the specified *SKUItemid* in the database          |
 
 
 
@@ -434,10 +490,53 @@ The input value is the SkuItemid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid |           Description of the test case           | Jest test case |
-| :--------: | :-------------: | :----------------------------------------------: | :------------: |
-|  Present   |      Valid      | There is a SKU Item with the chosen *SKUItemid*  |                |
-|   Absent   |     Invalid     | There is no SKU Item with the chosen *SKUItemid* |                |
+| Criteria 1 | Valid / Invalid |                   Description of the test case                    |                                                   Jest test case                                                    |
+| :--------: | :-------------: | :---------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------: |
+|  Present   |      Valid      |          There is a SKU Item with the chosen *SKUItemid*          |                                        test('successfull use of getSkuItem')                                        |
+|   Absent   |     Invalid     | There is no SKU Item with the chosen *SKUItemid* or it is invalid | test('attempt to use getSkuItem with an invalid rfid') / test('attempt to use getSkuItem with a non-existant rfid') |
+
+
+## 1) Test Case : successfull use of getSkuItem
+```
+test('successfull use of getSkuItem', async () => {
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+            const item = await skuItemController.getSkuItem(rfid);
+            assert.equal(item.RFID, rfid);
+        })
+```
+
+## 2) Test Case : attempt to use getSkuItem with a non-existant rfid
+```
+test('attempt to use getSkuItem with a non-existant rfid', async () => {
+            let errorValue;
+            const item = await skuItemController.getSkuItem('12345678901234567890123456789019')
+                .catch(error => errorValue = error)
+            assert.equal(errorValue.code, 404)
+        })
+```
+
+## 3) Test Case : attempt to use getSkuItem with an invalid rfid
+```
+test('attempt to use getSkuItem with an invalid rfid', async () => {
+            let errorValue;
+            const item = await skuItemController.getSkuItem('hello')
+                .catch(error => errorValue = error)
+            assert.equal(errorValue.code, 422)
+        })
+```
+
 
 ## **Class *skuItemController* - method *createSkuItem***
 
@@ -2093,16 +2192,16 @@ The input value is the body of the HTTP POST Request
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                  Description of the test case                                                   | Jest test case |
-| :--------: | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |   Valid    |      Valid      |   There is a restock order with the given *restockOrderId* in the database, *returnDate* is valid and products list is valid    |     test('Successfully create a new Return Order')           |
-|   Valid    |   Valid    |  Invalid   |     Invalid     |                                                    products list is invalid                                                     |                |
-|   Valid    |  Invalid   |   Valid    |     Invalid     |                                                     *returnDate* is invalid                                                     |     test('Creation of a Return Order with an invalid date')         |
-|   Valid    |  Invalid   |  Invalid   |     Invalid     |                                           *returnDate* and products list are invalid                                            |                |
-|  Invalid   |   Valid    |   Valid    |     Invalid     |                            There is no restock order with the given *restockOrderId* in the database                            |      test('Creation of a Return Order with an invalid Restock Order id')         |
-|  Invalid   |   Valid    |  Invalid   |     Invalid     |                     There is no restock order with the given *restockOrderId* and products list is invalid                      |                |
-|  Invalid   |  Invalid   |   Valid    |     Invalid     |                      There is no restock order with the given *restockOrderId* and *returnDate* is invalid                      |                |
-|  Invalid   |  Invalid   |  Invalid   |     Invalid     | *returnDate* is invalid, there is no restock order with the given *restockOrderId* in the database and products list is invalid |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                  Description of the test case                                                   |                                                      Jest test case |
+| :--------: | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------: | ------------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |      Valid      |   There is a restock order with the given *restockOrderId* in the database, *returnDate* is valid and products list is valid    |                      test('Successfully create a new Return Order') |
+|   Valid    |   Valid    |  Invalid   |     Invalid     |                                                    products list is invalid                                                     |                                                                     |
+|   Valid    |  Invalid   |   Valid    |     Invalid     |                                                     *returnDate* is invalid                                                     |             test('Creation of a Return Order with an invalid date') |
+|   Valid    |  Invalid   |  Invalid   |     Invalid     |                                           *returnDate* and products list are invalid                                            |                                                                     |
+|  Invalid   |   Valid    |   Valid    |     Invalid     |                            There is no restock order with the given *restockOrderId* in the database                            | test('Creation of a Return Order with an invalid Restock Order id') |
+|  Invalid   |   Valid    |  Invalid   |     Invalid     |                     There is no restock order with the given *restockOrderId* and products list is invalid                      |                                                                     |
+|  Invalid   |  Invalid   |   Valid    |     Invalid     |                      There is no restock order with the given *restockOrderId* and *returnDate* is invalid                      |                                                                     |
+|  Invalid   |  Invalid   |  Invalid   |     Invalid     | *returnDate* is invalid, there is no restock order with the given *restockOrderId* in the database and products list is invalid |                                                                     |
 
 ## 1) Test Case: "Successfully create a new Return Order"
 ```
@@ -2207,10 +2306,10 @@ The input value is the order id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                 Description of the test case                 | Jest test case |
-| :--------: | :-------------: | :----------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no return order with the given *id* in the database |   test('Delete a non-existing Return Order')             |
-|   Valid    |      Valid      | There is a return order with the given *id* in the database  |   test('Successfully delete a Return Order')             |
+| Criteria 1 | Valid / Invalid |                 Description of the test case                 |               Jest test case               |
+| :--------: | :-------------: | :----------------------------------------------------------: | :----------------------------------------: |
+|  Invalid   |     Invalid     | There is no return order with the given *id* in the database | test('Delete a non-existing Return Order') |
+|   Valid    |      Valid      | There is a return order with the given *id* in the database  | test('Successfully delete a Return Order') |
 
 
 ## 1) Test Case: "Successfully delete a Return Order"
@@ -2504,10 +2603,10 @@ The input value is the item id.
 
 **Predicates for method *getItem*:**
 
-|     Criteria     |                      Predicate                       |
-| :--------------: | :--------------------------------------------------: |
-| Validity of *id* | There is no item with the given *id* in the database |
-|                  |        There is an itemr with the given *id*         |
+|     Criteria     |                                     Predicate                                      |
+| :--------------: | :--------------------------------------------------------------------------------: |
+| Validity of *id* | There is no item with the given *id* in the database or id is invalid or undefined |
+|                  |                       There is an itemr with the given *id*                        |
 
 
 
@@ -2520,10 +2619,71 @@ The input value is the item id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                Description of the test case                | Jest test case |
-| :--------: | :-------------: | :--------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     |    There is no item with the given *id* in the database    |                |
-|   Valid    |      Valid      | There is an item order with the given *id* in the database |                |
+| Criteria 1 | Valid / Invalid |                            Description of the test case                            |                                                                Jest test case                                                                |
+| :--------: | :-------------: | :--------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: |
+|  Invalid   |     Invalid     | There is no item with the given *id* in the database or id is invalid or undefined | test('attempt of getItem with undefined id') / test('attempt of getItem with invalid id')  test('attempt of getItem with non-existant item') |
+|   Valid    |      Valid      |             There is an item order with the given *id* in the database             |                                                      test('successful use of getItem')                                                       |
+
+
+## 1) Test case : successful use of getItem
+```
+ test('successful use of getItem', async () => {
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            )
+            await itemController.createItem(
+                {
+                    id: 2,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 2,
+                    supplierId: 1,
+                }
+            )
+
+            const result = await itemController.getItem(2);
+            assert.equal(result.id, 2)
+        })
+```
+
+## 2) Test case : attempt of getItem with undefined id
+```
+        test('attempt of getItem with undefined id', async () => {
+            await itemController.getItem(undefined).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 3) Test case : attempt of getItem with invalid id
+```
+test('attempt of getItem with invalid id', async () => {
+            await itemController.getItem("hello").catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 4) Test case : attempt of getItem with non-existant item
+```
+test('attempt of getItem with non-existant item', async () => {
+            await itemController.getItem(1).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 404)
+        })
+```
+
 
 
 ## **Class *Item* - method *createItem***
@@ -2542,19 +2702,14 @@ The input value is the body of the HTTP POST Request.
 
 **Predicates for method *createItem*:**
 
-|             Criteria             |                                    Predicate                                     |
-| :------------------------------: | :------------------------------------------------------------------------------: |
-|            Price sign            |                                Price is positive                                 |
-|                                  |                                Price is negative                                 |
-| Validity of SKUid per supplierId | The supplier with the chosen supplierId already has an item with the same SKUid  |
-|                                  | The supplier with the chosen supplierId doesn't have an item with the same SKUid |
-|  Validity of id per supplierId   |   The supplier with the chosen supplierId already has an item with the same id   |
-|                                  |  The supplier with the chosen supplierId doesn't have an item with the same id   |
-|        Validity of SKUid         |               There is a SKU with the chosen SKUid in the database               |
-|                                  |              There is no SKU with the chosen SKUid in the database               |
-|      Validity of supplierId      |          There is a supplier with the chosen supplierid in the database          |
-|                                  |         There is no supplier with the chosen supplierid in the database          |
-
+|        Criteria         |                Predicate                 |
+| :---------------------: | :--------------------------------------: |
+|  Validity of *params*   |   The param is not undefined and valid   |
+|                         |    The param is undefined or invalid     |
+| Already existant *item* |    An item with that id doesn't exist    |
+|                         |   An item with that id already exists    |
+|     Skuid validity      |    A sku with the given skuid exists     |
+|                         | A sku with the given skuid doesn't exist |
 
 
 **Boundaries**:
@@ -2570,40 +2725,134 @@ The input value is the body of the HTTP POST Request.
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Valid / Invalid |                                                                             Description of the test case                                                                             | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Positive  |   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |                                                                   This is the only valid combination of predicates                                                                   |                |
-|  Positive  |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                           There is no supplier with the chosen supplierid in the database                                                            |                |
-|  Positive  |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                There is no SKU with the chosen SKUid in the database                                                                 |                |
-|  Positive  |   Valid    |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database                                |                |
-|  Positive  |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                    The supplier with the chosen supplierId already has an item with the same ids                                                     |                |
-|  Positive  |   Valid    |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                           There is no supplier with the chosen supplierid in the database                                                            |                |
-|  Positive  |   Valid    |  Invalid   |  Invalid   |   Valid    |     Invalid     |                         There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id                          |                |
-|  Positive  |   Valid    |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database                                |                |
-|  Positive  |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |                                                   The supplier with the chosen supplierId already has an item with the same SKUid                                                    |                |
-|  Positive  |  Invalid   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                           There is no supplier with the chosen supplierid in the databased                                                           |                |
-|  Positive  |  Invalid   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                There is no SKU with the chosen SKUid in the database                                                                 |                |
-|  Positive  |  Invalid   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database                                |                |
-|  Positive  |  Invalid   |  Invalid   |   Valid    |   Valid    |     Invalid     |            The supplier with the chosen supplierId already has an item with the same id, the supplier with the chosen supplierId already has an item with the same SKUid             |                |
-|  Positive  |  Invalid   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                           There is no supplier with the chosen supplierid in the database                                                            |                |
-|  Positive  |  Invalid   |  Invalid   |  Invalid   |   Valid    |     Invalid     |                         There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id                          |                |
-|  Positive  |  Invalid   |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database                                |                |
-|  Negative  |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                The price is negative                                                                                 |                |
-|  Negative  |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                There is no supplier with the chosen supplierid in the database, the price is negative                                                |                |
-|  Negative  |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                     There is no SKU with the chosen SKUid in the database, the price is negative                                                     |                |
-|  Negative  |   Valid    |   Valid    |  Invalid   |  Invalid   |     Invalid     |                    There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative                     |                |
-|  Negative  |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |                                         The supplier with the chosen supplierId already has an item with the same id, the price is negative                                          |                |
-|  Negative  |   Valid    |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                There is no supplier with the chosen supplierid in the database, the price is negative                                                |                |
-|  Negative  |   Valid    |  Invalid   |  Invalid   |   Valid    |     Invalid     |              There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id, the price is negative              |                |
-|  Negative  |   Valid    |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                    There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative                     |                |
-|  Negative  |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |                                        The supplier with the chosen supplierId already has an item with the same SKUid, the price is negative                                        |                |
-|  Negative  |  Invalid   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                There is no supplier with the chosen supplierid in the database, the price is negative                                                |                |
-|  Negative  |  Invalid   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                     There is no SKU with the chosen SKUid in the database, the price is negative                                                     |                |
-|  Negative  |  Invalid   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                    There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative                     |                |
-|  Negative  |  Invalid   |  Invalid   |   Valid    |   Valid    |     Invalid     | The supplier with the chosen supplierId already has an item with the same id, the supplier with the chosen supplierId already has an item with the same SKUid, the price is negative |                |
-|  Negative  |  Invalid   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                There is no supplier with the chosen supplierid in the database, the price is negative                                                |                |
-|  Negative  |  Invalid   |  Invalid   |  Invalid   |   Valid    |     Invalid     |              There is no SKU with the chosen SKUid in the database, the supplier with the chosen supplierId already has an item with the same id, the price is negative              |                |
-|  Negative  |  Invalid   |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                    There is no SKU with the chosen SKUid in the database, there is no supplier with the chosen supplierid in the database, the price is negative                     |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Description of test case | Jest test case |
+| :--------: | :--------: | :--------: | :----------------------: | :------------: |
+|            |            |            |                          |                |
+
+
+## 1) Test case : successful use of createItem
+```
+ test('successful use of createItem', async () => {
+
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            )
+
+            const result = await itemController.getItem(1);
+            assert.equal(result.id, 1)
+        })
+```
+
+## 2) Test case : attempt of createItem with an undefined parameter
+```
+ test('attempt of createItem with an undefined parameter', async () => {
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: undefined,
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            ).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 3) Test case : attempt of createItem with an invalid id
+```
+ test('attempt of createItem with an invalid id', async () => {
+            await itemController.createItem(
+                {
+                    id: "hello",
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            ).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 4) Test case : attempt of createItem with a negative parameter
+```
+test('attempt of createItem with a negative parameter', async () => {
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: -10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            ).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+
+```
+
+## 5) Test case : attempt of createItem with a non-existant sku
+```
+test('attempt of createItem with a non-existant sku', async () => {
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            ).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 404)
+        })
+```
+
+## 6) Test case : attempt of createItem with an already existant item
+```
+test('attempt of createItem with an already existant item', async () => {
+
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+
+
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            )
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            ).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+```
+
 
 ## **Class *Item* - method *editItem***
 
@@ -2618,12 +2867,12 @@ The input value is the item id and the body of the HTTP PUT Request
 
 **Predicates for method *editItem*:**
 
-|     Criteria     |                      Predicate                       |
-| :--------------: | :--------------------------------------------------: |
-| Validity of *id* | There is no item with the given *id* in the database |
-|                  |         There is an item with the given *id*         |
-|  Sign of price   |                   Sign is positive                   |
-|                  |                   Sign is negative                   |
+|       Criteria       |                                     Predicate                                      |
+| :------------------: | :--------------------------------------------------------------------------------: |
+|   Validity of *id*   | There is no item with the given *id* in the database or id is undefined or invalid |
+|                      |                        There is an item with the given *id*                        |
+| Validity of *params* |                                  Params are valid                                  |
+|                      |                                 Params are invalid                                 |
 
 
 
@@ -2637,12 +2886,89 @@ The input value is the item id and the body of the HTTP PUT Request
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                            Description of the test case                             | Jest test case |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------: | :------------: |
-|   Valid    |  Positive  |      Valid      | There is an item order with the given *id* in the database and the sign is positive |                |
-|   Valid    |  Negative  |     Invalid     |                                The sign is negative                                 |                |
-|  Invalid   |  Positive  |     Invalid     |                There is no item with the given *id* in the database                 |                |
-|  Invalid   |  Negative  |     Invalid     |     The sign is negative, there is no item with the given *id* in the database      |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                            Description of the test case                             |                                                                              Jest test case                                                                              |
+| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|   Valid    |  Positive  |      Valid      | There is an item order with the given *id* in the database and the sign is positive |                                                                    test('successful use of editItem')                                                                    |
+|   Valid    |  Negative  |     Invalid     |                                 Params are invalid                                  | test('attempt of editItem with a negative parameter') /   test('attempt of editItem with a invalid parameter') /  test('attempt of editItem with a undefined parameter') |
+|  Invalid   |  Positive  |     Invalid     | There is no item with the given *id* in the database or id is undefined or invalid  |                                                           test('attempt of editItem with a non-existant item')                                                           |
+
+
+## 1) Test case : successful use of editItem
+```
+test('successful use of editItem', async () => {
+
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            )
+
+            await itemController.editItem(1, {
+                newDescription: "newDescription",
+                newPrice: 15,
+            })
+
+            const result = await itemController.getItem(1);
+            assert.equal(result.description, "newDescription")
+
+        })
+```
+
+## 2) Test case : attempt of editItem with an undefined parameter
+```
+test('attempt of editItem with an undefined parameter', async() => {
+            await itemController.editItem(1, {
+                newDescription: undefined,
+                newPrice: 15,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+
+```
+
+## 3) Test case : attempt of editItem with a invalid parameter
+```
+test('attempt of editItem with a invalid parameter', async() => {
+            await itemController.editItem(1, {
+                newDescription: "newDescription",
+                newPrice: "hello",
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 4) Test case : attempt of editItem with a negative parameter
+```
+test('attempt of editItem with a negative parameter', async() => {
+            await itemController.editItem(1, {
+                newDescription: "newDescription",
+                newPrice: -15,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 5) Test case : attempt of editItem with a non-existant item
+```
+test('attempt of editItem with a non-existant item', async() => {
+            await itemController.editItem(1, {
+                newDescription: "newDescription",
+                newPrice: 15,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 404)
+        })
+```
+
 
 ## **Class *Item* - method *deleteItem***
 
@@ -2656,10 +2982,10 @@ The input value is the item id.
 
 **Predicates for method *deleteItem*:**
 
-|     Criteria     |                      Predicate                       |
-| :--------------: | :--------------------------------------------------: |
-| Validity of *id* | There is no item with the given *id* in the database |
-|                  |         There is an item with the given *id*         |
+|     Criteria     |           Predicate           |
+| :--------------: | :---------------------------: |
+| Validity of *id* |   The id parameter is valid   |
+|                  | The id parameter is not valid |
 
 
 
@@ -2672,10 +2998,55 @@ The input value is the item id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                Description of the test case                | Jest test case |
-| :--------: | :-------------: | :--------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     |    There is no item with the given *id* in the database    |                |
-|   Valid    |      Valid      | There is an item order with the given *id* in the database |                |
+| Criteria 1 | Valid / Invalid | Description of the test case |                                         Jest test case                                          |
+| :--------: | :-------------: | :--------------------------: | :---------------------------------------------------------------------------------------------: |
+|  Invalid   |     Invalid     | The id parameter is invalid  | test('attempt of deleteItem with undefined id') / test('attempt of deleteItem with invalid id') |
+|   Valid    |      Valid      |  TThe id parameter is valid  |                              test('successful use of deleteItem')                               |
+
+
+## 1) Test case: successful use of deleteItem
+```
+test('successful use of deleteItem', async () => {
+
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+
+            await itemController.createItem(
+                {
+                    id: 1,
+                    description: "description",
+                    price: 10.99,
+                    SKUId: 1,
+                    supplierId: 1,
+                }
+            )
+
+            const result = await itemController.getItem(1);
+            assert.equal(result.id, 1)
+            await itemController.deleteItem(1)
+            await itemController.getItem(1).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 404)
+        })
+```
+
+## 2) Test case: attempt of deleteItem with undefined id
+```
+test('attempt of deleteItem with undefined id', async () => {
+            await itemController.deleteItem(undefined).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 3) Test case: attempt of deleteItem with invalid id
+```
+test('attempt of deleteItem with invalid id', async () => {
+            await itemController.deleteItem("hello").catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422)
+        })
+```
 
 
 
@@ -2739,6 +3110,31 @@ The input value is the item id.
 |                                                           | test("Edit a non-existing Internal Order")                     |
 | internalOrderController.js -> deleteInternalOrder(id)     | test("Successfully delete an Internal Order")                  |
 |                                                           | test("Delete a non-existing Internal Order")                   |
+
+
+
+| Unit name                              | Jest test case                                              |
+| -------------------------------------- | ----------------------------------------------------------- |
+| itemController.js -> getAllItems()     | test('successful use of getAllItems')                       |
+|                                        |                                                             |
+| itemController.js -> getItem(id)       | test('successful use of getItem')                           |
+|                                        | test('attempt of getItem with undefined id')                |
+|                                        | test('attempt of getItem with invalid id')                  |
+|                                        | test('attempt of getItem with non-existant item')           |
+| itemController.js -> createItem(body)  | test('successful use of createItem')                        |
+|                                        | test('attempt of createItem with an undefined parameter')   |
+|                                        | test('attempt of createItem with an invalid id')            |
+|                                        | test('attempt of createItem with a negative parameter')     |
+|                                        | test('attempt of createItem with a non-existant sku')       |
+|                                        | test('attempt of createItem with an already existant item') |
+| itemController.js -> editItem(id,body) | test('successful use of editItem')                          |
+|                                        | test('attempt of editItem with an undefined parameter')     |
+|                                        | test('attempt of editItem with a invalid parameter')        |
+|                                        | test('attempt of editItem with a negative parameter')       |
+|                                        | test('attempt of editItem with a non-existant item')        |
+| itemController.js -> deleteItem(id)    | test('successful use of deleteItem')                        |
+|                                        | test('attempt of deleteItem with undefined id')             |
+|                                        | test('attempt of deleteItem with invalid id')               |
 
 
 ### Code coverage report
