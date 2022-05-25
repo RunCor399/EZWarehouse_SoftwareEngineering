@@ -18,7 +18,9 @@ Version: 1.0
   - [Internal Orders Controllers Test Suite](#internal-orders-controllers-test-suite)
   - [SkuItem Controller Test Suite](#skuitem-controller-test-suite)
   - [Position Controller Test Suite](#position-controller-test-suite)
-  - [Test Suite n](#test-suite-n)
+  - [SKU Controller Test Suite](#sku-controller-test-suite)
+  - [User Controller Test Suite](#user-controller-test-suite)
+  - [Test Descriptor Controller Test Suite](#test-descriptor-controller-test-suite)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
     - [](#)
@@ -84,16 +86,17 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 
 ## Internal Orders Controllers Test Suite
-| Classes                                                   | Jest test cases                                                |
-| --------------------------------------------------------- | -------------------------------------------------------------- |
-| controller.js - internalOrderController.js - dbManager.js | test("Successfully add a new Internal Order to Database")      |
-| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with malformed date")     |
-| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with invalid customerId") |
-| controller.js - internalOrderController.js - dbManager.js | test("Successfully edit an Internal Order")                    |
-| controller.js - internalOrderController.js - dbManager.js | test("Edit an Internal Order with an invalid state")           |
-| controller.js - internalOrderController.js - dbManager.js | test("Edit a non-existing Internal Order")                     |
-| controller.js - internalOrderController.js - dbManager.js | test("Successfully delete an Internal Order")                  |
-| controller.js - internalOrderController.js - dbManager.js | test("Delete a non-existing Internal Order")                   |
+| Classes                                                   | Jest test cases                                                      |
+| --------------------------------------------------------- | -------------------------------------------------------------------- |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully add a new Internal Order to Database")            |
+| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with malformed date")           |
+| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with invalid customerId")       |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully edit an Internal Order with state = 'ACCEPTED'")  |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully edit an Internal Order with state = 'COMPLETED'") |
+| controller.js - internalOrderController.js - dbManager.js | test("Edit an Internal Order with an invalid state")                 |
+| controller.js - internalOrderController.js - dbManager.js | test("Edit a non-existing Internal Order")                           |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully delete an Internal Order")                        |
+| controller.js - internalOrderController.js - dbManager.js | test("Delete a non-existing Internal Order")                         |
 
 
 ## SkuItem Controller Test Suite
@@ -158,14 +161,68 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 | controller.js - positionController.js - dbManager.js | test('attempt of checkPositionID with invalid col')                |
 | controller.js - positionController.js - dbManager.js | test('attempt of checkPositionID with incompatible codes')         |
 
+## SKU Controller Test Suite 
+| Classes                                         | Jest test cases                                                                                                                |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| controller.js - skuController.js - dbManager.js | test('successful use of getAllSku')                                                                                            |
+| controller.js - skuController.js - dbManager.js | test('successful use of getSku')                                                                                               |
+| controller.js - skuController.js - dbManager.js | test('use of getSku with invalid id')                                                                                          |
+| controller.js - skuController.js - dbManager.js | test('use of getSku with non-existant sku')                                                                                    |
+| controller.js - skuController.js - dbManager.js | test("Successfully add new Sku to Database")                                                                                   |
+| controller.js - skuController.js - dbManager.js | test("Insertion of a sku with a missing value")                                                                                |
+| controller.js - skuController.js - dbManager.js | test("Insertion of a Sku with negative volume")                                                                                |
+| controller.js - skuController.js - dbManager.js | test('Successfully edit a sku')                                                                                                |
+| controller.js - skuController.js - dbManager.js | test('Edit a sku with an invalid new volume')                                                                                  |
+| controller.js - skuController.js - dbManager.js | test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored')              |
+| controller.js - skuController.js - dbManager.js | test('Edit a non-existing Sku')                                                                                                |
+| controller.js - skuController.js - dbManager.js | test('Edit a sku with an undefined value)                                                                                      |
+| controller.js - skuController.js - dbManager.js | test('Successfully edit a position of a sku')                                                                                  |
+| controller.js - skuController.js - dbManager.js | test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku ') |
+| controller.js - skuController.js - dbManager.js | test('Edit a non-existing Sku')                                                                                                |
+| controller.js - skuController.js - dbManager.js | test('Edit a Sku with a non-existing position ')                                                                               |
+| controller.js - skuController.js - dbManager.js | etst('Successfully delete a Sku')                                                                                              |
+| controller.js - skuController.js - dbManager.js | test('attempt to delete a Sku with an invalid skuid')                                                                          |
+| controller.js - skuController.js - dbManager.js | test('Delete a non-existing Sku')                                                                                              |
+
+## User Controller Test Suite 
+| Classes                                          | Jest test cases                                                      |
+| ------------------------------------------------ | -------------------------------------------------------------------- |
+| controller.js - userController.js - dbManager.js | test("Succesful test, user is manager and is logged")                |
+| controller.js - userController.js - dbManager.js | test("Failure test, user is not logged")                             |
+| controller.js - userController.js - dbManager.js | test("Succesfully get the manager")                                  |
+| controller.js - userController.js - dbManager.js | test("Succesfully get an user ")                                     |
+| controller.js - userController.js - dbManager.js | test("Test failure, user is not logged")                             |
+| controller.js - userController.js - dbManager.js | test("Succesfully get all the Suppliers")                            |
+| controller.js - userController.js - dbManager.js | test("Succesfully get all the Users")                                |
+| controller.js - userController.js - dbManager.js | test("Succesful creation of a new user")                             |
+| controller.js - userController.js - dbManager.js | test("Not succesfull creation, user with same email and type exist") |
+| controller.js - userController.js - dbManager.js | test("Not succesful creation, attempted to create a manager" )       |
+| controller.js - userController.js - dbManager.js | test("Succesful login")                                              |
+| controller.js - userController.js - dbManager.js | test("Failed login, the username is not in the body")                |
+| controller.js - userController.js - dbManager.js | test("Failed login, wrong username")                                 |
+| controller.js - userController.js - dbManager.js | ttest("Succesful logout, user is logged")                            |
+| controller.js - userController.js - dbManager.js | test("Failure, the user is not logged")                              |
+| controller.js - userController.js - dbManager.js | test("Succesful test, edit done")                                    |
+| controller.js - userController.js - dbManager.js | test("Failure, wrong username")                                      |
+| controller.js - userController.js - dbManager.js | test("Failure, tryng to change type into manager")                   |
+| controller.js - userController.js - dbManager.js | test("Succesfully delete an user")                                   |
+| controller.js - userController.js - dbManager.js | test("User not deleted, trying to delete a manager")                 |
+| controller.js - userController.js - dbManager.js | test("User not deleted, trying to delete a non existing user")       |
 
 
-## Test Suite n 
 
+## Test Descriptor Controller Test Suite
    
-| Classes | Jest test cases |
-| ------- | --------------- |
-|         |                 |
+| Classes                                                    | Jest test cases                                                |
+| ---------------------------------------------------------- | -------------------------------------------------------------- |
+| controller.js - testDescriptorController.js - dbManager.js | test("Successfully create a Test Descriptor")                  |
+| controller.js - testDescriptorController.js - dbManager.js | test("Insertion of a test descriptor with a non-existing SKU") |
+| controller.js - testDescriptorController.js - dbManager.js | test("Insertion of a test descriptor with invalid body")       |
+| controller.js - testDescriptorController.js - dbManager.js | test("Successfully edit a Test Descriptor")                    |
+| controller.js - testDescriptorController.js - dbManager.js | test("Edit a Test Descriptor with invalid id")                 |
+| controller.js - testDescriptorController.js - dbManager.js | test("Edit a Test Descriptor with a non-existent SKU")         |
+| controller.js - testDescriptorController.js - dbManager.js | test("Successfully delete a Test Descriptor")                  |
+| controller.js - testDescriptorController.js - dbManager.js | test("Delete a non-existing Test Descriptor")                  |
 
 
 
@@ -178,26 +235,35 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 
 
-| Scenario ID   | Functional Requirements covered | Mocha  Test(s)                                      |
-| ------------- | ------------------------------- | --------------------------------------------------- |
-| 3-1, 3-2      | FR 5.1, 5.2, 5.3, 5.5           | Succesfully add and get a new Restock Order         |
-| 3-1, 3-2      | FR 5.2, 5.3                     | Successfully add a list of SKUItems                 |
-| 3             | FR 5.6                          | Successfully add a transportNote to a Restock Order |
-| 5-2-1 - 5-2-3 | FR 5.7                          | Edit restock order state                            |
-| /             | FR 5                            | Successfully delete a Restock Order                 |
-| 6             | FR 5.9                          | Successfully create a new Return Order              |
-| 6             | FR 5.11                         | Successfully delete a Return Order                  |
-| 9.1           | FR 6                            | Successfully add a new Internal Order               |
-| 9.3           | FR 6                            | Successfully delete an internal order               |
-| 11.1          | FR 7                            | Successfully add a new Item                         |
-| 11.2          | FR 7                            | Successfully edit an Item                           |
-|               | FR 2.1                          | Successfully created a sku                          |
-|               | FR 2.2                          | Successfully deleted a sku                          |
-|               | FR 2.3                          | Successfully got a list of SKUs                     |
-|               | FR 3.1.1                        | Successfully created/edited a position              |
-|               | FR 3.1.2                        | Successfully deleted a position                     |
-|               | FR 3.1.3                        | Successfully got a list of positions                |
-|               | FR 3.1.4                        | Successfully edited a position                      |
+| Scenario ID   | Functional Requirements covered | Mocha  Test(s)                                                                               |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------- |
+| 3-1, 3-2      | FR 5.1, 5.2, 5.3, 5.5           | Succesfully add and get a new Restock Order                                                  |
+| 3-1, 3-2      | FR 5.2, 5.3                     | Successfully add a list of SKUItems                                                          |
+| 3             | FR 5.6                          | Successfully add a transportNote to a Restock Order                                          |
+| 4             | FR1.3, FR1.4                    | Succesfully get all user info                                                                |
+| 4-1           | FR1.1                           | Succesfully add a new user                                                                   |
+| 4-2           | FR1.1, 1.5                      | Succesfully edit user                                                                        |
+| 4-3           | FR1.2                           | Succesfully delete a user                                                                    |
+| 5-2-1 - 5-2-3 | FR 5.7, 5.8.2                   | Edit restock order state, Succesfully add a new Test result                                  |
+| /             | FR 5                            | Successfully delete a Restock Order                                                          |
+| 6             | FR 5.9                          | Successfully create a new Return Order                                                       |
+| 6             | FR 5.11                         | Successfully delete a Return Order                                                           |
+| 7-1           | FR1.5                           | Succesfully log a customer, manager, supplier, clerk, quality employee and delivery amployee |
+| 7-2           | FR1.5                           | Succesfully logout                                                                           |
+| 9.1           | FR 6                            | Successfully add a new Internal Order                                                        |
+| 9.3           | FR 6                            | Successfully delete an internal order                                                        |
+| 11.1          | FR 7                            | Successfully add a new Item                                                                  |
+| 11.2          | FR 7                            | Successfully edit an Item                                                                    |
+| 12-1          | FR3.2.1                         | Succesfully add a new Test Descriptor                                                        |
+| 12-2          | FR3.2.2                         | Succesfully edit Test Descriptor                                                             |
+| 12-3          | FR3.2.3                         | Succesfully delete a Test Descriptor                                                         |
+|               | FR 2.1                          | Successfully created a sku                                                                   |
+|               | FR 2.2                          | Successfully deleted a sku                                                                   |
+|               | FR 2.3                          | Successfully got a list of SKUs                                                              |
+|               | FR 3.1.1                        | Successfully created/edited a position                                                       |
+|               | FR 3.1.2                        | Successfully deleted a position                                                              |
+|               | FR 3.1.3                        | Successfully got a list of positions                                                         |
+|               | FR 3.1.4                        | Successfully edited a position                                                               |
 
 
 # Coverage of Non Functional Requirements
@@ -208,10 +274,10 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 ### 
 
-| Non Functional Requirement | Test name                                                              |
-| -------------------------- | ---------------------------------------------------------------------- |
-| NFR2                       | All                                                                    |
-| NFR3                       | All                                                                    |
-| NFR4                       | RestockOrderAPITest.js, ReturnOrderAPITest.js, PositionAPITest.js      |
-| NFR6                       | RestockOrderAPITest.js, ReturnOrderAPITest.js, SkuItemAPITest.js       |
-| NFR9                       | InternalOrderAPITest.js, RestockOrderAPITest.js, ReturnOrderAPITest.js |
+| Non Functional Requirement | Test name                                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------------------- |
+| NFR2                       | All                                                                                          |
+| NFR3                       | All                                                                                          |
+| NFR4                       | RestockOrderAPITest.js, ReturnOrderAPITest.js, PositionAPITest.js                            |
+| NFR6                       | RestockOrderAPITest.js, ReturnOrderAPITest.js, SkuItemAPITest.js                             |
+| NFR9                       | InternalOrderAPITest.js, RestockOrderAPITest.js, ReturnOrderAPITest.js, TestResultAPITest.js |

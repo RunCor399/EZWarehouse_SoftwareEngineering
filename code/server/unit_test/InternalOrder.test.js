@@ -90,7 +90,7 @@ describe('InternalOrderController Tests', () => {
         test("Successfully edit an Internal Order with state = 'COMPLETED'", async () => {
             let result;
             const list = [];
-            const counter = list.length;
+            //const counter = list.length;
             const body = {
                 newState: "COMPLETED",
                 products: list
