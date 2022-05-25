@@ -5109,16 +5109,32 @@ test('attempt of deleteItem with invalid id', async () => {
 | testDescriptorController.js -> deleteTestDescriptor(id)     | test("Successfully delete a Test Descriptor")                  |
 |                                                             | test("Delete a non-existing Test Descriptor")                  |
 
-| Unit name                                                 | Jest test case |
-| --------------------------------------------------------- | -------------- |
-| testResultController.js -> createtestResult(body)         | test("")       |
-|                                                           | test("")       |
-|                                                           | test("")       |
-| testResultController.js -> editTestResult(rfid, id, body) | test("")       |
-|                                                           | test("")       |
-|                                                           | test("")       |
-| testResultrController.js -> deleteTestResult(rfid, id)    | test("")       |
-|                                                           | test("")       |
+| Unit name                                                 | Jest test case                                                          |
+| --------------------------------------------------------- | ----------------------------------------------------------------------- |
+| testResultController.js -> getTestResults(rfid)           | test("successful use of getTestResults")                                |
+|                                                           | test("attempt of getTestResults with an undefined parameter")           |
+|                                                           | test("attempt of getTestResults with an invalid parameter")             |
+|                                                           | test("attempt of getTestResults with a non-existant rfid")              |
+| testResultController.js -> getTestResult(rfid, id)        | test("successful use of getTestResult")                                 |
+|                                                           | test("attempt of getTestResults with an undefined parameter")           |
+|                                                           | test("attempt of getTestResult with an invalid parameter")              |
+|                                                           | test("attempt of getTestResults with a non-existant testResult")        |
+| testResultController.js -> createtestResult(body)         | test("Successful use of createTestResult")                              |
+|                                                           | test("attempt of createTestResult with a non-existant test descriptor") |
+|                                                           | test("attempt of createTestResult with a non-existant skuitem")         |
+|                                                           | test("attempt of createTestResult with an undefined parameter")         |
+|                                                           | test("attempt of createTestResult with an invalid parameter")           |
+|                                                           | test("attempt of createTestResult with an invalid date")                |
+| testResultController.js -> editTestResult(rfid, id, body) | test("successful use of editTestResult")                                |
+|                                                           | test("attempt of editTestResult with an undefined parameter")           |
+|                                                           | test("attempt of editTestResult with an invalid parameter")             |
+|                                                           | test("attempt of editTestResult with a non-existant testDescriptor")    |
+|                                                           | test("attempt of editTestResult with a non-existant testResult")        |
+|                                                           | test("attempt of editTestResult with a non-existant skuitem")           |
+| testResultrController.js -> deleteTestResult(rfid, id)    | test("deleteTestResult method testing")                                 |
+|                                                           | test("attempt of deleteTestResult with an undefined parameter")         |
+|                                                           | test("attempt of deleteTestResult with an invalid parameter")           |
+
 
 
 ### Code coverage report
