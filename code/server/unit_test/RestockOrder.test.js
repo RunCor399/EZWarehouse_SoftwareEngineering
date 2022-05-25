@@ -136,11 +136,39 @@ describe('RestockOrderController Tests', () => {
         test("Failed to add SKU Items due to invalid SKU", async () => {
             let result;
 
-            const list = {skuItems : {"skuItems" : [{"SKUId":100, "rfid":"01234567812345678990123456789016"}]}};
+            const list = [{"SKUId":100, "rfid":"01234567812345678990123456789016"}];
                 
             await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
-            let response = await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list}).catch(() => {});
+            await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list}).catch(() => {});
+       
+            result = await restockOrderController.getRestockOrder(1);
+
+            expect(result.products.length).to.be.equal(0);
+            expect(result.products.length).to.be.equal(0);
         });
+
+        test("Get restock order to be returned", async () => {
+            let result;
+            
+            result = await restockOrderController.getRestockOrderToBeReturned(2);
+
+            expect(result.length).to.be.equal(0);
+
+        });
+
+        test("Get restock order to be returned with wrong params", async () => {
+            let result1, result2, result3;
+            
+            result1 = await restockOrderController.getRestockOrderToBeReturned(100).catch(() => {});
+            result2 = await restockOrderController.getRestockOrderToBeReturned("test").catch(() => {});
+            
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
+            result3 = await restockOrderController.getRestockOrderToBeReturned(1).catch(() => {});
+
+            expect(result1).to.be.undefined;
+            expect(result2).to.be.undefined;
+            expect(result3).to.be.undefined;
+        })
     });
 
     describe('deleteRestockOrder method testing', () => {
@@ -171,11 +199,6 @@ describe('RestockOrderController Tests', () => {
     describe('getMethodsTesting',  () => {
         let result;
 
-        test('Get Products in a Restock Order Test', async () => {
-           result = await restockOrderController.getProductsForOrders(1);
-           
-           expect(result.length).to.be.equal(0);
-        })
 
         test('Add and Get a Transport Note in a Restock Order Test', async () => {
             await restockOrderController.editRestockOrder(1, {newState:"DELIVERY"});
@@ -192,9 +215,9 @@ describe('RestockOrderController Tests', () => {
          test('Failed to add transportNote due to state', async () => {
             await restockOrderController.editRestockOrder(1, {newState:"COMPLETED"});
 
-            const transportNote =  {transportNote:{"deliveryDate":"2022/03/03"}};
+            const transportNote =  {"deliveryDate":"2022/03/03"};
 
-            await restockOrderController.addTransportNote(1, transportNote).catch(() => {})
+            await restockOrderController.addTransportNote(1, {transportNote:transportNote}).catch(() => {})
             result = await restockOrderController.getTransportNote(1);
 
             expect(result["transportNote"]).to.be.equal('');
@@ -202,9 +225,9 @@ describe('RestockOrderController Tests', () => {
 
          test('Failed to add transportNote due to invalid date', async () => {
 
-            const transportNote =  {transportNote:{"deliveryDate":"12345"}};
+            const transportNote = {"deliveryDate":"12345"};
 
-            await restockOrderController.addTransportNote(1, transportNote).catch(() => {})
+            await restockOrderController.addTransportNote(1, {transportNote:transportNote}).catch(() => {})
             result = await restockOrderController.getTransportNote(1);
 
             expect(result["transportNote"]).to.be.equal('');
@@ -212,9 +235,9 @@ describe('RestockOrderController Tests', () => {
 
          test('Failed to add transportNote due to old delivery date', async () => {
 
-            const transportNote =  {transportNote:{"deliveryDate":"2020/01/01"}};
+            const transportNote =  {"deliveryDate":"2020/01/01"};
 
-            await restockOrderController.addTransportNote(1, transportNote).catch(() => {})
+            await restockOrderController.addTransportNote(1, {transportNote:transportNote}).catch(() => {})
             result = await restockOrderController.getTransportNote(1);
 
             expect(result["transportNote"]).to.be.equal('');
@@ -224,9 +247,7 @@ describe('RestockOrderController Tests', () => {
 
 
 
-/*test("", async () => {
-    
-});*/
+
 
 
 
