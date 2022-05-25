@@ -3414,12 +3414,13 @@ The input value is the body of the HTTP PUT Request and the order id
 
 | Criteria 1 | Criteria 2 | Valid / Invalid |                                      Description of the test case                                       |                                       Jest test case |
 | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------: | ---------------------------------------------------: |
-|   Valid    |   Valid    |      Valid      | There is a order with the given *id* in the database, the new state is either "ACCEPTED" or "COMPLETED" |          test("Successfully edit an Internal Order") |
+|   Valid    |   Valid    |      Valid      | There is a order with the given *id* in the database, the new state is "ACCEPTED"|          test("Successfully edit an Internal Order with state = 'ACCEPTED'") |
+|   Valid    |   Valid    |      Valid      | There is a order with the given *id* in the database, the new state is "COMPLETED"|          test("Successfully edit an Internal Order with state = 'COMPLETED'") |
 |   Valid    |  Invalid   |     Invalid     |                                    The *state* is an invalid string                                     | test("Edit an Internal Order with an invalid state") |
 |  Invalid   |   Valid    |     Invalid     |                          There is no order with the given *id* in the database                          |           test("Edit a non-existing Internal Order") |
 |  Invalid   |  Invalid   |     Invalid     |         The *state* is an invalid string, there is no order with the given *id* in the database         |                                                      |
 
-## 1) Test Case: "Successfully edit an Internal Order"
+## 1) Test Case: "Successfully edit an Internal Order with state = 'ACCEPTED'"
 ```
     let result;
     const body = { newState: "ACCEPTED" };
@@ -3432,7 +3433,25 @@ The input value is the body of the HTTP PUT Request and the order id
     expect(newState).to.be.equal("ACCEPTED");
 ```
 
-## 2) Test Case: "Edit an Internal Order with an invalid state"
+## 2) Test Case: "Successfully edit an Internal Order with state = 'COMPLETED'"
+```
+    let result;
+    const list = [];
+    const body = {
+        newState: "COMPLETED",
+        products: list
+    };
+    let newState, prods;
+
+    await internalOrderController.editInternalOrder(1, body);
+    result = await internalOrderController.getInternalOrder(1);
+    newState = result['state'];
+    prods = result['products'];
+
+    expect(newState).to.be.equal("COMPLETED");
+```
+
+## 3) Test Case: "Edit an Internal Order with an invalid state"
 ```
     let result;
     const body = { newState: "INVALID_STATE" };
@@ -3448,7 +3467,7 @@ The input value is the body of the HTTP PUT Request and the order id
     expect(newState).to.be.equal(oldState);
 ```
 
-## 3) Test Case: "Edit a non-existing Internal Order"
+## 4) Test Case: "Edit a non-existing Internal Order"
 ```
     let result;
     const body = { newState: "ACCEPTED" };
