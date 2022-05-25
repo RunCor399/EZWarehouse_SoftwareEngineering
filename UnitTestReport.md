@@ -4,17 +4,6 @@ Date:
 
 Version:
 
-# Contents
-
-- [Black Box Unit Tests](#black-box-unit-tests)
-    + [createSku](#createSKU)
-
-
-
-
-- [White Box Unit Tests](#white-box-unit-tests)
-
-
 # Black Box Unit Tests
 
     <Define here criteria, predicates and the combination of predicates for each function of each class.
@@ -454,22 +443,22 @@ The input value is the SkuItemid.
 
 The input value is the body of the HTTP POST Request.
 
-**Criteria for method *getSkuItem*:**
+**Criteria for method *createSkuItem*:**
  - Validity of *skuid*	
  - Format of  *dateOfStock*
- - Usage of *rfid*
+ - Validity of *rfid*
 
 
 
 
-**Predicates for method *getSkuItem*:**
+**Predicates for method *createSkuItem*:**
 
 |         Criteria         |                                Predicate                                 |
 | :----------------------: | :----------------------------------------------------------------------: |
 |   Validity of *skuid*    |        There is no SKU with the specified *skuid* in the database        |
 |                          |        There is a SKU with the specified *skuid* in the database         |
-|     Usage of *rfid*      |      There is no SKU item with the specified *rfid* in the database      |
-|                          |      There is a SKU Item with the specified *rfid* in the database       |
+|    Validity of *rfid*    |                         RFID has a valid format                          |
+|                          |                       RFID has not a valid format                        |
 | Format of  *dateOfStock* | The date format is a valid one (NULL, "YYYY/MM/DD" or"YYYY/MM/DD HH:MM") |
 |                          |                    The date format is an invalid one                     |
 
@@ -482,23 +471,108 @@ The input value is the body of the HTTP POST Request.
 |         Criteria         |  Boundary values  |
 | :----------------------: | :---------------: |
 |   Validity of *skuid*    | No boundary found |
-|     Usage of *rfid*      | No boundary found |
+|    Validity of *rfid*    | No boundary found |
 | Format of  *dateOfStock* | No boundary found |
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                               Description of the test case                                                               | Jest test case |
-| :--------: | :--------: | :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Present   |   Valid    |   In use   |     Invalid     |                                                       The rfid is already used by another SKUItem                                                        |                |
-|  Present   |   Valid    | Not in use |      Valid      |                    The rfid is not used by another SKUItem, the date format is valid and the sku id is associated to an existing sku                     |                |
-|  Present   |  Invalid   |   In use   |     Invalid     |                                        The rfid is already used by another SKUItem, the date format is not valid                                         |                |
-|  Present   |  Invalid   | Not in use |     Invalid     |                                                               The date format is not valid                                                               |                |
-|   Absent   |   Valid    |   In use   |     Invalid     |                                    The rfid is already used by another SKUItem, there is no SKU with the specified id                                    |                |
-|   Absent   |   Valid    | Not in use |     Invalid     | The rfid is not used by another SKUItem, the date format is valid and the sku id is associated to an existing sku, there is no SKU with the specified id |                |
-|   Absent   |  Invalid   |   In use   |     Invalid     |                     The rfid is already used by another SKUItem, the date format is not valid, there is no SKU with the specified id                     |                |
-|   Absent   |  Invalid   | Not in use |     Invalid     |                                           The date format is not valid, there is no SKU with the specified id                                            |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                    Description of the test case                                                    |                      Jest test case                       |
+| :--------: | :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------: |
+|  Present   |   Valid    |  Invalid   |     Invalid     |                                                        The rfid is invalid                                                         |    test('attempt to create SkuItem with invalid rfid')    |
+|  Present   |   Valid    |   Valid    |      Valid      |                  The rfid is not Valid, the date format is valid and the sku id is associated to an existing sku                   |   test('successful use of createSku and createSKUitem')   |
+|  Present   |  Invalid   |  Invalid   |     Invalid     |                                         The rfid is invalid, the date format is not valid                                          |                                                           |
+|  Present   |  Invalid   |   Valid    |     Invalid     |                                                    The date format is not valid                                                    |    test('attempt to create SkuItem with invalid date')    |
+|   Absent   |   Valid    |  Invalid   |     Invalid     |                                     The rfid is invalid, there is no SKU with the specified id                                     | test('attempt to create SkuItem with non-existent SKUId') |
+|   Absent   |   Valid    |   Valid    |     Invalid     | The rfid is valid, the date format is valid and the sku id is associated to an existing sku, there is no SKU with the specified id |                                                           |
+|   Absent   |  Invalid   |  Invalid   |     Invalid     |                      The rfid is invalid, the date format is not valid, there is no SKU with the specified id                      |                                                           |
+|   Absent   |  Invalid   |   Valid    |     Invalid     |                                The date format is not valid, there is no SKU with the specified id                                 |                                                           |
+
+## 1) Test case: successful use of createSku and createSKUitem'
+```
+test('successful use of createSku and createSKUitem', async () => {
+                await skuController.createSku(
+                {
+                    "description": "a new sku",
+                    "weight": 100,
+                    "volume": 50,
+                    "notes": "second SKU",
+                    "price": 10.99,
+                    "availableQuantity": 50
+                }
+            ).catch(error => (console.log(error)))
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+            const value = await skuItemController.getSkuItem(rfid)
+                .catch(error => (console.log(error)))
+            assert.equal(value.RFID, rfid)
+        })
+```
+
+## 2) Test case: attempt to create SkuItem with invalid rfid
+```
+ test('attempt to create SkuItem with invalid rfid', async () => {
+                 let errorValue;
+            const rfid = 'hello';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 3) Test case: attempt to create SkuItem with invalid date
+```
+test('attempt to create SkuItem with invalid date', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/1001/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 4) Test case: attempt to create SkuItem with non-existent SKUId
+```
+test('attempt to create SkuItem with non-existent SKUId', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 404);
+
+        })
+```
+
 
 
 ## **Class *skuItemController* - method *editSkuItem***
@@ -521,8 +595,8 @@ The input value is the body of the HTTP PUT Request, but also the old rfid.
 | :----------------------: | :----------------------------------------------------------------------: |
 |  Validity of *oldrfid*   |    There is no SKU item with the specified *oldrfid* in the database     |
 |                          |       There is a SKU with the specified *oldrfid* in the database        |
-|     Usage of *rfid*      |      There is no SKU item with the specified *rfid* in the database      |
-|                          |      There is a SKU Item with the specified *rfid* in the database       |
+|    Validity of *rfid*    |                         RFID has a valid format                          |
+|                          |                       RFID has not a valid format                        |
 |  Sign of *newAvailable*  |                             Sign is positive                             |
 |                          |                             Sign is negative                             |
 | Format of  *dateOfStock* | The date format is a valid one (NULL, "YYYY/MM/DD" or"YYYY/MM/DD HH:MM") |
@@ -537,7 +611,7 @@ The input value is the body of the HTTP PUT Request, but also the old rfid.
 |         Criteria         |  Boundary values  |
 | :----------------------: | :---------------: |
 |  Validity of *oldrfid*   | No boundary found |
-|     Usage of *rfid*      | No boundary found |
+|    Validity of *rfid*    | No boundary found |
 |  Sign of *newAvailable*  |         0         |
 | Format of  *dateOfStock* | No boundary found |
 
@@ -545,24 +619,135 @@ The input value is the body of the HTTP PUT Request, but also the old rfid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                           Description of the test case                                                           | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :-------------: | :----------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Present   |   In use   |  Positive  |   Valid    |     Invalid     |                                                   The rfid is already used by another SKUItem                                                    |                |
-|  Present   |   In use   |  Positive  |  Invalid   |     Invalid     |                                    The rfid is already used by another SKUItem, the date format is not valid                                     |                |
-|  Present   |   In use   |  Negative  |   Valid    |     Invalid     |                                    The rfid is already used by another SKUItem, the availability is negative                                     |                |
-|  Present   |   In use   |  Negative  |  Invalid   |     Invalid     |                     The rfid is already used by another SKUItem, the date format is not valid, the availability is negative                      |                |
-|  Present   |  Not use   |  Positive  |   Valid    |      Valid      |                                   The rfid is not already used by another SKUItem, it is a valid modification                                    |                |
-|  Present   | Not in use |  Positive  |  Invalid   |     Invalid     |                                                           The date format is not valid                                                           |                |
-|  Present   | Not in use |  Negative  |   Valid    |     Invalid     |                                                           The availability is negative                                                           |                |
-|  Present   | Not in use |  Negative  |  Invalid   |     Invalid     |                                            The date format is not valid, the availability is negative                                            |                |
-|   Absent   |   In use   |  Positive  |   Valid    |     Invalid     |                               The rfid is already used by another SKUItem, there is no SKUItem with rfid=*oldrfid*                               |                |
-|   Absent   |   In use   |  Positive  |  Invalid   |     Invalid     |                The rfid is already used by another SKUItem, the date format is not valid, there is no SKUItem with rfid=*oldrfid*                |                |
-|   Absent   |   In use   |  Negative  |   Valid    |     Invalid     |                The rfid is already used by another SKUItem, the availability is negative, there is no SKUItem with rfid=*oldrfid*                |                |
-|   Absent   |   In use   |  Negative  |  Invalid   |     Invalid     | The rfid is already used by another SKUItem, the date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid* |                |
-|   Absent   |  Not use   |  Positive  |   Valid    |     Invalid     |               The rfid is not already used by another SKUItem, it is a valid modification, there is no SKUItem with rfid=*oldrfid*               |                |
-|   Absent   | Not in use |  Positive  |  Invalid   |     Invalid     |                                      The date format is not valid, there is no SKUItem with rfid=*oldrfid*                                       |                |
-|   Absent   | Not in use |  Negative  |   Valid    |     Invalid     |                                      The availability is negative, there is no SKUItem with rfid=*oldrfid*                                       |                |
-|   Absent   | Not in use |  Negative  |  Invalid   |     Invalid     |                       The date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*                        |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                 Description of the test case                                                  |                          Jest test case                           |
+| :--------: | :--------: | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------: |
+|  Present   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                                     The rfid is not valid                                                     |      test('attempt to edit a SkuItem with an invalid rfid')       |
+|  Present   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                                      The rfid is not valid, the date format is not valid                                      |                                                                   |
+|  Present   |  Invalid   |  Negative  |   Valid    |     Invalid     |                                      The rfid is not valid, the availability is negative                                      |                                                                   |
+|  Present   |  Invalid   |  Negative  |  Invalid   |     Invalid     |                       The rfid is not valid, the date format is not valid, the availability is negative                       |                                                                   |
+|  Present   |   Valid    |  Positive  |   Valid    |      Valid      |                                         The rfid is valid, it is a valid modification                                         |      test('successful use of createSkuItem and editSkuItem')      |
+|  Present   |   Valid    |  Positive  |  Invalid   |     Invalid     |                                                 The date format is not valid                                                  |      test('attempt to edit a SkuItem with an invalid date')       |
+|  Present   |   Valid    |  Negative  |   Valid    |     Invalid     |                                                 The availability is negative                                                  | test('attempt to edit a SkuItem with an invalid available value') |
+|  Present   |   Valid    |  Negative  |  Invalid   |     Invalid     |                                  The date format is not valid, the availability is negative                                   |                                                                   |
+|   Absent   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                The rfid is not valid, there is no SKUItem with rfid=*oldrfid*                                 |                                                                   |
+|   Absent   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                 The rfid is not valid, the date format is not valid, there is no SKUItem with rfid=*oldrfid*                  |                                                                   |
+|   Absent   |  Invalid   |  Negative  |   Valid    |     Invalid     |                 The rfid is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*                  |                                                                   |
+|   Absent   |  Invalid   |  Negative  |  Invalid   |     Invalid     | The rfid is is not valid, the date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid* |                                                                   |
+|   Absent   |   Valid    |  Positive  |   Valid    |     Invalid     |                    The rfid is valid, it is a valid modification, there is no SKUItem with rfid=*oldrfid*                     |          test('attempt to edit a non-existant SkuItem')           |
+|   Absent   |   Valid    |  Positive  |  Invalid   |     Invalid     |                             The date format is not valid, there is no SKUItem with rfid=*oldrfid*                             |                                                                   |
+|   Absent   |   Valid    |  Negative  |   Valid    |     Invalid     |                             The availability is negative, there is no SKUItem with rfid=*oldrfid*                             |                                                                   |
+|   Absent   |   Valid    |  Negative  |  Invalid   |     Invalid     |              The date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*              |                                                                   |
+
+
+## 1) Test Case: successful use of createSkuItem and editSkuItem
+```
+test('successful use of createSkuItem and editSkuItem', async () => {
+            await skuController.createSku(
+                {
+                    "description": "a new sku",
+                    "weight": 100,
+                    "volume": 50,
+                    "notes": "second SKU",
+                    "price": 10.99,
+                    "availableQuantity": 50
+                }
+            ).catch(error => (console.log(error)))
+
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "12345678901234567890123456789018",
+                    newAvailable: 1,
+                    newDateOfStock: "2020/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            const value = await skuItemController.getSkuItem("12345678901234567890123456789018")
+                .catch(error => (console.log("get:", error)))
+            assert.equal(value.RFID, "12345678901234567890123456789018")
+        })
+```
+
+## 2) Test Case: attempt to edit a non-existant SkuItem
+```
+ test('attempt to edit a non-existant SkuItem', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "12345678901234567890123456789018",
+                    newAvailable: 1,
+                    newDateOfStock: "2020/01/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 404);
+
+        })
+```
+
+## 3) Test Case: attempt to edit a SkuItem with an invalid rfid
+```
+test('attempt to edit a SkuItem with an invalid rfid', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "hello",
+                    newAvailable: 1,
+                    newDateOfStock: "2020/01/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 4) Test Case: attempt to edit a SkuItem with an invalid available value
+``` 
+test('attempt to edit a SkuItem with an invalid available value', async () => {
+            let errorValue;
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "12345678901234567890123456789018",
+                    newAvailable: "hello",
+                    newDateOfStock: "2020/01/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 5) Test Case: attempt to edit a SkuItem with an invalid date
+```
+test('attempt to edit a SkuItem with an invalid date', async () => {
+            const rfid = '12345678901234567890123456789019';
+            let errorValue;
+            await skuItemController.editSkuItem(rfid,
+                {
+                    newRFID: "12345678901234567890123456789018",
+                    newAvailable: 1,
+                    newDateOfStock: "2020/2001/01",
+                }
+            ).catch(error => errorValue = error);
+
+            assert.equal(errorValue.code, 422);
+        })
+```
+
+
 
 ## **Class *skuItemController* - method *deleteSkuItem***
 
@@ -577,10 +762,10 @@ The input value is the SkuItemid.
 
 **Predicates for method *deleteSkuItem*:**
 
-|        Criteria         |                              Predicate                              |
-| :---------------------: | :-----------------------------------------------------------------: |
-| Validity of *SKUItemid* | There is no SKU Item with the specified *SKUItemid* in the database |
-|                         | There is a SKU Item with the specified *SKUItemid* in the database  |
+|        Criteria         |      Predicate      |
+| :---------------------: | :-----------------: |
+| Validity of *SKUItemid* |  The RFID is Valid  |
+|                         | The RFID is Invalid |
 
 
 
@@ -597,10 +782,54 @@ The input value is the SkuItemid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid |           Description of the test case           | Jest test case |
-| :--------: | :-------------: | :----------------------------------------------: | :------------: |
-|  Present   |      Valid      | There is a SKU Item with the chosen *SKUItemid*  |                |
-|   Absent   |     Invalid     | There is no SKU Item with the chosen *SKUItemid* |                |
+| Criteria 1 | Valid / Invalid | Description of the test case |                      Jest test case                       |
+| :--------: | :-------------: | :--------------------------: | :-------------------------------------------------------: |
+|  Present   |      Valid      |      The RFID is Valid       | test('successful use of createSkuItem and deleteSkuItem') |
+|   Absent   |     Invalid     |     The RFID is Invalid      | test('attempt to delete a SkuItem with an invalid rfid')  |
+
+## 1) Test Case: successful use of createSkuItem and deleteSkuItem
+```
+test('successful use of createSkuItem and deleteSkuItem', async () => {
+            await skuController.createSku(
+                {
+                    "description": "a new sku",
+                    "weight": 100,
+                    "volume": 50,
+                    "notes": "second SKU",
+                    "price": 10.99,
+                    "availableQuantity": 50
+                }
+            ).catch(error => (console.log(error)))
+
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+
+            await skuItemController.deleteSkuItem(rfid);
+
+            const value = await skuItemController.getAllSkuItems()
+                .catch(error => (console.log("get:", error)))
+            assert.equal(value.length, 0)
+        });
+```
+
+## 2) Test Case: attempt to delete a SkuItem with an invalid rfid
+```
+        test('attempt to delete a SkuItem with an invalid rfid', async () => {
+            const rfid = 'hello';
+            let errorValue;
+            await skuItemController.deleteSkuItem(rfid)
+                .catch(error => errorValue = error);
+                        
+            assert.equal(422, errorValue.code);
+        })
+```
 
 
 ## **Class *positionController* - method *createPosition***
@@ -2008,40 +2237,6 @@ The input value is the order id.
 ```
 
 
-## **Class *InternalOrderController* - method *getInternalOrder***
-
-The input value is the order id.
-
-**Criteria for method *getInternalOrder*:**
-	
- - Validity of *id*
-
-
-
-
-
-**Predicates for method *getInternalOrder*:**
-
-|     Criteria     |                           Predicate                            |
-| :--------------: | :------------------------------------------------------------: |
-| Validity of *id* | There is no internal order with the given *id* in the database |
-|                  |         There is a internal order with the given *id*          |
-
-
-
-
-**Boundaries**:
-
-|     Criteria     |  Boundary values  |
-| :--------------: | :---------------: |
-| Validity of *id* | No boundary found |
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid |                  Description of the test case                  | Jest test case |
-| :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database |                |
-|   Valid    |      Valid      | There is a internal order with the given *id* in the database  |                |
 
 ## **Class *InternalOrderController* - method *createInternalOrder***
 
@@ -2050,36 +2245,91 @@ The input value is the body of the HTTP POST Request
 **Criteria for method *createInternalOrder*:**
 	
  - Validity of *customerid*
- - Validity of product list 
-
-
+ - Validity of issueDate
 
 
 
 **Predicates for method *createInternalOrder*:**
 
-|         Criteria         |                                           Predicate                                            |
-| :----------------------: | :--------------------------------------------------------------------------------------------: |
-| Validity of *customerid* |                There is no customer with the given *customerid* in the database                |
-|                          |                There is a customer with the given *customerid* in the database                 |
-| Validity of product list |        All the products are associated to a SKU with an existing SKUID in the database         |
-|                          | At least one of the products is not associated to a SKU with an existing SKUID in the database |
+|         Criteria         |                            Predicate                             |
+| :----------------------: | :--------------------------------------------------------------: |
+| Validity of *customerid* | There is no customer with the given *customerid* in the database |
+|                          | There is a customer with the given *customerid* in the database  |
+| Validity of *issueDate*  |          *issueDate* is well-formed and can be inserted          |
+|                          |                     *issueDate* is incorrect                     |
 
 **Boundaries**:
 
 |         Criteria         |  Boundary values  |
 | :----------------------: | :---------------: |
 | Validity of *customerid* | No boundary found |
-| Validity of product list | No boundary found |
+| Validity of *issueDate*  | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                   Description of the test case                                                                    | Jest test case |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |      Valid      |       There is a customer with the given *customerid* in the database and all the products are associated to a SKU with and existing SKUID in the database        |                |
-|   Valid    |  Invalid   |     Invalid     |                                  At least one of the products is not associated to a SKU with and existing SKUID in the database                                  |                |
-|  Invalid   |   Valid    |     Invalid     |                                                 There is no customer with the given *customerid* in the database                                                  |                |
-|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKU with and existing SKUID in the database, there is no customer with the given *customerid* in the database |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                   Description of the test case                                    |                                                 Jest test case |
+| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------: | -------------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      | There is a customer with the given *customerid* in the database the *issueDate* is well-formatted |      test("Successfully add a new Internal Order to Database") |
+|   Valid    |  Invalid   |     Invalid     |                                   the *issueDate* is bad-formed                                   |     test("Insertion of an Internal Order with malformed date") |
+|  Invalid   |   Valid    |     Invalid     |                 There is no customer with the given *customerid* in the database                  | test("Insertion of an Internal Order with invalid customerId") |
+|  Invalid   |  Invalid   |     Invalid     |  There is no customer with the given customerId in the database and the issueDate is bad-formed   |                                                                |
+
+## 1) Test Case: "Successfully add a new Internal Order to Database"
+```
+    let result;
+    let currId;
+    const body = {
+        issueDate: "2022/07/07",
+        products: [],
+        customerId: 3
+    };
+
+    currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
+
+    await internalOrderController.createInternalOrder(body);
+
+    result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+
+    expect(result).not.to.be.undefined;
+```
+
+## 2) Test Case: "Insertion of an Internal Order with malformed date"
+```
+    let result;
+    let currId;
+    const body = {
+        issueDate: "999/999/999",
+        products: [],
+        customerId: 3
+    };
+
+    currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
+
+    await internalOrderController.createInternalOrder(body).catch(() => {});
+
+    result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+
+    expect(result).to.be.undefined;
+```
+
+## 3) Test Case: "Insertion of an Internal Order with invalid customerId"
+```
+    let result;
+    let currId;
+    const body = {
+        issueDate: "2022/07/07",
+        products: [],
+        customerId: -10
+    };
+
+    currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
+
+    await internalOrderController.createInternalOrder(body).catch(() => {});
+
+    result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+
+    expect(result).to.be.undefined;
+```
 
 ## **Class *InternalOrderController* - method *editInternalOrder***
 
@@ -2088,7 +2338,7 @@ The input value is the body of the HTTP PUT Request and the order id
 **Criteria for method *editInternalOrder*:**
 	
  - Validity of *id*
- - Validity and consistency of product list 
+ - Validity of the state
 
 
 
@@ -2096,28 +2346,66 @@ The input value is the body of the HTTP PUT Request and the order id
 
 **Predicates for method *editInternalOrder*:**
 
-|                 Criteria                 |                                                                Predicate                                                                 |
-| :--------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------: |
-|             Validity of *id*             |                                          There is no order with the given *id* in the database                                           |
-|                                          |                                           There is a order with the given *id* in the database                                           |
-| Validity and consistency of product list |           All the products are associated to a SKUItem with and existing RFID in the database, the new state must be COMPLETED           |
-|                                          | At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED |
+|      Criteria       |                          Predicate                           |
+| :-----------------: | :----------------------------------------------------------: |
+|  Validity of *id*   |    There is no order with the given *id* in the database     |
+|                     |     There is a order with the given *id* in the database     |
+| Validity of *state* | The new state of the order must be "ACCEPTED" or "COMPLETED" |
+|                     |                     The state is invalid                     |
 
 **Boundaries**:
 
-|                 Criteria                 |  Boundary values  |
-| :--------------------------------------: | :---------------: |
-|             Validity of *id*             | No boundary found |
-| Validity and consistency of product list | No boundary found |
+|      Criteria       |  Boundary values  |
+| :-----------------: | :---------------: |
+|  Validity of *id*   | No boundary found |
+| Validity of *state* | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                  Description of the test case                                                                                   | Jest test case |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |      Valid      |          There is a order with the given *id* in the database,All the products are associated to a SKUItem with and existing RFID in the database and the new state must be COMPLETED           |                |
-|   Valid    |  Invalid   |     Invalid     |                            At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED                             |                |
-|  Invalid   |   Valid    |     Invalid     |                                                                      There is no order with the given *id* in the database                                                                      |                |
-|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED, there is no order with the given *id* in the database |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                      Description of the test case                                       |                                       Jest test case |
+| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------: | ---------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      | There is a order with the given *id* in the database, the new state is either "ACCEPTED" or "COMPLETED" |          test("Successfully edit an Internal Order") |
+|   Valid    |  Invalid   |     Invalid     |                                    The *state* is an invalid string                                     | test("Edit an Internal Order with an invalid state") |
+|  Invalid   |   Valid    |     Invalid     |                          There is no order with the given *id* in the database                          |           test("Edit a non-existing Internal Order") |
+|  Invalid   |  Invalid   |     Invalid     |         The *state* is an invalid string, there is no order with the given *id* in the database         |                                                      |
+
+## 1) Test Case: "Successfully edit an Internal Order"
+```
+    let result;
+    const body = { newState: "ACCEPTED" };
+    let newState;
+
+    await internalOrderController.editInternalOrder(1, body);
+    result = await internalOrderController.getInternalOrder(1);
+    newState = result['state'];
+
+    expect(newState).to.be.equal("ACCEPTED");
+```
+
+## 2) Test Case: "Edit an Internal Order with an invalid state"
+```
+    let result;
+    const body = { newState: "INVALID_STATE" };
+    let oldState, newState;
+
+    result = await internalOrderController.getInternalOrder(1);
+    oldState = result['state'];
+
+    await internalOrderController.editInternalOrder(1, body).catch(() => { });
+    result = await internalOrderController.getInternalOrder(1);
+    newState = result['state'];
+
+    expect(newState).to.be.equal(oldState);
+```
+
+## 3) Test Case: "Edit a non-existing Internal Order"
+```
+    let result;
+    const body = { newState: "ACCEPTED" };
+
+    result = await internalOrderController.editInternalOrder(-1, body).catch(() => { });
+    expect(result).to.be.undefined;
+```
 
 ## **Class *InternalOrderController* - method *deleteInternalOrder***
 
@@ -2147,10 +2435,62 @@ The input value is the order id.
 
 **Combination of predicates**:
 
+| Criteria 1 | Valid / Invalid |                  Description of the test case                  |                Jest test case                 |
+| :--------: | :-------------: | :------------------------------------------------------------: | :-------------------------------------------: |
+|   Valid    |      Valid      | There is an internal order with the given *id* in the database | test("Successfully delete an Internal Order") |
+|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database | test("Delete a non-existing Internal Order")  |
+
+## 1) Test Case: "Successfully delete an Internal Order"
+```
+    let result;
+    await internalOrderController.deleteInternalOrder(1);
+
+    result = await internalOrderController.getInternalOrder(1).catch(() => { });
+    expect(result).to.be.undefined;
+```
+
+## 2) Test Case: "Delete a non-existing Internal Order"
+```
+    let oldCount, newCount;
+
+    oldCount = (await internalOrderController.getAllInternalOrders()).length;
+
+    await internalOrderController.deleteInternalOrder(-1).catch(() => { });
+
+    newCount = (await internalOrderController.getAllInternalOrders()).length;
+
+    expect(oldCount).to.be.equal(newCount);
+```
+
+## **Class *InternalOrderController* - method *getInternalOrder***
+
+The input value is the order id.
+
+**Criteria for method *getInternalOrder*:**
+	
+ - Validity of *id*
+
+
+**Predicates for method *getInternalOrder*:**
+
+|     Criteria     |                           Predicate                            |
+| :--------------: | :------------------------------------------------------------: |
+| Validity of *id* | There is no internal order with the given *id* in the database |
+|                  |         There is a internal order with the given *id*          |
+
+
+**Boundaries**:
+
+|     Criteria     |  Boundary values  |
+| :--------------: | :---------------: |
+| Validity of *id* | No boundary found |
+
+**Combination of predicates**:
+
 | Criteria 1 | Valid / Invalid |                  Description of the test case                  | Jest test case |
 | :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
 |  Invalid   |     Invalid     | There is no internal order with the given *id* in the database |                |
-|   Valid    |      Valid      | There is an internal order with the given *id* in the database |                |
+|   Valid    |      Valid      | There is a internal order with the given *id* in the database  |                |
 
 ## **Class *Item* - method *getItem***
 
@@ -2348,6 +2688,21 @@ The input value is the item id.
     <For traceability write the class and method name that contains the test case>
 
 
+| Unit name                                       | Jest test case                      |
+| ----------------------------------------------- | ----------------------------------- |
+| skuItemController.js -> createSkuItem(body)     | test('createSku and createSKUitem') |
+|                                                 | test('unexistant skuid')            |
+|                                                 | test('wrong rfid')                  |
+|                                                 | test('wrong skuid')                 |
+|                                                 | test('wrong date')                  |
+| skuItemController.js -> editSkuItem(rfid, body) | test('create and modify')           |
+|                                                 | test('modify unexistant skuitem')   |
+|                                                 | test('wrong rfid')                  |
+|                                                 | test('wrong available value'        |
+|                                                 | test('wrong date'                   |
+| skuItemController.js -> deleteSkuItem(rfid)     | test('create and delete')           |
+|                                                 | test('wrong rfid')                  |
+
 | Unit name                                               | Jest test case                                             |
 | ------------------------------------------------------- | ---------------------------------------------------------- |
 | restockOrderController.js -> createRestockOrder(body)   | test("Successfully add new Restock Order to Database")     |
@@ -2371,6 +2726,19 @@ The input value is the item id.
 | returnOrderController.js -> deleteReturnOrder(id)   | test('Successfully delete a Return Order')                                |
 |                                                     | test('Delete a non-existing Return Order')                                |
 |                                                     |                                                                           |
+
+
+
+| Unit name                                                 | Jest test case                                                 |
+| --------------------------------------------------------- | -------------------------------------------------------------- |
+| internalOrderController.js -> createInternalOrder(body)   | test("Successfully add a new Internal Order to Database")      |
+|                                                           | test("Insertion of an Internal Order with malformed date")     |
+|                                                           | test("Insertion of an Internal Order with invalid customerId") |
+| internalOrderController.js -> editInternalOrder(id, body) | test("Successfully edit an Internal Order")                    |
+|                                                           | test("Edit an Internal Order with an invalid state")           |
+|                                                           | test("Edit a non-existing Internal Order")                     |
+| internalOrderController.js -> deleteInternalOrder(id)     | test("Successfully delete an Internal Order")                  |
+|                                                           | test("Delete a non-existing Internal Order")                   |
 
 
 ### Code coverage report

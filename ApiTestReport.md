@@ -14,7 +14,7 @@ Version:
 - [Integration approach](#integration-approach)
 - [Integration Tests](#integration-tests)
   - [Restock Orders Controllers Test Suite](#restock-orders-controllers-test-suite)
-  - [Test Suite 2](#test-suite-2)
+  - [Internal Orders Controllers Test Suite](#internal-orders-controllers-test-suite)
   - [Test Suite n](#test-suite-n)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
@@ -48,25 +48,26 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
      Jest test cases applied to them, and the mock ups used, if any> Jest test cases should be here code/server/unit_test
 
 ## Restock Orders Controllers Test Suite 
-| Classes  | Jest test cases |
-|--|--|--|
-|controller.js - restockOrderController.js - dbManager.js| test(1) |
-|controller.js - restockOrderController.js - dbManager.js| test(2) | 
+| Classes                                                  | Jest test cases |
+| -------------------------------------------------------- | --------------- |
+| controller.js - restockOrderController.js - dbManager.js | test(1)         |
+| controller.js - restockOrderController.js - dbManager.js | test(2)         |
 
 
 
-## Test Suite 2
-| Classes  | Jest test cases |
-|--|--|
-||||
+## Internal Orders Controllers Test Suite
+| Classes                                                   | Jest test cases |
+| --------------------------------------------------------- | --------------- |
+| controller.js - internalOrderController.js - dbManager.js | test(1)         |
+| controller.js - internalOrderController.js - dbManager.js | test(2)         |
 
 
 ## Test Suite n 
 
    
-| Classes  | mock up used |Jest test cases |
-|--|--|--|
-||||
+| Classes | Jest test cases |
+| ------- | --------------- |
+|         |                 |
 
 
 
@@ -81,14 +82,16 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 
 
-| Scenario ID | Functional Requirements covered | Mocha  Test(s) | 
-| ----------- | ------------------------------- | ----------- | 
-|  ..         | FRx                             |    ASK if needed to write each test case         |             
-|  ..         | FRy                             |             |             
-| ...         |                                 |             |             
-| ...         |                                 |             |             
-| ...         |                                 |             |             
-| ...         |                                 |             |             
+| Scenario ID | Functional Requirements covered | Mocha  Test(s)                        |
+| ----------- | ------------------------------- | ------------------------------------- |
+| ..          | FRx                             | ASK if needed to write each test case |
+| ..          | FRy                             |                                       |
+| ...         |                                 |                                       |
+| 9.1         | FR 6                            | Successfully add a new Internal Order |
+| 9.3         | FR 6                            | Successfully delete an internal order |
+| 11.1        | FR 7                            | Successfully add a new Item           |
+| 11.2        | FR 7                            | Successfully edit an Item             |
+| ...         |                                 |                                       |
 
 
 
@@ -102,8 +105,8 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 | Non Functional Requirement | Test name |
 | -------------------------- | --------- |
-|          NFR2                 |   All        |
-|          NFR3                 |   All        |
-|          NFR4                |          |
-|          NFR6                |           |
-|          NFR9                |           |
+| NFR2                       | All       |
+| NFR3                       | All       |
+| NFR4                       |           |
+| NFR6                       |           |
+| NFR9                       |           |

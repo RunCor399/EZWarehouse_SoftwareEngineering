@@ -59,7 +59,7 @@ describe('InternalOrderController Tests', () => {
             let result;
             let currId;
             const body = {
-                issueDate: "999/999/999",
+                issueDate: "2022/07/07",
                 products: [],
                 customerId: -10
             };
@@ -104,7 +104,7 @@ describe('InternalOrderController Tests', () => {
 
         test("Edit a non-existing Internal Order", async () => {
             let result;
-            const body = { newState: "ISSUED" };
+            const body = { newState: "ACCEPTED" };
 
             result = await internalOrderController.editInternalOrder(-1, body).catch(() => { });
             expect(result).to.be.undefined;
@@ -121,7 +121,7 @@ describe('InternalOrderController Tests', () => {
         });
 
         test("Delete a non-existing Internal Order", async () => {
-            let result, oldCount, newCount;
+            let oldCount, newCount;
 
             oldCount = (await internalOrderController.getAllInternalOrders()).length;
 

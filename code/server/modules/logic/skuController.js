@@ -146,8 +146,7 @@ class SkuController {
         VALUES ( ?, ?, ?, ?, ?, ?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, weight, volume, price, notes, description, availableQuantity)
-            .catch(() => { throw  error
-        });
+            .catch(() => { throw  error});
     }
 
 
@@ -299,7 +298,10 @@ class SkuController {
 
         if (positionOccupiedBySku !== undefined) {
 
-            const positionInfo = await this.#dbManager.genericSqlGet(`SELECT * FROM Position WHERE positionID = ?;`, String(positionOccupiedBySku.positionID)).catch(error => { throw error });
+        
+
+            const positionInfo = await this.#dbManager.genericSqlGet(`SELECT * FROM Position WHERE positionID = ?;`, String(positionOccupiedBySku.positionID).padStart(12, "0")).catch(error => { throw error });
+            const positionInfo2 = await this.#dbManager.genericSqlGet(`SELECT * FROM Position;` ).catch(error => { throw error });
 
             //remove sku from position
             await this.#dbManager.genericSqlRun(`DELETE FROM SKU_in_Position WHERE SKUId = ?;`, positionOccupiedBySku.SKUId)
@@ -315,7 +317,7 @@ class SkuController {
         }
 
         //set sku in new position
-        await this.#dbManager.genericSqlRun(`INSERT INTO SKU_in_Position (SKUId, positionID) VALUES (?, ?)`, id, positionId)
+        await this.#dbManager.genericSqlRun(`INSERT INTO SKU_in_Position (SKUId, positionID) VALUES (?, ?)`, id, String(positionId))
             .catch((error) => { throw error });
 
 
