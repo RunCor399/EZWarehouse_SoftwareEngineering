@@ -2356,51 +2356,158 @@ The input value is the rfid and the id of a test result.
 
 **Criteria for method *getTestResult*:**
 	
- - Validity of *rfid*
- - - Validity of *id*
+ - Validity of parameters
+ - Existance of TestResult
 
 
 
 **Predicates for method *getTestResult*:**
 
-|      Criteria      |                                                Predicate                                                |
-| :----------------: | :-----------------------------------------------------------------------------------------------------: |
-| Validity of *rfid* |                     There is no SKU item with the specified *rfid* in the database                      |
-|                    |                      There is a SKU item with the specified *rfid* in the database                      |
-|  Validity of *id*  | There is no test result with the chosen *id* for the SKU item with the specified *rfid* in the database |
-|                    | There is a test result with the chosen *id* for the SKU item with the specified *rfid* in the database  |
+|        Criteria         |          Predicate           |
+| :---------------------: | :--------------------------: |
+| Validity of parameters  |     Parameters are valid     |
+|                         |    Parameters are invalid    |
+| Existance of TestResult |    The testResult exists     |
+|                         | The testResult doesn't exist |
 
 
 **Boundaries**:
 
-|      Criteria      |  Boundary values  |
-| :----------------: | :---------------: |
-| Validity of *rfid* | No boundary found |
-|  Validity of *id*  | No boundary found |
+|        Criteria         |  Boundary values  |
+| :---------------------: | :---------------: |
+| Validity of parameters  | No boundary found |
+| Existance of TestResult | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                            Description of the test case                            | Jest test case |
-| :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      | There is a SKU item with *rfid* and there is a test result with the specified *id* |                |
-|   Valid    |  Invalid   |     Invalid     |                  There is no test result with the specified *id*                   |                |
-|  Invalid   |   Valid    |     Invalid     |                          There is no SKU item with *rfid*                          |                |
-|  Invalid   |  Invalid   |     Invalid     | There is no test result with the specified *id*, there is no SKU item with *rfid*  |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |          Description of the test case           |                                                       Jest test case                                                       |
+| :--------: | :--------: | :-------------: | :---------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      |                  it's all fine                  |                                          test("successful use of getTestResult")                                           |
+|   Valid    |  Invalid   |     Invalid     | There is no test result with the specified *id* |                              test("attempt of getTestResults with a non-existant testResult")                              |
+|  Invalid   |   Valid    |     Invalid     |       A parameter is invalid or undefined       | test("attempt of getTestResults with an undefined parameter") / test("attempt of getTestResult with an invalid parameter") |
 
 
-## 1) Test Case: ""
+
+## 1) Test Case: "successful use of getTestResult"
+```
+ test("successful use of getTestResult", async () => {
+
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+
+            assert.equal(response.Result, true)
+
+        });
 ```
 
+## 2) Test Case: "attempt of getTestResults with an undefined parameter"
+```
+test("attempt of getTestResults with an undefined parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult(undefined, 1)
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
+        });
 ```
 
-## 2) Test Case: ""
+## 3) Test Case: "attempt of getTestResult with an invalid parameter"
+```
+ test("attempt of getTestResult with an invalid parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("hello", 1)
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
+        });
 ```
 
+## 4) Test Case: "attempt of getTestResults with a non-existant testResult"
 ```
+test("attempt of getTestResults with a non-existant testResult", async () => {
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+                .catch(err => errorValue = err);
 
-## 3) Test Case: ""
-```
-
+            assert.equal(errorValue.code, 404)
+        });
 ```
 
 ## **Class *TestResultController* - method *createTestResult***
@@ -2409,19 +2516,25 @@ The input value is the body of the HTTP POST Request.
 
 **Criteria for method *createTestResult*:**
 	
- - Validity of *rfid*
- - - Validity of *descriptorid*
+ - Existance of skuItem
+ - Existance of TestDescriptor
+ - Validity of parameters
+ - Validity of dateFormat
 
 
 
 **Predicates for method *createTestResult*:**
 
-|          Criteria          |                           Predicate                            |
-| :------------------------: | :------------------------------------------------------------: |
-|     Validity of *rfid*     | There is no SKU item with the specified *rfid* in the database |
-|                            | There is a SKU item with the specified *rfid* in the database  |
-| Validity of *descriptorid* |   There is no test descriptor with the chosen *descriptorid*   |
-|                            |   There is a test descriptor with the chosen *descriptorid*    |
+|          Criteria           |             Predicate             |
+| :-------------------------: | :-------------------------------: |
+|    Existance of skuItem     |        The skuitem exists         |
+|                             |     the skuitem doesn't exist     |
+| Existance of TestDescriptor |     the testDescriptor exists     |
+|                             | the test descriptor doesn't exist |
+|   Validity of parameters    |     the parameters are valid      |
+|                             |    the parameters are invalid     |
+|   Validity of dateFormat    |      the dateFormat is valid      |
+|                             |     the dateFormat is invalid     |
 
 
 **Boundaries**:
@@ -2433,26 +2546,170 @@ The input value is the body of the HTTP POST Request.
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                   Description of the test case                                   | Jest test case |
-| :--------: | :--------: | :-------------: | :----------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      | There is a SKU item with *rfid* and there is a test descriptor with the specified *descriptorid* |                |
-|   Valid    |  Invalid   |     Invalid     |                  There is no test descriptor with the specified *descriptorid*                   |                |
-|  Invalid   |   Valid    |     Invalid     |                                 There is no SKU item with *rfid*                                 |                |
-|  Invalid   |  Invalid   |     Invalid     | There is no test descriptor with the specified *descriptorid*, there is no SKU item with *rfid*  |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid | Description of the test case |                                                         Jest test case                                                          |
+| :--------: | :--------: | :--------: | :--------: | :-------------: | :--------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |                              |                                           test("Successful use of createTestResult")                                            |
+|  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |                              |                                 test("attempt of createTestResult with a non-existant skuitem")                                 |
+|   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |                              |                             test("attempt of createTestResult with a non-existant test descriptor")                             |
+|   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |                              | test("attempt of createTestResult with an undefined parameter") / test("attempt of createTestResult with an invalid parameter") |
+|   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     |                              |                                    test("attempt of createTestResult with an invalid date")                                     |
 
-## 1) Test Case: ""
+
+## 1) Test Case: "Successful use of createTestResult"
+```
+test("Successful use of createTestResult", async () => {
+
+
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+
+            assert.equal(response.Result, true);
+
+
+        });
 ```
 
+## 2) Test Case: attempt of createTestResult with a non-existant test descriptor""
+```
+test("attempt of createTestResult with a non-existant test descriptor", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            })
+                .catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 404);
+        });
 ```
 
-## 2) Test Case: ""
+## 3) Test Case: "attempt of createTestResult with a non-existant skuitem"
+```
+test("attempt of createTestResult with a non-existant skuitem", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 404);
+        });
 ```
 
+## 4) Test Case: "attempt of createTestResult with an undefined parameter"
+```
+test("attempt of createTestResult with an undefined parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: undefined,
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422);
+        });
 ```
 
-## 3) Test Case: ""
+## 5) Test Case: "attempt of createTestResult with an invalid parameter"
+```
+test("attempt of createTestResult with an invalid parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "hello",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422);
+        });
 ```
 
+## 6) Test Case: "attempt of createTestResult with an invalid date"
+```
+ test("attempt of createTestResult with an invalid date", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "hello",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422);
+        });
 ```
 
 ## **Class *TestResultController* - method *editTestResult***
