@@ -32,7 +32,7 @@ describe('InternalOrderController Tests', () => {
 
             await internalOrderController.createInternalOrder(body);
 
-            result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+            result = await internalOrderController.getInternalOrder(currId).catch(() => { });
 
             expect(result).not.to.be.undefined;
         });
@@ -48,9 +48,9 @@ describe('InternalOrderController Tests', () => {
 
             currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
 
-            await internalOrderController.createInternalOrder(body).catch(() => {});
+            await internalOrderController.createInternalOrder(body).catch(() => { });
 
-            result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+            result = await internalOrderController.getInternalOrder(currId).catch(() => { });
 
             expect(result).to.be.undefined;
         });
@@ -66,9 +66,9 @@ describe('InternalOrderController Tests', () => {
 
             currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
 
-            await internalOrderController.createInternalOrder(body).catch(() => {});
+            await internalOrderController.createInternalOrder(body).catch(() => { });
 
-            result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+            result = await internalOrderController.getInternalOrder(currId).catch(() => { });
 
             expect(result).to.be.undefined;
         });
@@ -91,9 +91,9 @@ describe('InternalOrderController Tests', () => {
             let result;
             const list = [];
             const counter = list.length;
-            const body = { 
+            const body = {
                 newState: "COMPLETED",
-                products: list 
+                products: list
             };
             let newState, prods;
 
@@ -156,9 +156,9 @@ describe('InternalOrderController Tests', () => {
         let result;
 
         test('Get Products in an Internal Order Test', async () => {
-           result = await internalOrderController.getProductsForInternalOrder(1);
-           
-           expect(result.length).to.be.equal(1);
+            result = await internalOrderController.getProductsForInternalOrder(1);
+
+            expect(result.length).to.be.equal(1);
         });
     });
 });
