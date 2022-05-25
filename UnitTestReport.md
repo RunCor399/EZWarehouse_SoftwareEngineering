@@ -2071,7 +2071,7 @@ The input value is the body of the HTTP POST Request
 **Criteria for method *createInternalOrder*:**
 	
  - Validity of *customerid*
- - Validity of product list 
+ - Validity of issueDate
 
 
 
@@ -2083,24 +2083,81 @@ The input value is the body of the HTTP POST Request
 | :----------------------: | :--------------------------------------------------------------------------------------------: |
 | Validity of *customerid* |                There is no customer with the given *customerid* in the database                |
 |                          |                There is a customer with the given *customerid* in the database                 |
-| Validity of product list |        All the products are associated to a SKU with an existing SKUID in the database         |
-|                          | At least one of the products is not associated to a SKU with an existing SKUID in the database |
+|  Validity of *issueDate*   |             *issueDate* is well-formed and can be inserted             |
+|                          |                        *issueDate* is incorrect                        |
 
 **Boundaries**:
 
 |         Criteria         |  Boundary values  |
 | :----------------------: | :---------------: |
 | Validity of *customerid* | No boundary found |
-| Validity of product list | No boundary found |
+| Validity of *issueDate* | No boundary found |
 
 **Combination of predicates**:
 
 | Criteria 1 | Criteria 2 | Valid / Invalid |                                                                   Description of the test case                                                                    | Jest test case |
 | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |      Valid      |       There is a customer with the given *customerid* in the database and all the products are associated to a SKU with and existing SKUID in the database        |                |
-|   Valid    |  Invalid   |     Invalid     |                                  At least one of the products is not associated to a SKU with and existing SKUID in the database                                  |                |
-|  Invalid   |   Valid    |     Invalid     |                                                 There is no customer with the given *customerid* in the database                                                  |                |
-|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKU with and existing SKUID in the database, there is no customer with the given *customerid* in the database |                |
+|   Valid    |   Valid    |      Valid      |       There is a customer with the given *customerid* in the database the *issueDate* is well-formatted        |  test("Successfully add a new Internal Order to Database")              |
+|   Valid    |  Invalid   |     Invalid     |                                 the *issueDate* is bad-formed                                  |   test("Insertion of an Internal Order with malformed date")             |
+|  Invalid   |   Valid    |     Invalid     |                                                 There is no customer with the given *customerid* in the database                                                  |   test("Insertion of an Internal Order with invalid customerId")             |
+|  Invalid   |  Invalid   |     Invalid     | There is no customer with the given customerId in the database and the issueDate is bad-formed |                |
+
+## 1) Test Case: "Successfully add a new Internal Order to Database"
+```
+    let result;
+    let currId;
+    const body = {
+        issueDate: "2022/07/07",
+        products: [],
+        customerId: 3
+    };
+
+    currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
+
+    await internalOrderController.createInternalOrder(body);
+
+    result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+
+    expect(result).not.to.be.undefined;
+```
+
+## 2) Test Case: "Insertion of an Internal Order with malformed date"
+```
+    let result;
+    let currId;
+    const body = {
+        issueDate: "999/999/999",
+        products: [],
+        customerId: 3
+    };
+
+    currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
+
+    await internalOrderController.createInternalOrder(body).catch(() => {});
+
+    result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+
+    expect(result).to.be.undefined;
+```
+
+## 3) Test Case: "Insertion of an Internal Order with invalid customerId"
+```
+    let result;
+    let currId;
+    const body = {
+        issueDate: "2022/07/07",
+        products: [],
+        customerId: -10
+    };
+
+    currId = ((await internalOrderController.getAllInternalOrders()).length) + 1;
+
+    await internalOrderController.createInternalOrder(body).catch(() => {});
+
+    result = await internalOrderController.getInternalOrder(currId).catch(() => {});
+
+    expect(result).to.be.undefined;
+```
 
 ## **Class *InternalOrderController* - method *editInternalOrder***
 
