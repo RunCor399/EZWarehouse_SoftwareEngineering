@@ -56,10 +56,16 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 
 ## Internal Orders Controllers Test Suite
-| Classes                                                   | Jest test cases |
-| --------------------------------------------------------- | --------------- |
-| controller.js - internalOrderController.js - dbManager.js | test(1)         |
-| controller.js - internalOrderController.js - dbManager.js | test(2)         |
+| Classes                                                   | Jest test cases                                                |
+| --------------------------------------------------------- | -------------------------------------------------------------- |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully add a new Internal Order to Database")      |
+| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with malformed date")     |
+| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with invalid customerId") |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully edit an Internal Order")                    |
+| controller.js - internalOrderController.js - dbManager.js | test("Edit an Internal Order with an invalid state")           |
+| controller.js - internalOrderController.js - dbManager.js | test("Edit a non-existing Internal Order")                     |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully delete an Internal Order")                  |
+| controller.js - internalOrderController.js - dbManager.js | test("Delete a non-existing Internal Order")                   |
 
 
 ## Test Suite n 
