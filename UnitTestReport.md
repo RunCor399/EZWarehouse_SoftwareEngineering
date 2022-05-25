@@ -2166,7 +2166,7 @@ The input value is the body of the HTTP PUT Request and the order id
 **Criteria for method *editInternalOrder*:**
 	
  - Validity of *id*
- - Validity and consistency of product list 
+ - Validity of the state
 
 
 
@@ -2178,24 +2178,62 @@ The input value is the body of the HTTP PUT Request and the order id
 | :--------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------: |
 |             Validity of *id*             |                                          There is no order with the given *id* in the database                                           |
 |                                          |                                           There is a order with the given *id* in the database                                           |
-| Validity and consistency of product list |           All the products are associated to a SKUItem with and existing RFID in the database, the new state must be COMPLETED           |
-|                                          | At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED |
+| Validity of *state* |           The new state of the order must be "ACCEPTED" or "COMPLETED"          |
+|                                          | The state is invalid |
 
 **Boundaries**:
 
 |                 Criteria                 |  Boundary values  |
 | :--------------------------------------: | :---------------: |
 |             Validity of *id*             | No boundary found |
-| Validity and consistency of product list | No boundary found |
+| Validity of *state* | No boundary found |
 
 **Combination of predicates**:
 
 | Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                  Description of the test case                                                                                   | Jest test case |
 | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |      Valid      |          There is a order with the given *id* in the database,All the products are associated to a SKUItem with and existing RFID in the database and the new state must be COMPLETED           |                |
-|   Valid    |  Invalid   |     Invalid     |                            At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED                             |                |
-|  Invalid   |   Valid    |     Invalid     |                                                                      There is no order with the given *id* in the database                                                                      |                |
-|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKUItem with and existing RFID in the database and/or the new state is not COMPLETED, there is no order with the given *id* in the database |                |
+|   Valid    |   Valid    |      Valid      |          There is a order with the given *id* in the database, the new state is either "ACCEPTED" or "COMPLETED"          |  test("Successfully edit an Internal Order")              |
+|   Valid    |  Invalid   |     Invalid     |                            The *state* is an invalid string                            |     test("Edit an Internal Order with an invalid state")           |
+|  Invalid   |   Valid    |     Invalid     |                                                                      There is no order with the given *id* in the database                                                                  |      test("Edit a non-existing Internal Order")          |
+|  Invalid   |  Invalid   |     Invalid     | The *state* is an invalid string, there is no order with the given *id* in the database |                |
+
+## 1) Test Case: "Successfully edit an Internal Order"
+```
+    let result;
+    const body = { newState: "ACCEPTED" };
+    let newState;
+
+    await internalOrderController.editInternalOrder(1, body);
+    result = await internalOrderController.getInternalOrder(1);
+    newState = result['state'];
+
+    expect(newState).to.be.equal("ACCEPTED");
+```
+
+## 2) Test Case: "Edit an Internal Order with an invalid state"
+```
+    let result;
+    const body = { newState: "INVALID_STATE" };
+    let oldState, newState;
+
+    result = await internalOrderController.getInternalOrder(1);
+    oldState = result['state'];
+
+    await internalOrderController.editInternalOrder(1, body).catch(() => { });
+    result = await internalOrderController.getInternalOrder(1);
+    newState = result['state'];
+
+    expect(newState).to.be.equal(oldState);
+```
+
+## 3) Test Case: "Edit a non-existing Internal Order"
+```
+    let result;
+    const body = { newState: "ACCEPTED" };
+
+    result = await internalOrderController.editInternalOrder(-1, body).catch(() => { });
+    expect(result).to.be.undefined;
+```
 
 ## **Class *InternalOrderController* - method *deleteInternalOrder***
 
