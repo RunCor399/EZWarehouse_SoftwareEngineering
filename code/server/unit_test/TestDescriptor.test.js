@@ -18,6 +18,20 @@ afterEach(async () => {
 });
 
 describe("TestDescriptorController Tests", () => {
+    describe("getAllTestDescriptors method testing", () => {
+        test("", () => {
+
+        });
+        
+        test("", () => {
+
+        });
+        
+        test("", () => {
+
+        });
+    });
+
     describe("getTestDescriptor method testing", () => {
         test("", () => {
 
