@@ -4,10 +4,11 @@
 Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto Giovanna
 
 
-| Version number | Change                           |
-| -------------- | :------------------------------- |
-| 1.0            | First drafts of Design Document  |
-| 2.0            | Final version of Design Document |
+| Version number | Change                                                 |
+| -------------- | :----------------------------------------------------- |
+| 1.0            | First drafts of Design Document                        |
+| 2.0            | Final version of Design Document (Before Coding)       |
+| 3.0            | Final version of Design Doument (After implementation) |
 
 # Contents
 
@@ -16,8 +17,7 @@ Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto G
 - [Instructions](#instructions)
 - [High level design](#high-level-design)
 - [Low level design](#low-level-design)
-  - [Data Class Diagram](#data-class-diagram)
-  - [Logic Class Diagram](#logic-class-diagram)
+  - [Class Diagram](#class-diagram)
 - [Verification traceability matrix](#verification-traceability-matrix)
 - [Verification sequence diagrams](#verification-sequence-diagrams)
   - [Sequence Diagram 1.1](#sequence-diagram-11)
@@ -42,29 +42,15 @@ This is the reason why the team has decided to show in the package diagram both 
 The backend package is divided in a data package that provides all the data structures required by the application and a logic package that provides the operations to manage the data.
 
 
-<img src="images/PackageDiagram.png" alt="PackageDiagram" width="600"/>
+<img src="images/FinalPackageDiagram.png" alt="PackageDiagram" width="600"/>
 
 
 # Low level design
 
 
-## Data Class Diagram
-<img src="images/DataClassDiagram.png" alt="DataClassDiagram" width="800"/>
 
-
-The team has designed the logic package using a Controller composed of many sub-controllers that make it easier to implement and decouple the different kind of operations.
-
-The Resolver, placed in the Logic Class Diagram, is the component in charge of:
-1. Receiving the API Requests 
-2. Parse them in order to understand by which specific Controller they need to be evaluated
-3. Return an HTTP Response to the Frontend
-   
-## Logic Class Diagram
-<img src="images/LogicClassDiagram.png" alt="LogicClassDiagram" width="800"/>
-
-
-
-
+## Class Diagram
+<img src="images/newDesignImage.png" alt="ClassDiagram" width="1000"/>
 
 
 
