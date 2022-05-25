@@ -56,7 +56,7 @@ describe('SKUItemController Tests', () => {
     })
 
     describe('getSkuItems method testing', () => {
-        test('successfull use of getSkuItems', async () => {
+        test('successful use of getSkuItems', async () => {
 
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         VALUES ( ?, ?, ?, ?, ?, ?);`;
@@ -96,7 +96,7 @@ describe('SKUItemController Tests', () => {
             assert.equal(errorValue.code, 404)
         })
 
-        test('attempt to use getSkuItems with a invalid skuid', async () => {
+        test('attempt to use getSkuItems with an invalid skuid', async () => {
             let errorValue;
             const items = await skuItemController.getSkuItems("hello").catch(error => { errorValue = error })
             assert.equal(errorValue.code, 422)

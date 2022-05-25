@@ -73,7 +73,7 @@ describe('itemController Tests', () => {
             assert.equal(errorValue.code, 422)
         })
 
-        test('attempt of getItem with on-existant item', async () => {
+        test('attempt of getItem with non-existant item', async () => {
             await itemController.getItem(1).catch(err => errorValue = err);
             assert.equal(errorValue.code, 404)
         })
@@ -220,7 +220,7 @@ describe('itemController Tests', () => {
 
         })
 
-        test('attempt of editItem with an undefined parameter', async() => {
+        test('attempt of editItem with an undefined parameter', async () => {
             await itemController.editItem(1, {
                 newDescription: undefined,
                 newPrice: 15,
@@ -228,7 +228,7 @@ describe('itemController Tests', () => {
             assert.equal(errorValue.code, 422)
         })
 
-        test('attempt of editItem with a invalid parameter', async() => {
+        test('attempt of editItem with a invalid parameter', async () => {
             await itemController.editItem(1, {
                 newDescription: "newDescription",
                 newPrice: "hello",
@@ -236,7 +236,7 @@ describe('itemController Tests', () => {
             assert.equal(errorValue.code, 422)
         })
 
-        test('attempt of editItem with a negative parameter', async() => {
+        test('attempt of editItem with a negative parameter', async () => {
             await itemController.editItem(1, {
                 newDescription: "newDescription",
                 newPrice: -15,
@@ -244,7 +244,7 @@ describe('itemController Tests', () => {
             assert.equal(errorValue.code, 422)
         })
 
-        test('attempt of editItem with a non-existant item', async() => {
+        test('attempt of editItem with a non-existant item', async () => {
             await itemController.editItem(1, {
                 newDescription: "newDescription",
                 newPrice: 15,
@@ -288,7 +288,6 @@ describe('itemController Tests', () => {
         test('attempt of deleteItem with invalid id', async () => {
             await itemController.deleteItem("hello").catch(err => errorValue = err)
             assert.equal(errorValue.code, 422)
-
         })
 
 
