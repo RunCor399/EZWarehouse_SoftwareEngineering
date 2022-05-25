@@ -41,7 +41,7 @@ This is the reason why the team has decided to show in the package diagram both 
 The backend package is divided in a data package that provides all the data structures required by the application and a logic package that provides the operations to manage the data.
 
 
-<img src="images/PackageDiagram.png" alt="PackageDiagram" width="600"/>
+<img src="images/FinalPackageDiagram.png" alt="PackageDiagram" width="600"/>
 
 
 # Low level design

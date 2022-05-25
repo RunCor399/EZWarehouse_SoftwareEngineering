@@ -21,14 +21,130 @@ afterEach(async () => {
 
 describe('SKUItemController Tests', () => {
 
+
+    describe('getAllSkuItems method testing', () => {
+        test('successfull use of getAllSkuItems', async () => {
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+                .catch(() => { throw error });
+
+            const rfid1 = '12345678901234567890123456789019'
+            const rfid2 = '12345678901234567890123456789010'
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid1,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid2,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            const items = await skuItemController.getAllSkuItems().catch(error => { throw error });
+
+            assert.equal(items.length, 2);
+        })
+    })
+
+    describe('getSkuItems method testing', () => {
+        test('successfull use of getSkuItems', async () => {
+
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "second sku", 50)
+                .catch(() => { throw error });
+
+            const rfid1 = '12345678901234567890123456789019'
+            const rfid2 = '12345678901234567890123456789010'
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid1,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid2,
+                    SKUId: 2,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+
+            const items = await skuItemController.getSkuItems(1).catch(error => { throw error })
+            assert.equal(items.length, 1)
+            assert.equal(items[0].RFID, rfid1)
+        })
+
+        test('attempt to use getSkuItems with a non-existant skuid', async () => {
+            let errorValue;
+            const items = await skuItemController.getSkuItems(1).catch(error => { errorValue = error })
+            assert.equal(errorValue.code, 404)
+        })
+
+        test('attempt to use getSkuItems with a invalid skuid', async () => {
+            let errorValue;
+            const items = await skuItemController.getSkuItems("hello").catch(error => { errorValue = error })
+            assert.equal(errorValue.code, 422)
+        })
+    })
+
+    describe('getSkuItem method testing', () => {
+        test('successfull use of getSkuItem', async () => {
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
+                .catch(() => { throw error });
+            const rfid = '12345678901234567890123456789019';
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (console.log(error)))
+            const item = await skuItemController.getSkuItem(rfid);
+            assert.equal(item.RFID, rfid);
+        })
+
+        test('attempt to use getSkuItem with a non-existant rfid', async () => {
+            let errorValue;
+            const item = await skuItemController.getSkuItem('12345678901234567890123456789019')
+                .catch(error => errorValue = error)
+            assert.equal(errorValue.code, 404)
+        })
+
+        test('attempt to use getSkuItem with an invalid rfid', async () => {
+            let errorValue;
+            const item = await skuItemController.getSkuItem('hello')
+                .catch(error => errorValue = error)
+            assert.equal(errorValue.code, 422)
+        })
+    })
+
     describe('createSkuItem method testing', () => {
         test('successful use of createSku and createSKUitem', async () => {
 
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         VALUES ( ?, ?, ?, ?, ?, ?);`;
 
-        await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
-            .catch(() => { throw  error});
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+                .catch(() => { throw error });
 
             const rfid = '12345678901234567890123456789019';
 
@@ -78,6 +194,36 @@ describe('SKUItemController Tests', () => {
 
         })
 
+        test('attempt to create SkuItem with an already used rfid', async () => {
+            let errorValue;
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+                .catch(() => { throw error });
+            
+            const rfid = '12345678901234567890123456789019';
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            );
+
+            await skuItemController.createSkuItem(
+                {
+                    RFID: rfid,
+                    SKUId: 1,
+                    DateOfStock: "2022/01/01",
+                }
+            ).catch(error => (errorValue = error));
+
+            assert.equal(errorValue.code, 500);
+
+        })
+
         test('attempt to create SkuItem with invalid SKUId', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
@@ -119,8 +265,8 @@ describe('SKUItemController Tests', () => {
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         VALUES ( ?, ?, ?, ?, ?, ?);`;
 
-        await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
-            .catch(() => { throw  error});
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+                .catch(() => { throw error });
 
             const rfid = '12345678901234567890123456789019';
             await skuItemController.createSkuItem(
@@ -209,12 +355,12 @@ describe('SKUItemController Tests', () => {
 
     describe('deleteSkuItem method testing', () => {
         test('successful use of createSkuItem and deleteSkuItem', async () => {
-            
+
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         VALUES ( ?, ?, ?, ?, ?, ?);`;
 
-        await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
-            .catch(() => { throw  error});
+            await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+                .catch(() => { throw error });
 
             const rfid = '12345678901234567890123456789019';
             await skuItemController.createSkuItem(
@@ -238,7 +384,7 @@ describe('SKUItemController Tests', () => {
             let errorValue;
             await skuItemController.deleteSkuItem(rfid)
                 .catch(error => errorValue = error);
-                        
+
             assert.equal(422, errorValue.code);
         })
     })
