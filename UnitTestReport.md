@@ -1968,35 +1968,93 @@ The input value is the body of the HTTP POST request.
 
 **Predicates for method *createTestDescriptor*:**
 
-|      Criteria       |                         Predicate                         |
-| :-----------------: | :-------------------------------------------------------: |
-| Validity of *idSKU* | There is a SKU with the specified *idSKU* in the database |
-|                     | There is a SKU with the specified *idSKU* in the database |
+|       Criteria       |                           Predicate                            |
+| :------------------: | :------------------------------------------------------------: |
+| Validity of *idSKU*  | There is not an SKU with the specified *idSKU* in the database |
+|                      |   There is an SKU with the specified *idSKU* in the database   |
+| Validity of the body |                 The body is correctly written                  |
+|                      |                      The body is invalid                       |
 
 
 
 
 **Boundaries**:
 
-|      Criteria       |  Boundary values  |
-| :-----------------: | :---------------: |
-| Validity of *idSKU* | No boundary found |
+|       Criteria       |  Boundary values  |
+| :------------------: | :---------------: |
+| Validity of *idSKU*  | No boundary found |
+| Validity if the body | No boundary found |
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-| :--------: | :-------------: | :--------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no SKU with *idSKU* |                |
-|   Valid    |      Valid      | There is a SKU with *idSKU*  |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                  Description of the test case                  | Jest test case |
+| :--------: | :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
+|   Valid    |   Valid    |      Valid      | There is an SKU with *idSKU* and the body is correctly written |test("Successfully create a Test Descriptor")                |
+|  Invalid   |   Valid    |     Invalid     |                There is not an SKU with *idSKU*                | test("Insertion of a test descriptor with a non-existing SKU")               |
+|   Valid    |  Invalid   |     Invalid     |                      The body is invalid                       |       test("Insertion of a test descriptor with invalid body")         |
+
+## 1) Test Case: "Successfully create a Test Descriptor"
+```
+    let result;
+    let currId;
+    const body = {
+        name: "a_test_descriptor",
+        procedureDescription: "procedureDescription99",
+        idSKU: 1
+    };
+    currId = ((await testDescriptorController.getAllTestDescriptors()).length) + 1;
+
+    await testDescriptorController.createTestDescriptor(body);
+
+    result = await testDescriptorController.getTestDescriptor(currId).catch(() => { });
+
+    expect(result).not.to.be.undefined;  
+```
+
+## 2) Test Case: "Insertion of a test descriptor with a non-existing SKU"
+```
+    let result;
+    let currId;
+    const body = {
+        name: "new_test_descriptor",
+        procedureDescription: "procedureDescription13",
+        idSKU: -13000
+    };
+    currId = ((await testDescriptorController.getAllTestDescriptors()).length) + 1;
+
+    await testDescriptorController.createTestDescriptor(body).catch(() => { });
+
+    result = await testDescriptorController.getTestDescriptor(currId).catch(() => { });
+
+    expect(result).to.be.undefined; 
+```
+
+## 3) Test Case: "Insertion of a test descriptor with invalid body"
+```
+    let result;
+    let currId;
+    const body = {
+        name: "another_test_descriptor",
+        procedureDescription: "procedureDescription44",
+        idSKU: "anSKU"
+    };
+    currId = ((await testDescriptorController.getAllTestDescriptors()).length) + 1;
+
+    await testDescriptorController.createTestDescriptor(body).catch(() => { });
+
+    result = await testDescriptorController.getTestDescriptor(currId).catch(() => { });
+
+    expect(result).to.be.undefined; 
+```
 
 ## **Class *TestDescriptorController* - method *editTestDescriptor***
 
 The input value is the body of the HTTP PUT request and the test id.
 
-**Criteria for method *createTestDescriptor*:**
+**Criteria for method *editTestDescriptor*:**
 	
  - Validity of *newidSKU*
 - Validity of *id*
@@ -2005,12 +2063,12 @@ The input value is the body of the HTTP PUT request and the test id.
 
 
 
-**Predicates for method *createTestDescriptor*:**
+**Predicates for method *editTestDescriptor*:**
 
 |        Criteria        |                              Predicate                              |
 | :--------------------: | :-----------------------------------------------------------------: |
 | Validity of *newidSKU* |    There is a SKU with the specified *newidSKU* in the database     |
-|                        |    There is a SKU with the specified *newidSKU* in the database     |
+|                        |    There is no SKU with the specified *newidSKU* in the database     |
 |    Validity of *id*    | There is no test descriptor with the specified *id* in the database |
 |                        | There is a test descriptor with the specified *id* in the database  |
 
@@ -2029,10 +2087,57 @@ The input value is the body of the HTTP PUT request and the test id.
 
 | Criteria 1 | Criteria 2 | Valid / Invalid |                Description of the test case                 | Jest test case |
 | :--------: | :--------: | :-------------: | :---------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |      There is a SKU with *idSKU*, the test id is valid      |                |
-|   Valid    |  Invalid   |     Invalid     |                There is no SKU with *idSKU*                 |                |
-|  Invalid   |   Valid    |     Invalid     |                There is no test with such id                |                |
+|   Valid    |   Valid    |      Valid      |      There is a SKU with *idSKU*, the test id is valid      |    test("Successfully edit a Test Descriptor")            |
+|  Invalid   |   Valid    |     Invalid     |                There is no test with such id                |   test("Edit a Test Descriptor with invalid id")             |
+|   Valid    |  Invalid   |     Invalid     |                There is no SKU with *idSKU*                 |   test("Edit a Test Descriptor with a non-existent SKU")             |
 |  Invalid   |  Invalid   |     Invalid     | There is no SKU with *idSKU*, there is no test with such id |                |
+
+## 1) Test Case: "Successfully edit a Test Descriptor"
+```
+    let result;
+    let currId;
+    const body = {
+        newName: "newName",
+        newProcedureDescription: "newProcedureDescription",
+        newIdSKU: 2
+    };
+    let thisId;
+
+    currId = ((await testDescriptorController.getAllTestDescriptors()).length);
+
+    await testDescriptorController.editTestDescriptor(currId, body);
+    result = await testDescriptorController.getTestDescriptor(currId);
+    thisId = result['id'];
+
+    expect(thisId).to.be.equal(currId);  
+```
+
+## 2) Test Case: "Edit a Test Descriptor with invalid id"
+```
+    let result;
+    const body = {
+        newName: "newName",
+        newProcedureDescription: "newProcedureDescription",
+        newIdSKU: 2
+    };
+
+    result = await testDescriptorController.editTestDescriptor(-1, body).catch(() => { });
+    expect(result).to.be.undefined;   
+```
+
+## 3) Test Case: "Edit a Test Descriptor with a non-existent SKU"
+```
+    let result;
+    const body = {
+        newName: "newName",
+        newProcedureDescription: "newProcedureDescription",
+        newIdSKU: -20000
+    };
+
+    result = await testDescriptorController.editTestDescriptor(1, body).catch(() => { });
+
+    expect(result).to.be.undefined;  
+```
 
 ## **Class *TestDescriptorController* - method *deleteTestDescriptor***
 
@@ -2066,8 +2171,30 @@ The input value is the id.
 
 | Criteria 1 | Valid / Invalid |     Description of the test case      | Jest test case |
 | :--------: | :-------------: | :-----------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no test descriptor with *id* |                |
-|   Valid    |      Valid      |  There is a test descriptor with *id  |                |
+|  Valid   |     Valid     | There is a test descriptor with *id* |         test("Successfully delete a Test Descriptor")       |
+|   Invalid    |      Invalid      |  There is no test descriptor with *id  |   test("Delete a non-existing Test Descriptor")             |
+
+## 1) Test Case: "Successfully delete a Test Descriptor"
+```
+    let result;
+    await testDescriptorController.deleteTestDescriptor(1);
+
+    result = await testDescriptorController.getTestDescriptor(1).catch(() => { });
+    expect(result).to.be.undefined; 
+```
+
+## 2) Test Case: "Delete a non-existing Test Descriptor"
+```
+    let oldCount, newCount;
+
+    oldCount = (await testDescriptorController.getAllTestDescriptors()).length;
+
+    await testDescriptorController.deleteTestDescriptor(-1).catch(() => { });
+
+    newCount = (await testDescriptorController.getAllTestDescriptors()).length;
+
+    expect(oldCount).to.be.equal(newCount); 
+```
 
 ## **Class *TestResultController* - method *getTestResults***
 
