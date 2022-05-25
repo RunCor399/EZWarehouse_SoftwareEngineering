@@ -125,12 +125,13 @@ describe("TestResultController Tests", () => {
         });
 
 
-        test("attempt of getTestResults with a non-existant testResult", async () => {
+        test("attempt of getTestResults with a non-existant rfid", async () => {
             response = await testResultController.getTestResults("12345678901234567890123456789015")
                 .catch(err => errorValue = err);
 
             assert.equal(errorValue.code, 404)
         });
+
 
 
     });

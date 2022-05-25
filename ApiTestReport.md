@@ -40,7 +40,7 @@ Version: 1.0
 
 # Dependency graph 
 
-<img src="images/DependencyGraph.png" alt="PackageDiagram" width="600"/>
+<img src="images/DependencyGraph.png" alt="DependencyGraph" width="1200"/>
      
 # Integration approach
 To implement Integration tests we have used a mixed approach between Top-Down and Bottom-Up, this is because our Integration and Unit Tests are merged together in several test suites.
