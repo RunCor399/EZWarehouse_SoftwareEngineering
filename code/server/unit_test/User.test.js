@@ -8,9 +8,7 @@ const userController = controller.getUserController();
 const dbManager = controller.getDBManager();
 
 beforeEach(async () => {
-    await dbManager.deleteAllData().then(async () => {
-        //await dbManager.insertUserTestData();
-    })
+    await dbManager.deleteAllData();
 });
 
 afterEach(async () => {
@@ -18,144 +16,248 @@ afterEach(async () => {
 });
 
 describe("UserController Tests", () => {
-    describe("getUserAPI method testing", () => {
-        test("", () => {
-
+    describe("getUserAPI method testing",() => {
+        test("Succesful test, user is manager and is logged",async () => {
+            let body= {
+                "username" : "manager1@ezwh.com", 
+                "password" : "testpassword"
+            }
+            await userController.login(body, "manager");
+            let result=  userController.getUserAPI();
+            expect(result['username']).to.be.equal("manager1@ezwh.com");
+            expect(result['name']).to.be.equal("name6");
+            expect(result['surname']).to.be.equal("surname6");
+            expect(result['type']).to.be.equal("manager");
+            userController.logout();
         });
         
-        test("", () => {
-
-        });
         
-        test("", () => {
-
+        test("Failure test, user is not logged", async() => {
+            let err;
+            let result;
+            try{
+            result=userController.getUserAPI();
+            }
+            catch(error){
+                err=error;
+            }
+            expect(err.code).to.be.equal(401);
         });
     });
     
     describe("getUser method testing", () => {
-        test("", () => {
-
+        test("Succesfully get the manager", async() => {
+            let body= {
+                "username" : "manager1@ezwh.com", 
+                "password" : "testpassword"
+            }
+            await userController.login(body, "manager");
+            let result=  userController.getUser();
+            expect(result['username']).to.be.equal("manager1@ezwh.com");
+            expect(result['name']).to.be.equal("name6");
+            expect(result['surname']).to.be.equal("surname6");
+            expect(result['type']).to.be.equal("manager");
+            userController.logout();
         });
         
-        test("", () => {
-
+        test("Succesfully get an user ", async() => {
+            let body= {
+                "username" : "user1@ezwh.com", 
+                "password" : "testpassword"
+            }
+            await userController.login(body, "customer");
+            let result= userController.getUser();
+            expect(result['username']).to.be.equal("user1@ezwh.com");
+            expect(result['name']).to.be.equal("name1");
+            expect(result['surname']).to.be.equal("surname1");
+            expect(result['type']).to.be.equal("customer");
+            userController.logout();
         });
         
-        test("", () => {
-
+        test("Test failure, user is not logged", async () => {
+            let err;
+            let result;
+            try{
+            result=userController.getUser();
+            }
+            catch(error){
+                err=error;
+            }
+            expect(err.code).to.be.equal(401);
         });
     });
     
     describe("getAllSuppliers method testing", () => {
-        test("", () => {
-
+        test("Succesfully get all the Suppliers", async() => {
+            let result= await userController.getAllSuppliers();
+            expect(result.length).to.be.equal(1);
         });
         
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
     });
 
     describe("getAllUsers method testing", () => {
-        test("", () => {
-
+        test("Succesfully get all the Users", async() => {
+            let result= await userController.getAllUsers();
+            expect(result.length).to.be.equal(6);
         });
         
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
     });
 
     describe("createUser method testing", () => {
-        test("", () => {
-
+        test("Succesful creation of a new user",  async() => {
+            let body={
+                "username" : "user2@ezwh.com", 
+                "password" : "testpassword",
+                "name" : "Giulia",
+                "surname" :"Bianchi",
+                "type" : "customer"
+            }
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.createUser(body);
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length+1);
         });
         
-        test("", () => {
-
+        test("Not succesfull creation, user with same email and type exist", async() => {
+            let body={
+                "username" : "user1@ezwh.com", 
+                "password" : "testpassword",
+                "name" : "Giulia",
+                "surname" :"Bianchi",
+                "type" : "customer"
+            }
+            let err;
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.createUser(body).catch((error)=>(err=error));
+            let newCount= await userController.getAllUsers().catch(()=>{});
+            expect(newCount.length).to.be.equal(oldCount.length);
+            expect(err.code).to.be.equal(409);
         });
         
-        test("", () => {
-
+        test("Not succesful creation, attempted to create a manager", async() => {
+            let body={
+                "username" : "user2@ezwh.com", 
+                "password" : "testpassword",
+                "name" : "Giulia",
+                "surname" :"Bianchi",
+                "type" : "manager"
+            }
+            let err;
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.createUser(body).catch((error)=>(err=error));
+            let newCount= await userController.getAllUsers().catch(()=>{});
+            expect(newCount.length).to.be.equal(oldCount.length);
+            expect(err.code).to.be.equal(422);
         });
     });
 
     describe("login method testing", () => {
-        test("", () => {
-
+        test("Succesful login", async () => {
+            let body= {
+                "username" : "manager1@ezwh.com", 
+                "password" : "testpassword"
+            }
+            await userController.login(body, "manager");
+            userController.logout();
         });
         
-        test("", () => {
-
+        test("Failed login, the username is not in the body", async () => {
+            let body= {
+                "password" : "testpassword"
+            }
+            let err;
+            await userController.login(body, "manager").catch((error)=>(err=error));
+            expect(err.code).to.be.equal(422);
         });
         
-        test("", () => {
+        test("Failed login, wrong username", async () => {
+            let body= {
+                "username" : "gatto",
+                "password" : "testpassword"
+            }
+            let err;
+            await userController.login(body, "manager").catch((error)=>(err=error));
+            expect(err.code).to.be.equal(401);
 
         });
     });
 
     describe("logout method testing", () => {
-        test("", () => {
-
+        test("Succesful logout, user is logged", async() => {
+            let body= {
+                "username" : "manager1@ezwh.com", 
+                "password" : "testpassword"
+            }
+            await userController.login(body, "manager");
+            userController.logout();
         });
         
-        test("", () => {
-
+        test("Failure, the user is not logged", () => {
+            let err;
+            try{
+                userController.logout();
+            }
+            catch(error){
+                err=error;
+            }
+            expect(err.code).to.be.equal(500);
         });
         
-        test("", () => {
-
-        });
     });
 
     describe("editUser method testing", () => {
-        test("", () => {
-
+        test("Succesful test, edit done", async () => {
+            let body= {
+                "oldType" : "customer",
+                "newType" :"supplier"
+            }
+            await userController.editUser("user1@ezwh.com", body);
         });
         
-        test("", () => {
-
+        test("Failure, wrong username", async () => {
+            let err;
+            let body= {
+                "oldType" : "customer",
+                "newType" :"supplier"
+            }
+            await userController.editUser("user12@ezwh.com", body).catch((error)=>(err=error));
+            expect(err.code).to.be.equal(404);
         });
         
-        test("", () => {
-
+        test("Failure, tryng to change type into manager", async() => {
+            let err;
+            let body= {
+                "oldType" : "manager",
+                "newType" :"customer"
+            }
+            await userController.editUser("manager1@ezwh.com", body).catch((error)=>(err=error));
+            expect(err.code).to.be.equal(422);
         });
     });
 
     describe("deleteUser method testing", () => {
-        test("", () => {
-
+        test("Succesfully delete an user", async () => {
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.deleteUser("user1@ezwh.com", "customer");
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length-1);
         });
         
-        test("", () => {
-
+        test("User not deleted, trying to delete a manager", async() => {
+            let oldCount= await userController.getAllUsers();
+            let error;
+            let result= await userController.deleteUser("manager1@ezwh.com", "manager").catch((err)=>(error=err));
+            expect(error.code).to.be.equal(422);
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length);
         });
         
-        test("", () => {
-
+        test("User not deleted, trying to delete a non existing user", async() => {
+            let oldCount= await userController.getAllUsers();
+            let error;
+            let result= await userController.deleteUser("customer12@ezwh.com", "customer").catch((err)=>(error=err));
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length);
         });
     });
-
-    describe("hasPermission method testing", () => {
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
-    });
-    
 });

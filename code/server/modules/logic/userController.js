@@ -42,8 +42,9 @@ class UserController {
      * @throws 401 (Not Authorized)
      */
     getUser() {
-        if (!this.#logged)
+        if (!this.#logged){
             throw new Exceptions(401);
+        }
         return this.#user;
     }
 
@@ -73,7 +74,8 @@ class UserController {
 
         let users = await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .catch(error => { throw error });
-        return users;
+
+         return users;
     }
 
 
@@ -128,14 +130,13 @@ class UserController {
             throw new Exceptions(422);
 
         const hashedPassword = MD5(password).toString();
-
         const sqlInstruction = `SELECT * FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
         console.log(username, hashedPassword)
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction, username, hashedPassword, type)
             .then(value => row = value[0])
-            .catch(error => { throw error });
-            
+            .catch(error => { throw error; });
+
         if (!row)
             throw new Exceptions(401);
         
@@ -146,6 +147,7 @@ class UserController {
         this.#user.surname = row.surname;
         this.#user.type = row.type;
         this.#logged = true;
+        console.log(this.#logged);
 
         return ({
             id: this.#user.id,
@@ -159,6 +161,7 @@ class UserController {
      * @throws 500 Internal Server Error (generic error). 
      */
     logout() {
+        console.log(this.#logged);
         if (!this.#logged)
             throw new Exceptions(500)//already logged out
         this.#logged = false;
@@ -172,7 +175,6 @@ class UserController {
      * @throws 503 Service Unavailable (generic error)
      */
     async editUser(username, body) {
-        console.log(username);
         if(username== "undefined")
             username=undefined;
         
