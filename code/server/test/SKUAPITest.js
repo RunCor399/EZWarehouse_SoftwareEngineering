@@ -40,7 +40,7 @@ describe('sku test suite', async () => {
     })
 
 
-    describe('create sku, get, modify and then delete', async () => {
+    describe('successfully created a sku', async () => {
 
         it('add sku', async () => {
             const response1 = await skuAPICalls.addSKUTest("descriptionTest", 10, 20, "noteTest", 10.99, 5);
@@ -67,9 +67,44 @@ describe('sku test suite', async () => {
 
     });
 
+    describe('successfully deleted a sku', async () => {
+        it('add and delete a sku', async () => {
+            let response
+            response = await skuAPICalls.addSKUTest("descriptionTest", 10, 20, "noteTest", 10.99, 5);
+            response.status.should.equal(201);
+
+            response = await skuAPICalls.getSKUTest(1);
+            assert.equal(response.data.id, 1)
+
+            response = await skuAPICalls.deleteSKUTest(1);
+            response.status.should.equal(204);
+
+            response = await skuAPICalls.getSKUTest(1);
+            response.status.should.equal(404)
+        })
+    })
+
+    describe('successfully got a list of skus', async () => {
+        it.only('add some skus and get all', async() => {
+            let response
+            response = await skuAPICalls.addSKUTest("description1", 10, 20, "noteTest", 10.99, 5);
+            response.status.should.equal(201);
+            response = await skuAPICalls.addSKUTest("description2", 10, 20, "noteTest", 10.99, 5);
+            response.status.should.equal(201);
+            response = await skuAPICalls.addSKUTest("description3", 10, 20, "noteTest", 10.99, 5);
+            response.status.should.equal(201);
+
+            response = await skuAPICalls.getSKUsTest();
+            assert.equal(response.data[0].description, "description1")
+            assert.equal(response.data[1].description, "description2")
+            assert.equal(response.data[2].description, "description3")
+
+        })
+    })
+
     describe('position test', async () => {
 
-        it('create sku, position and set', async () => {
+        it('successfully set a position to a sku', async () => {
 
             const weight = 10;
             const volume = 20;
@@ -175,8 +210,8 @@ describe('sku test suite', async () => {
 
         })
 
-        it('too much volume for position', async () =>  {
-            
+        it('too much volume for position', async () => {
+
             const response1 = await positionAPICalls.addPosition("800234543412", "8002", "3454", "3412", 1000, 1000)
             response1.status.should.equal(201);
 
@@ -188,7 +223,7 @@ describe('sku test suite', async () => {
 
         })
 
-        it('already occupied position', async() => {
+        it('already occupied position', async () => {
             const response1 = await positionAPICalls.addPosition("800234543412", "8002", "3454", "3412", 1000, 1000)
             response1.status.should.equal(201);
 
