@@ -3412,13 +3412,13 @@ The input value is the body of the HTTP PUT Request and the order id
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                      Description of the test case                                       |                                       Jest test case |
-| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------: | ---------------------------------------------------: |
-|   Valid    |   Valid    |      Valid      | There is a order with the given *id* in the database, the new state is "ACCEPTED"|          test("Successfully edit an Internal Order with state = 'ACCEPTED'") |
-|   Valid    |   Valid    |      Valid      | There is a order with the given *id* in the database, the new state is "COMPLETED"|          test("Successfully edit an Internal Order with state = 'COMPLETED'") |
-|   Valid    |  Invalid   |     Invalid     |                                    The *state* is an invalid string                                     | test("Edit an Internal Order with an invalid state") |
-|  Invalid   |   Valid    |     Invalid     |                          There is no order with the given *id* in the database                          |           test("Edit a non-existing Internal Order") |
-|  Invalid   |  Invalid   |     Invalid     |         The *state* is an invalid string, there is no order with the given *id* in the database         |                                                      |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                              Description of the test case                               |                                                       Jest test case |
+| :--------: | :--------: | :-------------: | :-------------------------------------------------------------------------------------: | -------------------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      |    There is a order with the given *id* in the database, the new state is "ACCEPTED"    |  test("Successfully edit an Internal Order with state = 'ACCEPTED'") |
+|   Valid    |   Valid    |      Valid      |   There is a order with the given *id* in the database, the new state is "COMPLETED"    | test("Successfully edit an Internal Order with state = 'COMPLETED'") |
+|   Valid    |  Invalid   |     Invalid     |                            The *state* is an invalid string                             |                 test("Edit an Internal Order with an invalid state") |
+|  Invalid   |   Valid    |     Invalid     |                  There is no order with the given *id* in the database                  |                           test("Edit a non-existing Internal Order") |
+|  Invalid   |  Invalid   |     Invalid     | The *state* is an invalid string, there is no order with the given *id* in the database |                                                                      |
 
 ## 1) Test Case: "Successfully edit an Internal Order with state = 'ACCEPTED'"
 ```
@@ -4126,16 +4126,17 @@ test('attempt of deleteItem with invalid id', async () => {
 
 
 
-| Unit name                                                 | Jest test case                                                 |
-| --------------------------------------------------------- | -------------------------------------------------------------- |
-| internalOrderController.js -> createInternalOrder(body)   | test("Successfully add a new Internal Order to Database")      |
-|                                                           | test("Insertion of an Internal Order with malformed date")     |
-|                                                           | test("Insertion of an Internal Order with invalid customerId") |
-| internalOrderController.js -> editInternalOrder(id, body) | test("Successfully edit an Internal Order")                    |
-|                                                           | test("Edit an Internal Order with an invalid state")           |
-|                                                           | test("Edit a non-existing Internal Order")                     |
-| internalOrderController.js -> deleteInternalOrder(id)     | test("Successfully delete an Internal Order")                  |
-|                                                           | test("Delete a non-existing Internal Order")                   |
+| Unit name                                                 | Jest test case                                                       |
+| --------------------------------------------------------- | -------------------------------------------------------------------- |
+| internalOrderController.js -> createInternalOrder(body)   | test("Successfully add a new Internal Order to Database")            |
+|                                                           | test("Insertion of an Internal Order with malformed date")           |
+|                                                           | test("Insertion of an Internal Order with invalid customerId")       |
+| internalOrderController.js -> editInternalOrder(id, body) | test("Successfully edit an Internal Order with state = 'ACCEPTED'")  |
+|                                                           | test("Successfully edit an Internal Order with state = 'COMPLETED'") |
+|                                                           | test("Edit an Internal Order with an invalid state")                 |
+|                                                           | test("Edit a non-existing Internal Order")                           |
+| internalOrderController.js -> deleteInternalOrder(id)     | test("Successfully delete an Internal Order")                        |
+|                                                           | test("Delete a non-existing Internal Order")                         |
 
 
 
