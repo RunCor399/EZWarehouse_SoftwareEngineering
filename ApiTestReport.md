@@ -191,8 +191,13 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 9.3           | FR 6                            | Successfully delete an internal order               |
 | 11.1          | FR 7                            | Successfully add a new Item                         |
 | 11.2          | FR 7                            | Successfully edit an Item                           |
-| ...           |                                 |                                                     |
-
+|               | FR 2.1                          | Successfully created a sku                          |
+|               | FR 2.2                          | Successfully deleted a sku                          |
+|               | FR 2.3                          | Successfully got a list of SKUs                     |
+|               | FR 3.1.1                        | Successfully created/edited a position              |
+|               | FR 3.1.2                        | Successfully deleted a position                     |
+|               | FR 3.1.3                        | Successfully got a list of positions                |
+|               | FR 3.1.4                        | Successfully edited a position                      |
 
 
 # Coverage of Non Functional Requirements
@@ -207,6 +212,6 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | -------------------------- | ---------------------------------------------------------------------- |
 | NFR2                       | All                                                                    |
 | NFR3                       | All                                                                    |
-| NFR4                       | RestockOrderAPITest.js, ReturnOrderAPITest.js                          |
-| NFR6                       | RestockOrderAPITest.js, ReturnOrderAPITest.js,                         |
+| NFR4                       | RestockOrderAPITest.js, ReturnOrderAPITest.js, PositionAPITest.js      |
+| NFR6                       | RestockOrderAPITest.js, ReturnOrderAPITest.js, SkuItemAPITest.js       |
 | NFR9                       | InternalOrderAPITest.js, RestockOrderAPITest.js, ReturnOrderAPITest.js |

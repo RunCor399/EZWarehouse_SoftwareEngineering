@@ -29,7 +29,7 @@ describe('skuitem test suite', async () => {
     })
 
     let response;
-    describe('add and verify', async () => {
+    describe('successfully added a skuitem', async () => {
         it('add skuitem', async () => { //it indicates a TEST CASE
 
             response = await skuAPICalls.addSKUTest("description1", 10, 20, "noteTest", 10.99, 5);
@@ -89,7 +89,7 @@ describe('skuitem test suite', async () => {
 
     })
 
-    describe('modify and verify', async () => {
+    describe('successfully edited a skuitem', async () => {
 
         it('modify skuitem', async () => { //it indicates a TEST CASE
             response = await skuAPICalls.addSKUTest("description1", 10, 20, "noteTest", 10.99, 5);
@@ -111,7 +111,7 @@ describe('skuitem test suite', async () => {
 
     })
 
-    describe('delete and verify', async () => {
+    describe('successfully deleted an skuitem', async () => {
 
         it('delete skuitem', async () => { //it indicates a TEST CASE
             response = await skuAPICalls.addSKUTest("description1", 10, 20, "noteTest", 10.99, 5);
