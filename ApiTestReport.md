@@ -33,7 +33,7 @@ Version: 1.0
 
 # Dependency graph 
 
-     <report the here the dependency graph of the classes in EzWH, using plantuml or other tool>
+<img src="images/DependencyGraph.png" alt="PackageDiagram" width="600"/>
      
 # Integration approach
 To implement Integration tests we have used a mixed approach between Top-Down and Bottom-Up, this is because our Integration and Unit Tests are merged together in several test suites.
