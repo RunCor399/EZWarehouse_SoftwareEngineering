@@ -227,11 +227,31 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 ## Test Result Controller Test Suite
    
-| Classes                                                | Jest test cases |
-| ------------------------------------------------------ | --------------- |
-| controller.js - testResultController.js - dbManager.js | test("")        |
-| controller.js - testResultController.js - dbManager.js | test("")        |
-| controller.js - testResultController.js - dbManager.js | test("")        |
+| Classes                                                | Jest test cases                                                         |
+| ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| controller.js - testResultController.js - dbManager.js | test("successful use of getTestResults")                                |
+| controller.js - testResultController.js - dbManager.js | test("attempt of getTestResults with an undefined parameter")           |
+| controller.js - testResultController.js - dbManager.js | test("attempt of getTestResults with an invalid parameter")             |
+| controller.js - testResultController.js - dbManager.js | attempt of getTestResults with a non-existant rfid                      |
+| controller.js - testResultController.js - dbManager.js | test("successful use of getTestResult")                                 |
+| controller.js - testResultController.js - dbManager.js | test("attempt of getTestResults with an undefined parameter")           |
+| controller.js - testResultController.js - dbManager.js | test("attempt of getTestResult with an invalid parameter")              |
+| controller.js - testResultController.js - dbManager.js | test("attempt of getTestResults with a non-existant testResult")        |
+| controller.js - testResultController.js - dbManager.js | test("Successful use of createTestResult")                              |
+| controller.js - testResultController.js - dbManager.js | test("attempt of createTestResult with a non-existant test descriptor") |
+| controller.js - testResultController.js - dbManager.js | test("attempt of createTestResult with a non-existant skuitem")         |
+| controller.js - testResultController.js - dbManager.js | test("attempt of createTestResult with an undefined parameter")         |
+| controller.js - testResultController.js - dbManager.js | test("attempt of createTestResult with an invalid parameter")           |
+| controller.js - testResultController.js - dbManager.js | test("attempt of createTestResult with an invalid date")                |
+| controller.js - testResultController.js - dbManager.js | test("successful use of editTestResult")                                |
+| controller.js - testResultController.js - dbManager.js | test("attempt of editTestResult with an undefined parameter")           |
+| controller.js - testResultController.js - dbManager.js | test("attempt of editTestResult with an invalid parameter")             |
+| controller.js - testResultController.js - dbManager.js | test("attempt of editTestResult with a non-existant testDescriptor")    |
+| controller.js - testResultController.js - dbManager.js | test("attempt of editTestResult with a non-existant testResult")        |
+| controller.js - testResultController.js - dbManager.js | test("attempt of editTestResult with a non-existant skuitem")           |
+| controller.js - testResultController.js - dbManager.js | test("successful use of deleteTestResult")                              |
+| controller.js - testResultController.js - dbManager.js | test("attempt of deleteTestResult with an undefined parameter")         |
+| controller.js - testResultController.js - dbManager.js | test("attempt of deleteTestResult with an invalid parameter")           |
 
 
 

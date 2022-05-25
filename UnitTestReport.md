@@ -4522,7 +4522,6 @@ test('attempt of deleteItem with invalid id', async () => {
 | Unit name                              | Jest test case                                              |
 | -------------------------------------- | ----------------------------------------------------------- |
 | itemController.js -> getAllItems()     | test('successful use of getAllItems')                       |
-|                                        |                                                             |
 | itemController.js -> getItem(id)       | test('successful use of getItem')                           |
 |                                        | test('attempt of getItem with undefined id')                |
 |                                        | test('attempt of getItem with invalid id')                  |
