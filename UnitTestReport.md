@@ -30,8 +30,8 @@ The input value is the id.
 | :--------------: | :-----------------------------------------------------: |
 | Validity of *id* | There is no SKU with the specified *id* in the database |
 |                  | There is a SKU with the specified *id* in the database  |
-| *id* format| The format of id is incorrect|
-|                  | The format of id is correct|
+|   *id* format    |              The format of id is incorrect              |
+|                  |               The format of id is correct               |
 
 
 
@@ -44,12 +44,12 @@ The input value is the id.
 | :--------------: | :---------------: |
 | Validity of *id* | No boundary found |
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |     Description of the test case     | Jest test case |
-| :--------: | :-------------: | :----------------------------------: | :------------: |
-|  Present   |  Valid   |      Valid      | There is a SKU with the chosen *id*  |           test('successful use of getSku')      |
-|   Absent   |   Valid   |    Invalid     | There is no SKU with the chosen *id* |    test('use of getSku with non-existant sku'            |
-|  Present   |  Invalid   |      Invalid      | There is a SKU with the chosen *id*, the *id* is not valid  |           test('use of getSku with invalid id')     |
-|   Absent   |   Invalid   |    Invalid     | There is no SKU with the chosen *id*,  the *id* is not valid |               |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                 Description of the test case                 |               Jest test case               |
+| :--------: | :--------: | :-------------: | :----------------------------------------------------------: | :----------------------------------------: |
+|  Present   |   Valid    |      Valid      |             There is a SKU with the chosen *id*              |      test('successful use of getSku')      |
+|   Absent   |   Valid    |     Invalid     |             There is no SKU with the chosen *id*             | test('use of getSku with non-existant sku' |
+|  Present   |  Invalid   |     Invalid     |  There is a SKU with the chosen *id*, the *id* is not valid  |   test('use of getSku with invalid id')    |
+|   Absent   |  Invalid   |     Invalid     | There is no SKU with the chosen *id*,  the *id* is not valid |                                            |
 
 
 ## 1) Test Case: 'successful use of getAllSku'
@@ -98,18 +98,18 @@ The values used for criteria are not the input of the function, they are taken f
 
 **Predicates for method *createSKU*:**
 
-|               Criteria                |                          Predicate                          |
-| :-----------------------------------: | :---------------------------------------------------------: |
-|           Sign of *weight*            |                    *weight* is positive                     |
-|                                       |                    *weight* is negative                     |
-|           Sign of *volume*            |                    *volume* is positive                     |
-|                                       |                    *volume* is negative                     |
-|      Sign of *availableQuantity*      |               *availableQuantity* is positive               |
-|                                       |               *availableQuantity* is negative               |
-|            Sign of *price*            |                     *price* is positive                     |
-|                                       |                     *price* is negative                     |
-| Absence of a value | There is some missing value in the body of the request |
-|                                       | There is no missing value in the body of the request|
+|          Criteria           |                       Predicate                        |
+| :-------------------------: | :----------------------------------------------------: |
+|      Sign of *weight*       |                  *weight* is positive                  |
+|                             |                  *weight* is negative                  |
+|      Sign of *volume*       |                  *volume* is positive                  |
+|                             |                  *volume* is negative                  |
+| Sign of *availableQuantity* |            *availableQuantity* is positive             |
+|                             |            *availableQuantity* is negative             |
+|       Sign of *price*       |                  *price* is positive                   |
+|                             |                  *price* is negative                   |
+|     Absence of a value      | There is some missing value in the body of the request |
+|                             |  There is no missing value in the body of the request  |
 
 
 
@@ -117,53 +117,53 @@ The values used for criteria are not the input of the function, they are taken f
 
 **Boundaries**:
 
-|               Criteria                |  Boundary values  |
-| :-----------------------------------: | :---------------: |
-|           Sign of *weight*            |         0         |
-|           Sign of *volume*            |         0         |
-|      Sign of *availableQuantity*      |         0         |
-|            Sign of *price*            |         0         |
-| Absence of a value | No boundary found |
+|          Criteria           |  Boundary values  |
+| :-------------------------: | :---------------: |
+|      Sign of *weight*       |         0         |
+|      Sign of *volume*       |         0         |
+| Sign of *availableQuantity* |         0         |
+|       Sign of *price*       |         0         |
+|     Absence of a value      | No boundary found |
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Valid / Invalid |                                    Description of the test case                                     | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :-------------------------------------------------------------------------------------------------: | :------------: |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |     Valid     | The test case considers all the correct signs, no missing value|      test("Successfully add new Sku to Database")      |
-|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |      Invalid      |  The test case considers all the correct signs, there is a missing value|   test("Insertion of a sku with a missing value")             |
-|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |   The test case considers one incorrect sign  |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs  |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign |     test("Insertion of a Sku with negative volume")           |
-|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs|                |
-|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs|                |
-|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs|                |
-|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Positive  |  Positive  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign |                |
-|  Negative  |  Positive  |  Positive  |  Positive  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Negative  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs |                |
-|  Negative  |  Positive  |  Positive  |  Negative  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Negative  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs |                |
-|  Negative  |  Positive  |  Negative  |  Positive  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Negative  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs|                |
-|  Negative  |  Positive  |  Negative  |  Negative  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs|                |
-|  Negative  |  Negative  |  Positive  |  Positive  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Negative  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs |                |
-|  Negative  |  Negative  |  Positive  |  Negative  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     | The test case considers three incorrect signs |                |
-|  Negative  |  Negative  |  Negative  |  Positive  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     |  The test case considers four incorrect signs |                |
-|  Negative  |  Negative  |  Negative  |  Negative  |   Absent   |     Invalid     |                            The test case considers four incorrect signs                             |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Valid / Invalid |                      Description of the test case                       |                 Jest test case                  |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------: | :---------------------------------------------: |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |      Valid      |     The test case considers all the correct signs, no missing value     |  test("Successfully add new Sku to Database")   |
+|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |     Invalid     | The test case considers all the correct signs, there is a missing value | test("Insertion of a sku with a missing value") |
+|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |               The test case considers one incorrect sign                |                                                 |
+|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |     Invalid     |               The test case considers one incorrect sign                |                                                 |
+|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |               The test case considers one incorrect sign                |                                                 |
+|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |     Invalid     |               The test case considers one incorrect sign                |                                                 |
+|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |               The test case considers one incorrect sign                | test("Insertion of a Sku with negative volume") |
+|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |     Invalid     |               The test case considers one incorrect sign                |                                                 |
+|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Negative  |  Positive  |  Positive  |  Positive  |  Present   |     Invalid     |               The test case considers one incorrect sign                |                                                 |
+|  Negative  |  Positive  |  Positive  |  Positive  |   Absent   |     Invalid     |               The test case considers one incorrect sign                |                                                 |
+|  Negative  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Negative  |  Positive  |  Positive  |  Negative  |   Absent   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Negative  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Negative  |  Positive  |  Negative  |  Positive  |   Absent   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Negative  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Negative  |  Positive  |  Negative  |  Negative  |   Absent   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Negative  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Negative  |  Negative  |  Positive  |  Positive  |   Absent   |     Invalid     |               The test case considers two incorrect signs               |                                                 |
+|  Negative  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Negative  |  Negative  |  Positive  |  Negative  |   Absent   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Negative  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Negative  |  Negative  |  Negative  |  Positive  |   Absent   |     Invalid     |              The test case considers three incorrect signs              |                                                 |
+|  Negative  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     |              The test case considers four incorrect signs               |                                                 |
+|  Negative  |  Negative  |  Negative  |  Negative  |   Absent   |     Invalid     |              The test case considers four incorrect signs               |                                                 |
 
 
 ## 1) Test Case: "Successfully add new Sku to Database"
@@ -267,9 +267,9 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 |              Criteria              |                        Predicate                        |
 | :--------------------------------: | :-----------------------------------------------------: |
-|        Sign and validity of *newWeight*         |                 *newWeight* is positive                 |
+|  Sign and validity of *newWeight*  |                 *newWeight* is positive                 |
 |                                    |                 *newWeight* is negative                 |
-|        Sign and validity of *newVolume*         |                 *newVolume* is positive                 |
+|  Sign and validity of *newVolume*  |                 *newVolume* is positive                 |
 |                                    |                 *newVolume* is negative                 |
 |   Sign of *newAvailableQuantity*   |           *newAvailableQuantity* is positive            |
 |                                    |           *newAvailableQuantity* is negative            |
@@ -290,8 +290,8 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 |              Criteria              |  Boundary values  |
 | :--------------------------------: | :---------------: |
-|        Sign and validity of *newWeight*         |         0         |
-|        Sign and validity of *newVolume*         |         0         |
+|  Sign and validity of *newWeight*  |         0         |
+|  Sign and validity of *newVolume*  |         0         |
 |   Sign of *newAvailableQuantity*   |         0         |
 |         Sign of *newPrice*         |         0         |
 |          Validity of *id*          | No boundary found |
@@ -303,73 +303,73 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Criteria 7 | Valid / Invalid |                                                                                                    Description of the test case                                                                                                    | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                                    The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume                                                                    |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                                           The new occupied weight exceeds the maxWeight                                                                                            |    test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored')            |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                                           The new occupied volume exceeds the maxVolume                                                                                            |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Negative  |  Negative  |      Valid      |                                The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value                                 |          test('Successfully edit a sku')      |
-|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |               The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                                       The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                       |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                                       The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                        |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                              The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                                               |    test('Edit a non-existing Sku')            |
-|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                       The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign                                                        |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                    The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there is one wrong sign                    |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                          The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                           The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                  The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                                                  |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                       The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign                                                        |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Negative  |  Negative  |     Invalid     |                    The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there is one wrong sign                    |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                          The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                           The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                  The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                                                  |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                      The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are two wrong signs                                                       |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                              The new occupied weight exceeds the maxWeight, there are two wrong signs                                                                              |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                              The new occupied volume exceeds the maxVolume, there are two wrong signs                                                                              |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                   The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are two wrong signs                   |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     |  The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs  |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                         The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                          The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                 The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                                                 |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                       The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign                                                        |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Negative  |  Negative  |     Invalid     |                    The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there is one wrong sign                    |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |       test('Edit a sku with an invalid new volume')         |
-|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                          The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                                       The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                        |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                  The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                                                  |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                      The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are two wrong signs                                                       |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                              The new occupied weight exceeds the maxWeight, there are two wrong signs                                                                              |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                              The new occupied volume exceeds the maxVolume, there are two wrong signs                                                                              |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                   The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are two wrong signs                   |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     |  The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs  |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                         The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                          The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                 The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                                                 |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                      The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are two wrong signs                                                       |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                              The new occupied weight exceeds the maxWeight, there are two wrong signs                                                                              |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                              The new occupied volume exceeds the maxVolume, there are two wrong signs                                                                              |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Negative  |  Negative  |     Invalid     |                   The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are two wrong signs                   |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |  The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs  |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                         The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                          The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                 The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                                                 |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                     The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are three wrong signs                                                      |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                             The new occupied weight exceeds the maxWeight, there are three wrong signs                                                                             |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                             The new occupied volume exceeds the maxVolume, there are three wrong signs                                                                             |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                  The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are three wrong signs                  |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     | The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                        The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs                         |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                         The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs                         |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                but there is no SKU with the chosen *id* in the database, there are three wrong signs                                                |                |
-|  Invalid  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                The test case considers an invalid weight, but there is no SKU with the chosen *id* in the database                                             |     test('Edit a sku with an undefined value')           |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Criteria 7 | Valid / Invalid |                                                                                                    Description of the test case                                                                                                    |                                                  Jest test case                                                   |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------: |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                                    The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume                                                                    |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                                           The new occupied weight exceeds the maxWeight                                                                                            | test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored') |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                                           The new occupied volume exceeds the maxVolume                                                                                            |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Negative  |  Negative  |      Valid      |                                The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value                                 |                                          test('Successfully edit a sku')                                          |
+|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |               The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                                       The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                       |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                                       The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                        |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                              The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                                               |                                          test('Edit a non-existing Sku')                                          |
+|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                       The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign                                                        |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                    The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there is one wrong sign                    |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                          The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                           The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                                                                                                                   |
+|  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                  The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                                                  |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                       The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign                                                        |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |  Negative  |  Negative  |     Invalid     |                    The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there is one wrong sign                    |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                          The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                           The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                  The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                                                  |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                      The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are two wrong signs                                                       |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                              The new occupied weight exceeds the maxWeight, there are two wrong signs                                                                              |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                              The new occupied volume exceeds the maxVolume, there are two wrong signs                                                                              |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                   The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are two wrong signs                   |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     |  The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs  |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                         The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                          The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                                                                                                                   |
+|  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                 The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                                                 |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                       The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign                                                        |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Negative  |  Negative  |     Invalid     |                    The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there is one wrong sign                    |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |                                   test('Edit a sku with an invalid new volume')                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                          The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                                       The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                        |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                  The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                                                  |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                      The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are two wrong signs                                                       |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                              The new occupied weight exceeds the maxWeight, there are two wrong signs                                                                              |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                              The new occupied volume exceeds the maxVolume, there are two wrong signs                                                                              |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                   The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are two wrong signs                   |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     |  The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs  |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                         The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                          The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                                                                                                                   |
+|  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                 The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                                                 |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                      The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are two wrong signs                                                       |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                              The new occupied weight exceeds the maxWeight, there are two wrong signs                                                                              |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                              The new occupied volume exceeds the maxVolume, there are two wrong signs                                                                              |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |  Negative  |  Negative  |     Invalid     |                   The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are two wrong signs                   |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |  The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs  |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                         The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                          The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                          |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                 The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are two wrong signs                                                 |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                     The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there are three wrong signs                                                      |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                             The new occupied weight exceeds the maxWeight, there are three wrong signs                                                                             |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                             The new occupied volume exceeds the maxVolume, there are three wrong signs                                                                             |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |  Negative  |  Negative  |     Invalid     |                  The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there are three wrong signs                  |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     | The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                        The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs                         |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                         The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs                         |                                                                                                                   |
+|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                                       but there is no SKU with the chosen *id* in the database, there are three wrong signs                                                                        |                                                                                                                   |
+|  Invalid   |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                                The test case considers an invalid weight, but there is no SKU with the chosen *id* in the database                                                                 |                                    test('Edit a sku with an undefined value')                                     |
 |  .......   |
 
 
@@ -536,24 +536,24 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                                                                           Description of the test case                                                                                                           | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :-------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Positive  |  Positive  |  Present   |   Valid    |     Invalid     |                                                                               The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume                                                                               | test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku '=               |
-|  Positive  |  Positive  |  Present   |  Invalid   |     Invalid     |                         The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU                          |                |
-|  Positive  |  Positive  |   Absent   |   Valid    |     Invalid     |                                                      The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database                                                       |                |
-|  Positive  |  Positive  |   Absent   |  Invalid   |     Invalid     | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database, there is no SKU with such SKUID in the database or the poitionID is already associated to a SKU |                |
-|  Positive  |  Negative  |  Present   |   Valid    |     Invalid     |                                                                                                    The occupied weight exceeds the maxWeight                                                                                                     |                |
-|  Positive  |  Negative  |  Present   |  Invalid   |     Invalid     |                                               The occupied weight exceeds the maxWeight, there is no position with such positionID in the database or the poitionID is already associated to a SKU                                               |                |
-|  Positive  |  Negative  |   Absent   |   Valid    |     Invalid     |                                                                            The occupied weight exceeds the maxWeight, there is no SKU with such SKUID in the database                                                                            |                |
-|  Positive  |  Negative  |   Absent   |  Invalid   |     Invalid     |                      The occupied weight exceeds the maxWeight, there is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                       |                |
-|  Negative  |  Positive  |  Present   |   Valid    |     Invalid     |                                                                                                    The occupied volume exceeds the maxVolume                                                                                                     |                |
-|  Negative  |  Positive  |  Present   |  Invalid   |     Invalid     |                                               The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU                                               |                |
-|  Negative  |  Positive  |   Absent   |   Valid    |     Invalid     |                                                                            The occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database                                                                            |                |
-|  Negative  |  Positive  |   Absent   |  Invalid   |     Invalid     |                      The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                       |                |
-|  Negative  |  Negative  |  Present   |   Valid    |      Valid      |                                                                                                         All the conditions are satisfied                                                                                                         |     test('Successfully edit a position of a sku')           |
-|  Negative  |  Negative  |  Present   |  Invalid   |     Invalid     |                                                                    There is no position with such positionID in the database or the poitionID is already associated to a SKU                                                                     |  test('Edit a Sku with a non-existing position ')              |
-|  Negative  |  Negative  |   Absent   |   Valid    |     Invalid     |                                                                                                 There is no SKU with such SKUID in the database                                                                                                  |       test('Edit a non-existing Sku')         |
-|  Negative  |  Negative  |   Absent   |  Invalid   |     Invalid     |                                            There is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                                            |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                                                                           Description of the test case                                                                                                           |                                                         Jest test case                                                         |
+| :--------: | :--------: | :--------: | :--------: | :-------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: |
+|  Positive  |  Positive  |  Present   |   Valid    |     Invalid     |                                                                               The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume                                                                               | test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku '= |
+|  Positive  |  Positive  |  Present   |  Invalid   |     Invalid     |                         The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU                          |                                                                                                                                |
+|  Positive  |  Positive  |   Absent   |   Valid    |     Invalid     |                                                      The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database                                                       |                                                                                                                                |
+|  Positive  |  Positive  |   Absent   |  Invalid   |     Invalid     | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database, there is no SKU with such SKUID in the database or the poitionID is already associated to a SKU |                                                                                                                                |
+|  Positive  |  Negative  |  Present   |   Valid    |     Invalid     |                                                                                                    The occupied weight exceeds the maxWeight                                                                                                     |                                                                                                                                |
+|  Positive  |  Negative  |  Present   |  Invalid   |     Invalid     |                                               The occupied weight exceeds the maxWeight, there is no position with such positionID in the database or the poitionID is already associated to a SKU                                               |                                                                                                                                |
+|  Positive  |  Negative  |   Absent   |   Valid    |     Invalid     |                                                                            The occupied weight exceeds the maxWeight, there is no SKU with such SKUID in the database                                                                            |                                                                                                                                |
+|  Positive  |  Negative  |   Absent   |  Invalid   |     Invalid     |                      The occupied weight exceeds the maxWeight, there is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                       |                                                                                                                                |
+|  Negative  |  Positive  |  Present   |   Valid    |     Invalid     |                                                                                                    The occupied volume exceeds the maxVolume                                                                                                     |                                                                                                                                |
+|  Negative  |  Positive  |  Present   |  Invalid   |     Invalid     |                                               The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU                                               |                                                                                                                                |
+|  Negative  |  Positive  |   Absent   |   Valid    |     Invalid     |                                                                            The occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database                                                                            |                                                                                                                                |
+|  Negative  |  Positive  |   Absent   |  Invalid   |     Invalid     |                      The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                       |                                                                                                                                |
+|  Negative  |  Negative  |  Present   |   Valid    |      Valid      |                                                                                                         All the conditions are satisfied                                                                                                         |                                         test('Successfully edit a position of a sku')                                          |
+|  Negative  |  Negative  |  Present   |  Invalid   |     Invalid     |                                                                    There is no position with such positionID in the database or the poitionID is already associated to a SKU                                                                     |                                        test('Edit a Sku with a non-existing position ')                                        |
+|  Negative  |  Negative  |   Absent   |   Valid    |     Invalid     |                                                                                                 There is no SKU with such SKUID in the database                                                                                                  |                                                test('Edit a non-existing Sku')                                                 |
+|  Negative  |  Negative  |   Absent   |  Invalid   |     Invalid     |                                            There is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                                            |                                                                                                                                |
 
 ## 1) Test Case: 'Successfully edit a position of a sku'
 
@@ -640,8 +640,8 @@ The input value is the id.
 | :--------------: | :-----------------------------------------------------: |
 | Validity of *id* | There is no SKU with the specified *id* in the database |
 |                  | There is a SKU with the specified *id* in the database  |
-| Format of *id* | There format is not valid |
-|                  | The format is valid |
+|  Format of *id*  |                There format is not valid                |
+|                  |                   The format is valid                   |
 
 
 
@@ -654,18 +654,18 @@ The input value is the id.
 |     Criteria     |  Boundary values  |
 | :--------------: | :---------------: |
 | Validity of *id* | No boundary found |
-| Format of *id* | No boundary found |
+|  Format of *id*  | No boundary found |
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 |Criteria 2 | Valid / Invalid |     Description of the test case     | Jest test case |
-| :--------: | :-------------: | :----------------------------------: | :------------: |
-|  Present   |Valid|      Valid      | There is a SKU with the chosen *id*, the format is valid |   test('Successfully delete a Sku')             |
-|   Absent   |  Valid|   Invalid     | There is no SKU with the chosen *id* |     test('Delete a non-existing Sku')           |
-|  Present   |Invalid|      Invalid      | There is a SKU with the chosen *id*, the format is invalid |    test('attempt to delete a Sku with an invalid skuid')            |
-|   Absent   |  Invalid|   Invalid     | There is no SKU with the chosen *id* , the format is invalid |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                 Description of the test case                 | Jest test case                                        |
+| :--------: | :--------: | :-------------: | :----------------------------------------------------------: |
+|  Present   |   Valid    |      Valid      |   There is a SKU with the chosen *id*, the format is valid   | test('Successfully delete a Sku')                     |
+|   Absent   |   Valid    |     Invalid     |             There is no SKU with the chosen *id*             | test('Delete a non-existing Sku')                     |
+|  Present   |  Invalid   |     Invalid     |  There is a SKU with the chosen *id*, the format is invalid  | test('attempt to delete a Sku with an invalid skuid') |
+|   Absent   |  Invalid   |     Invalid     | There is no SKU with the chosen *id* , the format is invalid |                                                       |
 
 ## 1) Test Case: 'Successfully delete a Sku'
 
@@ -1426,40 +1426,58 @@ test('attempt of createPosition with negative volume', async () => {
 
 ## **Class *positionController* - method *editPositionVer1***
 
-The input value is the body of the HTTP PUT Request and the positionid.
-
-**Criteria for method *editPositionVer1*:**
-	
+The input value is the body of the HTTP PUT Request and the positionid.	
 
 
 **Predicates for method *editPositionVer1*:**
 
-| Criteria | Predicate |
-| :------: | :-------: |
-|          |           |
-|          |           |
+|           Criteria           |            Predicate            |
+| :--------------------------: | :-----------------------------: |
+|     positionID validity      |       positionId is valid       |
+|                              |      positionId is invalid      |
+|      position existance      |         position exists         |
+|                              |     position doesn't exist      |
+| position codes compatibility |  position codes are compatible  |
+|                              | position codes are incompatible |
+|        maxWeight sign        |      maxWeight is positive      |
+|                              |      maxWeight is negative      |
+|        maxVolume sign        |      maxVolume is positive      |
+|                              |      maxVolume is negative      |
+|     occupiedWeight sign      |   occupiedWeight is positive    |
+|                              |   occupiedWeight is negative    |
+|     occupiedWVolume sign     |   occupiedVolume is positive    |
+|                              |   occupiedVolume is negative    |
 
 
 
 
 **Boundaries**:
 
-| Criteria | Boundary values |
-| :------: | :-------------: |
-|          |                 |
+|           Criteria           |  Boundary values  |
+| :--------------------------: | :---------------: |
+|     positionID validity      | No boundary found |
+|      position existance      | No boundary found |
+| position codes compatibility | No boundary found |
+|        maxWeight sign        |         0         |
+|        maxVolume sign        |         0         |
+|     occupiedWeight sign      |         0         |
+|     occupiedWVolume sign     |         0         |
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-| :--------: | :-------------: | :--------------------------: | :------------: |
-|            |                 |                              |                |
-|            |                 |                              |                |
-
-
-
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Criteria 7 | Valid / Invalid |    Description of the test case     |                          Jest test case                          |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :---------------------------------: | :--------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |       All parameters are fine       |            test('successful use of editPositionVer1')            |
+|  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |        positionID is invalid        |  test('attempt of editPositionVer1 with an invalid positionID')  |
+|   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |     the position doesn't exist      |  test('attempt of editPositionVer1 with non-existant position')  |
+|   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     | the position codes are incompatible | test('attempt of editPositionVer1 with invalid position codes')  |
+|   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |        maxWeight is negative        |     test('attempt of editPositionVer1 with negative weight')     |
+|   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |        maxVolume is negative        |     test('attempt of editPositionVer1 with negative volume')     |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |     occupiedWeight is negative      | test('attempt of editPositionVer1 with negative occupiedWeight') |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     |     occupiedVolume is negative      | test('attempt of editPositionVer1 with negative occupiedVolume') |
 
 
 **Predicates for method *editPositionVer1*:**
@@ -1627,38 +1645,41 @@ The input value is the body of the HTTP PUT Request and the positionid.
 
 **Criteria for method *editPositionVer2*:**
 	
- - Validity of *id*
-
-
-
+ - Validity of *oldPositionID*
+ - Validity of *newPositionID*
+ - existance of the position
 
 
 **Predicates for method *editPositionVer2*:**
 
-| Criteria | Predicate |
-| :------: | :-------: |
-|          |           |
-|          |           |
-
-
+|          Criteria           |         Predicate          |
+| :-------------------------: | :------------------------: |
+| Validity of *oldPositionID* |   oldPositionID is valid   |
+|                             |  oldPositionID is invalid  |
+| Validity of *newPositionID* |   newPositionId is valid   |
+|                             |  newPositionID is invalid  |
+|  existance of the position  |    the position exists     |
+|                             | the position doesn't exist |
 
 
 **Boundaries**:
 
-| Criteria | Boundary values |
-| :------: | :-------------: |
-|          |                 |
-
+|          Criteria           |  Boundary values  |
+| :-------------------------: | :---------------: |
+| Validity of *oldPositionID* | No boundary found |
+| Validity of *newPositionID* | No boundary found |
+|  existance of the position  | No boundary found |
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-| :--------: | :-------------: | :--------------------------: | :------------: |
-|            |                 |                              |                |
-|            |                 |                              |                |
-
+| Criteria 1 | Criteria 2 | Criterie 3 | Valid / Invalid |         Description of the test case         |                          Jest test case                          |
+| :--------: | :--------: | :--------: | :-------------: | :------------------------------------------: | :--------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |      Valid      | All params are valid and the position exists |            test('successful use of editPositionVer2')            |
+|   Valid    |   Valid    |  Invalid   |     Invalid     |          The position doesn't exist          | test('attempt of editPositionVer2 with a non-existant position') |
+|  Invalid   |   Valid    |   Valid    |     Invalid     |           oldPositionID is invalid           | test('attempt of editPositionVer2 with an invalid oldPositionID' |
+|   Valid    |  Invalid   |   Valid    |     Invalid     |           newPositionId is invalid           | test('attempt of editPositionVer2 with an invalid newPositionID' |
 ## 1) Test case : successful use of editPositionVer2
 ```
 test('successful use of editPositionVer2', async () => {
@@ -2277,24 +2298,24 @@ The input value is the body of the HTTP POST Request
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                                                                                         Description of the test case | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :-------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Present   |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                                 There is an user with the same *type* and *username* |   test("Not succesfull creation, user with same email and type exist")             |
-|  Present   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                     There is an user with the same *type* and *username*, the type format is invalid |                |
-|  Present   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                    There is an user with the same *type* and *username*, the email format is invalid |                |
-|  Present   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                        There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid |                |
-|  Present   |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                            There is an user with the same *type* and *username*, the password is shorter than 8 char |                |
-|  Present   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                There is an user with the same *type* and *username*, the type format is invalid, the password is shorter than 8 char |                |
-|  Present   |  Invalid   |  Invalid   |   Valid    |     Invalid     |                               There is an user with the same *type* and *username*, the email format is invalid, the password is shorter than 8 char |                |
-|  Present   |  Invalid   |  Invalid   |  Invalid   |     Invalid     | There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid, , the password is shorter than 8 char |                |
-|   Absent   |   Valid    |   Valid    |   Valid    |      Valid      |                                                                 All the inserted values are ok, there is no user with the same *type* and *username* |    test("Succesful creation of a new user")            |
-|   Absent   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                                                                           The type format is invalid |      test("Not succesful creation, attempted to create a manager")          |
-|   Absent   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                                                                          The email format is invalid |                |
-|   Absent   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                                                              The type format is invalid, the email format is invalid |                |
-|   Absent   |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                                                                                  The password is shorter than 8 char |                |
-|   Absent   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                                                      The type format is invalid, the password is shorter than 8 char |                |
-|   Absent   |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                                                                     The email format is invalid, the password is shorter than 8 char |                |
-|   Absent   |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                                       The type format is invalid, the email format is invalid, , the password is shorter than 8 char |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                                                                                         Description of the test case |                            Jest test case                            |
+| :--------: | :--------: | :--------: | :--------: | :-------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------: |
+|  Present   |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                                 There is an user with the same *type* and *username* | test("Not succesfull creation, user with same email and type exist") |
+|  Present   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                     There is an user with the same *type* and *username*, the type format is invalid |                                                                      |
+|  Present   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                    There is an user with the same *type* and *username*, the email format is invalid |                                                                      |
+|  Present   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                        There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid |                                                                      |
+|  Present   |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                            There is an user with the same *type* and *username*, the password is shorter than 8 char |                                                                      |
+|  Present   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                There is an user with the same *type* and *username*, the type format is invalid, the password is shorter than 8 char |                                                                      |
+|  Present   |  Invalid   |  Invalid   |   Valid    |     Invalid     |                               There is an user with the same *type* and *username*, the email format is invalid, the password is shorter than 8 char |                                                                      |
+|  Present   |  Invalid   |  Invalid   |  Invalid   |     Invalid     | There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid, , the password is shorter than 8 char |                                                                      |
+|   Absent   |   Valid    |   Valid    |   Valid    |      Valid      |                                                                 All the inserted values are ok, there is no user with the same *type* and *username* |               test("Succesful creation of a new user")               |
+|   Absent   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                                                                           The type format is invalid |    test("Not succesful creation, attempted to create a manager")     |
+|   Absent   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                                                                          The email format is invalid |                                                                      |
+|   Absent   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                                                              The type format is invalid, the email format is invalid |                                                                      |
+|   Absent   |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                                                                                  The password is shorter than 8 char |                                                                      |
+|   Absent   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                                                      The type format is invalid, the password is shorter than 8 char |                                                                      |
+|   Absent   |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                                                                     The email format is invalid, the password is shorter than 8 char |                                                                      |
+|   Absent   |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                                       The type format is invalid, the email format is invalid, , the password is shorter than 8 char |                                                                      |
 
 ## 1) Test Case: "Succesful creation of a new user"
 
@@ -2363,8 +2384,8 @@ The input value is the body of the HTTP POST Request and the type
 | :-----------------------------------: | :--------------------------------------------------------------------------------------------------------: |
 | Validity of *password* and *username* |             The username with *username* exists, the password is valid for the chosen username             |
 |                                       | The username with *username* doesn't exist, if he exists the password is not valid for the chosen username |
-|Missing value|There is a value missing in the body of the request|
-| |There is no value missing in the body of the request|
+|             Missing value             |                            There is a value missing in the body of the request                             |
+|                                       |                            There is no value missing in the body of the request                            |
 
 
 **Boundaries**:
@@ -2372,17 +2393,17 @@ The input value is the body of the HTTP POST Request and the type
 |               Criteria                |  Boundary values  |
 | :-----------------------------------: | :---------------: |
 | Validity of *password* and *username* | No boundary found |
-| Missing value | No boundary found |
+|             Missing value             | No boundary found |
 
 
 **Combination of predicates**:
 
-| Criteria 1 |Criteria 2| Valid / Invalid |              Description of the test case               | Jest test case |
-| :--------: | :-------------: | :-----------------------------------------------------: | :------------: |
-|   Valid    | Present|     Valid      |   The combination of *username and password* is valid   | test("Succesful login")               |
-|   Invalid    | Present|    Invalid     | The combination of *username and password* is not valid |     test("Failed login, wrong username")           |
-|   Valid    | Absent|     Invalid      |   The combination of *username and password* is valid, there is a missing value   |        test("Failed login, the username is not in the body")        |
-|   Invalid    | Absent|    Invalid     | The combination of *username and password* is not valid, there is a missing value |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                           Description of the test case                            | Jest test case                                        |
+| :--------: | :--------: | :-------------: | :-------------------------------------------------------------------------------: |
+|   Valid    |  Present   |      Valid      |                The combination of *username and password* is valid                | test("Succesful login")                               |
+|  Invalid   |  Present   |     Invalid     |              The combination of *username and password* is not valid              | test("Failed login, wrong username")                  |
+|   Valid    |   Absent   |     Invalid     |   The combination of *username and password* is valid, there is a missing value   | test("Failed login, the username is not in the body") |
+|  Invalid   |   Absent   |     Invalid     | The combination of *username and password* is not valid, there is a missing value |                                                       |
 
 
 ## 1) Test Case: "Succesful login"
@@ -2449,12 +2470,12 @@ The input value is the body of the HTTP POST Request and the username
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                   Description of the test case                                                                                    | Jest test case |
-| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |                           The user with *username* exists and the *oldType* corresponds to the type of the user before the API execution, the *newType* is a valid one                            |   test("Succesful test, edit done")             |
-|   Valid    |  Invalid   |     Invalid     |                                                                                  The *newType* is an invalid one                                                                                  |                |
-|  Invalid   |   Valid    |     Invalid     |                 The user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution                  |  test("Failure, wrong username"),    test("Failure, tryng to change type into manager")           |
-|  Invalid   |  Invalid   |     Invalid     | The *newType* is an invalid one, the user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                   Description of the test case                                                                                    |                                     Jest test case                                     |
+| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      |                           The user with *username* exists and the *oldType* corresponds to the type of the user before the API execution, the *newType* is a valid one                            |                           test("Succesful test, edit done")                            |
+|   Valid    |  Invalid   |     Invalid     |                                                                                  The *newType* is an invalid one                                                                                  |                                                                                        |
+|  Invalid   |   Valid    |     Invalid     |                 The user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution                  | test("Failure, wrong username"),    test("Failure, tryng to change type into manager") |
+|  Invalid   |  Invalid   |     Invalid     | The *newType* is an invalid one, the user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution |                                                                                        |
 
 ## 1) Test Case: "Succesful test, edit done"
 
@@ -2502,14 +2523,14 @@ The input value the username and the type
 
 **Predicates for method *deleteUser*:**
 
-|                     Criteria                     |                                                                           Predicate                                                                           |
-| :----------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Validity *username* |                          The user with *username* exists                          |
-|                                                  | The user with *username* doesn't exist|                                                                             |
-|                Validity of *type*                |                                                                                                                                                               | The type is one of them: customer, qualityEmployee, clerk, deliveryEmployee |
-|                                                  |                                                                  The type is not a valid one                                                                  |
-| Format of *username* |                          The format of *username* is incorrect                        |
-|                                                  | The format of *username*  is correct|
+|       Criteria       |               Predicate                |
+| :------------------: | :------------------------------------: |
+| Validity *username*  |    The user with *username* exists     |
+|                      | The user with *username* doesn't exist |                                                                             |
+|  Validity of *type*  |                                        | The type is one of them: customer, qualityEmployee, clerk, deliveryEmployee |
+|                      |      The type is not a valid one       |
+| Format of *username* | The format of *username* is incorrect  |
+|                      |  The format of *username*  is correct  |
 
 **Boundaries**:
 
@@ -2517,21 +2538,21 @@ The input value the username and the type
 | :----------------------------------------------: | :---------------: |
 | Validity of *username* and consistence of *type* | No boundary found |
 |                Validity of *type*                | No boundary found |
-| Format of *username* |No boundary found |
+|               Format of *username*               | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 |Criteria 3| Valid / Invalid |                                                                                Description of the test case                                                                                 | Jest test case |
-| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    | Valid|      Valid      |                           The user with *username* exists and the *type* corresponds to the type of the user before the API execution, the *type* is a valid one                            |    test("Succesfully delete an user")             |
-|   Valid    |  Invalid   |Valid|     Invalid     |                                                                                The *type* is an invalid one                                                                                 |   test("User not deleted, trying to delete a manager")             |
-|  Invalid   |  Invalid   | Invalid|    Invalid     | The *type* is an invalid one, the user with *username* doesn't exist  |                |
-|  Invalid   |   Valid    |Valid|     Invalid     |                The user with *username* doesn't exist             | test("User not deleted, trying to delete a non existing user")               |
-|  Invalid   |  Invalid   | Valid|    Invalid     | The *type* is an invalid one, the user with *username* doesn't exist |                |
-|   Valid    |   Valid    | Invalid|      Invalid      |                           The user with *username* exists , the *type* is a valid one                            |                |
-|   Valid    |  Invalid   |Invalid|     Invalid     |                                                                                The *type* is an invalid one                                                                                 |                |
-|  Invalid   |   Valid    |Invalid|     Invalid     |                The user with *username* doesn't exist                 |                |
-|  Invalid   |  Invalid   | Invalid|    Invalid     | The *type* is an invalid one, the user with *username* doesn't exist  |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                      Description of the test case                                                      | Jest test case                                                 |
+| :--------: | :--------: | :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |      Valid      | The user with *username* exists and the *type* corresponds to the type of the user before the API execution, the *type* is a valid one | test("Succesfully delete an user")                             |
+|   Valid    |  Invalid   |   Valid    |     Invalid     |                                                      The *type* is an invalid one                                                      | test("User not deleted, trying to delete a manager")           |
+|  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                  The *type* is an invalid one, the user with *username* doesn't exist                                  |                                                                |
+|  Invalid   |   Valid    |   Valid    |     Invalid     |                                                 The user with *username* doesn't exist                                                 | test("User not deleted, trying to delete a non existing user") |
+|  Invalid   |  Invalid   |   Valid    |     Invalid     |                                  The *type* is an invalid one, the user with *username* doesn't exist                                  |                                                                |
+|   Valid    |   Valid    |  Invalid   |     Invalid     |                                      The user with *username* exists , the *type* is a valid one                                       |                                                                |
+|   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                      The *type* is an invalid one                                                      |                                                                |
+|  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                 The user with *username* doesn't exist                                                 |                                                                |
+|  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                  The *type* is an invalid one, the user with *username* doesn't exist                                  |                                                                |
 
 ## 1) Test Case: "Succesfully delete an user"
 
@@ -3549,10 +3570,12 @@ The input value is the item id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                            Description of the test case                            |                                                                Jest test case                                                                |
-| :--------: | :-------------: | :--------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: |
-|  Invalid   |     Invalid     | There is no item with the given *id* in the database or id is invalid or undefined | test('attempt of getItem with undefined id') / test('attempt of getItem with invalid id')  test('attempt of getItem with non-existant item') |
-|   Valid    |      Valid      |             There is an item order with the given *id* in the database             |                                                      test('successful use of getItem')                                                       |
+| Criteria 1 | Valid / Invalid |                            Description of the test case                            |                  Jest test case                   |
+| :--------: | :-------------: | :--------------------------------------------------------------------------------: | :-----------------------------------------------: |
+|  Invalid   |     Invalid     | There is no item with the given *id* in the database or id is invalid or undefined |   test('attempt of getItem with undefined id')    |
+|            |                 |                                                                                    |    test('attempt of getItem with invalid id')     |
+|            |                 |                                                                                    | test('attempt of getItem with non-existant item') |
+|   Valid    |      Valid      |             There is an item order with the given *id* in the database             |         test('successful use of getItem')         |
 
 
 ## 1) Test case : successful use of getItem
@@ -4120,51 +4143,51 @@ test('attempt of deleteItem with invalid id', async () => {
 |                                        | test('attempt of deleteItem with undefined id')             |
 |                                        | test('attempt of deleteItem with invalid id')               |
 
-| Unit name                                       | Jest test case                      |
-| ----------------------------------------------- | ----------------------------------- |
-| userController.js -> getUserAPI()    | test("Succesful test, user is manager and is logged")|
-|                                                 | test("Failure test, user is not logged") |
-| userController.js -> getUser() | test("Succesfully get the manager"          |
-|                                                 | test("Succesfully get an user ")   |
-|                                                 | test("Test failure, user is not logged") |
-| userController.js -> getAllSuppliers()     | test("Succesfully get all the Suppliers" |
-| userController.js -> getAllUsers()     | test("Succesfully get all the Users" |
-| userController.js -> createUser()    | test("Succesful creation of a new user")|
-|                                                 | test("Not succesfull creation, user with same email and type exist")|
-|                                                 | test("Not succesful creation, attempted to create a manager")|
-| userController.js -> login()    | test("Succesful login")|
-|                                                 | test("Failed login, the username is not in the body")|
-|                                                 | test("Failed login, wrong username)|
-| userController.js -> logout()    | test("Succesful logout, user is logged")|
-|                                                 | test("Failure, the user is not logged")|
-| userController.js -> editUser()    | test("Succesful test, edit done")|
-|                                                 | test("Failure, wrong username")|
-|                                                 | test("Failure, tryng to change type into manager")|
-| userController.js -> deleteUser()    | test("Succesfully delete an user")|
-|                                                 | test("User not deleted, trying to delete a manager")|
-|                                                 | test("User not deleted, trying to delete a non existing user")|
+| Unit name                              | Jest test case                                                       |
+| -------------------------------------- | -------------------------------------------------------------------- |
+| userController.js -> getUserAPI()      | test("Succesful test, user is manager and is logged")                |
+|                                        | test("Failure test, user is not logged")                             |
+| userController.js -> getUser()         | test("Succesfully get the manager"                                   |
+|                                        | test("Succesfully get an user ")                                     |
+|                                        | test("Test failure, user is not logged")                             |
+| userController.js -> getAllSuppliers() | test("Succesfully get all the Suppliers"                             |
+| userController.js -> getAllUsers()     | test("Succesfully get all the Users"                                 |
+| userController.js -> createUser()      | test("Succesful creation of a new user")                             |
+|                                        | test("Not succesfull creation, user with same email and type exist") |
+|                                        | test("Not succesful creation, attempted to create a manager")        |
+| userController.js -> login()           | test("Succesful login")                                              |
+|                                        | test("Failed login, the username is not in the body")                |
+|                                        | test("Failed login, wrong username)                                  |
+| userController.js -> logout()          | test("Succesful logout, user is logged")                             |
+|                                        | test("Failure, the user is not logged")                              |
+| userController.js -> editUser()        | test("Succesful test, edit done")                                    |
+|                                        | test("Failure, wrong username")                                      |
+|                                        | test("Failure, tryng to change type into manager")                   |
+| userController.js -> deleteUser()      | test("Succesfully delete an user")                                   |
+|                                        | test("User not deleted, trying to delete a manager")                 |
+|                                        | test("User not deleted, trying to delete a non existing user")       |
 
-| Unit name                                       | Jest test case                      |
-| ----------------------------------------------- | ----------------------------------- |
-| skuController.js -> getAllSku()    | test('successful use of getAllSku')|
-| skuController.js -> getSku()    | test('successful use of getSku')|
-|                                                 | test('use of getSku with invalid id')|
-|                                                 | test('use of getSku with non-existant sku')|
-| skuController.js -> createSku()    |test("Successfully add new Sku to Database")|
-|                                                 | test("Insertion of a sku with a missing value")|
-|                                                 | test("Insertion of a Sku with negative volume")|
-| skuController.js -> editSku()    |test('Successfully edit a sku')|
-|                                                 | test('Edit a sku with an invalid new volume')|
-|                                                 | test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored')|
-|                                                 | test('Edit a non-existing Sku')|
-|                                                 | test('Edit a sku with an undefined value')|
-| skuController.js -> setPosition()    |test('Successfully edit a position of a sku')|
-|                                                 | test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku ')|
-|                                                 | test('Edit a non-existing Sku')|
-|                                                 | test('Edit a Sku with a non-existing position ')|
- skuController.js -> deleteSku()    |test('Successfully delete a Sku')|
-|                                                 | test('attempt to delete a Sku with an invalid skuid')|
-|                                                 | test('Delete a non-existing Sku')|
+| Unit name                         | Jest test case                                                                                                                 |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| skuController.js -> getAllSku()   | test('successful use of getAllSku')                                                                                            |
+| skuController.js -> getSku()      | test('successful use of getSku')                                                                                               |
+|                                   | test('use of getSku with invalid id')                                                                                          |
+|                                   | test('use of getSku with non-existant sku')                                                                                    |
+| skuController.js -> createSku()   | test("Successfully add new Sku to Database")                                                                                   |
+|                                   | test("Insertion of a sku with a missing value")                                                                                |
+|                                   | test("Insertion of a Sku with negative volume")                                                                                |
+| skuController.js -> editSku()     | test('Successfully edit a sku')                                                                                                |
+|                                   | test('Edit a sku with an invalid new volume')                                                                                  |
+|                                   | test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored')              |
+|                                   | test('Edit a non-existing Sku')                                                                                                |
+|                                   | test('Edit a sku with an undefined value')                                                                                     |
+| skuController.js -> setPosition() | test('Successfully edit a position of a sku')                                                                                  |
+|                                   | test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku ') |
+|                                   | test('Edit a non-existing Sku')                                                                                                |
+|                                   | test('Edit a Sku with a non-existing position ')                                                                               |
+| skuController.js -> deleteSku()   | test('Successfully delete a Sku')                                                                                              |
+|                                   | test('attempt to delete a Sku with an invalid skuid')                                                                          |
+|                                   | test('Delete a non-existing Sku')                                                                                              |
 
 
 ### Code coverage report

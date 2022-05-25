@@ -118,17 +118,17 @@ describe('Restock Orders Testing', async () => {
         });
 
         describe('Add a list of SKUItems to a Restock Order by id', async () => {
-            it.only('Successfully add a list of SKUItems', async () => {
+            it('Successfully add a list of SKUItems', async () => {
                 const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERED");
 
-                let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(1, list);
+                await restockOrdersAPICalls.addSKUItemsToRestockOrder(1, list);
 
                 
                 let result = await restockOrdersAPICalls.getRestockOrderById(1);
 
-                response.status.should.equal(200);
+                 result.status.should.equal(200);
             });
 
             it('State of Restock Order different from DELIVERED', async () => {
