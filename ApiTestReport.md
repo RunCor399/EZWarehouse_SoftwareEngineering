@@ -109,10 +109,10 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 ### 
 
-| Non Functional Requirement | Test name |
-| -------------------------- | --------- |
-| NFR2                       | All       |
-| NFR3                       | All       |
-| NFR4                       |           |
-| NFR6                       |           |
-| NFR9                       |           |
+| Non Functional Requirement | Test name               |
+| -------------------------- | ----------------------- |
+| NFR2                       | All                     |
+| NFR3                       | All                     |
+| NFR4                       |                         |
+| NFR6                       |                         |
+| NFR9                       | InternalOrderAPITest.js |
