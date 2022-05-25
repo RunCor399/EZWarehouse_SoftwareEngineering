@@ -75,16 +75,25 @@ describe("TestDescriptorController Tests", () => {
     });
     
     describe("deleteTestDescriptor method testing", () => {
-        test("", () => {
+        test("Successfully delete a Test Descriptor", async () => {
+            let result;
+            await testDescriptorController.deleteTestDescriptor(1);
 
+            result = await testDescriptorController.getTestDescriptor(1).catch(() => { });
+            expect(result).to.be.undefined;
         });
         
-        test("", () => {
+        test("Delete a non-existing Test Descriptor", () => {
+            let oldCount, newCount;
 
+            oldCount = (await testDescriptorController.getAllTestDescriptors()).length;
+
+            await testDescriptorController.deleteTestDescriptor(-1).catch(() => { });
+
+            newCount = (await testDescriptorController.getAllTestDescriptors()).length;
+
+            expect(oldCount).to.be.equal(newCount);
         });
         
-        test("", () => {
-
-        });
     });
 });
