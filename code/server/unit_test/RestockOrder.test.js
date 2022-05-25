@@ -43,8 +43,6 @@ describe('RestockOrderController Tests', () => {
     
         test("Insertion of a RestockOrder with malformed date", async () => {
             let result;
-            let oldCount;
-            let newCount; 
             let currId
             const body = {
                  issueDate : "123/456/7",
@@ -63,8 +61,6 @@ describe('RestockOrderController Tests', () => {
     
         test("Insertion of a RestockOrder with invalid supplierId", async () => {
             let result;
-            let oldCount;
-            let newCount; 
             let currId;
             const body = {
                  issueDate : "123/456/7",
