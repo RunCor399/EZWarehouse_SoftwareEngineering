@@ -22,6 +22,7 @@ Version: 1.0
   - [User Controller Test Suite](#user-controller-test-suite)
   - [Test Descriptor Controller Test Suite](#test-descriptor-controller-test-suite)
   - [Test Result Controller Test Suite](#test-result-controller-test-suite)
+  - [Item Controller Test Suite](#item-controller-test-suite)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
     - [](#)
@@ -253,7 +254,28 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 | controller.js - testResultController.js - dbManager.js | test("attempt of deleteTestResult with an undefined parameter")         |
 | controller.js - testResultController.js - dbManager.js | test("attempt of deleteTestResult with an invalid parameter")           |
 
-
+## Item Controller Test Suite
+| Classes                                          | Jest test cases                                             |
+| ------------------------------------------------ | ----------------------------------------------------------- |
+| controller.js - itemController.js - dbManager.js | test('successful use of getAllItems')                       |
+| controller.js - itemController.js - dbManager.js | test('successful use of getItem')                           |
+| controller.js - itemController.js - dbManager.js | test('attempt of getItem with undefined id')                |
+| controller.js - itemController.js - dbManager.js | test('attempt of getItem with invalid id')                  |
+| controller.js - itemController.js - dbManager.js | test('attempt of getItem with non-existant item')           |
+| controller.js - itemController.js - dbManager.js | test('successful use of createItem')                        |
+| controller.js - itemController.js - dbManager.js | test('attempt of createItem with an undefined parameter')   |
+| controller.js - itemController.js - dbManager.js | test('attempt of createItem with an invalid id')            |
+| controller.js - itemController.js - dbManager.js | test('attempt of createItem with a negative parameter')     |
+| controller.js - itemController.js - dbManager.js | test('attempt of createItem with a non-existant sku')       |
+| controller.js - itemController.js - dbManager.js | test('attempt of createItem with an already existant item') |
+| controller.js - itemController.js - dbManager.js | test('successful use of editItem')                          |
+| controller.js - itemController.js - dbManager.js | test('attempt of editItem with an undefined parameter')     |
+| controller.js - itemController.js - dbManager.js | test('attempt of editItem with a invalid parameter')        |
+| controller.js - itemController.js - dbManager.js | test('attempt of editItem with a negative parameter')       |
+| controller.js - itemController.js - dbManager.js | test('attempt of editItem with a non-existant item')        |
+| controller.js - itemController.js - dbManager.js | test('successful use of deleteItem')                        |
+| controller.js - itemController.js - dbManager.js | test('attempt of deleteItem with undefined id')             |
+| controller.js - itemController.js - dbManager.js | test('attempt of deleteItem with invalid id')               |
 
 # Coverage of Scenarios and FR
 
