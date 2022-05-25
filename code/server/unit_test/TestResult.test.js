@@ -421,8 +421,6 @@ describe("TestResultController Tests", () => {
                 Result: true,
             }).catch(error => console.log(error))
 
-            console.log(5)
-
             await testResultController.editTestResult("12345678901234567890123456789015", 1, {
                 "newIdTestDescriptor": 2,
                 "newDate": "2021/11/28",
@@ -437,12 +435,195 @@ describe("TestResultController Tests", () => {
 
         });
 
-        test("", () => {
+        test("attempt of editTestResult with an undefined parameter", async() => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.editTestResult(undefined, 1, {
+                "newIdTestDescriptor": 2,
+                "newDate": "2021/11/28",
+                "newResult": false
+            })
+            .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
 
         });
 
-        test("", () => {
+        test("attempt of editTestResult with an invalid parameter", async() => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.editTestResult("hello", 1, {
+                "newIdTestDescriptor": 2,
+                "newDate": "2021/11/28",
+                "newResult": false
+            })
+            .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
+        });
+
+        test("attempt of editTestResult with a non-existant testDescriptor", async() => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.editTestResult("12345678901234567890123456789015", 1, {
+                "newIdTestDescriptor": 10,
+                "newDate": "2021/11/28",
+                "newResult": false
+            })
+            .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 404)
+        });
+
+        test("attempt of editTestResult with a non-existant testResult", async() => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.editTestResult("12345678901234567890123456789015", 2, {
+                "newIdTestDescriptor": 2,
+                "newDate": "2021/11/28",
+                "newResult": false
+            })
+            .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 404)
+        });
+
+        test("attempt of editTestResult with a non-existant skuitem", async() => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.editTestResult("12345678901234567890123456789016", 1, {
+                "newIdTestDescriptor": 2,
+                "newDate": "2021/11/28",
+                "newResult": false
+            })
+            .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 404)
         });
     });
 
