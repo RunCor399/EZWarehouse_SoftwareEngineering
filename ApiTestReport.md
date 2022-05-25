@@ -286,13 +286,13 @@ Please note that many of the mocha test cases' implemented (each of them testing
 | 12-1          | FR3.2.1                         | Succesfully add a new Test Descriptor                                                        |
 | 12-2          | FR3.2.2                         | Succesfully edit Test Descriptor                                                             |
 | 12-3          | FR3.2.3                         | Succesfully delete a Test Descriptor                                                         |
-|               | FR 2.1                          | Successfully created a sku                                                                   |
+| 1-1           | FR 2.1                          | Successfully created a sku                                                                   |
 |               | FR 2.2                          | Successfully deleted a sku                                                                   |
 |               | FR 2.3                          | Successfully got a list of SKUs                                                              |
-|               | FR 3.1.1                        | Successfully created/edited a position                                                       |
-|               | FR 3.1.2                        | Successfully deleted a position                                                              |
+| 2-1           | FR 3.1.1                        | Successfully created a position                                                              |
+| 2-5           | FR 3.1.2                        | Successfully deleted a position                                                              |
 |               | FR 3.1.3                        | Successfully got a list of positions                                                         |
-|               | FR 3.1.4                        | Successfully edited a position                                                               |
+| 2-2, 2-3, 2-4 | FR 3.1.4                        | Successfully edited a position                                                               |
 
 
 # Coverage of Non Functional Requirements
