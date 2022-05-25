@@ -1468,16 +1468,16 @@ The input value is the body of the HTTP PUT Request and the positionid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Criteria 7 | Valid / Invalid | Description of the test case |                          Jest test case                          |
-| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :--------------------------: | :--------------------------------------------------------------: |
-|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |                              |            test('successful use of editPositionVer1')            |
-|  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |                              |  test('attempt of editPositionVer1 with an invalid positionID')  |
-|   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |                              |  test('attempt of editPositionVer1 with non-existant position')  |
-|   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |                              | test('attempt of editPositionVer1 with invalid position codes')  |
-|   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |                              |     test('attempt of editPositionVer1 with negative weight')     |
-|   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |                              |     test('attempt of editPositionVer1 with negative volume')     |
-|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |                              | test('attempt of editPositionVer1 with negative occupiedWeight') |
-|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     |                              | test('attempt of editPositionVer1 with negative occupiedVolume') |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Criteria 7 | Valid / Invalid |    Description of the test case     |                          Jest test case                          |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :---------------------------------: | :--------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |       All parameters are fine       |            test('successful use of editPositionVer1')            |
+|  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |        positionID is invalid        |  test('attempt of editPositionVer1 with an invalid positionID')  |
+|   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |     the position doesn't exist      |  test('attempt of editPositionVer1 with non-existant position')  |
+|   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     | the position codes are incompatible | test('attempt of editPositionVer1 with invalid position codes')  |
+|   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |        maxWeight is negative        |     test('attempt of editPositionVer1 with negative weight')     |
+|   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |        maxVolume is negative        |     test('attempt of editPositionVer1 with negative volume')     |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |     occupiedWeight is negative      | test('attempt of editPositionVer1 with negative occupiedWeight') |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     |     occupiedVolume is negative      | test('attempt of editPositionVer1 with negative occupiedVolume') |
 
 
 **Predicates for method *editPositionVer1*:**
@@ -1645,38 +1645,41 @@ The input value is the body of the HTTP PUT Request and the positionid.
 
 **Criteria for method *editPositionVer2*:**
 	
- - Validity of *id*
-
-
-
+ - Validity of *oldPositionID*
+ - Validity of *newPositionID*
+ - existance of the position
 
 
 **Predicates for method *editPositionVer2*:**
 
-| Criteria | Predicate |
-| :------: | :-------: |
-|          |           |
-|          |           |
-
-
+|          Criteria           |         Predicate          |
+| :-------------------------: | :------------------------: |
+| Validity of *oldPositionID* |   oldPositionID is valid   |
+|                             |  oldPositionID is invalid  |
+| Validity of *newPositionID* |   newPositionId is valid   |
+|                             |  newPositionID is invalid  |
+|  existance of the position  |    the position exists     |
+|                             | the position doesn't exist |
 
 
 **Boundaries**:
 
-| Criteria | Boundary values |
-| :------: | :-------------: |
-|          |                 |
-
+|          Criteria           |  Boundary values  |
+| :-------------------------: | :---------------: |
+| Validity of *oldPositionID* | No boundary found |
+| Validity of *newPositionID* | No boundary found |
+|  existance of the position  | No boundary found |
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-| :--------: | :-------------: | :--------------------------: | :------------: |
-|            |                 |                              |                |
-|            |                 |                              |                |
-
+| Criteria 1 | Criteria 2 | Criterie 3 | Valid / Invalid |         Description of the test case         |                          Jest test case                          |
+| :--------: | :--------: | :--------: | :-------------: | :------------------------------------------: | :--------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |      Valid      | All params are valid and the position exists |            test('successful use of editPositionVer2')            |
+|   Valid    |   Valid    |  Invalid   |     Invalid     |          The position doesn't exist          | test('attempt of editPositionVer2 with a non-existant position') |
+|  Invalid   |   Valid    |   Valid    |     Invalid     |           oldPositionID is invalid           | test('attempt of editPositionVer2 with an invalid oldPositionID' |
+|   Valid    |  Invalid   |   Valid    |     Invalid     |           newPositionId is invalid           | test('attempt of editPositionVer2 with an invalid newPositionID' |
 ## 1) Test case : successful use of editPositionVer2
 ```
 test('successful use of editPositionVer2', async () => {
