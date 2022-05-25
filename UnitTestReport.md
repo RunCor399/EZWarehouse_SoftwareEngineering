@@ -2265,8 +2265,30 @@ The input value is the order id.
 
 | Criteria 1 | Valid / Invalid |                  Description of the test case                  | Jest test case |
 | :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database |                |
-|   Valid    |      Valid      | There is an internal order with the given *id* in the database |                |
+|   Valid    |      Valid      | There is an internal order with the given *id* in the database |  test("Successfully delete an Internal Order")              |
+|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database |     test("Delete a non-existing Internal Order")           |
+
+## 1) Test Case: "Successfully delete an Internal Order"
+```
+    let result;
+    await internalOrderController.deleteInternalOrder(1);
+
+    result = await internalOrderController.getInternalOrder(1).catch(() => { });
+    expect(result).to.be.undefined;
+```
+
+## 2) Test Case: "Delete a non-existing Internal Order"
+```
+    let oldCount, newCount;
+
+    oldCount = (await internalOrderController.getAllInternalOrders()).length;
+
+    await internalOrderController.deleteInternalOrder(-1).catch(() => { });
+
+    newCount = (await internalOrderController.getAllInternalOrders()).length;
+
+    expect(oldCount).to.be.equal(newCount);
+```
 
 ## **Class *Item* - method *getItem***
 
