@@ -85,7 +85,7 @@ describe('sku test suite', async () => {
     })
 
     describe('successfully got a list of skus', async () => {
-        it.only('add some skus and get all', async() => {
+        it('add some skus and get all', async() => {
             let response
             response = await skuAPICalls.addSKUTest("description1", 10, 20, "noteTest", 10.99, 5);
             response.status.should.equal(201);
