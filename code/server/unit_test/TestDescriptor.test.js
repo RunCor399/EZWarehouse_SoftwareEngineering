@@ -9,7 +9,7 @@ const dbManager = controller.getDBManager();
 
 beforeEach(async () => {
     await dbManager.deleteAllData().then(async () => {
-        //await dbManager.insertTestDescriptorTestData();
+        await dbManager.insertTestDescriptorTestData();
     })
 });
 
@@ -18,7 +18,7 @@ afterEach(async () => {
 });
 
 describe("TestDescriptorController Tests", () => {
-    describe("getAllTestDescriptors method testing", () => {
+    /*describe("getAllTestDescriptors method testing", () => {
         test("", () => {
 
         });
@@ -44,36 +44,49 @@ describe("TestDescriptorController Tests", () => {
         test("", () => {
 
         });
-    });
-    
+    });*/
+
     describe("createTestDescriptor method testing", () => {
-        test("", () => {
+        test("Successfully create a Test Descriptor", async () => {
+            let result;
+            let currId;
+            const body = {
+                name: "a_test_descriptor",
+                procedureDescription: "procedureDescription99",
+                idSKU: 1
+            };
+            currId = ((await testDescriptorController.getAllTestDescriptors()).length) + 1;
+
+            await testDescriptorController.createTestDescriptor(body);
+
+            result = await testDescriptorController.getTestDescriptor(currId).catch(() => {});
+
+            expect(result).not.to.be.undefined;
+        });
+
+        test("Insertion of a test descriptor with a non-existing SKU", () => {
 
         });
-        
-        test("", () => {
 
-        });
-        
-        test("", () => {
+        test("Insertion of a test descriptor with invalid body", () => {
 
         });
     });
-    
+
     describe("editTestDescriptor method testing", () => {
-        test("", () => {
+        test("Successfully edit a Test Descriptor", () => {
 
         });
-        
-        test("", () => {
+
+        test("Edit a Test Descriptor with invalid id", () => {
 
         });
-        
-        test("", () => {
+
+        test("Edit a Test Descriptor with a non-exitent SKU", () => {
 
         });
     });
-    
+
     describe("deleteTestDescriptor method testing", () => {
         test("Successfully delete a Test Descriptor", async () => {
             let result;
@@ -82,7 +95,7 @@ describe("TestDescriptorController Tests", () => {
             result = await testDescriptorController.getTestDescriptor(1).catch(() => { });
             expect(result).to.be.undefined;
         });
-        
+
         test("Delete a non-existing Test Descriptor", async () => {
             let oldCount, newCount;
 
@@ -94,6 +107,6 @@ describe("TestDescriptorController Tests", () => {
 
             expect(oldCount).to.be.equal(newCount);
         });
-        
+
     });
 });
