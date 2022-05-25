@@ -116,7 +116,7 @@ describe("TestDescriptorController Tests", () => {
             result = testDescriptorController.getTestDescriptor(currId);
             thisId = result['id'];
 
-            expect(currId).to.be.equal(thisId);
+            expect(thisId).to.be.equal(currId);
         });
 
         test("Edit a Test Descriptor with invalid id", async () => {
