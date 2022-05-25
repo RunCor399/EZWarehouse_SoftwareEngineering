@@ -20,7 +20,7 @@ Version: 1.0
   - [Position Controller Test Suite](#position-controller-test-suite)
   - [SKU Controller Test Suite](#sku-controller-test-suite)
   - [User Controller Test Suite](#user-controller-test-suite)
-  - [Test Descriptor Test Suite](#test-descriptor-test-suite)
+  - [Test Descriptor Controller Test Suite](#test-descriptor-controller-test-suite)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
     - [](#)
@@ -211,7 +211,7 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 
 
-## Test Descriptor Test Suite
+## Test Descriptor Controller Test Suite
    
 | Classes                                                    | Jest test cases                                                |
 | ---------------------------------------------------------- | -------------------------------------------------------------- |
