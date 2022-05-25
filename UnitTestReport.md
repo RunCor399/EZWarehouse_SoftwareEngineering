@@ -19,6 +19,7 @@ The input value is the id.
 **Criteria for method *getSKU*:**
 	
  - Validity of *id*
+ -*id* format
 
 
 
@@ -29,6 +30,9 @@ The input value is the id.
 | :--------------: | :-----------------------------------------------------: |
 | Validity of *id* | There is no SKU with the specified *id* in the database |
 |                  | There is a SKU with the specified *id* in the database  |
+| *id* format| The format of id is incorrect|
+|                  | The format of id is correct|
+
 
 
 
@@ -40,10 +44,38 @@ The input value is the id.
 | :--------------: | :---------------: |
 | Validity of *id* | No boundary found |
 
-| Criteria 1 | Valid / Invalid |     Description of the test case     | Jest test case |
+| Criteria 1 | Criteria 2 | Valid / Invalid |     Description of the test case     | Jest test case |
 | :--------: | :-------------: | :----------------------------------: | :------------: |
-|  Present   |      Valid      | There is a SKU with the chosen *id*  |                |
-|   Absent   |     Invalid     | There is no SKU with the chosen *id* |                |
+|  Present   |  Valid   |      Valid      | There is a SKU with the chosen *id*  |           test('successful use of getSku')      |
+|   Absent   |   Valid   |    Invalid     | There is no SKU with the chosen *id* |    test('use of getSku with non-existant sku'            |
+|  Present   |  Invalid   |      Invalid      | There is a SKU with the chosen *id*, the *id* is not valid  |           test('use of getSku with invalid id')     |
+|   Absent   |   Invalid   |    Invalid     | There is no SKU with the chosen *id*,  the *id* is not valid |               |
+
+
+## 1) Test Case: 'successful use of getAllSku'
+
+```
+let result, currId;
+            const result = await skuController.getAllSku();
+            console.log(result);
+            assert.equal(result.length, 1);
+```
+
+## 2) Test Case: 'use of getSku with invalid id'
+
+```
+let errorValue;
+            const result = await skuController.getSku("hello").catch(error => errorValue = error)
+            assert.equal(errorValue.code, 422);
+```
+## 3) Test Case: 'use of getSku with non-existant sku'
+
+```
+let errorValue;
+            let errorValue;
+            await skuController.getSku(2).catch(error => errorValue = error)
+            assert.equal(errorValue.code, 404);
+```
 
 
  ## **Class *skuController* - method *createSKU***
@@ -59,7 +91,7 @@ The values used for criteria are not the input of the function, they are taken f
  - Sign of *volume*
  - Sign of *availableQuantity*
   - Sign of *price*
- - Absence of array of *testDescriptors*
+ - Absence of array of a value
 
 
 
@@ -76,8 +108,8 @@ The values used for criteria are not the input of the function, they are taken f
 |                                       |               *availableQuantity* is negative               |
 |            Sign of *price*            |                     *price* is positive                     |
 |                                       |                     *price* is negative                     |
-| Absence of array of *testDescriptors* | There is no array *testDescriptor* in the body of the POST  |
-|                                       | There is the array *testDescriptor* in the body of the POST |
+| Absence of a value | There is some missing value in the body of the request |
+|                                       | There is no missing value in the body of the request|
 
 
 
@@ -91,7 +123,7 @@ The values used for criteria are not the input of the function, they are taken f
 |           Sign of *volume*            |         0         |
 |      Sign of *availableQuantity*      |         0         |
 |            Sign of *price*            |         0         |
-| Absence of array of *testDescriptors* | No boundary found |
+| Absence of a value | No boundary found |
 
 
 
@@ -100,39 +132,118 @@ The values used for criteria are not the input of the function, they are taken f
 
 | Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Valid / Invalid |                                    Description of the test case                                     | Jest test case |
 | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :-------------------------------------------------------------------------------------------------: | :------------: |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |     Invalid     | The test case considers all the correct signs, but it has an unrequested array of *testDescriptors* |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |      Valid      |  The test case considers all the correct signs and it doesn't have the array of *testDescriptors*   |                |
-|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |   The test case considers one incorrect sign and it has an unrequested array of *testDescriptors*   |                |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |     Valid     | The test case considers all the correct signs, no missing value|      test("Successfully add new Sku to Database")      |
+|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |      Invalid      |  The test case considers all the correct signs, there is a missing value|   test("Insertion of a sku with a missing value")             |
+|  Positive  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |   The test case considers one incorrect sign  |                |
 |  Positive  |  Positive  |  Positive  |  Negative  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign and it has an unrequested array of *testDescriptors*   |                |
+|  Positive  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign |                |
 |  Positive  |  Positive  |  Negative  |  Positive  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs and it has an unrequested array of *testDescriptors*   |                |
+|  Positive  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs  |                |
 |  Positive  |  Positive  |  Negative  |  Negative  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign and it has an unrequested array of *testDescriptors*   |                |
+|  Positive  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign |     test("Insertion of a Sku with negative volume")           |
 |  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs and it has an unrequested array of *testDescriptors*   |                |
+|  Positive  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs|                |
 |  Positive  |  Negative  |  Positive  |  Negative  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs and it has an unrequested array of *testDescriptors*   |                |
+|  Positive  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs|                |
 |  Positive  |  Negative  |  Negative  |  Positive  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs and it has an unrequested array of *testDescriptors*  |                |
+|  Positive  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs|                |
 |  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Positive  |  Positive  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign and it has an unrequested array of *testDescriptors*   |                |
+|  Negative  |  Positive  |  Positive  |  Positive  |  Present   |     Invalid     |   The test case considers one incorrect sign |                |
 |  Negative  |  Positive  |  Positive  |  Positive  |   Absent   |     Invalid     |                             The test case considers one incorrect sign                              |                |
-|  Negative  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs and it has an unrequested array of *testDescriptors*   |                |
+|  Negative  |  Positive  |  Positive  |  Negative  |  Present   |     Invalid     |  The test case considers two incorrect signs |                |
 |  Negative  |  Positive  |  Positive  |  Negative  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Negative  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs and it has an unrequested array of *testDescriptors*   |                |
+|  Negative  |  Positive  |  Negative  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs |                |
 |  Negative  |  Positive  |  Negative  |  Positive  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Negative  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs and it has an unrequested array of *testDescriptors*  |                |
+|  Negative  |  Positive  |  Negative  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs|                |
 |  Negative  |  Positive  |  Negative  |  Negative  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs and it has an unrequested array of *testDescriptors*   |                |
+|  Negative  |  Negative  |  Positive  |  Positive  |  Present   |     Invalid     |  The test case considers two incorrect signs|                |
 |  Negative  |  Negative  |  Positive  |  Positive  |   Absent   |     Invalid     |                             The test case considers two incorrect signs                             |                |
-|  Negative  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs and it has an unrequested array of *testDescriptors*  |                |
+|  Negative  |  Negative  |  Positive  |  Negative  |  Present   |     Invalid     | The test case considers three incorrect signs |                |
 |  Negative  |  Negative  |  Positive  |  Negative  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     | The test case considers three incorrect signs and it has an unrequested array of *testDescriptors*  |                |
+|  Negative  |  Negative  |  Negative  |  Positive  |  Present   |     Invalid     | The test case considers three incorrect signs |                |
 |  Negative  |  Negative  |  Negative  |  Positive  |   Absent   |     Invalid     |                            The test case considers three incorrect signs                            |                |
-|  Negative  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     |  The test case considers four incorrect signs and it has an unrequested array of *testDescriptors*  |                |
+|  Negative  |  Negative  |  Negative  |  Negative  |  Present   |     Invalid     |  The test case considers four incorrect signs |                |
 |  Negative  |  Negative  |  Negative  |  Negative  |   Absent   |     Invalid     |                            The test case considers four incorrect signs                             |                |
 
+
+## 1) Test Case: "Successfully add new Sku to Database"
+
+```
+let result;
+            let oldCount;
+            let newCount;
+            const body = {
+                "description": "a new sku",
+                "weight": 100,
+                "volume": 50,
+                "notes": "second SKU",
+                "price": 10.99,
+                "availableQuantity": 50
+            }
+
+            result = await skuController.getAllSku();
+            oldCount = result.length;
+
+            await skuController.createSku(body);
+
+            result = await skuController.getAllSku();
+            newCount = result.length;
+
+
+            expect(newCount).to.be.equal(oldCount + 1);
+```
+
+## 2) Test Case: "Insertion of a sku with a missing value"
+
+```
+let result;
+            let oldCount;
+            let newCount;
+            const body = {
+                "description": "a new sku",
+                "weight": 100,
+                "volume": 50,
+                "notes": "second SKU",
+                "price": 10.99
+            }
+
+            result = await skuController.getAllSku();
+            oldCount = result.length;
+
+            await skuController.createSku(body).catch(() => { });
+
+            result = await skuController.getAllSku();
+            newCount = result.length;
+
+
+            expect(newCount).to.be.equal(oldCount);
+```
+## 3) Test Case: "Insertion of a Sku with negative volume"
+
+```
+            let result;
+            let oldCount;
+            let newCount;
+            const body = {
+                "description": "a new sku",
+                "weight": 100,
+                "volume": -50,
+                "notes": "second SKU",
+                "price": 10.99,
+                "availableQuantity": 50
+            }
+
+            result = await skuController.getAllSku();
+            oldCount = result.length;
+
+            await skuController.createSku(body).catch(() => { });
+
+            result = await skuController.getAllSku();
+            newCount = result.length;
+
+
+            expect(newCount).to.be.equal(oldCount);
+```
 
 ## **Class *skuController* - method *editSKU***
 
@@ -141,8 +252,8 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 **Criteria for method *editSKU*:**
 	
 
- - Sign of *newWeight*
- - Sign of *newVolume*
+ - Sign and validity of *newWeight*
+ - Sign and validity of *newVolume*
  - Sign of *newAvailableQuantity*
  - Sign of *newPrice*
  - Validity of *id*
@@ -156,9 +267,9 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 |              Criteria              |                        Predicate                        |
 | :--------------------------------: | :-----------------------------------------------------: |
-|        Sign of *newWeight*         |                 *newWeight* is positive                 |
+|        Sign and validity of *newWeight*         |                 *newWeight* is positive                 |
 |                                    |                 *newWeight* is negative                 |
-|        Sign of *newVolume*         |                 *newVolume* is positive                 |
+|        Sign and validity of *newVolume*         |                 *newVolume* is positive                 |
 |                                    |                 *newVolume* is negative                 |
 |   Sign of *newAvailableQuantity*   |           *newAvailableQuantity* is positive            |
 |                                    |           *newAvailableQuantity* is negative            |
@@ -179,8 +290,8 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 |              Criteria              |  Boundary values  |
 | :--------------------------------: | :---------------: |
-|        Sign of *newWeight*         |         0         |
-|        Sign of *newVolume*         |         0         |
+|        Sign and validity of *newWeight*         |         0         |
+|        Sign and validity of *newVolume*         |         0         |
 |   Sign of *newAvailableQuantity*   |         0         |
 |         Sign of *newPrice*         |         0         |
 |          Validity of *id*          | No boundary found |
@@ -195,13 +306,13 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 | Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Criteria 7 | Valid / Invalid |                                                                                                    Description of the test case                                                                                                    | Jest test case |
 | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
 |  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Positive  |  Positive  |     Invalid     |                                                                    The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume                                                                    |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                                           The new occupied weight exceeds the maxWeight                                                                                            |                |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                                           The new occupied weight exceeds the maxWeight                                                                                            |    test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored')            |
 |  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                                           The new occupied volume exceeds the maxVolume                                                                                            |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Negative  |  Negative  |      Valid      |                                The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value                                 |                |
+|  Positive  |  Positive  |  Positive  |  Positive  |  Present   |  Negative  |  Negative  |      Valid      |                                The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value                                 |          test('Successfully edit a sku')      |
 |  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |               The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                |                |
 |  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                                       The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                       |                |
 |  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                                       The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                        |                |
-|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                              The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                                               |                |
+|  Positive  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                              The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                                               |    test('Edit a non-existing Sku')            |
 |  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Positive  |  Positive  |     Invalid     |                                                       The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, there is one wrong sign                                                        |                |
 |  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                |
 |  Positive  |  Positive  |  Positive  |  Negative  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                |
@@ -230,7 +341,7 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 |  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Positive  |  Negative  |     Invalid     |                                                                               The new occupied weight exceeds the maxWeight, there is one wrong sign                                                                               |                |
 |  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Negative  |  Positive  |     Invalid     |                                                                               The new occupied volume exceeds the maxVolume, there is one wrong sign                                                                               |                |
 |  Positive  |  Negative  |  Positive  |  Positive  |  Present   |  Negative  |  Negative  |     Invalid     |                    The test case considers all the correct signs, there is a SKU with the chosen *id* in the database, the occupied volume and weight don't exceed their maximum value, there is one wrong sign                    |                |
-|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |                |
+|  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Positive  |  Positive  |     Invalid     |   The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign   |       test('Edit a sku with an invalid new volume')         |
 |  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Positive  |  Negative  |     Invalid     |                          The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                           |                |
 |  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Negative  |  Positive  |     Invalid     |                                       The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database                                        |                |
 |  Positive  |  Negative  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                  The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there is one wrong sign                                                  |                |
@@ -257,8 +368,128 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 |  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Positive  |  Positive  |     Invalid     | The new occupied weight exceeds the maxWeight, the new occupied volume exceeds the maxVolume, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs |                |
 |  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Positive  |  Negative  |     Invalid     |                        The new occupied weight exceeds the maxWeight, the test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs                         |                |
 |  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Negative  |  Positive  |     Invalid     |                         The new occupied volume exceeds the maxVolume, he test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs                         |                |
-|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                The test case considers all the correct signs, but there is no SKU with the chosen *id* in the database, there are three wrong signs                                                |                |
+|  Positive  |  Negative  |  Negative  |  Negative  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                but there is no SKU with the chosen *id* in the database, there are three wrong signs                                                |                |
+|  Invalid  |  Positive  |  Positive  |  Positive  |   Absent   |  Negative  |  Negative  |     Invalid     |                                                The test case considers an invalid weight, but there is no SKU with the chosen *id* in the database                                             |     test('Edit a sku with an undefined value')           |
 |  .......   |
+
+
+
+## 1) Test Case: 'Successfully edit a sku'
+
+```
+let result;
+            const body = {
+                "newDescription": "a new sku",
+                "newWeight": 10,
+                "newVolume": 10,
+                "newNotes": "first SKU",
+                "newPrice": 10.99,
+                "newAvailableQuantity": 3
+            }
+
+
+            await skuController.editSku(1, body).catch(() => { });;
+
+            result = await skuController.getSku(1);
+
+            expect(result['description']).to.be.equal("a new sku");
+            expect(result['weight']).to.be.equal(10);
+            expect(result['volume']).to.be.equal(10);
+            expect(result['notes']).to.be.equal("first SKU");
+            expect(result['price']).to.be.equal(10.99);
+            expect(result['availableQuantity']).to.be.equal(3);
+```
+
+## 2) Test Case: 'Edit a sku with an invalid new volume'
+
+```
+let result;
+            const body = {
+                "newDescription": "a new sku",
+                "newWeight": 10,
+                "newVolume": -10,
+                "newNotes": "first SKU",
+                "newPrice": 10.99,
+                "newAvailableQuantity": 3
+            }
+            let oldResult, newResult;
+
+            oldResult = await skuController.getSku(1);
+
+            await skuController.editSku(1, body).catch(() => { });
+
+            newResult = await skuController.getSku(1);
+
+            expect(oldResult['description']).to.be.equal(newResult['description']);
+            expect(oldResult['weight']).to.be.equal(newResult['weight']);
+            expect(oldResult['volume']).to.be.equal(newResult['volume']);
+            expect(oldResult['notes']).to.be.equal(newResult['notes']);
+            expect(oldResult['price']).to.be.equal(newResult['price']);
+            expect(oldResult['availableQuantity']).to.be.equal(newResult['availableQuantity']);
+```
+## 3) Test Case: 'Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored'
+
+```
+            let result;
+            const body = {
+                "newDescription": "a new sku",
+                "newWeight": 30,
+                "newVolume": 30,
+                "newNotes": "first SKU",
+                "newPrice": 10.99,
+                "newAvailableQuantity": 10
+            }
+            let oldResult, newResult;
+
+            oldResult = await skuController.getSku(1);
+
+            await skuController.editSku(1, body).catch(() => { });
+
+            newResult = await skuController.getSku(1);
+
+            expect(oldResult['description']).to.be.equal(newResult['description']);
+            expect(oldResult['weight']).to.be.equal(newResult['weight']);
+            expect(oldResult['volume']).to.be.equal(newResult['volume']);
+            expect(oldResult['notes']).to.be.equal(newResult['notes']);
+            expect(oldResult['price']).to.be.equal(newResult['price']);
+            expect(oldResult['availableQuantity']).to.be.equal(newResult['availableQuantity']);
+```
+
+## 4) Test Case: 'Edit a non-existing Sku'
+
+```
+           let result;
+            const body = {
+                "newDescription": "a new sku",
+                "newWeight": 10,
+                "newVolume": 10,
+                "newNotes": "first SKU",
+                "newPrice": 10.99,
+                "newAvailableQuantity": 3
+            }
+
+
+            result = await skuController.editSku(2, body).catch(() => { });
+            expect(result).to.be.undefined;
+```
+
+## 5) Test Case: 'Edit a sku with an undefined value'
+
+```
+                       let errorValue;
+            const body = {
+                "newDescription": "a new sku",
+                "newWeight": undefined,
+                "newVolume": 10,
+                "newNotes": "first SKU",
+                "newPrice": 10.99,
+                "newAvailableQuantity": 3
+            }
+
+            await skuController.editSku(1, body).catch(error => errorValue = error);
+            assert.equal(errorValue.code, 422)
+
+```
 
 
 
@@ -307,7 +538,7 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 
 | Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                                                                           Description of the test case                                                                                                           | Jest test case |
 | :--------: | :--------: | :--------: | :--------: | :-------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Positive  |  Positive  |  Present   |   Valid    |     Invalid     |                                                                               The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume                                                                               |                |
+|  Positive  |  Positive  |  Present   |   Valid    |     Invalid     |                                                                               The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume                                                                               | test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku '=               |
 |  Positive  |  Positive  |  Present   |  Invalid   |     Invalid     |                         The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU                          |                |
 |  Positive  |  Positive  |   Absent   |   Valid    |     Invalid     |                                                      The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database                                                       |                |
 |  Positive  |  Positive  |   Absent   |  Invalid   |     Invalid     | The occupied weight exceeds the maxWeight, the occupied volume exceeds the maxVolume, there is no position with such positionID in the database, there is no SKU with such SKUID in the database or the poitionID is already associated to a SKU |                |
@@ -319,10 +550,76 @@ The input values the id and they are also taken from the body of the HTTP PUT Re
 |  Negative  |  Positive  |  Present   |  Invalid   |     Invalid     |                                               The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU                                               |                |
 |  Negative  |  Positive  |   Absent   |   Valid    |     Invalid     |                                                                            The occupied volume exceeds the maxVolume, there is no SKU with such SKUID in the database                                                                            |                |
 |  Negative  |  Positive  |   Absent   |  Invalid   |     Invalid     |                      The occupied volume exceeds the maxVolume, there is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                       |                |
-|  Negative  |  Negative  |  Present   |   Valid    |      Valid      |                                                                                                         All the conditions are satisfied                                                                                                         |                |
-|  Negative  |  Negative  |  Present   |  Invalid   |     Invalid     |                                                                    There is no position with such positionID in the database or the poitionID is already associated to a SKU                                                                     |                |
-|  Negative  |  Negative  |   Absent   |   Valid    |     Invalid     |                                                                                                 There is no SKU with such SKUID in the database                                                                                                  |                |
+|  Negative  |  Negative  |  Present   |   Valid    |      Valid      |                                                                                                         All the conditions are satisfied                                                                                                         |     test('Successfully edit a position of a sku')           |
+|  Negative  |  Negative  |  Present   |  Invalid   |     Invalid     |                                                                    There is no position with such positionID in the database or the poitionID is already associated to a SKU                                                                     |  test('Edit a Sku with a non-existing position ')              |
+|  Negative  |  Negative  |   Absent   |   Valid    |     Invalid     |                                                                                                 There is no SKU with such SKUID in the database                                                                                                  |       test('Edit a non-existing Sku')         |
 |  Negative  |  Negative  |   Absent   |  Invalid   |     Invalid     |                                            There is no position with such positionID in the database or the poitionID is already associated to a SKU, there is no SKU with such SKUID in the database                                            |                |
+
+## 1) Test Case: 'Successfully edit a position of a sku'
+
+```
+let result;
+            const body = {
+                "position": "000000000002"
+            }
+
+
+
+            await skuController.setPosition(1, body);
+
+            result = await skuController.getPositionForSKU(1);
+
+            expect(result).to.be.equal(String(Number("000000000002")));
+        
+```
+
+## 2) Test Case: 'Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku '
+
+```
+let result;
+            const body = {
+                "position": "000000000003"
+            }
+
+            let oldPosition, newPosition;
+            oldPosition = await skuController.getPositionForSKU(1);
+
+            result = await skuController.setPosition(1, body).catch(() => { });
+
+            newPosition = await skuController.getPositionForSKU(1);
+
+            expect(oldPosition).to.be.equal(newPosition);
+```
+## 3) Test Case: 'Edit a non-existing Sku'
+
+```
+            let result;
+            const body = {
+                "position": "000000000002"
+            }
+
+
+            result = await skuController.setPosition(2, body).catch(() => { });
+            expect(result).to.be.undefined;
+```
+
+## 4) Test Case: 'Edit a Sku with a non-existing position '
+
+```
+           let result;
+            const body = {
+                "position": "000000000005"
+            }
+
+            let oldPosition, newPosition;
+            oldPosition = await skuController.getPositionForSKU(1);
+
+            result = await skuController.setPosition(1, body).catch(() => { });
+
+            newPosition = await skuController.getPositionForSKU(1);
+
+            expect(oldPosition).to.be.equal(newPosition);
+```
 
 
 ## **Class *skuController* - method *deleteSKU***
@@ -332,6 +629,7 @@ The input value is the id.
 **Criteria for method *deleteSKU*:**
 	
  - Validity of *id*
+ -Format of *id*
 
 
 
@@ -342,6 +640,10 @@ The input value is the id.
 | :--------------: | :-----------------------------------------------------: |
 | Validity of *id* | There is no SKU with the specified *id* in the database |
 |                  | There is a SKU with the specified *id* in the database  |
+| Format of *id* | There format is not valid |
+|                  | The format is valid |
+
+
 
 
 
@@ -352,16 +654,53 @@ The input value is the id.
 |     Criteria     |  Boundary values  |
 | :--------------: | :---------------: |
 | Validity of *id* | No boundary found |
-
+| Format of *id* | No boundary found |
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid |     Description of the test case     | Jest test case |
+| Criteria 1 |Criteria 2 | Valid / Invalid |     Description of the test case     | Jest test case |
 | :--------: | :-------------: | :----------------------------------: | :------------: |
-|  Present   |      Valid      | There is a SKU with the chosen *id*  |                |
-|   Absent   |     Invalid     | There is no SKU with the chosen *id* |                |
+|  Present   |Valid|      Valid      | There is a SKU with the chosen *id*, the format is valid |   test('Successfully delete a Sku')             |
+|   Absent   |  Valid|   Invalid     | There is no SKU with the chosen *id* |     test('Delete a non-existing Sku')           |
+|  Present   |Invalid|      Invalid      | There is a SKU with the chosen *id*, the format is invalid |    test('attempt to delete a Sku with an invalid skuid')            |
+|   Absent   |  Invalid|   Invalid     | There is no SKU with the chosen *id* , the format is invalid |                |
+
+## 1) Test Case: 'Successfully delete a Sku'
+
+```
+            let result;
+
+            await skuController.deleteSku(1);
+
+            result = await skuController.getSku(1).catch(() => { });
+            expect(result).to.be.undefined;
+        
+```
+
+## 2) Test Case: 'attempt to delete a Sku with an invalid skuid'
+
+```
+let result;
+            let errorValue;
+
+            await skuController.deleteSku("hello").catch(error => errorValue = error);
+            assert.equal(errorValue.code, 422);
+```
+## 3) Test Case: 'Delete a non-existing Sku'
+
+```
+            let result, oldCount, newCount;
+
+            oldCount = (await skuController.getAllSku()).length;
+
+            await skuController.deleteSku(9).catch(() => { });
+
+            newCount = (await skuController.getAllSku()).length;
+
+            expect(oldCount).to.be.equal(newCount);
+```
 
 ## **Class *skuItemController* - method *getSkuItems***
 
@@ -1597,7 +1936,7 @@ The input value is the body of the HTTP POST Request
 
 | Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                                                                                         Description of the test case | Jest test case |
 | :--------: | :--------: | :--------: | :--------: | :-------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Present   |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                                 There is an user with the same *type* and *username* |                |
+|  Present   |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                                 There is an user with the same *type* and *username* |   test("Not succesfull creation, user with same email and type exist")             |
 |  Present   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                     There is an user with the same *type* and *username*, the type format is invalid |                |
 |  Present   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                    There is an user with the same *type* and *username*, the email format is invalid |                |
 |  Present   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                        There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid |                |
@@ -1605,14 +1944,66 @@ The input value is the body of the HTTP POST Request
 |  Present   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                There is an user with the same *type* and *username*, the type format is invalid, the password is shorter than 8 char |                |
 |  Present   |  Invalid   |  Invalid   |   Valid    |     Invalid     |                               There is an user with the same *type* and *username*, the email format is invalid, the password is shorter than 8 char |                |
 |  Present   |  Invalid   |  Invalid   |  Invalid   |     Invalid     | There is an user with the same *type* and *username*, the type format is invalid, the email format is invalid, , the password is shorter than 8 char |                |
-|   Absent   |   Valid    |   Valid    |   Valid    |      Valid      |                                                                 All the inserted values are ok, there is no user with the same *type* and *username* |                |
-|   Absent   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                                                                           The type format is invalid |                |
+|   Absent   |   Valid    |   Valid    |   Valid    |      Valid      |                                                                 All the inserted values are ok, there is no user with the same *type* and *username* |    test("Succesful creation of a new user")            |
+|   Absent   |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                                                                           The type format is invalid |      test("Not succesful creation, attempted to create a manager")          |
 |   Absent   |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                                                                          The email format is invalid |                |
 |   Absent   |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                                                              The type format is invalid, the email format is invalid |                |
 |   Absent   |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                                                                                  The password is shorter than 8 char |                |
 |   Absent   |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                                                      The type format is invalid, the password is shorter than 8 char |                |
 |   Absent   |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                                                                     The email format is invalid, the password is shorter than 8 char |                |
 |   Absent   |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                                       The type format is invalid, the email format is invalid, , the password is shorter than 8 char |                |
+
+## 1) Test Case: "Succesful creation of a new user"
+
+```
+let body={
+                "username" : "user2@ezwh.com", 
+                "password" : "testpassword",
+                "name" : "Giulia",
+                "surname" :"Bianchi",
+                "type" : "customer"
+            }
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.createUser(body);
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length+1);
+       
+```
+
+## 2) Test Case: "Not succesfull creation, user with same email and type exist"
+
+```
+let body={
+                "username" : "user1@ezwh.com", 
+                "password" : "testpassword",
+                "name" : "Giulia",
+                "surname" :"Bianchi",
+                "type" : "customer"
+            }
+            let err;
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.createUser(body).catch((error)=>(err=error));
+            let newCount= await userController.getAllUsers().catch(()=>{});
+            expect(newCount.length).to.be.equal(oldCount.length);
+            expect(err.code).to.be.equal(409);
+```
+## 3) Test Case: "Not succesful creation, attempted to create a manager"
+
+```
+             let body={
+                "username" : "user2@ezwh.com", 
+                "password" : "testpassword",
+                "name" : "Giulia",
+                "surname" :"Bianchi",
+                "type" : "manager"
+            }
+            let err;
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.createUser(body).catch((error)=>(err=error));
+            let newCount= await userController.getAllUsers().catch(()=>{});
+            expect(newCount.length).to.be.equal(oldCount.length);
+            expect(err.code).to.be.equal(422);
+```
 
 ## **Class *UserController* - method *login***
 
@@ -1621,9 +2012,7 @@ The input value is the body of the HTTP POST Request and the type
 **Criteria for method *login*:**
 	
  - Validity of *password* and *username*
- /* IF THE USERNAME EXISTS, IT ALREADY IS A VALID ONE
- - Format of *username*
-*/
+- Missing value
 
 **Predicates for method *login*:**
 
@@ -1631,6 +2020,8 @@ The input value is the body of the HTTP POST Request and the type
 | :-----------------------------------: | :--------------------------------------------------------------------------------------------------------: |
 | Validity of *password* and *username* |             The username with *username* exists, the password is valid for the chosen username             |
 |                                       | The username with *username* doesn't exist, if he exists the password is not valid for the chosen username |
+|Missing value|There is a value missing in the body of the request|
+| |There is no value missing in the body of the request|
 
 
 **Boundaries**:
@@ -1638,16 +2029,51 @@ The input value is the body of the HTTP POST Request and the type
 |               Criteria                |  Boundary values  |
 | :-----------------------------------: | :---------------: |
 | Validity of *password* and *username* | No boundary found |
-
+| Missing value | No boundary found |
 
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |              Description of the test case               | Jest test case |
+| Criteria 1 |Criteria 2| Valid / Invalid |              Description of the test case               | Jest test case |
 | :--------: | :-------------: | :-----------------------------------------------------: | :------------: |
-|   Valid    |      Valid      |   The combination of *username and password* is valid   |                |
-|   Valid    |     Invalid     | The combination of *username and password* is not valid |                |
+|   Valid    | Present|     Valid      |   The combination of *username and password* is valid   | test("Succesful login")               |
+|   Invalid    | Present|    Invalid     | The combination of *username and password* is not valid |     test("Failed login, wrong username")           |
+|   Valid    | Absent|     Invalid      |   The combination of *username and password* is valid, there is a missing value   |        test("Failed login, the username is not in the body")        |
+|   Invalid    | Absent|    Invalid     | The combination of *username and password* is not valid, there is a missing value |                |
 
+
+## 1) Test Case: "Succesful login"
+
+```
+            let body= {
+                "username" : "manager1@ezwh.com", 
+                "password" : "testpassword"
+            }
+            await userController.login(body, "manager");
+            userController.logout();
+       
+```
+
+## 2) Test Case: "Failed login, the username is not in the body"
+
+```
+            let body= {
+                "password" : "testpassword"
+            }
+            let err;
+            await userController.login(body, "manager").catch((error)=>(err=error));
+            expect(err.code).to.be.equal(422);
+```
+## 3) Test Case: "Failed login, wrong username"
+
+```
+            let body= {
+                "password" : "testpassword"
+            }
+            let err;
+            await userController.login(body, "manager").catch((error)=>(err=error));
+            expect(err.code).to.be.equal(422);
+```
 ## **Class *UserController* - method *editUser***
 
 The input value is the body of the HTTP POST Request and the username
@@ -1682,10 +2108,44 @@ The input value is the body of the HTTP POST Request and the username
 
 | Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                   Description of the test case                                                                                    | Jest test case |
 | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |                           The user with *username* exists and the *oldType* corresponds to the type of the user before the API execution, the *newType* is a valid one                            |                |
+|   Valid    |   Valid    |      Valid      |                           The user with *username* exists and the *oldType* corresponds to the type of the user before the API execution, the *newType* is a valid one                            |   test("Succesful test, edit done")             |
 |   Valid    |  Invalid   |     Invalid     |                                                                                  The *newType* is an invalid one                                                                                  |                |
-|  Invalid   |   Valid    |     Invalid     |                 The user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution                  |                |
+|  Invalid   |   Valid    |     Invalid     |                 The user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution                  |  test("Failure, wrong username"),    test("Failure, tryng to change type into manager")           |
 |  Invalid   |  Invalid   |     Invalid     | The *newType* is an invalid one, the user with *username* doesn't exist, or the user with *username* exists but the *oldType* doesn't correspond to the type of the user before the API execution |                |
+
+## 1) Test Case: "Succesful test, edit done"
+
+```
+            let body= {
+                "oldType" : "customer",
+                "newType" :"supplier"
+            }
+            await userController.editUser("user1@ezwh.com", body);
+       
+```
+
+## 2) Test Case: "Failure, wrong username"
+
+```
+            let err;
+            let body= {
+                "oldType" : "customer",
+                "newType" :"supplier"
+            }
+            await userController.editUser("user12@ezwh.com", body).catch((error)=>(err=error));
+            expect(err.code).to.be.equal(404);
+```
+## 3) Test Case: "Failure, tryng to change type into manager"
+
+```
+                        let err;
+            let body= {
+                "oldType" : "manager",
+                "newType" :"customer"
+            }
+            await userController.editUser("manager1@ezwh.com", body).catch((error)=>(err=error));
+            expect(err.code).to.be.equal(422);
+```
 
 ## **Class *UserController* - method *deleteUser***
 
@@ -1695,19 +2155,18 @@ The input value the username and the type
 	
  - Validity of *username* 
  - Validity of *type*
- /* IF THE USERNAME EXISTS, IT ALREADY IS A VALID ONE
  - Format of *username*
-*/
 
 **Predicates for method *deleteUser*:**
 
 |                     Criteria                     |                                                                           Predicate                                                                           |
 | :----------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Validity *username* and consistence of *oldType* |                          The user with *username* exists and the *type* corresponds to the type of the user before the API execution                          |
-|                                                  | The user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution |                                                                             |
+| Validity *username* |                          The user with *username* exists                          |
+|                                                  | The user with *username* doesn't exist|                                                                             |
 |                Validity of *type*                |                                                                                                                                                               | The type is one of them: customer, qualityEmployee, clerk, deliveryEmployee |
 |                                                  |                                                                  The type is not a valid one                                                                  |
-
+| Format of *username* |                          The format of *username* is incorrect                        |
+|                                                  | The format of *username*  is correct|
 
 **Boundaries**:
 
@@ -1715,17 +2174,51 @@ The input value the username and the type
 | :----------------------------------------------: | :---------------: |
 | Validity of *username* and consistence of *type* | No boundary found |
 |                Validity of *type*                | No boundary found |
-
+| Format of *username* |No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                Description of the test case                                                                                 | Jest test case |
+| Criteria 1 | Criteria 2 |Criteria 3| Valid / Invalid |                                                                                Description of the test case                                                                                 | Jest test case |
 | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |                           The user with *username* exists and the *type* corresponds to the type of the user before the API execution, the *type* is a valid one                            |                |
-|   Valid    |  Invalid   |     Invalid     |                                                                                The *type* is an invalid one                                                                                 |                |
-|  Invalid   |   Valid    |     Invalid     |                The user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution                |                |
-|  Invalid   |  Invalid   |     Invalid     | The *type* is an invalid one, the user with *username* doesn't exist, or the user with *username* exists but the *type* doesn't correspond to the type of the user before the API execution |                |
+|   Valid    |   Valid    | Valid|      Valid      |                           The user with *username* exists and the *type* corresponds to the type of the user before the API execution, the *type* is a valid one                            |    test("Succesfully delete an user")             |
+|   Valid    |  Invalid   |Valid|     Invalid     |                                                                                The *type* is an invalid one                                                                                 |   test("User not deleted, trying to delete a manager")             |
+|  Invalid   |  Invalid   | Invalid|    Invalid     | The *type* is an invalid one, the user with *username* doesn't exist  |                |
+|  Invalid   |   Valid    |Valid|     Invalid     |                The user with *username* doesn't exist             | test("User not deleted, trying to delete a non existing user")               |
+|  Invalid   |  Invalid   | Valid|    Invalid     | The *type* is an invalid one, the user with *username* doesn't exist |                |
+|   Valid    |   Valid    | Invalid|      Invalid      |                           The user with *username* exists , the *type* is a valid one                            |                |
+|   Valid    |  Invalid   |Invalid|     Invalid     |                                                                                The *type* is an invalid one                                                                                 |                |
+|  Invalid   |   Valid    |Invalid|     Invalid     |                The user with *username* doesn't exist                 |                |
+|  Invalid   |  Invalid   | Invalid|    Invalid     | The *type* is an invalid one, the user with *username* doesn't exist  |                |
 
+## 1) Test Case: "Succesfully delete an user"
+
+```
+            let oldCount= await userController.getAllUsers();
+            let result= await userController.deleteUser("user1@ezwh.com", "customer");
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length-1);
+       
+```
+
+## 2) Test Case: "Failure, wrong username"
+
+```
+            let oldCount= await userController.getAllUsers();
+            let error;
+            let result= await userController.deleteUser("manager1@ezwh.com", "manager").catch((err)=>(error=err));
+            expect(error.code).to.be.equal(422);
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length);
+```
+## 3) Test Case: "Failure, tryng to change type into manager"
+
+```
+            let oldCount= await userController.getAllUsers();
+            let error;
+            let result= await userController.deleteUser("customer12@ezwh.com", "customer").catch((err)=>(error=err));
+            let newCount= await userController.getAllUsers().catch((err)=>(console.log(err)));
+            expect(newCount.length).to.be.equal(oldCount.length);
+```
 
 
 ## **Class *RestockOrderController* - method *createRestockOrder***
@@ -3135,6 +3628,52 @@ test('attempt of deleteItem with invalid id', async () => {
 | itemController.js -> deleteItem(id)    | test('successful use of deleteItem')                        |
 |                                        | test('attempt of deleteItem with undefined id')             |
 |                                        | test('attempt of deleteItem with invalid id')               |
+
+| Unit name                                       | Jest test case                      |
+| ----------------------------------------------- | ----------------------------------- |
+| userController.js -> getUserAPI()    | test("Succesful test, user is manager and is logged")|
+|                                                 | test("Failure test, user is not logged") |
+| userController.js -> getUser() | test("Succesfully get the manager"          |
+|                                                 | test("Succesfully get an user ")   |
+|                                                 | test("Test failure, user is not logged") |
+| userController.js -> getAllSuppliers()     | test("Succesfully get all the Suppliers" |
+| userController.js -> getAllUsers()     | test("Succesfully get all the Users" |
+| userController.js -> createUser()    | test("Succesful creation of a new user")|
+|                                                 | test("Not succesfull creation, user with same email and type exist")|
+|                                                 | test("Not succesful creation, attempted to create a manager")|
+| userController.js -> login()    | test("Succesful login")|
+|                                                 | test("Failed login, the username is not in the body")|
+|                                                 | test("Failed login, wrong username)|
+| userController.js -> logout()    | test("Succesful logout, user is logged")|
+|                                                 | test("Failure, the user is not logged")|
+| userController.js -> editUser()    | test("Succesful test, edit done")|
+|                                                 | test("Failure, wrong username")|
+|                                                 | test("Failure, tryng to change type into manager")|
+| userController.js -> deleteUser()    | test("Succesfully delete an user")|
+|                                                 | test("User not deleted, trying to delete a manager")|
+|                                                 | test("User not deleted, trying to delete a non existing user")|
+
+| Unit name                                       | Jest test case                      |
+| ----------------------------------------------- | ----------------------------------- |
+| skuController.js -> getAllSku()    | test('successful use of getAllSku')|
+| skuController.js -> getSku()    | test('successful use of getSku')|
+|                                                 | test('use of getSku with invalid id')|
+|                                                 | test('use of getSku with non-existant sku')|
+| skuController.js -> createSku()    |test("Successfully add new Sku to Database")|
+|                                                 | test("Insertion of a sku with a missing value")|
+|                                                 | test("Insertion of a Sku with negative volume")|
+| skuController.js -> editSku()    |test('Successfully edit a sku')|
+|                                                 | test('Edit a sku with an invalid new volume')|
+|                                                 | test('Edit a sku in such a way that newWeight*newAvailableQuantity>maxWeight of the position in which is stored')|
+|                                                 | test('Edit a non-existing Sku')|
+|                                                 | test('Edit a sku with an undefined value')|
+| skuController.js -> setPosition()    |test('Successfully edit a position of a sku')|
+|                                                 | test('Edit a Sku with a position that is not capable to satisfy volume and weight constraints for available quantity of sku ')|
+|                                                 | test('Edit a non-existing Sku')|
+|                                                 | test('Edit a Sku with a non-existing position ')|
+ skuController.js -> deleteSku()    |test('Successfully delete a Sku')|
+|                                                 | test('attempt to delete a Sku with an invalid skuid')|
+|                                                 | test('Delete a non-existing Sku')|
 
 
 ### Code coverage report
