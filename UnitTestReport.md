@@ -1986,11 +1986,11 @@ The input value is the body of the HTTP POST request.
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                  Description of the test case                  | Jest test case |
-| :--------: | :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      | There is an SKU with *idSKU* and the body is correctly written |test("Successfully create a Test Descriptor")                |
-|  Invalid   |   Valid    |     Invalid     |                There is not an SKU with *idSKU*                | test("Insertion of a test descriptor with a non-existing SKU")               |
-|   Valid    |  Invalid   |     Invalid     |                      The body is invalid                       |       test("Insertion of a test descriptor with invalid body")         |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                  Description of the test case                  |                         Jest test case                         |
+| :--------: | :--------: | :-------------: | :------------------------------------------------------------: | :------------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      | There is an SKU with *idSKU* and the body is correctly written |         test("Successfully create a Test Descriptor")          |
+|  Invalid   |   Valid    |     Invalid     |                There is not an SKU with *idSKU*                | test("Insertion of a test descriptor with a non-existing SKU") |
+|   Valid    |  Invalid   |     Invalid     |                      The body is invalid                       |    test("Insertion of a test descriptor with invalid body")    |
 
 ## 1) Test Case: "Successfully create a Test Descriptor"
 ```
@@ -2064,7 +2064,7 @@ The input value is the body of the HTTP PUT request and the test id.
 |        Criteria        |                              Predicate                              |
 | :--------------------: | :-----------------------------------------------------------------: |
 | Validity of *newidSKU* |    There is a SKU with the specified *newidSKU* in the database     |
-|                        |    There is no SKU with the specified *newidSKU* in the database     |
+|                        |    There is no SKU with the specified *newidSKU* in the database    |
 |    Validity of *id*    | There is no test descriptor with the specified *id* in the database |
 |                        | There is a test descriptor with the specified *id* in the database  |
 
@@ -2081,12 +2081,12 @@ The input value is the body of the HTTP PUT request and the test id.
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                Description of the test case                 | Jest test case |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |      There is a SKU with *idSKU*, the test id is valid      |    test("Successfully edit a Test Descriptor")            |
-|  Invalid   |   Valid    |     Invalid     |                There is no test with such id                |   test("Edit a Test Descriptor with invalid id")             |
-|   Valid    |  Invalid   |     Invalid     |                There is no SKU with *idSKU*                 |   test("Edit a Test Descriptor with a non-existent SKU")             |
-|  Invalid   |  Invalid   |     Invalid     | There is no SKU with *idSKU*, there is no test with such id |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                Description of the test case                 |                     Jest test case                     |
+| :--------: | :--------: | :-------------: | :---------------------------------------------------------: | :----------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      |      There is a SKU with *idSKU*, the test id is valid      |      test("Successfully edit a Test Descriptor")       |
+|  Invalid   |   Valid    |     Invalid     |                There is no test with such id                |     test("Edit a Test Descriptor with invalid id")     |
+|   Valid    |  Invalid   |     Invalid     |                There is no SKU with *idSKU*                 | test("Edit a Test Descriptor with a non-existent SKU") |
+|  Invalid   |  Invalid   |     Invalid     | There is no SKU with *idSKU*, there is no test with such id |                                                        |
 
 ## 1) Test Case: "Successfully edit a Test Descriptor"
 ```
@@ -2165,10 +2165,10 @@ The input value is the id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |     Description of the test case      | Jest test case |
-| :--------: | :-------------: | :-----------------------------------: | :------------: |
-|  Valid   |     Valid     | There is a test descriptor with *id* |         test("Successfully delete a Test Descriptor")       |
-|   Invalid    |      Invalid      |  There is no test descriptor with *id  |   test("Delete a non-existing Test Descriptor")             |
+| Criteria 1 | Valid / Invalid |     Description of the test case     |                Jest test case                 |
+| :--------: | :-------------: | :----------------------------------: | :-------------------------------------------: |
+|   Valid    |      Valid      | There is a test descriptor with *id* | test("Successfully delete a Test Descriptor") |
+|  Invalid   |     Invalid     | There is no test descriptor with *id | test("Delete a non-existing Test Descriptor") |
 
 ## 1) Test Case: "Successfully delete a Test Descriptor"
 ```
