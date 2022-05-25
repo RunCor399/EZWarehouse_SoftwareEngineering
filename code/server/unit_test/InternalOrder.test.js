@@ -75,7 +75,7 @@ describe('InternalOrderController Tests', () => {
     });
 
     describe('editInternalOrder method testing', () => {
-        test("Successfully edit an Internal Order", async () => {
+        test("Successfully edit an Internal Order with state = 'ACCEPTED'", async () => {
             let result;
             const body = { newState: "ACCEPTED" };
             let newState;
@@ -85,6 +85,25 @@ describe('InternalOrderController Tests', () => {
             newState = result['state'];
 
             expect(newState).to.be.equal("ACCEPTED");
+        });
+
+        test("Successfully edit an Internal Order with state = 'COMPLETED'", async () => {
+            let result;
+            const list = [];
+            const counter = list.length;
+            const body = { 
+                newState: "COMPLETED",
+                products: list 
+            };
+            let newState, prods;
+
+            await internalOrderController.editInternalOrder(1, body);
+            result = await internalOrderController.getInternalOrder(1);
+            newState = result['state'];
+            prods = result['products'];
+
+            expect(newState).to.be.equal("COMPLETED");
+            //expect(prods.length).to.be.equal(counter);
         });
 
         test("Edit an Internal Order with an invalid state", async () => {
