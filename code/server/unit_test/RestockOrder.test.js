@@ -117,7 +117,7 @@ describe('RestockOrderController Tests', () => {
         });
 
 
-        test.only("Add SKU Items to Restock Order", async () => {
+        test("Add SKU Items to Restock Order", async () => {
             let result;
 
             const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];

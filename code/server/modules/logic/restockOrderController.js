@@ -286,9 +286,11 @@ class RestockOrderController {
             .then(value => row = value[0])
             .catch((error) => { throw error });
 
+    
         /*check if the restock order exists*/
-        if (!row)
+        if (!row){
             throw new Exceptions(404);
+        }
 
         /*check if the state of the restock order is DELIVERED*/
         if (row.state !== 'DELIVERED'){

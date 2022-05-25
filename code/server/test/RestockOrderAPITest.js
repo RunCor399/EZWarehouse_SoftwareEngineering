@@ -24,9 +24,9 @@ describe('Restock Orders Testing', async () => {
         });
       });
 
-    /* after(async () => {
+     after(async () => {
         await databaseManager.deleteAllData();
-    }) */
+    }) 
 
       describe('Add and get a new Restock', async () => {
         describe('Add a new Restock Order tests', async() => {
@@ -122,11 +122,12 @@ describe('Restock Orders Testing', async () => {
                 const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERED");
+
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(1, list);
 
                 
                 let result = await restockOrdersAPICalls.getRestockOrderById(1);
-                console.log(result.data);
+
                 response.status.should.equal(200);
             });
 
