@@ -18,33 +18,6 @@ afterEach(async () => {
 });
 
 describe("TestDescriptorController Tests", () => {
-    /*describe("getAllTestDescriptors method testing", () => {
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
-    });
-
-    describe("getTestDescriptor method testing", () => {
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
-        
-        test("", () => {
-
-        });
-    });*/
 
     describe("createTestDescriptor method testing", () => {
         test("Successfully create a Test Descriptor", async () => {
@@ -109,11 +82,11 @@ describe("TestDescriptorController Tests", () => {
                 newIdSKU: 2
             };
             let thisId;
-            
+
             currId = ((await testDescriptorController.getAllTestDescriptors()).length);
 
             await testDescriptorController.editTestDescriptor(currId, body);
-            result = testDescriptorController.getTestDescriptor(currId);
+            result = await testDescriptorController.getTestDescriptor(currId);
             thisId = result['id'];
 
             expect(thisId).to.be.equal(currId);
