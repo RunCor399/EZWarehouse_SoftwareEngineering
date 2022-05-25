@@ -934,15 +934,53 @@ test('successful use of createSkuItem and deleteSkuItem', async () => {
 ## **Class *positionController* - method *createPosition***
 
 The input value is the body of the HTTP POST Request.
-
 **Criteria for method *createPosition*:**
 	
  - Usage of *positionid*
  - Sign of *maxWeight*
  - Sign of *maxVolume*
- - Format of *aisle*
- - Format of *row*
- - Format of *colummn*
+ - Format and compatibility of position codes
+ - Validity of parameters
+
+|                  Criteria                  |                 Predicate                 |
+| :----------------------------------------: | :---------------------------------------: |
+|           Usage of *positionid*            |    The positionID is valid and unused     |
+|                                            | The positionId is invalid or already used |
+|            Sign of *maxWeight*             |           maxWeight is positive           |
+|                                            |           maxWeight is negative           |
+|            Sign of *maxVolume*             |           maxVolume is positive           |
+|                                            |           maxVolume is negative           |
+| Format and compatibility of position codes |         position codes are valid          |
+|                                            |        position codes are invalid         |
+|           Validity of parameters           |         The parameters are valid          |
+|                                            |  the parameters are invalid or undefined  |
+
+
+**Boundaries**:
+
+|                  Criteria                  |  Boundary values  |
+| :----------------------------------------: | :---------------: |
+|           Usage of *positionid*            | No boundary found |
+|            Sign of *maxWeight*             |         0         |
+|            Sign of *maxVolume*             |         0         |
+| Format and compatibility of position codes | No boundary found |
+|           Validity of parameters           | No boundary found |
+
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Valid / Invalid |  Description of the test case   |                           Jest test case                           |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :-----------------------------: | :----------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |    All parameters are valid     |              test('successful use of createPosition')              |
+|  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |      PositionID is invalid      |     test('attempt of createPosition with invalid PositionID')      |
+|   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     | position codes are incompatible | test('attempt of createPosition with incompatible position codes') |
+|   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     | there is an undefined parameter |   test('attempt of createPosition with an undefined parameter')    |
+|   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |      maxWeight is negative      |       test('attempt of createPosition with negative weight'        |
+|   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |      maxVolume is negative      |       test('attempt of createPosition with negative volume')       |
+
+
 
 ## 1) Test case : successful use of createPosition
 ```
@@ -1053,16 +1091,33 @@ The input value is the body of the HTTP PUT Request and the positionid.
 
 **Criteria for method *editPositionVer1*:**
 	
- - Validity of *positionid*
- - Sign of *newmaxWeight*
- - Sign of *newmaxVolume*
- - Sign of *newoccupiedWeight*
- - Sign of *newoccupiedVolume*
- - Sign of *newmaxWeight-newoccupiedWeight*
- - Sign of *newmaxVolume-newoccupiedVolume*
- - Format of *newaisle*
- - Format of *newrow*
- - Format of *newcolummn*
+
+
+**Predicates for method *editPositionVer1*:**
+
+| Criteria | Predicate |
+| :------: | :-------: |
+|          |           |
+|          |           |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :------: | :-------------: |
+|          |                 |
+
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+| :--------: | :-------------: | :--------------------------: | :------------: |
+|            |                 |                              |                |
+|            |                 |                              |                |
 
 
 
@@ -1230,10 +1285,10 @@ test('attempt of editPositionVer1 with negative occupiedVolume', async () => {
 
 The input value is the body of the HTTP PUT Request and the positionid.
 
-**Criteria for method *editPositionId*:**
+
+**Criteria for method *editPositionVer2*:**
 	
- - Validity of *positionid*
- - Usage of *newpositionid*
+ - Validity of *id*
 
 
 
@@ -1241,35 +1296,29 @@ The input value is the body of the HTTP PUT Request and the positionid.
 
 **Predicates for method *editPositionVer2*:**
 
-|         Criteria         |                              Predicate                               |
-| :----------------------: | :------------------------------------------------------------------: |
-| Validity of *positionid* | There is no position with the specified *positionid* in the database |
-|                          | There is a position with the specified *positionid* in the database  |
-| Usage of *newpositionid* | There is no position with the specified *positionid* in the database |
-|                          | There is a position with the specified *positionid* in the database  |
+| Criteria | Predicate |
+| :------: | :-------: |
+|          |           |
+|          |           |
 
 
 
 
 **Boundaries**:
 
-|         Criteria         |  Boundary values  |
-| :----------------------: | :---------------: |
-| Validity of *positionid* | No boundary found |
-| Usage of *newpositionid* | No boundary found |
-
+| Criteria | Boundary values |
+| :------: | :-------------: |
+|          |                 |
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                 Description of the test case                                  | Jest test case |
-| :--------: | :--------: | :-------------: | :-------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |  Present   |     Invalid     |                       There is already a position with *newpositionid*                        |                |
-|   Valid    |   Absent   |      Valid      |                There is no position with *newpositionid*, we can change the id                |                |
-|  Invalid   |  Present   |     Invalid     | There is already a position with *newpositionid*, there is no position with such *positionid* |                |
-|  Invalid   |   Absent   |     Invalid     |                          There is no position with such *positionid*                          |                |
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+| :--------: | :-------------: | :--------------------------: | :------------: |
+|            |                 |                              |                |
+|            |                 |                              |                |
 
 ## 1) Test case : successful use of editPositionVer2
 ```
@@ -1334,17 +1383,12 @@ The input value is the positionid.
  - Validity of *positionid*
 
 
-
-
-
 **Predicates for method *deletePosition*:**
 
-|         Criteria         |                              Predicate                               |
-| :----------------------: | :------------------------------------------------------------------: |
-| Validity of *positionid* | There is no position with the specified *positionid* in the database |
-|                          | There is a position with the specified *positionid* in the database  |
-
-
+|         Criteria         |         Predicate         |
+| :----------------------: | :-----------------------: |
+| Validity of *positionid* |  The positionID is valid  |
+|                          | The positionID is invalid |
 
 
 **Boundaries**:
@@ -1358,13 +1402,13 @@ The input value is the positionid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid |      Description of the test case      | Jest test case |
-| :--------: | :-------------: | :------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no position with *positionid* |                |
-|   Valid    |      Valid      | There is a position with *positionid*  |                |
+| Criteria 1 | Valid / Invalid | Description of the test case |                      Jest test case                       |
+| :--------: | :-------------: | :--------------------------: | :-------------------------------------------------------: |
+|  Invalid   |     Invalid     |   The positionID is valid    | test('attempt of deletePosition with invalid positionId') |
+|   Valid    |      Valid      |  The positionID is invalid   |         test('successful use of deletePosition')          |
 
 
-## 1) Test case : 
+## 1) Test case : successful use of deletePosition
 ```
 test('successful use of deletePosition', async () => {
             let results;
@@ -1385,7 +1429,7 @@ test('successful use of deletePosition', async () => {
         })
 ```
 
-## 1) Test case : 
+## 2) Test case : attempt of deletePosition with invalid positionId
 ```
 test('attempt of deletePosition with invalid positionId', async () => {
             let errorValue;
@@ -1398,41 +1442,58 @@ test('attempt of deletePosition with invalid positionId', async () => {
 
 ## **Class *PositionController* - method *checkPositionID***
 
-The input value is the test id.
 
 **Criteria for method *checkPositionID*:**
 	
- - Validity of *id*
-
-
-
+- position validity
+- aisleID validity           
+- col validity
+- row validity          
+- position codes compatibility          
 
 
 **Predicates for method *checkPositionID*:**
 
-| Criteria | Predicate |
-| :------: | :-------: |
-|          |           |
-|          |           |
+|           Criteria           |             Predicate             |
+| :--------------------------: | :-------------------------------: |
+|     positionID validity      |        positionID is valid        |
+|                              |       positionId is invalid       |
+|       aisleID validity       |         aisleID is valid          |
+|                              |        asiledID is invalid        |
+|         row validity         |           row is valid            |
+|                              |          row is invalid           |
+|         col validity         |           col is valid            |
+|                              |          col is invalid           |
+| position codes compatibility |   position codes are compatible   |
+|                              | position codes are not compatible |
 
 
 
 
 **Boundaries**:
 
-| Criteria | Boundary values |
-| :------: | :-------------: |
-|          |                 |
+|           Criteria           |  Boundary values  |
+| :--------------------------: | :---------------: |
+|      position validity       | No boundary found |
+|       aisleID validity       | No boundary found |
+|         col validity         | No boundary found |
+|         row validity         | No boundary found |
+| position codes compatibility | No boundary found |
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-| :--------: | :-------------: | :--------------------------: | :------------: |
-|            |                 |                              |                |
-|            |                 |                              |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Valid / Invalid |  Description of the test case   |                       Jest test case                       |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :-----------------------------: | :--------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |    All parameters are valid     |         test('successful use of checkPositionID')          |
+|  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |      PositionId is invalid      | test('attempt of checkPositionID with invalid PositionID') |
+|   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |       AisleId is invalid        |  test('attempt of checkPositionID with invalid aisleID')   |
+|   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |         Row is invalid          |    test('attempt of checkPositionID with invalid row')     |
+|   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |         Col is invalid          |    test('attempt of checkPositionID with invalid col')     |
+|   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     | position codes are incompatible | test('attempt of checkPositionID with incompatible codes') |
+
 
 ## 1) Test case : successful use of checkPositionID
 ```
