@@ -2316,11 +2316,36 @@ The input value is the order id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                                                Description of the test case                                                | Jest test case |
-| :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its status is COMPLETEDRETURN |                |
-|   Valid    |      Valid      |       There is a restock order with the given *id* in the database and the status is different from COMPLETEDRETURN        |                |
+| Criteria 1 | Valid / Invalid |                                                Description of the test case                                                |                       Jest test case                       |
+| :--------: | :-------------: | :------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------: |
+|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its status is COMPLETEDRETURN | test("Get restock order to be returned with wrong params") |
+|   Valid    |      Valid      |       There is a restock order with the given *id* in the database and the status is different from COMPLETEDRETURN        |          test("Get restock order to be returned")          |
 
+
+## 1) Test Case: Get restock order to be returned with wrong params
+```
+            let result1, result2, result3;
+            
+            result1 = await restockOrderController.getRestockOrderToBeReturned(100).catch(() => {});
+            result2 = await restockOrderController.getRestockOrderToBeReturned("test").catch(() => {});
+            
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
+            result3 = await restockOrderController.getRestockOrderToBeReturned(1).catch(() => {});
+
+            expect(result1).to.be.undefined;
+            expect(result2).to.be.undefined;
+            expect(result3).to.be.undefined;
+```
+
+
+## 2) Test Case: Get restock order to be returned
+```
+            let result;
+            
+            result = await restockOrderController.getRestockOrderToBeReturned(2);
+
+            expect(result.length).to.be.equal(0);
+```
 
 ## **Class *RestockOrderController* - method *addSkuItemsToRestockOrder***
 
@@ -2356,12 +2381,45 @@ The input value is the body of the HTTP PUT Request and the order id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                                      Description of the test case                                                                                                       | Jest test case |
-| :--------: | :--------: | :-------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |                         There is a restock order with the given *id* in the database, the status is equal to DELIVERED and all the products are associated to a SKUItem with and existing RFID in the database                          |                |
-|   Valid    |  Invalid   |     Invalid     |                                                                   At least one of the products is not associated to a SKUItem with and existing RFID in the database                                                                    |                |
-|  Invalid   |   Valid    |     Invalid     |                                                   There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED                                                   |                |
-|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKUItem with and existing RFID in the database, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                                      Description of the test case                                                                                                       |                   Jest test case                   |
+| :--------: | :--------: | :-------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      |                         There is a restock order with the given *id* in the database, the status is equal to DELIVERED and all the products are associated to a SKUItem with and existing RFID in the database                          |       test("Add SKU Items to Restock Order")       |
+|   Valid    |  Invalid   |     Invalid     |                                                                   At least one of the products is not associated to a SKUItem with and existing RFID in the database                                                                    | test("Failed to add SKU Items due to invalid SKU") |
+|  Invalid   |   Valid    |     Invalid     |                                                   There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED                                                   |                                                    |
+|  Invalid   |  Invalid   |     Invalid     | At least one of the products is not associated to a SKUItem with and existing RFID in the database, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERED |                                                    |
+
+
+## 1) Test Case: Add SKU Items to Restock Order
+```
+            let result;
+
+            const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
+                
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
+            await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list});
+
+            result = await restockOrderController.getRestockOrder(1);
+
+            
+
+           expect(result.products.length).to.be.equal(1);
+           expect(result.products.length).to.be.equal(1);
+```
+
+## 2) Test Case: Failed to add SKU Items due to invalid SKU
+```
+            let result;
+
+            const list = [{"SKUId":100, "rfid":"01234567812345678990123456789016"}];
+                
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
+            await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list}).catch(() => {});
+       
+            result = await restockOrderController.getRestockOrder(1);
+
+            expect(result.products.length).to.be.equal(0);
+            expect(result.products.length).to.be.equal(0);
+```
 
 ## **Class *RestockOrderController* - method * addTransportNote***
 
@@ -2397,12 +2455,48 @@ The input value is the body of the HTTP PUT Request and the order id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                    Description of the test case                                                                     | Jest test case |
-| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|   Valid    |   Valid    |      Valid      |                 There is a restock order with the given *id* in the database, the status is equal to DELIVERY and issueDate is before deliveryDate                  |                |
-|   Valid    |  Invalid   |     Invalid     |                                                                   issueDate is after deliveryDate                                                                   |                |
-|  Invalid   |   Valid    |     Invalid     |                 There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY                  |                |
-|  Invalid   |  Invalid   |     Invalid     | issueDate is after deliveryDate, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                    Description of the test case                                                                     |                        Jest test case                        |
+| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      |                 There is a restock order with the given *id* in the database, the status is equal to DELIVERY and issueDate is before deliveryDate                  | test("Add and Get a Transport Note in a Restock Order Test") |
+|   Valid    |  Invalid   |     Invalid     |                                                                   issueDate is after deliveryDate                                                                   | test('Failed to add transportNote due to old delivery date') |
+|  Invalid   |   Valid    |     Invalid     |                 There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY                  |       test("Failed to add transportNote due to state")       |
+|  Invalid   |  Invalid   |     Invalid     | issueDate is after deliveryDate, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY |                                                              |
+
+
+## 1) Test Case: Add and Get a Transport Note in a Restock Order Test
+```
+            await restockOrderController.editRestockOrder(1, {newState:"DELIVERY"});
+
+
+            const transportNote =  {transportNote:{"deliveryDate":"2022/03/03"}};
+
+            await restockOrderController.addTransportNote(1, transportNote)
+            result = await restockOrderController.getTransportNote(1);
+
+            expect(result).not.to.be.undefined;
+```
+
+## 2) Test Case: Failed to add transportNote due to old delivery date
+```
+            const transportNote =  {"deliveryDate":"2020/01/01"};
+
+            await restockOrderController.addTransportNote(1, {transportNote:transportNote}).catch(() => {})
+            result = await restockOrderController.getTransportNote(1);
+
+            expect(result["transportNote"]).to.be.equal('');
+```
+
+## 3) Test Case: Failed to add transportNote due to state
+```
+            await restockOrderController.editRestockOrder(1, {newState:"COMPLETED"});
+
+            const transportNote =  {"deliveryDate":"2022/03/03"};
+
+            await restockOrderController.addTransportNote(1, {transportNote:transportNote}).catch(() => {})
+            result = await restockOrderController.getTransportNote(1);
+
+            expect(result["transportNote"]).to.be.equal('');
+```
 
 ## **Class *ReturnOrderController* - method *getReturnOrder***
 
@@ -3361,16 +3455,25 @@ test('attempt of deleteItem with invalid id', async () => {
 | skuItemController.js -> deleteSkuItem(rfid)     | test('create and delete')           |
 |                                                 | test('wrong rfid')                  |
 
-| Unit name                                               | Jest test case                                             |
-| ------------------------------------------------------- | ---------------------------------------------------------- |
-| restockOrderController.js -> createRestockOrder(body)   | test("Successfully add new Restock Order to Database")     |
-|                                                         | test("Insertion of a RestockOrder with malformed date")    |
-|                                                         | test("Insertion of a RestockOrder with invalid supplierId" |
-| restockOrderController.js -> editRestockOrder(id, body) | test('Successfully edit a Restock Order')                  |
-|                                                         | test('Edit a Restock Order with an invalid state')         |
-|                                                         | test('Edit a non-existing Restock Order'                   |
-| restockOrderController.js -> deleteRestockOrder(id)     | test('Successfully delete a Restock Order'                 |
-|                                                         | test('Delete a non-existing Restock Order')                |
+| Unit name                                                        | Jest test case                                               |
+| ---------------------------------------------------------------- | ------------------------------------------------------------ |
+| restockOrderController.js -> createRestockOrder(body)            | test("Successfully add new Restock Order to Database")       |
+|                                                                  | test("Insertion of a RestockOrder with malformed date")      |
+|                                                                  | test("Insertion of a RestockOrder with invalid supplierId"   |
+| restockOrderController.js -> editRestockOrder(id, body)          | test('Successfully edit a Restock Order')                    |
+|                                                                  | test('Edit a Restock Order with an invalid state')           |
+|                                                                  | test('Edit a non-existing Restock Order'                     |
+| restockOrderController.js -> deleteRestockOrder(id)              | test('Successfully delete a Restock Order'                   |
+|                                                                  | test('Delete a non-existing Restock Order')                  |
+| restockOrderController.js -> addSkuItemsToRestockOrder(id, body) | test("Add SKU Items to Restock Order")                       |
+|                                                                  | test("Failed to add SKU Items due to invalid SKU")           |
+| restockOrderController.js -> getRestockOrderToBeReturned(id)     | test("Get restock order to be returned")                     |
+|                                                                  | test("Get restock order to be returned with wrong params")   |
+| restockOrderController.js -> addTransportNote(body)              | test('Add and Get a Transport Note in a Restock Order Test') |
+|                                                                  | test('Failed to add transportNote due to state')             |
+|                                                                  | test('Failed to add transportNote due to invalid date')      |
+|                                                                  | test('Failed to add transportNote due to old delivery date') |
+
 
 
 

@@ -50,16 +50,24 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
      Jest test cases applied to them, and the mock ups used, if any> Jest test cases should be here code/server/unit_test
 
 ## Restock Orders Controllers Test Suite 
-| Classes                                                  | Jest test cases                                             |
-| -------------------------------------------------------- | ----------------------------------------------------------- |
-| controller.js - restockOrderController.js - dbManager.js | test("Successfully add new Restock Order to Database")      |
-| controller.js - restockOrderController.js - dbManager.js | test("Insertion of a RestockOrder with malformed date")     |
-| controller.js - restockOrderController.js - dbManager.js | test("Insertion of a RestockOrder with invalid supplierId") |
-| controller.js - restockOrderController.js - dbManager.js | test('Successfully edit a Restock Order')                   |
-| controller.js - restockOrderController.js - dbManager.js | test('Edit a Restock Order with an invalid state')          |
-| controller.js - restockOrderController.js - dbManager.js | test('Edit a non-existing Restock Order')                   |
-| controller.js - restockOrderController.js - dbManager.js | test('Successfully delete a Restock Order')                 |
-| controller.js - restockOrderController.js - dbManager.js | test('Delete a non-existing Restock Order')                 |
+| Classes                                                           | Jest test cases                                              |
+| ----------------------------------------------------------------- | ------------------------------------------------------------ |
+| controller.js - restockOrderController.js - dbManager.js          | test("Successfully add new Restock Order to Database")       |
+| controller.js - restockOrderController.js - dbManager.js          | test("Insertion of a RestockOrder with malformed date")      |
+| controller.js - restockOrderController.js - dbManager.js          | test("Insertion of a RestockOrder with invalid supplierId")  |
+| controller.js - restockOrderController.js - dbManager.js          | test('Successfully edit a Restock Order')                    |
+| controller.js - restockOrderController.js - dbManager.js          | test('Edit a Restock Order with an invalid state')           |
+| controller.js - restockOrderController.js - dbManager.js          | test('Edit a non-existing Restock Order')                    |
+| controller.js - restockOrderController.js - dbManager.js          | test('Successfully delete a Restock Order')                  |
+| controller.js - restockOrderController.js - dbManager.js          | test('Delete a non-existing Restock Order')                  |
+| controller.js - restock, sku, skuItems controllers - dbManager.js | test("Add SKU Items to Restock Order")                       |
+| ontroller.js - restock, sku, skuItems controllers - dbManager.js  | test("Failed to add SKU Items due to invalid SKU")           |
+| controller.js - restockOrderController.js - dbManager.js          | test("Get restock order to be returned")                     |
+| controller.js - restockOrderController.js - dbManager.js          | test("Get restock order to be returned with wrong params")   |
+| controller.js - restockOrderController.js - dbManager.js          | test('Add and Get a Transport Note in a Restock Order Test') |
+| controller.js - restockOrderController.js - dbManager.js          | test('Failed to add transportNote due to state')             |
+| controller.js - restockOrderController.js - dbManager.js          | test('Failed to add transportNote due to invalid date')      |
+| controller.js - restockOrderController.js - dbManager.js          | test('Failed to add transportNote due to old delivery date') |
 
 
 
