@@ -478,21 +478,21 @@ The input value is the body of the HTTP POST Request.
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                    Description of the test case                                                    |       Jest test case        |
-| :--------: | :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------: | :-------------------------: |
-|  Present   |   Valid    |  Invalid   |     Invalid     |                                                        The rfid is invalid                                                         |         wrong rfid          |
-|  Present   |   Valid    |   Valid    |      Valid      |                  The rfid is not Valid, the date format is valid and the sku id is associated to an existing sku                   | createSku and createSKUitem |
-|  Present   |  Invalid   |  Invalid   |     Invalid     |                                         The rfid is invalid, the date format is not valid                                          |                             |
-|  Present   |  Invalid   |   Valid    |     Invalid     |                                                    The date format is not valid                                                    |         wrong date          |
-|   Absent   |   Valid    |  Invalid   |     Invalid     |                                     The rfid is invalid, there is no SKU with the specified id                                     |      unexistant skuid       |
-|   Absent   |   Valid    |   Valid    |     Invalid     | The rfid is valid, the date format is valid and the sku id is associated to an existing sku, there is no SKU with the specified id |                             |
-|   Absent   |  Invalid   |  Invalid   |     Invalid     |                      The rfid is invalid, the date format is not valid, there is no SKU with the specified id                      |                             |
-|   Absent   |  Invalid   |   Valid    |     Invalid     |                                The date format is not valid, there is no SKU with the specified id                                 |                             |
+| Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                    Description of the test case                                                    |                      Jest test case                       |
+| :--------: | :--------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------: |
+|  Present   |   Valid    |  Invalid   |     Invalid     |                                                        The rfid is invalid                                                         |    test('attempt to create SkuItem with invalid rfid')    |
+|  Present   |   Valid    |   Valid    |      Valid      |                  The rfid is not Valid, the date format is valid and the sku id is associated to an existing sku                   |   test('successful use of createSku and createSKUitem')   |
+|  Present   |  Invalid   |  Invalid   |     Invalid     |                                         The rfid is invalid, the date format is not valid                                          |                                                           |
+|  Present   |  Invalid   |   Valid    |     Invalid     |                                                    The date format is not valid                                                    |    test('attempt to create SkuItem with invalid date')    |
+|   Absent   |   Valid    |  Invalid   |     Invalid     |                                     The rfid is invalid, there is no SKU with the specified id                                     | test('attempt to create SkuItem with non-existent SKUId') |
+|   Absent   |   Valid    |   Valid    |     Invalid     | The rfid is valid, the date format is valid and the sku id is associated to an existing sku, there is no SKU with the specified id |                                                           |
+|   Absent   |  Invalid   |  Invalid   |     Invalid     |                      The rfid is invalid, the date format is not valid, there is no SKU with the specified id                      |                                                           |
+|   Absent   |  Invalid   |   Valid    |     Invalid     |                                The date format is not valid, there is no SKU with the specified id                                 |                                                           |
 
-createSku and createSKUitem
+## 1) Test case: successful use of createSku and createSKUitem'
 ```
-test('createSku and createSKUitem', async () => {
-            await skuController.createSku(
+test('successful use of createSku and createSKUitem', async () => {
+                await skuController.createSku(
                 {
                     "description": "a new sku",
                     "weight": 100,
@@ -516,10 +516,10 @@ test('createSku and createSKUitem', async () => {
         })
 ```
 
-wrong rfid 
+## 2) Test case: attempt to create SkuItem with invalid rfid
 ```
-test('wrong rfid', async () => {
-            let errorValue;
+ test('attempt to create SkuItem with invalid rfid', async () => {
+                 let errorValue;
             const rfid = 'hello';
 
             await skuItemController.createSkuItem(
@@ -535,9 +535,9 @@ test('wrong rfid', async () => {
         })
 ```
 
-wrong date
+## 3) Test case: attempt to create SkuItem with invalid date
 ```
-test('wrong date', async () => {
+test('attempt to create SkuItem with invalid date', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
 
@@ -554,9 +554,9 @@ test('wrong date', async () => {
         })
 ```
 
-unexistant skuid
+## 4) Test case: attempt to create SkuItem with non-existent SKUId
 ```
-test('unexistant skuid', async () => {
+test('attempt to create SkuItem with non-existent SKUId', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
 
@@ -619,29 +619,29 @@ The input value is the body of the HTTP PUT Request, but also the old rfid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                 Description of the test case                                                  |      Jest test case       |
-| :--------: | :--------: | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------: | :-----------------------: |
-|  Present   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                                     The rfid is not valid                                                     |        wrong rfid         |
-|  Present   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                                      The rfid is not valid, the date format is not valid                                      |                           |
-|  Present   |  Invalid   |  Negative  |   Valid    |     Invalid     |                                      The rfid is not valid, the availability is negative                                      |                           |
-|  Present   |  Invalid   |  Negative  |  Invalid   |     Invalid     |                       The rfid is not valid, the date format is not valid, the availability is negative                       |                           |
-|  Present   |   Valid    |  Positive  |   Valid    |      Valid      |                                         The rfid is valid, it is a valid modification                                         |     create and modify     |
-|  Present   |   Valid    |  Positive  |  Invalid   |     Invalid     |                                                 The date format is not valid                                                  |        wrong date         |
-|  Present   |   Valid    |  Negative  |   Valid    |     Invalid     |                                                 The availability is negative                                                  |  wrong avaibility value   |
-|  Present   |   Valid    |  Negative  |  Invalid   |     Invalid     |                                  The date format is not valid, the availability is negative                                   |                           |
-|   Absent   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                The rfid is not valid, there is no SKUItem with rfid=*oldrfid*                                 |                           |
-|   Absent   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                 The rfid is not valid, the date format is not valid, there is no SKUItem with rfid=*oldrfid*                  |                           |
-|   Absent   |  Invalid   |  Negative  |   Valid    |     Invalid     |                 The rfid is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*                  |                           |
-|   Absent   |  Invalid   |  Negative  |  Invalid   |     Invalid     | The rfid is is not valid, the date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid* |                           |
-|   Absent   |   Valid    |  Positive  |   Valid    |     Invalid     |                    The rfid is valid, it is a valid modification, there is no SKUItem with rfid=*oldrfid*                     | modify unexistant skuitem |
-|   Absent   |   Valid    |  Positive  |  Invalid   |     Invalid     |                             The date format is not valid, there is no SKUItem with rfid=*oldrfid*                             |                           |
-|   Absent   |   Valid    |  Negative  |   Valid    |     Invalid     |                             The availability is negative, there is no SKUItem with rfid=*oldrfid*                             |                           |
-|   Absent   |   Valid    |  Negative  |  Invalid   |     Invalid     |              The date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*              |                           |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                 Description of the test case                                                  |                          Jest test case                           |
+| :--------: | :--------: | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------: |
+|  Present   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                                     The rfid is not valid                                                     |      test('attempt to edit a SkuItem with an invalid rfid')       |
+|  Present   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                                      The rfid is not valid, the date format is not valid                                      |                                                                   |
+|  Present   |  Invalid   |  Negative  |   Valid    |     Invalid     |                                      The rfid is not valid, the availability is negative                                      |                                                                   |
+|  Present   |  Invalid   |  Negative  |  Invalid   |     Invalid     |                       The rfid is not valid, the date format is not valid, the availability is negative                       |                                                                   |
+|  Present   |   Valid    |  Positive  |   Valid    |      Valid      |                                         The rfid is valid, it is a valid modification                                         |      test('successful use of createSkuItem and editSkuItem')      |
+|  Present   |   Valid    |  Positive  |  Invalid   |     Invalid     |                                                 The date format is not valid                                                  |      test('attempt to edit a SkuItem with an invalid date')       |
+|  Present   |   Valid    |  Negative  |   Valid    |     Invalid     |                                                 The availability is negative                                                  | test('attempt to edit a SkuItem with an invalid available value') |
+|  Present   |   Valid    |  Negative  |  Invalid   |     Invalid     |                                  The date format is not valid, the availability is negative                                   |                                                                   |
+|   Absent   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                The rfid is not valid, there is no SKUItem with rfid=*oldrfid*                                 |                                                                   |
+|   Absent   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                 The rfid is not valid, the date format is not valid, there is no SKUItem with rfid=*oldrfid*                  |                                                                   |
+|   Absent   |  Invalid   |  Negative  |   Valid    |     Invalid     |                 The rfid is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*                  |                                                                   |
+|   Absent   |  Invalid   |  Negative  |  Invalid   |     Invalid     | The rfid is is not valid, the date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid* |                                                                   |
+|   Absent   |   Valid    |  Positive  |   Valid    |     Invalid     |                    The rfid is valid, it is a valid modification, there is no SKUItem with rfid=*oldrfid*                     |          test('attempt to edit a non-existant SkuItem')           |
+|   Absent   |   Valid    |  Positive  |  Invalid   |     Invalid     |                             The date format is not valid, there is no SKUItem with rfid=*oldrfid*                             |                                                                   |
+|   Absent   |   Valid    |  Negative  |   Valid    |     Invalid     |                             The availability is negative, there is no SKUItem with rfid=*oldrfid*                             |                                                                   |
+|   Absent   |   Valid    |  Negative  |  Invalid   |     Invalid     |              The date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*              |                                                                   |
 
 
-create and modify
+## 1) Test Case: successful use of createSkuItem and editSkuItem
 ```
-test('create and modify', async () => {
+test('successful use of createSkuItem and editSkuItem', async () => {
             await skuController.createSku(
                 {
                     "description": "a new sku",
@@ -676,9 +676,9 @@ test('create and modify', async () => {
         })
 ```
 
-modify unexistant skuitem
+## 2) Test Case: attempt to edit a non-existant SkuItem
 ```
- test('modify unexistant skuitem', async () => {
+ test('attempt to edit a non-existant SkuItem', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
             await skuItemController.editSkuItem(rfid,
@@ -694,9 +694,9 @@ modify unexistant skuitem
         })
 ```
 
-wrong rfid
+## 3) Test Case: attempt to edit a SkuItem with an invalid rfid
 ```
-test('wrong rfid', async () => {
+test('attempt to edit a SkuItem with an invalid rfid', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
             await skuItemController.editSkuItem(rfid,
@@ -712,9 +712,9 @@ test('wrong rfid', async () => {
         })
 ```
 
-wrong available value
+## 4) Test Case: attempt to edit a SkuItem with an invalid available value
 ``` 
-test('wrong available value', async () => {
+test('attempt to edit a SkuItem with an invalid available value', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
             await skuItemController.editSkuItem(rfid,
@@ -730,9 +730,9 @@ test('wrong available value', async () => {
         })
 ```
 
-wrong date
+## 5) Test Case: attempt to edit a SkuItem with an invalid date
 ```
-test('wrong date', async () => {
+test('attempt to edit a SkuItem with an invalid date', async () => {
             const rfid = '12345678901234567890123456789019';
             let errorValue;
             await skuItemController.editSkuItem(rfid,
@@ -782,14 +782,14 @@ The input value is the SkuItemid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case |  Jest test case   |
-| :--------: | :-------------: | :--------------------------: | :---------------: |
-|  Present   |      Valid      |      The RFID is Valid       | Create and modify |
-|   Absent   |     Invalid     |     The RFID is Invalid      |    Wrong rfid     |
+| Criteria 1 | Valid / Invalid | Description of the test case |                      Jest test case                       |
+| :--------: | :-------------: | :--------------------------: | :-------------------------------------------------------: |
+|  Present   |      Valid      |      The RFID is Valid       | test('successful use of createSkuItem and deleteSkuItem') |
+|   Absent   |     Invalid     |     The RFID is Invalid      | test('attempt to delete a SkuItem with an invalid rfid')  |
 
-create and delete
+## 1) Test Case: successful use of createSkuItem and deleteSkuItem
 ```
-test('create and delete', async () => {
+test('successful use of createSkuItem and deleteSkuItem', async () => {
             await skuController.createSku(
                 {
                     "description": "a new sku",
@@ -819,9 +819,9 @@ test('create and delete', async () => {
         });
 ```
 
-wrong rfid
+## 2) Test Case: attempt to delete a SkuItem with an invalid rfid
 ```
-        test('wrong rfid', async () => {
+        test('attempt to delete a SkuItem with an invalid rfid', async () => {
             const rfid = 'hello';
             let errorValue;
             await skuItemController.deleteSkuItem(rfid)

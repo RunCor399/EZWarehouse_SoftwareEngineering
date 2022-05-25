@@ -22,7 +22,7 @@ afterEach(async () => {
 describe('SKUItemController Tests', () => {
 
     describe('createSkuItem method testing', () => {
-        test('createSku and createSKUitem', async () => {
+        test('successful use of createSku and createSKUitem', async () => {
 
             await skuController.createSku(
                 {
@@ -51,7 +51,7 @@ describe('SKUItemController Tests', () => {
 
         })
 
-        test('unexistant skuid', async () => {
+        test('attempt to create SkuItem with non-existent SKUId', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
 
@@ -67,7 +67,7 @@ describe('SKUItemController Tests', () => {
 
         })
 
-        test('wrong rfid', async () => {
+        test('attempt to create SkuItem with invalid rfid', async () => {
             let errorValue;
             const rfid = 'hello';
 
@@ -83,7 +83,7 @@ describe('SKUItemController Tests', () => {
 
         })
 
-        test('wrong skuid', async () => {
+        test('attempt to create SkuItem with invalid SKUId', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
 
@@ -99,7 +99,7 @@ describe('SKUItemController Tests', () => {
 
         })
 
-        test('wrong date', async () => {
+        test('attempt to create SkuItem with invalid date', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
 
@@ -119,7 +119,7 @@ describe('SKUItemController Tests', () => {
     })
 
     describe('editSkuItem method testing', () => {
-        test('create and modify', async () => {
+        test('successful use of createSkuItem and editSkuItem', async () => {
 
 
             await skuController.createSku(
@@ -156,7 +156,7 @@ describe('SKUItemController Tests', () => {
         })
 
 
-        test('modify unexistant skuitem', async () => {
+        test('attempt to edit a non-existant SkuItem', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
             await skuItemController.editSkuItem(rfid,
@@ -171,7 +171,7 @@ describe('SKUItemController Tests', () => {
 
         })
 
-        test('wrong rfid', async () => {
+        test('attempt to edit a SkuItem with an invalid rfid', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
             await skuItemController.editSkuItem(rfid,
@@ -187,7 +187,7 @@ describe('SKUItemController Tests', () => {
         })
 
 
-        test('wrong available value', async () => {
+        test('attempt to edit a SkuItem with an invalid available value', async () => {
             let errorValue;
             const rfid = '12345678901234567890123456789019';
             await skuItemController.editSkuItem(rfid,
@@ -202,7 +202,7 @@ describe('SKUItemController Tests', () => {
 
         })
 
-        test('wrong date', async () => {
+        test('attempt to edit a SkuItem with an invalid date', async () => {
             const rfid = '12345678901234567890123456789019';
             let errorValue;
             await skuItemController.editSkuItem(rfid,
@@ -219,7 +219,7 @@ describe('SKUItemController Tests', () => {
     })
 
     describe('deleteSkuItem method testing', () => {
-        test('create and delete', async () => {
+        test('successful use of createSkuItem and deleteSkuItem', async () => {
             await skuController.createSku(
                 {
                     "description": "a new sku",
@@ -248,7 +248,7 @@ describe('SKUItemController Tests', () => {
             assert.equal(value.length, 0)
         });
 
-        test('wrong rfid', async () => {
+        test('attempt to delete a SkuItem with an invalid rfid', async () => {
             const rfid = 'hello';
             let errorValue;
             await skuItemController.deleteSkuItem(rfid)
