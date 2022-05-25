@@ -43,7 +43,7 @@ describe("TestDescriptorController Tests", () => {
             const body = {
                 name: "new_test_descriptor",
                 procedureDescription: "procedureDescription13",
-                idSKU: 13000
+                idSKU: -13000
             };
             currId = ((await testDescriptorController.getAllTestDescriptors()).length) + 1;
 
@@ -109,7 +109,7 @@ describe("TestDescriptorController Tests", () => {
             const body = {
                 newName: "newName",
                 newProcedureDescription: "newProcedureDescription",
-                newIdSKU: 20000
+                newIdSKU: -20000
             };
 
             result = await testDescriptorController.editTestDescriptor(1, body).catch(() => { });
