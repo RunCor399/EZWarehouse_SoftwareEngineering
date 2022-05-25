@@ -131,10 +131,10 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 ### 
 
-| Non Functional Requirement | Test name               |
-| -------------------------- | ----------------------- |
-| NFR2                       | All                     |
-| NFR3                       | All                     |
-| NFR4                       |                         |
-| NFR6                       |                         |
-| NFR9                       | InternalOrderAPITest.js |
+| Non Functional Requirement | Test name                                                              |
+| -------------------------- | ---------------------------------------------------------------------- |
+| NFR2                       | All                                                                    |
+| NFR3                       | All                                                                    |
+| NFR4                       | RestockOrderAPITest.js, ReturnOrderAPITest.js                          |
+| NFR6                       | RestockOrderAPITest.js, ReturnOrderAPITest.js,                         |
+| NFR9                       | InternalOrderAPITest.js, RestockOrderAPITest.js, ReturnOrderAPITest.js |
