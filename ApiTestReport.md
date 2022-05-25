@@ -241,7 +241,6 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 6             | FR 5.11                         | Successfully delete a Return Order                  |
 | 7-1             |      FR1.5                     | Succesfully log a customer, manager, supplier, clerk, quality employee and delivery amployee |
 | 7-2             |    FR1.5                       | Succesfully logout|
-
 | 9.1           | FR 6                            | Successfully add a new Internal Order               |
 | 9.3           | FR 6                            | Successfully delete an internal order               |
 | 11.1          | FR 7                            | Successfully add a new Item                         |
@@ -249,8 +248,6 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 12-1             |     FR3.2.1                      | Succesfully add a new Test Descriptor |
 | 12-2             |     FR3.2.2                      | Succesfully edit Test Descriptor|
 | 12-3             |      FR3.2.3                     | Succesfully delete a Test Descriptor|
-| ...           |                                 |                                                     |
-
 |               | FR 2.1                          | Successfully created a sku                          |
 |               | FR 2.2                          | Successfully deleted a sku                          |
 |               | FR 2.3                          | Successfully got a list of SKUs                     |
