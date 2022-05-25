@@ -21,6 +21,7 @@ Version: 1.0
   - [SKU Controller Test Suite](#sku-controller-test-suite)
   - [User Controller Test Suite](#user-controller-test-suite)
   - [Test Descriptor Controller Test Suite](#test-descriptor-controller-test-suite)
+  - [Test Result Controller Test Suite](#test-result-controller-test-suite)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
     - [](#)
@@ -224,6 +225,14 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 | controller.js - testDescriptorController.js - dbManager.js | test("Successfully delete a Test Descriptor")                  |
 | controller.js - testDescriptorController.js - dbManager.js | test("Delete a non-existing Test Descriptor")                  |
 
+## Test Result Controller Test Suite
+   
+| Classes                                                | Jest test cases |
+| ------------------------------------------------------ | --------------- |
+| controller.js - testResultController.js - dbManager.js | test("")        |
+| controller.js - testResultController.js - dbManager.js | test("")        |
+| controller.js - testResultController.js - dbManager.js | test("")        |
+
 
 
 # Coverage of Scenarios and FR
@@ -245,7 +254,7 @@ Please note that many of the mocha test cases' implemented (each of them testing
 | 4-2           | FR1.1, 1.5                      | Succesfully edit user                                                                        |
 | 4-3           | FR1.2                           | Succesfully delete a user                                                                    |
 | 5-2-1 - 5-2-3 | FR 5.7, 5.8.2                   | Edit restock order state, Succesfully add a new Test result                                  |
-|              | FR 5                            | Successfully delete a Restock Order                                                          |
+|               | FR 5                            | Successfully delete a Restock Order                                                          |
 | 6             | FR 5.9                          | Successfully create a new Return Order                                                       |
 | 6             | FR 5.11                         | Successfully delete a Return Order                                                           |
 | 7-1           | FR1.5                           | Succesfully log a customer, manager, supplier, clerk, quality employee and delivery amployee |
