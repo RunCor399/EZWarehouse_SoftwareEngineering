@@ -14,7 +14,7 @@ Version:
 - [Integration approach](#integration-approach)
 - [Integration Tests](#integration-tests)
   - [Restock Orders Controllers Test Suite](#restock-orders-controllers-test-suite)
-  - [Test Suite 2](#test-suite-2)
+  - [Internal Orders Controllers Test Suite](#internal-orders-controllers-test-suite)
   - [Test Suite n](#test-suite-n)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
@@ -49,24 +49,25 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 ## Restock Orders Controllers Test Suite 
 | Classes  | Jest test cases |
-|--|--|--|
+|--|--|
 |controller.js - restockOrderController.js - dbManager.js| test(1) |
 |controller.js - restockOrderController.js - dbManager.js| test(2) | 
 
 
 
-## Test Suite 2
+## Internal Orders Controllers Test Suite
 | Classes  | Jest test cases |
 |--|--|
-||||
+|controller.js - internalOrderController.js - dbManager.js| test(1)|
+|controller.js - internalOrderController.js - dbManager.js| test(2)|
 
 
 ## Test Suite n 
 
    
-| Classes  | mock up used |Jest test cases |
-|--|--|--|
-||||
+| Classes  |Jest test cases |
+|--|--|
+|||
 
 
 
