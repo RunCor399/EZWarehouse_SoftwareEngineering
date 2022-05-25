@@ -3407,20 +3407,60 @@ test('attempt of deleteItem with invalid id', async () => {
     <For traceability write the class and method name that contains the test case>
 
 
-| Unit name                                       | Jest test case                      |
-| ----------------------------------------------- | ----------------------------------- |
-| skuItemController.js -> createSkuItem(body)     | test('createSku and createSKUitem') |
-|                                                 | test('unexistant skuid')            |
-|                                                 | test('wrong rfid')                  |
-|                                                 | test('wrong skuid')                 |
-|                                                 | test('wrong date')                  |
-| skuItemController.js -> editSkuItem(rfid, body) | test('create and modify')           |
-|                                                 | test('modify unexistant skuitem')   |
-|                                                 | test('wrong rfid')                  |
-|                                                 | test('wrong available value'        |
-|                                                 | test('wrong date'                   |
-| skuItemController.js -> deleteSkuItem(rfid)     | test('create and delete')           |
-|                                                 | test('wrong rfid')                  |
+| Unit name                                       | Jest test case                                                    |
+| ----------------------------------------------- | ----------------------------------------------------------------- |
+| skuItemController.js -> getAllSkuItens()        | test('successfull use of getAllSkuItems')                         |
+| skuItemController.js -> getSkuItems(skuid)      | test('successful use of getSkuItems')                             |
+|                                                 | test('attempt to use getSkuItems with a non-existant skuid')      |
+|                                                 | test('attempt to use getSkuItems with an invalid skuid')          |
+| skuItemController.js -> getSkuItem(rfid)        | test('successfull use of getSkuItem')                             |
+|                                                 | test('attempt to use getSkuItem with a non-existant rfid'         |
+|                                                 | test('attempt to use getSkuItem with an invalid rfid')            |
+| skuItemController.js -> createSkuItem(body)     | test('successful use of createSKUitem')                           |
+|                                                 | test('attempt to create SkuItem with non-existent SKUId')         |
+|                                                 | test('attempt to create SkuItem with invalid rfid')               |
+|                                                 | test('attempt to create SkuItem with an already used rfid')       |
+|                                                 | test('attempt to create SkuItem with invalid SKUId')              |
+|                                                 | test('attempt to create SkuItem with invalid date')               |
+| skuItemController.js -> editSkuItem(rfid, body) | test('successful use of editSkuItem')                             |
+|                                                 | test('attempt to edit a non-existant SkuItem'                     |
+|                                                 | test('attempt to edit a SkuItem with an invalid rfid')            |
+|                                                 | test('attempt to edit a SkuItem with an invalid available value') |
+|                                                 | test('attempt to edit a SkuItem with an invalid date')            |
+| skuItemController.js -> deleteSkuItem(rfid)     | test('successful use of createSkuItem and deleteSkuItem)          |
+|                                                 | test('attempt to delete a SkuItem with an invalid rfid')          |
+
+
+| Unit name                                                   | Just test case                                                     |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| positionController.js -> getAllPositions()                  | test('successfully use of getAllPositions')                        |
+| positionController.js -> createPosition()                   | test('successfully use of createPosition')                         |
+|                                                             | test('attempt of createPosition with invalid PositionID')          |
+|                                                             | test('attempt of createPosition with incompatible position codes') |
+|                                                             | test('attempt of createPosition with an undefined parameter')      |
+|                                                             | test('attempt of createPosition with negative weight')             |
+|                                                             | test('attempt of createPosition with negative volume')             |
+| positionController.js -> editPositionVer1(positionId, body) | test('successful use of editPositionVer1')                         |
+|                                                             | test('attempt of editPositionVer1 with an invalid positionID')     |
+|                                                             | test('attempt of editPositionVer1 with non-existant position')     |
+|                                                             | test('attempt of editPositionVer1 with invalid position codes')    |
+|                                                             | test('attempt of editPositionVer1 with negative weight')           |
+|                                                             | test('attempt of editPositionVer1 with negative volume')           |
+|                                                             | test('attempt of editPositionVer1 with negative occupiedWeight')   |
+|                                                             | test('attempt of editPositionVer1 with negative occupiedVolume')   |
+| positionController.js -> editPositionVer2(positionId, body) | test('successful use of editPositionVer2')                         |
+|                                                             | test('attempt of editPositionVer2 with a non-existant position')   |
+|                                                             | test('attempt of editPositionVer2 with an invalid oldPositionID')  |
+|                                                             | test('attempt of editPositionVer2 with an invalid newPositionID')  |
+| positionController.js -> deletePosition(positionId)         | test('successful use of deletePosition')                           |
+|                                                             | test('attempt of deletePosition with invalid positionId'           |
+| positionController.js ->                                    | test('successful use of checkPositionID')                          |
+|                                                             | test('attempt of checkPositionID with invalid PositionID')         |
+|                                                             | test('attempt of checkPositionID with invalid aisleID')            |
+|                                                             | test('attempt of checkPositionID with invalid row')                |
+|                                                             | test('attempt of checkPositionID with invalid col')                |
+|                                                             | test('attempt of checkPositionID with incompatible codes')         |
+
 
 | Unit name                                               | Jest test case                                             |
 | ------------------------------------------------------- | ---------------------------------------------------------- |

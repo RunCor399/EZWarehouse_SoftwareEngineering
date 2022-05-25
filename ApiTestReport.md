@@ -17,6 +17,7 @@ Version: 1.0
   - [Return Orders Controllers Test Suite](#return-orders-controllers-test-suite)
   - [Internal Orders Controllers Test Suite](#internal-orders-controllers-test-suite)
   - [SkuItem Controller Test Suite](#skuitem-controller-test-suite)
+  - [Position Controller Test Suite](#position-controller-test-suite)
   - [Test Suite n](#test-suite-n)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
@@ -116,14 +117,47 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 
 
+## Position Controller Test Suite 
+
+   
+| Classes                                              | Jest test cases                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------ |
+| controller.js - positionController.js - dbManager.js | test('successfully use of getAllPositions')                        |
+| controller.js - positionController.js - dbManager.js | test('successfully use of createPosition')                         |
+| controller.js - positionController.js - dbManager.js | test('attempt of createPosition with invalid PositionID')          |
+| controller.js - positionController.js - dbManager.js | test('attempt of createPosition with incompatible position codes') |
+| controller.js - positionController.js - dbManager.js | test('attempt of createPosition with an undefined parameter')      |
+| controller.js - positionController.js - dbManager.js | test('attempt of createPosition with negative weight')             |
+| controller.js - positionController.js - dbManager.js | test('attempt of createPosition with negative volume')             |
+| controller.js - positionController.js - dbManager.js | test('successful use of editPositionVer1')                         |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer1 with an invalid positionID')     |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer1 with non-existant position')     |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer1 with invalid position codes')    |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer1 with negative weight')           |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer1 with negative volume')           |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer1 with negative occupiedWeight')   |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer1 with negative occupiedVolume')   |
+| controller.js - positionController.js - dbManager.js | test('successful use of editPositionVer2')                         |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer2 with a non-existant position')   |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer2 with an invalid oldPositionID')  |
+| controller.js - positionController.js - dbManager.js | test('attempt of editPositionVer2 with an invalid newPositionID')  |
+| controller.js - positionController.js - dbManager.js | test('successful use of deletePosition')                           |
+| controller.js - positionController.js - dbManager.js | test('attempt of deletePosition with invalid positionId')          |
+| controller.js - positionController.js - dbManager.js | test('successful use of checkPositionID')                          |
+| controller.js - positionController.js - dbManager.js | test('attempt of checkPositionID with invalid PositionID')         |
+| controller.js - positionController.js - dbManager.js | test('attempt of checkPositionID with invalid aisleID')            |
+| controller.js - positionController.js - dbManager.js | test('attempt of checkPositionID with invalid row')                |
+| controller.js - positionController.js - dbManager.js | test('attempt of checkPositionID with invalid col')                |
+| controller.js - positionController.js - dbManager.js | test('attempt of checkPositionID with incompatible codes')         |
+
+
+
 ## Test Suite n 
 
    
 | Classes | Jest test cases |
 | ------- | --------------- |
 |         |                 |
-
-
 
 
 
