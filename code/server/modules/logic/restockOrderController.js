@@ -23,21 +23,17 @@ class RestockOrderController {
         if (!this.#controller.isLoggedAndHasPermission("manager", "clerk", "qualityEmployee"))
             throw new Exceptions(401)
 
-        let orders = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;")
-            .catch((error) => { throw error });
+        let orders = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;").catch((error) => { throw error });
 
         for (let i = 0; i < orders.length; i++) { // WHERE ARE THIS METHODS?
             if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
-                orders[i].products = await this.getProductsForOrders(orders[i].id)
-                    .catch((error) => { throw error });
+                orders[i].products = await this.getProductsForOrders(orders[i].id).catch((error) => { throw error });
 
-                orders[i].skuItems = await this.getSKUItemsForOrders(orders[i].id)
-                    .catch((error) => { throw error });
+                orders[i].skuItems = await this.getSKUItemsForOrders(orders[i].id).catch((error) => { throw error });
 
             }
             if (orders[i].state !== 'ISSUED') {
-                orders[i].skuItems = await this.getTransportNote(orders[i].id)
-                    .catch((error) => { throw error });
+                orders[i].skuItems = await this.getTransportNote(orders[i].id).catch((error) => { throw error });
             }
         }
 
@@ -46,24 +42,20 @@ class RestockOrderController {
 
     /** @throws 500 */
     async getProductsForOrders(id) {
-        let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id)
-            .catch((error) => { throw error });
+        let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
         return products;
     }
 
     /** @throws 500 */
     async getTransportNote(id) {
-        let transportNote = await this.#dbManager.genericSqlGet(`SELECT transportNote FROM RestockOrder WHERE id = ?;`, id)
-            //.then(value => transportNote = value[0])
-            .catch((error) => { throw error });
+        let transportNote = await this.#dbManager.genericSqlGet(`SELECT transportNote FROM RestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
 
         return transportNote[0];
     }
 
     /** @throws 500 */
     async getSKUItemsForOrders(id) {
-        let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id)
-            .catch((error) => { throw error });
+        let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
         return skuItems;
     }
 
@@ -306,20 +298,16 @@ class RestockOrderController {
         const sqlUpdate = `UPDATE SKUPerRestockOrder SET qty = qty + 1 WHERE SKUid = ?`
         
         for (let i = 0; i < skuItems.length; i++) {
-            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid)
-                .catch((error) => { throw error })
+            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid).catch((error) => { throw error })
             skuidInfo = await this.#controller.getSkuController().getSku(skuItems[i].SKUId)
 
-            num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?", skuidInfo.id)
-                .catch(error => { throw new Exceptions(503) });
+            num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?", skuidInfo.id).catch(error => { throw new Exceptions(503) });
                 
             if (num.length === 0) {
-                await this.#dbManager.genericSqlRun(sqlInsert2, id, skuidInfo.id, skuidInfo.description, skuidInfo.price, 1)
-                    .catch((error) => { throw new Exceptions(503) })
+                await this.#dbManager.genericSqlRun(sqlInsert2, id, skuidInfo.id, skuidInfo.description, skuidInfo.price, 1).catch((error) => { throw new Exceptions(503) })
             }
             else {
-                await this.#dbManager.genericSqlRun(sqlUpdate, skuidInfo.id)
-                    .catch((error) => { throw new Exceptions(503) })
+                await this.#dbManager.genericSqlRun(sqlUpdate, skuidInfo.id).catch((error) => { throw new Exceptions(503) })
             }
 
         }
@@ -354,8 +342,7 @@ class RestockOrderController {
 
     let row;
     await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
-        .then(value => row = value[0])
-        .catch((error) => { throw error });
+        .then(value => row = value[0]).catch((error) => { throw error });
 
     /*check if the restock order exists*/
     if (!row)
@@ -383,8 +370,7 @@ class RestockOrderController {
 
 
     const sqlInstruction = `UPDATE RestockOrder SET transportNote = ? WHERE id = ?;`;
-    await this.#dbManager.genericSqlRun(sqlInstruction, transportNote.deliveryDate, id)
-        .catch((error) => { throw error })
+    await this.#dbManager.genericSqlRun(sqlInstruction, transportNote.deliveryDate, id).catch((error) => { throw error })
 }
 
     /** COMPLETED - delete function to remove a restock order from the table, given its ID
@@ -403,8 +389,7 @@ class RestockOrderController {
         || !this.#controller.areAllPositiveOrZero(id))
         throw new Exceptions(422);
 
-    await this.#dbManager.genericSqlRun(`DELETE FROM RestockOrder WHERE ID=?;`, id)
-        .catch((error) => { throw error });
+    await this.#dbManager.genericSqlRun(`DELETE FROM RestockOrder WHERE ID=?;`, id).catch((error) => { throw error });
 
 }
 }

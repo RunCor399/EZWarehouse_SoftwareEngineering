@@ -138,7 +138,7 @@ describe('SKUItemController Tests', () => {
     })
 
     describe('createSkuItem method testing', () => {
-        test('successful use of createSku and createSKUitem', async () => {
+        test('successful use of createSKUitem', async () => {
 
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         VALUES ( ?, ?, ?, ?, ?, ?);`;
@@ -260,7 +260,7 @@ describe('SKUItemController Tests', () => {
     })
 
     describe('editSkuItem method testing', () => {
-        test('successful use of createSkuItem and editSkuItem', async () => {
+        test('successful use of editSkuItem', async () => {
 
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
         VALUES ( ?, ?, ?, ?, ?, ?);`;

@@ -96,7 +96,7 @@ describe("TestDescriptorController Tests", () => {
             expect(result).to.be.undefined;
         });
 
-        test("Delete a non-existing Test Descriptor", () => {
+        test("Delete a non-existing Test Descriptor", async () => {
             let oldCount, newCount;
 
             oldCount = (await testDescriptorController.getAllTestDescriptors()).length;
