@@ -1087,40 +1087,58 @@ test('attempt of createPosition with negative volume', async () => {
 
 ## **Class *positionController* - method *editPositionVer1***
 
-The input value is the body of the HTTP PUT Request and the positionid.
-
-**Criteria for method *editPositionVer1*:**
-	
+The input value is the body of the HTTP PUT Request and the positionid.	
 
 
 **Predicates for method *editPositionVer1*:**
 
-| Criteria | Predicate |
-| :------: | :-------: |
-|          |           |
-|          |           |
+|           Criteria           |            Predicate            |
+| :--------------------------: | :-----------------------------: |
+|     positionID validity      |       positionId is valid       |
+|                              |      positionId is invalid      |
+|      position existance      |         position exists         |
+|                              |     position doesn't exist      |
+| position codes compatibility |  position codes are compatible  |
+|                              | position codes are incompatible |
+|        maxWeight sign        |      maxWeight is positive      |
+|                              |      maxWeight is negative      |
+|        maxVolume sign        |      maxVolume is positive      |
+|                              |      maxVolume is negative      |
+|     occupiedWeight sign      |   occupiedWeight is positive    |
+|                              |   occupiedWeight is negative    |
+|     occupiedWVolume sign     |   occupiedVolume is positive    |
+|                              |   occupiedVolume is negative    |
 
 
 
 
 **Boundaries**:
 
-| Criteria | Boundary values |
-| :------: | :-------------: |
-|          |                 |
+|           Criteria           |  Boundary values  |
+| :--------------------------: | :---------------: |
+|     positionID validity      | No boundary found |
+|      position existance      | No boundary found |
+| position codes compatibility | No boundary found |
+|        maxWeight sign        |         0         |
+|        maxVolume sign        |         0         |
+|     occupiedWeight sign      |         0         |
+|     occupiedWVolume sign     |         0         |
 
 
 
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-| :--------: | :-------------: | :--------------------------: | :------------: |
-|            |                 |                              |                |
-|            |                 |                              |                |
-
-
-
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Criteria 7 | Valid / Invalid | Description of the test case |                          Jest test case                          |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :--------------------------: | :--------------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |      Valid      |                              |            test('successful use of editPositionVer1')            |
+|  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |                              |  test('attempt of editPositionVer1 with an invalid positionID')  |
+|   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |                              |  test('attempt of editPositionVer1 with non-existant position')  |
+|   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |   Valid    |     Invalid     |                              | test('attempt of editPositionVer1 with invalid position codes')  |
+|   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |   Valid    |     Invalid     |                              |     test('attempt of editPositionVer1 with negative weight')     |
+|   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |   Valid    |     Invalid     |                              |     test('attempt of editPositionVer1 with negative volume')     |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |   Valid    |     Invalid     |                              | test('attempt of editPositionVer1 with negative occupiedWeight') |
+|   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |   Valid    |  Invalid   |     Invalid     |                              | test('attempt of editPositionVer1 with negative occupiedVolume') |
 
 
 **Predicates for method *editPositionVer1*:**
@@ -3056,10 +3074,12 @@ The input value is the item id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                            Description of the test case                            |                                                                Jest test case                                                                |
-| :--------: | :-------------: | :--------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: |
-|  Invalid   |     Invalid     | There is no item with the given *id* in the database or id is invalid or undefined | test('attempt of getItem with undefined id') / test('attempt of getItem with invalid id')  test('attempt of getItem with non-existant item') |
-|   Valid    |      Valid      |             There is an item order with the given *id* in the database             |                                                      test('successful use of getItem')                                                       |
+| Criteria 1 | Valid / Invalid |                            Description of the test case                            |                  Jest test case                   |
+| :--------: | :-------------: | :--------------------------------------------------------------------------------: | :-----------------------------------------------: |
+|  Invalid   |     Invalid     | There is no item with the given *id* in the database or id is invalid or undefined |   test('attempt of getItem with undefined id')    |
+|            |                 |                                                                                    |    test('attempt of getItem with invalid id')     |
+|            |                 |                                                                                    | test('attempt of getItem with non-existant item') |
+|   Valid    |      Valid      |             There is an item order with the given *id* in the database             |         test('successful use of getItem')         |
 
 
 ## 1) Test case : successful use of getItem
