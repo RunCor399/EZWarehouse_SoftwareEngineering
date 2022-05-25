@@ -20,7 +20,7 @@ Version: 1.0
   - [Position Controller Test Suite](#position-controller-test-suite)
   - [SKU Controller Test Suite](#sku-controller-test-suite)
   - [User Controller Test Suite](#user-controller-test-suite)
-  - [Test Suite n](#test-suite-n)
+  - [Test Descriptor Test Suite](#test-descriptor-test-suite)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
     - [](#)
@@ -211,12 +211,18 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 
 
-## Test Suite n 
-
+## Test Descriptor Test Suite
    
-| Classes | Jest test cases |
-| ------- | --------------- |
-|         |                 |
+| Classes                                                    | Jest test cases                                                |
+| ---------------------------------------------------------- | -------------------------------------------------------------- |
+| controller.js - testDescriptorController.js - dbManager.js | test("Successfully create a Test Descriptor")                  |
+| controller.js - testDescriptorController.js - dbManager.js | test("Insertion of a test descriptor with a non-existing SKU") |
+| controller.js - testDescriptorController.js - dbManager.js | test("Insertion of a test descriptor with invalid body")       |
+| controller.js - testDescriptorController.js - dbManager.js | test("Successfully edit a Test Descriptor")                    |
+| controller.js - testDescriptorController.js - dbManager.js | test("Edit a Test Descriptor with invalid id")                 |
+| controller.js - testDescriptorController.js - dbManager.js | test("Edit a Test Descriptor with a non-existent SKU")         |
+| controller.js - testDescriptorController.js - dbManager.js | test("Successfully delete a Test Descriptor")                  |
+| controller.js - testDescriptorController.js - dbManager.js | test("Delete a non-existing Test Descriptor")                  |
 
 
 
