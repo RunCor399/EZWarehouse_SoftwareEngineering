@@ -6,11 +6,7 @@ Version: 1.0
 
 # Black Box Unit Tests
 
-    <Define here criteria, predicates and the combination of predicates for each function of each class.
-    Define test cases to cover all equivalence classes and boundary conditions.
-    In the table, report the description of the black box test case and (traceability) the correspondence with the Jest test case writing the 
-    class and method name that contains the test case>
-    <Jest tests  must be in code/server/unit_test  >
+
 
 ## **Class *skuController* - method *getSKU***
 
@@ -4159,8 +4155,6 @@ test('attempt of deleteItem with invalid id', async () => {
 ### Test cases definition
     
     
-    <Report here all the created Jest test cases, and the units/classes under test >
-    <For traceability write the class and method name that contains the test case>
 
 
 | Unit name                                       | Jest test case                                                    |
@@ -4349,9 +4343,9 @@ test('attempt of deleteItem with invalid id', async () => {
 
 
 ### Code coverage report
-Since we weren't supposed to implement UnitTests with the design adopted (due to the lack of data structures kept in memory apart from the data in the Database),
-we have only implemented few unit tests on some of the controllers that we deemed to be the most important ones.
-For this reason the coverage statistics are not as good as they should be.
+Since UnitTests are not so meaningful with the adopted design (due to the lack of data structures kept in memory apart from the data in the Database),
+we have only implemented some unit tests in which we test the logic of the application, the validity of the inputs and the interaction of the Controllers with the database
+For this reason the coverage statistics are not as good as they should be; furthermore we deemed not necessary to trigger some Database pure operational errors (by simply shutting down the server and performing some operations on it) just to obtain few more covered lines of code.
 
 On the other hand we have focused our efforts in developing and testing thoroughly (through API tests) all the given API's specified in the Requirements  
     

@@ -25,6 +25,9 @@ Version: 1.0
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
     - [](#)
 
+
+  
+
 - [Tests](#tests)
 
 - [Scenarios](#scenarios)
@@ -48,9 +51,6 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 
 #  Integration Tests
 
-
-   <define below a table for each integration step. For each integration step report the group of classes under test, and the names of
-     Jest test cases applied to them, and the mock ups used, if any> Jest test cases should be here code/server/unit_test
 
 ## Restock Orders Controllers Test Suite 
 | Classes                                                           | Jest test cases                                              |
@@ -229,8 +229,8 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
 # Coverage of Scenarios and FR
 
 
-<Report in the following table the coverage of  scenarios (from official requirements and from above) vs FR. 
-Report also for each of the scenarios the (one or more) API Mocha tests that cover it. >  Mocha test cases should be here code/server/test
+We have decided to not include in this document the implementation of each mocha test for comprehensibility. The latters are available inside the "test" folder and can be identified by the same name written in the following table. 
+Please note that many of the mocha test cases' implemented (each of them testing a specific API with different values for the specified predicates) are not present in this table as they don't entirely correspond to a specific Functional Requirement or Scenario.
 
 
 
@@ -245,7 +245,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 4-2           | FR1.1, 1.5                      | Succesfully edit user                                                                        |
 | 4-3           | FR1.2                           | Succesfully delete a user                                                                    |
 | 5-2-1 - 5-2-3 | FR 5.7, 5.8.2                   | Edit restock order state, Succesfully add a new Test result                                  |
-| /             | FR 5                            | Successfully delete a Restock Order                                                          |
+|              | FR 5                            | Successfully delete a Restock Order                                                          |
 | 6             | FR 5.9                          | Successfully create a new Return Order                                                       |
 | 6             | FR 5.11                         | Successfully delete a Return Order                                                           |
 | 7-1           | FR1.5                           | Succesfully log a customer, manager, supplier, clerk, quality employee and delivery amployee |

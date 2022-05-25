@@ -46,7 +46,7 @@ describe('position test suite', async () => {
         });
     })
 
-    describe.only('successfullty got a list of positions', async () => {
+    describe('successfullty got a list of positions', async () => {
         it('create and get position ', async () => { //it indicates a TEST CASE
             let response;
             response = await positionAPICalls.addPosition("800234543412", "8002",
