@@ -146,8 +146,7 @@ class SkuController {
         VALUES ( ?, ?, ?, ?, ?, ?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, weight, volume, price, notes, description, availableQuantity)
-            .catch(() => { throw  error
-        });
+            .catch(() => { throw  error});
     }
 
 

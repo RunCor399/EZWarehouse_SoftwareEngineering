@@ -24,16 +24,11 @@ describe('SKUItemController Tests', () => {
     describe('createSkuItem method testing', () => {
         test('successful use of createSku and createSKUitem', async () => {
 
-            await skuController.createSku(
-                {
-                    "description": "a new sku",
-                    "weight": 100,
-                    "volume": 50,
-                    "notes": "second SKU",
-                    "price": 10.99,
-                    "availableQuantity": 50
-                }
-            ).catch(error => (console.log(error)))
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+        await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+            .catch(() => { throw  error});
 
             const rfid = '12345678901234567890123456789019';
 
@@ -121,17 +116,11 @@ describe('SKUItemController Tests', () => {
     describe('editSkuItem method testing', () => {
         test('successful use of createSkuItem and editSkuItem', async () => {
 
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
 
-            await skuController.createSku(
-                {
-                    "description": "a new sku",
-                    "weight": 100,
-                    "volume": 50,
-                    "notes": "second SKU",
-                    "price": 10.99,
-                    "availableQuantity": 50
-                }
-            ).catch(error => (console.log(error)))
+        await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+            .catch(() => { throw  error});
 
             const rfid = '12345678901234567890123456789019';
             await skuItemController.createSkuItem(
@@ -220,16 +209,12 @@ describe('SKUItemController Tests', () => {
 
     describe('deleteSkuItem method testing', () => {
         test('successful use of createSkuItem and deleteSkuItem', async () => {
-            await skuController.createSku(
-                {
-                    "description": "a new sku",
-                    "weight": 100,
-                    "volume": 50,
-                    "notes": "second SKU",
-                    "price": 10.99,
-                    "availableQuantity": 50
-                }
-            ).catch(error => (console.log(error)))
+            
+            const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+        VALUES ( ?, ?, ?, ?, ?, ?);`;
+
+        await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
+            .catch(() => { throw  error});
 
             const rfid = '12345678901234567890123456789019';
             await skuItemController.createSkuItem(
