@@ -1688,6 +1688,187 @@ let result, currId;
             expect(result).not.to.be.undefined;
 ```
 
+## 2) Test Case: "Insertion of a RestockOrder with malformed date"
+```
+            let result;
+            let currId
+            const body = {
+                 issueDate : "123/456/7",
+                 products: [],
+                 supplierId : 5
+             }
+        
+             currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
+             await restockOrderController.createRestockOrder(body).catch(() => {});
+             result = await restockOrderController.getRestockOrder(currId).catch(() => {});
+    
+        
+             expect(result).to.be.undefined;
+```
+
+
+## 3) Test Case: "Insertion of a RestockOrder with invalid supplierId"
+```
+            let result;
+            let currId;
+            const body = {
+                 issueDate : "123/456/7",
+                 products: [],
+                 supplierId : -1
+             }
+        
+             currId = ((await restockOrderController.getAllRestockOrders()).length) + 1;
+             await restockOrderController.createRestockOrder(body).catch(() => {});
+             result = await restockOrderController.getRestockOrder(currId).catch(() => {});
+    
+        
+             expect(result).to.be.undefined;
+```
+
+
+
+
+
+
+
+## **Class *RestockOrderController* - method *editRestockOrder***
+
+The input value is the order id and the body of the HTTP PUT Request.
+
+**Criteria for method *editRestockOrder*:**
+	
+ - Validity of *id* and of the order *state*
+
+
+
+
+
+**Predicates for method *editRestockOrder*:**
+
+|                 Criteria                 |                                                          Predicate                                                          |
+| :--------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: |
+| Validity of *id* and of the order status | There is no restock order with the given *id* in the database, if there is the restock order its *state* is not a valid one |
+|                                          |                 There is a restock order with the given *id* in the database and the *state* is a valid one                 |
+
+
+
+
+**Boundaries**:
+
+|                 Criteria                  |  Boundary values  |
+| :---------------------------------------: | :---------------: |
+| Validity of *id* and of the order *state* | No boundary found |
+
+
+**Combination of predicates**:
+
+| Criteria 1 | Valid / Invalid |                                                Description of the test case                                                 |                                          Jest test case                                           |
+| :--------: | :-------------: | :-------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: |
+|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its *state* is not a valid one | test('Edit a non-existing Restock Order')  and test("Edit a Restock Order with an invalid state") |
+|   Valid    |      Valid      |                 There is a restock order with the given *id* in the database and the *state* is a valid one                 |                             test('Successfully edit a Restock Order')                             |
+
+
+## 1a) Test Case: "Edit a non-existing Restock Order'"
+```
+            let result;
+            const body = {newState : "DELIVERED"};
+
+
+            result = await restockOrderController.editRestockOrder(-1, body).catch(() => {});
+            expect(result).to.be.undefined;
+```
+
+## 1b) Test Case: "Edit a Restock Order with an invalid state"
+```
+            let result;
+            const body = {newState : "INVALID_STATE"};
+            let oldState, newState;
+
+            result = await restockOrderController.getRestockOrder(1);
+            oldState = result['state'];
+
+            await restockOrderController.editRestockOrder(1, body).catch(() => {});
+
+            result = await restockOrderController.getRestockOrder(1);
+            newState = result['state'];
+
+            expect(newState).to.be.equal(oldState);
+```
+
+## 2) Test Case: "Successfully edit a Restock Order"
+```
+            let result;
+            const body = {newState : "DELIVERED"};
+            let newState;
+
+            await restockOrderController.editRestockOrder(1, body);
+
+            result = await restockOrderController.getRestockOrder(1);
+            newState = result['state'];
+
+            expect(newState).to.be.equal("DELIVERED");
+```
+
+
+
+## **Class *RestockOrderController* - method *deleteRestockOrder***
+
+The input value is the order id.
+
+**Criteria for method *deleteRestockOrder*:**
+	
+ - Validity of *id*
+
+
+
+
+
+**Predicates for method *deleteRestockOrder*:**
+
+|     Criteria     |                           Predicate                           |
+| :--------------: | :-----------------------------------------------------------: |
+| Validity of *id* | There is no restock order with the given *id* in the database |
+|                  |         There is a restock order with the given *id*          |
+
+
+
+
+**Boundaries**:
+
+|     Criteria     |  Boundary values  |
+| :--------------: | :---------------: |
+| Validity of *id* | No boundary found |
+
+**Combination of predicates**:
+
+| Criteria 1 | Valid / Invalid |                 Description of the test case                  |               Jest test case                |
+| :--------: | :-------------: | :-----------------------------------------------------------: | :-----------------------------------------: |
+|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database | test('Delete a non-existing Restock Order') |
+|   Valid    |      Valid      | There is a restock order with the given *id* in the database  | test('Successfully delete a Restock Order') |
+
+## 1) Test Case: "Delete a non-existing Restock Order"
+```
+            let result, oldCount, newCount;
+
+            oldCount = (await restockOrderController.getAllRestockOrders()).length;
+
+            await restockOrderController.deleteRestockOrder(-1).catch(() => {});
+
+            newCount = (await restockOrderController.getAllRestockOrders()).length;
+
+            expect(oldCount).to.be.equal(newCount);
+```
+
+## 2) Test Case: "Successfully delete a Restock Order"
+```
+            let result;
+
+            await restockOrderController.deleteRestockOrder(1);
+
+            result = await restockOrderController.getRestockOrder(1).catch(() => {});
+            expect(result).to.be.undefined;
+```
+
 
 ## **Class *RestockOrderController* - method *getRestockOrder***
 
@@ -1759,43 +1940,6 @@ The input value is the order id.
 |  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its status is COMPLETEDRETURN |                |
 |   Valid    |      Valid      |       There is a restock order with the given *id* in the database and the status is different from COMPLETEDRETURN        |                |
 
-
-
-## **Class *RestockOrderController* - method *editRestockOrder***
-
-The input value is the order id and the body of the HTTP PUT Request.
-
-**Criteria for method *editRestockOrder*:**
-	
- - Validity of *id* and of the order *state*
-
-
-
-
-
-**Predicates for method *editRestockOrder*:**
-
-|                 Criteria                 |                                                          Predicate                                                          |
-| :--------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: |
-| Validity of *id* and of the order status | There is no restock order with the given *id* in the database, if there is the restock order its *state* is not a valid one |
-|                                          |                 There is a restock order with the given *id* in the database and the *state* is a valid one                 |
-
-
-
-
-**Boundaries**:
-
-|                 Criteria                  |  Boundary values  |
-| :---------------------------------------: | :---------------: |
-| Validity of *id* and of the order *state* | No boundary found |
-
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid |                                                Description of the test case                                                 |                                          Jest test case                                           |
-| :--------: | :-------------: | :-------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: |
-|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database, if there is the restock order its *state* is not a valid one | test('Edit a non-existing Restock Order')  and test("Edit a Restock Order with an invalid state") |
-|   Valid    |      Valid      |                 There is a restock order with the given *id* in the database and the *state* is a valid one                 |                             test('Successfully edit a Restock Order')                             |
 
 ## **Class *RestockOrderController* - method *addSkuItemsToRestockOrder***
 
@@ -1879,41 +2023,6 @@ The input value is the body of the HTTP PUT Request and the order id.
 |  Invalid   |   Valid    |     Invalid     |                 There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY                  |                |
 |  Invalid   |  Invalid   |     Invalid     | issueDate is after deliveryDate, There is no restock order with the given *id* in the database, if there is the restock order its status is different from DELIVERY |                |
 
-## **Class *RestockOrderController* - method *deleteRestockOrder***
-
-The input value is the order id.
-
-**Criteria for method *deleteRestockOrder*:**
-	
- - Validity of *id*
-
-
-
-
-
-**Predicates for method *deleteRestockOrder*:**
-
-|     Criteria     |                           Predicate                           |
-| :--------------: | :-----------------------------------------------------------: |
-| Validity of *id* | There is no restock order with the given *id* in the database |
-|                  |         There is a restock order with the given *id*          |
-
-
-
-
-**Boundaries**:
-
-|     Criteria     |  Boundary values  |
-| :--------------: | :---------------: |
-| Validity of *id* | No boundary found |
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid |                 Description of the test case                  |               Jest test case                |
-| :--------: | :-------------: | :-----------------------------------------------------------: | :-----------------------------------------: |
-|  Invalid   |     Invalid     | There is no restock order with the given *id* in the database | test('Delete a non-existing Restock Order') |
-|   Valid    |      Valid      | There is a restock order with the given *id* in the database  | test('Successfully delete a Restock Order') |
-
 ## **Class *ReturnOrderController* - method *getReturnOrder***
 
 The input value is the order id.
@@ -1986,14 +2095,89 @@ The input value is the body of the HTTP POST Request
 
 | Criteria 1 | Criteria 2 | Criteria 3 | Valid / Invalid |                                                  Description of the test case                                                   | Jest test case |
 | :--------: | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |   Valid    |      Valid      |   There is a restock order with the given *restockOrderId* in the database, *returnDate* is valid and products list is valid    |                |
+|   Valid    |   Valid    |   Valid    |      Valid      |   There is a restock order with the given *restockOrderId* in the database, *returnDate* is valid and products list is valid    |     test('Successfully create a new Return Order')           |
 |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                    products list is invalid                                                     |                |
-|   Valid    |  Invalid   |   Valid    |     Invalid     |                                                     *returnDate* is invalid                                                     |                |
+|   Valid    |  Invalid   |   Valid    |     Invalid     |                                                     *returnDate* is invalid                                                     |     test('Creation of a Return Order with an invalid date')         |
 |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                           *returnDate* and products list are invalid                                            |                |
-|  Invalid   |   Valid    |   Valid    |     Invalid     |                            There is no restock order with the given *restockOrderId* in the database                            |                |
+|  Invalid   |   Valid    |   Valid    |     Invalid     |                            There is no restock order with the given *restockOrderId* in the database                            |      test('Creation of a Return Order with an invalid Restock Order id')         |
 |  Invalid   |   Valid    |  Invalid   |     Invalid     |                     There is no restock order with the given *restockOrderId* and products list is invalid                      |                |
 |  Invalid   |  Invalid   |   Valid    |     Invalid     |                      There is no restock order with the given *restockOrderId* and *returnDate* is invalid                      |                |
 |  Invalid   |  Invalid   |  Invalid   |     Invalid     | *returnDate* is invalid, there is no restock order with the given *restockOrderId* in the database and products list is invalid |                |
+
+## 1) Test Case: "Successfully create a new Return Order"
+```
+            let result, oldCount, newCount;
+            const products = [{
+                               "SKUId":2, "description_return":"return description", 
+                               "price":30, "RFID":"78901234567890161234567890123456"
+                             }];
+            const body = {
+                returnDate : "2022/04/14",
+                products : products,
+                restockOrderId : 3
+            }
+
+            oldCount = (await returnOrderController.getAllReturnOrders()).length;
+
+            await returnOrderController.createReturnOrder(body).catch(() => {
+                console.log("error");
+            });
+
+            result = await returnOrderController.getAllReturnOrders();
+            newCount = result.length;
+
+            expect(oldCount).to.be.equal(newCount-1);
+            expect(result[1].products.length).to.be.above(0);
+```
+
+
+## 2) Test Case: "Creation of a Return Order with an invalid date"
+```
+            let result, oldCount, newCount;
+            const products = [{
+                               "SKUId":2, "description_return":"return description", 
+                               "price":30, "RFID":"78901234567890161234567890123456"
+                             }];
+            const body = {
+                returnDate : "123/456/78",
+                products : products,
+                restockOrderId : 1
+            }
+
+            oldCount = (await returnOrderController.getAllReturnOrders()).length;
+
+            await returnOrderController.createReturnOrder(body).catch(() => {});
+
+            result = await returnOrderController.getAllReturnOrders();
+            newCount = result.length;
+
+            expect(oldCount).to.be.equal(newCount);
+```
+
+
+## 3) Test Case: "Creation of a Return Order with an invalid Restock Order id"
+```
+            let result, oldCount, newCount;
+            const products = [{
+                               "SKUId":2, "description_return":"return description", 
+                               "price":30, "RFID":"78901234567890161234567890123456"
+                             }];
+            const body = {
+                returnDate : "2022/04/04",
+                products : products,
+                restockOrderId : 100
+            }
+
+            oldCount = (await returnOrderController.getAllReturnOrders()).length;
+
+            await returnOrderController.createReturnOrder(body).catch(() => {});
+
+            result = await returnOrderController.getAllReturnOrders();
+            newCount = result.length;
+            console.log(result.products);
+
+            expect(oldCount).to.be.equal(newCount);
+```
 
 ## **Class *ReturnOrderController* - method *deleteReturnOrder***
 
@@ -2025,8 +2209,32 @@ The input value is the order id.
 
 | Criteria 1 | Valid / Invalid |                 Description of the test case                 | Jest test case |
 | :--------: | :-------------: | :----------------------------------------------------------: | :------------: |
-|  Invalid   |     Invalid     | There is no return order with the given *id* in the database |                |
-|   Valid    |      Valid      | There is a return order with the given *id* in the database  |                |
+|  Invalid   |     Invalid     | There is no return order with the given *id* in the database |   test('Delete a non-existing Return Order')             |
+|   Valid    |      Valid      | There is a return order with the given *id* in the database  |   test('Successfully delete a Return Order')             |
+
+
+## 1) Test Case: "Successfully delete a Return Order"
+```
+            let result;
+
+            await returnOrderController.deleteReturnOrder(1);
+
+            result = await returnOrderController.getReturnOrder(1).catch(() => {});
+            expect(result).to.be.undefined;
+```
+
+## 2) Test Case: "Delete a non-existing Return Order"
+```
+            let oldCount, newCount;
+
+            oldCount = (await returnOrderController.getAllReturnOrders()).length;
+
+            await returnOrderController.deleteReturnOrder(-1).catch(() => {});
+
+            newCount = (await returnOrderController.getAllReturnOrders()).length;
+
+            expect(oldCount).to.be.equal(newCount);
+```
 
 
 
@@ -2507,15 +2715,19 @@ The input value is the item id.
 |                                                         | test('Delete a non-existing Restock Order')                |
 
 
-| Unit name                                           | Jest test case                                                      |
-| --------------------------------------------------- | ------------------------------------------------------------------- |
-| returnOrderController.js -> createReturnOrder(body) | test('Successfully create a new Return Order')                      |
-|                                                     | test('Creation of a Return Order with an invalid Restock Order id') |
-|                                                     |                                                                     |
-|                                                     |                                                                     |
-|                                                     |                                                                     |
-|                                                     |                                                                     |
-|                                                     |                                                                     |
+
+
+| Unit name                                           | Jest test case                                                            |
+| --------------------------------------------------- | ------------------------------------------------------------------------- |
+| returnOrderController.js -> createReturnOrder(body) | test('Successfully create a new Return Order')                            |
+|                                                     | test('Creation of a Return Order with an invalid Restock Order id')       |
+|                                                     | test('Creation of a Return Order with an invalid date')                   |
+|                                                     | test('Creation of a Return Order with one or more non-existing products') |
+| returnOrderController.js -> deleteReturnOrder(id)   | test('Successfully delete a Return Order')                                |
+|                                                     | test('Delete a non-existing Return Order')                                |
+|                                                     |                                                                           |
+
+
 
 | Unit name                                                 | Jest test case                                                 |
 | --------------------------------------------------------- | -------------------------------------------------------------- |
@@ -2530,11 +2742,11 @@ The input value is the item id.
 
 
 ### Code coverage report
-Since we weren't supposed to implement UnitTests with the design adopted (because of the lack of data structures kept in memory apart from the data in the Database),
+Since we weren't supposed to implement UnitTests with the design adopted (due to the lack of data structures kept in memory apart from the data in the Database),
 we have only implemented few unit tests on some of the controllers that we deemed to be the most important ones.
 For this reason the coverage statistics are not as good as they should be.
 
-On the other hand we have focused our efforts in developing and testing thoroughly (through API and Integration tests) all the given API's specified in the Requirements  
+On the other hand we have focused our efforts in developing and testing thoroughly (through API tests) all the given API's specified in the Requirements  
     
 
 

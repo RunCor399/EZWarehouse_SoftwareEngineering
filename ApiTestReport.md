@@ -14,6 +14,7 @@ Version:
 - [Integration approach](#integration-approach)
 - [Integration Tests](#integration-tests)
   - [Restock Orders Controllers Test Suite](#restock-orders-controllers-test-suite)
+  - [Return Orders Controllers Test Suite](#return-orders-controllers-test-suite)
   - [Internal Orders Controllers Test Suite](#internal-orders-controllers-test-suite)
   - [Test Suite n](#test-suite-n)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
@@ -48,18 +49,41 @@ The reason of this choice is that in our Unit Tests we were obliged to test toge
      Jest test cases applied to them, and the mock ups used, if any> Jest test cases should be here code/server/unit_test
 
 ## Restock Orders Controllers Test Suite 
-| Classes                                                  | Jest test cases |
-| -------------------------------------------------------- | --------------- |
-| controller.js - restockOrderController.js - dbManager.js | test(1)         |
-| controller.js - restockOrderController.js - dbManager.js | test(2)         |
+| Classes                                                  | Jest test cases                                             |
+| -------------------------------------------------------- | ----------------------------------------------------------- |
+| controller.js - restockOrderController.js - dbManager.js | test("Successfully add new Restock Order to Database")      |
+| controller.js - restockOrderController.js - dbManager.js | test("Insertion of a RestockOrder with malformed date")     |
+| controller.js - restockOrderController.js - dbManager.js | test("Insertion of a RestockOrder with invalid supplierId") |
+| controller.js - restockOrderController.js - dbManager.js | test('Successfully edit a Restock Order')                   |
+| controller.js - restockOrderController.js - dbManager.js | test('Edit a Restock Order with an invalid state')          |
+| controller.js - restockOrderController.js - dbManager.js | test('Edit a non-existing Restock Order')                   |
+| controller.js - restockOrderController.js - dbManager.js | test('Successfully delete a Restock Order')                 |
+| controller.js - restockOrderController.js - dbManager.js | test('Delete a non-existing Restock Order')                 |
 
+
+
+## Return Orders Controllers Test Suite
+| Classes                                                 | Jest test cases                                                          |
+| ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| controller.js - returnOrderController.js - dbManager.js | test('Successfully create a new Return Order')                           |
+| controller.js - returnOrderController.js - dbManager.js | test('Creation of a Return Order with an invalid Restock Order id'       |
+| controller.js - returnOrderController.js - dbManager.js | test('Creation of a Return Order with an invalid date'                   |
+| controller.js - returnOrderController.js - dbManager.js | test('Creation of a Return Order with one or more non-existing products' |
+| controller.js - returnOrderController.js - dbManager.js | test('Successfully delete a Return Order'                                |
+| controller.js - returnOrderController.js - dbManager.js | test('Delete a non-existing Return Order')                               |
 
 
 ## Internal Orders Controllers Test Suite
-| Classes                                                   | Jest test cases |
-| --------------------------------------------------------- | --------------- |
-| controller.js - internalOrderController.js - dbManager.js | test(1)         |
-| controller.js - internalOrderController.js - dbManager.js | test(2)         |
+| Classes                                                   | Jest test cases                                                |
+| --------------------------------------------------------- | -------------------------------------------------------------- |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully add a new Internal Order to Database")      |
+| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with malformed date")     |
+| controller.js - internalOrderController.js - dbManager.js | test("Insertion of an Internal Order with invalid customerId") |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully edit an Internal Order")                    |
+| controller.js - internalOrderController.js - dbManager.js | test("Edit an Internal Order with an invalid state")           |
+| controller.js - internalOrderController.js - dbManager.js | test("Edit a non-existing Internal Order")                     |
+| controller.js - internalOrderController.js - dbManager.js | test("Successfully delete an Internal Order")                  |
+| controller.js - internalOrderController.js - dbManager.js | test("Delete a non-existing Internal Order")                   |
 
 
 ## Test Suite n 
@@ -82,16 +106,20 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 
 
-| Scenario ID | Functional Requirements covered | Mocha  Test(s)                        |
-| ----------- | ------------------------------- | ------------------------------------- |
-| ..          | FRx                             | ASK if needed to write each test case |
-| ..          | FRy                             |                                       |
-| ...         |                                 |                                       |
-| 9.1         | FR 6                            | Successfully add a new Internal Order |
-| 9.3         | FR 6                            | Successfully delete an internal order |
-| 11.1        | FR 7                            | Successfully add a new Item           |
-| 11.2        | FR 7                            | Successfully edit an Item             |
-| ...         |                                 |                                       |
+| Scenario ID   | Functional Requirements covered | Mocha  Test(s)                                      |
+| ------------- | ------------------------------- | --------------------------------------------------- |
+| 3-1, 3-2      | FR 5.1, 5.2, 5.3, 5.5           | Succesfully add and get a new Restock Order         |
+| 3-1, 3-2      | FR 5.2, 5.3                     | Successfully add a list of SKUItems                 |
+| 3             | FR 5.6                          | Successfully add a transportNote to a Restock Order |
+| 5-2-1 - 5-2-3 | FR 5.7                          | Edit restock order state                            |
+| /             | FR 5                            | Successfully delete a Restock Order                 |
+| 6             | FR 5.9                          | Successfully create a new Return Order              |
+| 6             | FR 5.11                         | Successfully delete a Return Order                  |
+| 9.1           | FR 6                            | Successfully add a new Internal Order               |
+| 9.3           | FR 6                            | Successfully delete an internal order               |
+| 11.1          | FR 7                            | Successfully add a new Item                         |
+| 11.2          | FR 7                            | Successfully edit an Item                           |
+| ...           |                                 |                                                     |
 
 
 
@@ -103,10 +131,10 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 ### 
 
-| Non Functional Requirement | Test name |
-| -------------------------- | --------- |
-| NFR2                       | All       |
-| NFR3                       | All       |
-| NFR4                       |           |
-| NFR6                       |           |
-| NFR9                       |           |
+| Non Functional Requirement | Test name               |
+| -------------------------- | ----------------------- |
+| NFR2                       | All                     |
+| NFR3                       | All                     |
+| NFR4                       |                         |
+| NFR6                       |                         |
+| NFR9                       | InternalOrderAPITest.js |
