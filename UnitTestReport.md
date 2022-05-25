@@ -453,14 +453,14 @@ The input value is the body of the HTTP POST Request.
 
 **Predicates for method *createSkuItem*:**
 
-|         Criteria         |                                         Predicate                                          |
-| :----------------------: | :----------------------------------------------------------------------------------------: |
-|   Validity of *skuid*    |                 There is no SKU with the specified *skuid* in the database                 |
-|                          |                 There is a SKU with the specified *skuid* in the database                  |
-|    Validity of *rfid*    |   There is no SKU item with the specified *rfid* in the database and has a valid format    |
-|                          | There is a SKU Item with the specified *rfid* in the database or it has not a valid format |
-| Format of  *dateOfStock* |          The date format is a valid one (NULL, "YYYY/MM/DD" or"YYYY/MM/DD HH:MM")          |
-|                          |                             The date format is an invalid one                              |
+|         Criteria         |                                Predicate                                 |
+| :----------------------: | :----------------------------------------------------------------------: |
+|   Validity of *skuid*    |        There is no SKU with the specified *skuid* in the database        |
+|                          |        There is a SKU with the specified *skuid* in the database         |
+|    Validity of *rfid*    |                         RFID has a valid format                          |
+|                          |                       RFID has not a valid format                        |
+| Format of  *dateOfStock* | The date format is a valid one (NULL, "YYYY/MM/DD" or"YYYY/MM/DD HH:MM") |
+|                          |                    The date format is an invalid one                     |
 
 
 
@@ -595,8 +595,8 @@ The input value is the body of the HTTP PUT Request, but also the old rfid.
 | :----------------------: | :----------------------------------------------------------------------: |
 |  Validity of *oldrfid*   |    There is no SKU item with the specified *oldrfid* in the database     |
 |                          |       There is a SKU with the specified *oldrfid* in the database        |
-|     Usage of *rfid*      |      There is no SKU item with the specified *rfid* in the database      |
-|                          |      There is a SKU Item with the specified *rfid* in the database       |
+|    Validity of *rfid*    |                         RFID has a valid format                          |
+|                          |                       RFID has not a valid format                        |
 |  Sign of *newAvailable*  |                             Sign is positive                             |
 |                          |                             Sign is negative                             |
 | Format of  *dateOfStock* | The date format is a valid one (NULL, "YYYY/MM/DD" or"YYYY/MM/DD HH:MM") |
@@ -611,7 +611,7 @@ The input value is the body of the HTTP PUT Request, but also the old rfid.
 |         Criteria         |  Boundary values  |
 | :----------------------: | :---------------: |
 |  Validity of *oldrfid*   | No boundary found |
-|     Usage of *rfid*      | No boundary found |
+|    Validity of *rfid*    | No boundary found |
 |  Sign of *newAvailable*  |         0         |
 | Format of  *dateOfStock* | No boundary found |
 
@@ -619,24 +619,24 @@ The input value is the body of the HTTP PUT Request, but also the old rfid.
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                           Description of the test case                                                           |      Jest test case       |
-| :--------: | :--------: | :--------: | :--------: | :-------------: | :----------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------: |
-|  Present   |   In use   |  Positive  |   Valid    |     Invalid     |                                                   The rfid is already used by another SKUItem                                                    |        wrong rfid         |
-|  Present   |   In use   |  Positive  |  Invalid   |     Invalid     |                                    The rfid is already used by another SKUItem, the date format is not valid                                     |                           |
-|  Present   |   In use   |  Negative  |   Valid    |     Invalid     |                                    The rfid is already used by another SKUItem, the availability is negative                                     |                           |
-|  Present   |   In use   |  Negative  |  Invalid   |     Invalid     |                     The rfid is already used by another SKUItem, the date format is not valid, the availability is negative                      |                           |
-|  Present   |  Not use   |  Positive  |   Valid    |      Valid      |                                   The rfid is not already used by another SKUItem, it is a valid modification                                    |     create and modify     |
-|  Present   | Not in use |  Positive  |  Invalid   |     Invalid     |                                                           The date format is not valid                                                           |        wrong date         |
-|  Present   | Not in use |  Negative  |   Valid    |     Invalid     |                                                           The availability is negative                                                           |  wrong avaibility value   |
-|  Present   | Not in use |  Negative  |  Invalid   |     Invalid     |                                            The date format is not valid, the availability is negative                                            |                           |
-|   Absent   |   In use   |  Positive  |   Valid    |     Invalid     |                               The rfid is already used by another SKUItem, there is no SKUItem with rfid=*oldrfid*                               |                           |
-|   Absent   |   In use   |  Positive  |  Invalid   |     Invalid     |                The rfid is already used by another SKUItem, the date format is not valid, there is no SKUItem with rfid=*oldrfid*                |                           |
-|   Absent   |   In use   |  Negative  |   Valid    |     Invalid     |                The rfid is already used by another SKUItem, the availability is negative, there is no SKUItem with rfid=*oldrfid*                |                           |
-|   Absent   |   In use   |  Negative  |  Invalid   |     Invalid     | The rfid is already used by another SKUItem, the date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid* |                           |
-|   Absent   |  Not use   |  Positive  |   Valid    |     Invalid     |               The rfid is not already used by another SKUItem, it is a valid modification, there is no SKUItem with rfid=*oldrfid*               | modify unexistant skuitem |
-|   Absent   | Not in use |  Positive  |  Invalid   |     Invalid     |                                      The date format is not valid, there is no SKUItem with rfid=*oldrfid*                                       |                           |
-|   Absent   | Not in use |  Negative  |   Valid    |     Invalid     |                                      The availability is negative, there is no SKUItem with rfid=*oldrfid*                                       |                           |
-|   Absent   | Not in use |  Negative  |  Invalid   |     Invalid     |                       The date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*                        |                           |
+| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Valid / Invalid |                                                 Description of the test case                                                  |      Jest test case       |
+| :--------: | :--------: | :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------: | :-----------------------: |
+|  Present   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                                     The rfid is not valid                                                     |        wrong rfid         |
+|  Present   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                                      The rfid is not valid, the date format is not valid                                      |                           |
+|  Present   |  Invalid   |  Negative  |   Valid    |     Invalid     |                                      The rfid is not valid, the availability is negative                                      |                           |
+|  Present   |  Invalid   |  Negative  |  Invalid   |     Invalid     |                       The rfid is not valid, the date format is not valid, the availability is negative                       |                           |
+|  Present   |   Valid    |  Positive  |   Valid    |      Valid      |                                         The rfid is valid, it is a valid modification                                         |     create and modify     |
+|  Present   |   Valid    |  Positive  |  Invalid   |     Invalid     |                                                 The date format is not valid                                                  |        wrong date         |
+|  Present   |   Valid    |  Negative  |   Valid    |     Invalid     |                                                 The availability is negative                                                  |  wrong avaibility value   |
+|  Present   |   Valid    |  Negative  |  Invalid   |     Invalid     |                                  The date format is not valid, the availability is negative                                   |                           |
+|   Absent   |  Invalid   |  Positive  |   Valid    |     Invalid     |                                The rfid is not valid, there is no SKUItem with rfid=*oldrfid*                                 |                           |
+|   Absent   |  Invalid   |  Positive  |  Invalid   |     Invalid     |                 The rfid is not valid, the date format is not valid, there is no SKUItem with rfid=*oldrfid*                  |                           |
+|   Absent   |  Invalid   |  Negative  |   Valid    |     Invalid     |                 The rfid is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*                  |                           |
+|   Absent   |  Invalid   |  Negative  |  Invalid   |     Invalid     | The rfid is is not valid, the date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid* |                           |
+|   Absent   |   Valid    |  Positive  |   Valid    |     Invalid     |                    The rfid is valid, it is a valid modification, there is no SKUItem with rfid=*oldrfid*                     | modify unexistant skuitem |
+|   Absent   |   Valid    |  Positive  |  Invalid   |     Invalid     |                             The date format is not valid, there is no SKUItem with rfid=*oldrfid*                             |                           |
+|   Absent   |   Valid    |  Negative  |   Valid    |     Invalid     |                             The availability is negative, there is no SKUItem with rfid=*oldrfid*                             |                           |
+|   Absent   |   Valid    |  Negative  |  Invalid   |     Invalid     |              The date format is not valid, the availability is negative, there is no SKUItem with rfid=*oldrfid*              |                           |
 
 
 create and modify
@@ -2043,28 +2043,28 @@ The input value is the body of the HTTP POST Request
 
 **Predicates for method *createInternalOrder*:**
 
-|         Criteria         |                                           Predicate                                            |
-| :----------------------: | :--------------------------------------------------------------------------------------------: |
-| Validity of *customerid* |                There is no customer with the given *customerid* in the database                |
-|                          |                There is a customer with the given *customerid* in the database                 |
-|  Validity of *issueDate*   |             *issueDate* is well-formed and can be inserted             |
-|                          |                        *issueDate* is incorrect                        |
+|         Criteria         |                            Predicate                             |
+| :----------------------: | :--------------------------------------------------------------: |
+| Validity of *customerid* | There is no customer with the given *customerid* in the database |
+|                          | There is a customer with the given *customerid* in the database  |
+| Validity of *issueDate*  |          *issueDate* is well-formed and can be inserted          |
+|                          |                     *issueDate* is incorrect                     |
 
 **Boundaries**:
 
 |         Criteria         |  Boundary values  |
 | :----------------------: | :---------------: |
 | Validity of *customerid* | No boundary found |
-| Validity of *issueDate* | No boundary found |
+| Validity of *issueDate*  | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                   Description of the test case                                                                    | Jest test case |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |      Valid      |       There is a customer with the given *customerid* in the database the *issueDate* is well-formatted        |  test("Successfully add a new Internal Order to Database")              |
-|   Valid    |  Invalid   |     Invalid     |                                 the *issueDate* is bad-formed                                  |   test("Insertion of an Internal Order with malformed date")             |
-|  Invalid   |   Valid    |     Invalid     |                                                 There is no customer with the given *customerid* in the database                                                  |   test("Insertion of an Internal Order with invalid customerId")             |
-|  Invalid   |  Invalid   |     Invalid     | There is no customer with the given customerId in the database and the issueDate is bad-formed |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                   Description of the test case                                    |                                                 Jest test case |
+| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------: | -------------------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      | There is a customer with the given *customerid* in the database the *issueDate* is well-formatted |      test("Successfully add a new Internal Order to Database") |
+|   Valid    |  Invalid   |     Invalid     |                                   the *issueDate* is bad-formed                                   |     test("Insertion of an Internal Order with malformed date") |
+|  Invalid   |   Valid    |     Invalid     |                 There is no customer with the given *customerid* in the database                  | test("Insertion of an Internal Order with invalid customerId") |
+|  Invalid   |  Invalid   |     Invalid     |  There is no customer with the given customerId in the database and the issueDate is bad-formed   |                                                                |
 
 ## 1) Test Case: "Successfully add a new Internal Order to Database"
 ```
@@ -2138,28 +2138,28 @@ The input value is the body of the HTTP PUT Request and the order id
 
 **Predicates for method *editInternalOrder*:**
 
-|                 Criteria                 |                                                                Predicate                                                                 |
-| :--------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------: |
-|             Validity of *id*             |                                          There is no order with the given *id* in the database                                           |
-|                                          |                                           There is a order with the given *id* in the database                                           |
-| Validity of *state* |           The new state of the order must be "ACCEPTED" or "COMPLETED"          |
-|                                          | The state is invalid |
+|      Criteria       |                          Predicate                           |
+| :-----------------: | :----------------------------------------------------------: |
+|  Validity of *id*   |    There is no order with the given *id* in the database     |
+|                     |     There is a order with the given *id* in the database     |
+| Validity of *state* | The new state of the order must be "ACCEPTED" or "COMPLETED" |
+|                     |                     The state is invalid                     |
 
 **Boundaries**:
 
-|                 Criteria                 |  Boundary values  |
-| :--------------------------------------: | :---------------: |
-|             Validity of *id*             | No boundary found |
+|      Criteria       |  Boundary values  |
+| :-----------------: | :---------------: |
+|  Validity of *id*   | No boundary found |
 | Validity of *state* | No boundary found |
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                                                                                  Description of the test case                                                                                   | Jest test case |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -------------: |
-|   Valid    |   Valid    |      Valid      |          There is a order with the given *id* in the database, the new state is either "ACCEPTED" or "COMPLETED"          |  test("Successfully edit an Internal Order")              |
-|   Valid    |  Invalid   |     Invalid     |                            The *state* is an invalid string                            |     test("Edit an Internal Order with an invalid state")           |
-|  Invalid   |   Valid    |     Invalid     |                                                                      There is no order with the given *id* in the database                                                                  |      test("Edit a non-existing Internal Order")          |
-|  Invalid   |  Invalid   |     Invalid     | The *state* is an invalid string, there is no order with the given *id* in the database |                |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                                      Description of the test case                                       |                                       Jest test case |
+| :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------: | ---------------------------------------------------: |
+|   Valid    |   Valid    |      Valid      | There is a order with the given *id* in the database, the new state is either "ACCEPTED" or "COMPLETED" |          test("Successfully edit an Internal Order") |
+|   Valid    |  Invalid   |     Invalid     |                                    The *state* is an invalid string                                     | test("Edit an Internal Order with an invalid state") |
+|  Invalid   |   Valid    |     Invalid     |                          There is no order with the given *id* in the database                          |           test("Edit a non-existing Internal Order") |
+|  Invalid   |  Invalid   |     Invalid     |         The *state* is an invalid string, there is no order with the given *id* in the database         |                                                      |
 
 ## 1) Test Case: "Successfully edit an Internal Order"
 ```
@@ -2227,10 +2227,10 @@ The input value is the order id.
 
 **Combination of predicates**:
 
-| Criteria 1 | Valid / Invalid |                  Description of the test case                  | Jest test case |
-| :--------: | :-------------: | :------------------------------------------------------------: | :------------: |
-|   Valid    |      Valid      | There is an internal order with the given *id* in the database |  test("Successfully delete an Internal Order")              |
-|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database |     test("Delete a non-existing Internal Order")           |
+| Criteria 1 | Valid / Invalid |                  Description of the test case                  |                Jest test case                 |
+| :--------: | :-------------: | :------------------------------------------------------------: | :-------------------------------------------: |
+|   Valid    |      Valid      | There is an internal order with the given *id* in the database | test("Successfully delete an Internal Order") |
+|  Invalid   |     Invalid     | There is no internal order with the given *id* in the database | test("Delete a non-existing Internal Order")  |
 
 ## 1) Test Case: "Successfully delete an Internal Order"
 ```
@@ -2517,16 +2517,16 @@ The input value is the item id.
 |                                                     |                                                                     |
 |                                                     |                                                                     |
 
-| Unit name                                               | Jest test case                                             |
-| ------------------------------------------------------- | ---------------------------------------------------------- |
-| internalOrderController.js -> createInternalOrder(body)   | test("Successfully add a new Internal Order to Database")     |
-|                                                         | test("Insertion of an Internal Order with malformed date")    |
-|                                                         | test("Insertion of an Internal Order with invalid customerId") |
-| internalOrderController.js -> editInternalOrder(id, body) | test("Successfully edit an Internal Order")                  |
-|                                                         | test("Edit an Internal Order with an invalid state")         |
-|                                                         | test("Edit a non-existing Internal Order")                   |
-| internalOrderController.js -> deleteInternalOrder(id)     | test("Successfully delete an Internal Order")                 |
-|                                                         | test("Delete a non-existing Internal Order")                |
+| Unit name                                                 | Jest test case                                                 |
+| --------------------------------------------------------- | -------------------------------------------------------------- |
+| internalOrderController.js -> createInternalOrder(body)   | test("Successfully add a new Internal Order to Database")      |
+|                                                           | test("Insertion of an Internal Order with malformed date")     |
+|                                                           | test("Insertion of an Internal Order with invalid customerId") |
+| internalOrderController.js -> editInternalOrder(id, body) | test("Successfully edit an Internal Order")                    |
+|                                                           | test("Edit an Internal Order with an invalid state")           |
+|                                                           | test("Edit a non-existing Internal Order")                     |
+| internalOrderController.js -> deleteInternalOrder(id)     | test("Successfully delete an Internal Order")                  |
+|                                                           | test("Delete a non-existing Internal Order")                   |
 
 
 ### Code coverage report
