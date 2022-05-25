@@ -20,34 +20,237 @@ afterEach(async () => {
 
 describe("TestResultController Tests", () => {
     describe("getTestResults method testing", () => {
-        test("", () => {
+        let response, errorValue;
+        test("successful use of getTestResults", async () => {
+
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResults("12345678901234567890123456789015")
+
+            assert.equal(response.length, 2)
+
         });
 
-        test("", () => {
+        test("attempt of getTestResults with an undefined parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResults(undefined)
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
         });
 
-        test("", () => {
+        test("attempt of getTestResults with an invalid parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResults("hello")
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
         });
+
+
+        test("attempt of getTestResults with a non-existant testResult", async () => {
+            response = await testResultController.getTestResults("12345678901234567890123456789015")
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 404)
+        });
+
+
     });
 
     describe("getTestResult method testing", () => {
-        test("", () => {
+        let response, errorValue;
+        test("successful use of getTestResult", async () => {
+
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+
+            assert.equal(response.Result, true)
 
         });
 
-        test("", () => {
+        test("attempt of getTestResults with an undefined parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult(undefined, 1)
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
         });
 
-        test("", () => {
+        test("attempt of getTestResult with an invalid parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: false,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("hello", 1)
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 422)
+        });
+
+
+        test("attempt of getTestResults with a non-existant testResult", async () => {
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+                .catch(err => errorValue = err);
+
+            assert.equal(errorValue.code, 404)
         });
     });
 
     describe("createTestResult method testing", () => {
-        let response;
+        let response, errorValue;
         test("Successful use of createTestResult", async () => {
 
 
@@ -78,17 +281,159 @@ describe("TestResultController Tests", () => {
 
         });
 
-        test("", () => {
+        test("attempt of createTestResult with a non-existant test descriptor", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            })
+                .catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 404);
         });
 
-        test("", () => {
+        test("attempt of createTestResult with a non-existant skuitem", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 404);
+        });
+
+        test("attempt of createTestResult with an undefined parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: undefined,
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422);
+        });
+
+        test("attempt of createTestResult with an invalid parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "hello",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422);
+        });
+
+        test("attempt of createTestResult with an invalid date", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "hello",
+                Result: true,
+            }).catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422);
         });
     });
 
     describe("editTestResult method testing", () => {
-        test("", () => {
+        let response, errorValue;
+        test("successful use of editTestResult", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            console.log(5)
+
+            await testResultController.editTestResult("12345678901234567890123456789015", 1, {
+                "newIdTestDescriptor": 2,
+                "newDate": "2021/11/28",
+                "newResult": false
+            })
+
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+
+            assert.equal(response.Result, false);
+
+
 
         });
 
@@ -102,16 +447,104 @@ describe("TestResultController Tests", () => {
     });
 
     describe("deleteTestResult method testing", () => {
-        test("", () => {
+        let response, errorValue;
+        test("successful use of deleteTestResult", async () => {
+
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+
+            assert.equal(response.Result, true);
+
+            response = await testResultController.deleteTestResult("12345678901234567890123456789015", 1)
+
+            await testResultController.getTestResult("12345678901234567890123456789015", 1)
+                .catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 404);
 
         });
 
-        test("", () => {
+        test("attempt of deleteTestResult with an undefined parameter", async () => {
+
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+
+            assert.equal(response.Result, true);
+
+            await testResultController.deleteTestResult(undefined, 1)
+                .catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422)
 
         });
 
-        test("", () => {
+        test("attempt of deleteTestResult with an invalid parameter", async () => {
+            await dbManager.genericSqlRun(`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
+            VALUES ( 10, 20, 10.99, "noteTest", "description1" , 5 );`)
+                .catch(() => { throw error });
 
+            await dbManager.genericSqlRun(`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) 
+            VALUES ("12345678901234567890123456789015", 1, 1, "2021/11/20 12:30");`)
+                .catch((error) => { throw error });
+
+            await dbManager.genericSqlRun(`INSERT INTO TestDescriptor ( name, procedureDescription, idSKU) 
+            VALUES ("test1", "procedureDescriptionTest", 1);`)
+                .catch((error) => { throw error })
+
+
+            await testResultController.createTestResult({
+                rfid: "12345678901234567890123456789015",
+                idTestDescriptor: 1,
+                Date: "2020/01/01",
+                Result: true,
+            }).catch(error => console.log(error))
+
+            response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
+
+            assert.equal(response.Result, true);
+
+            await testResultController.deleteTestResult("hello", 1)
+                .catch(err => errorValue = err)
+
+            assert.equal(errorValue.code, 422)
         });
     });
 });
