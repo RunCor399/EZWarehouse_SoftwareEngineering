@@ -2507,8 +2507,6 @@ The input value is the item id.
 |                                                         | test('Delete a non-existing Restock Order')                |
 
 
-
-
 | Unit name                                           | Jest test case                                                      |
 | --------------------------------------------------- | ------------------------------------------------------------------- |
 | returnOrderController.js -> createReturnOrder(body) | test('Successfully create a new Return Order')                      |
@@ -2518,6 +2516,17 @@ The input value is the item id.
 |                                                     |                                                                     |
 |                                                     |                                                                     |
 |                                                     |                                                                     |
+
+| Unit name                                               | Jest test case                                             |
+| ------------------------------------------------------- | ---------------------------------------------------------- |
+| internalOrderController.js -> createInternalOrder(body)   | test("Successfully add a new Internal Order to Database")     |
+|                                                         | test("Insertion of an Internal Order with malformed date")    |
+|                                                         | test("Insertion of an Internal Order with invalid customerId") |
+| internalOrderController.js -> editInternalOrder(id, body) | test("Successfully edit an Internal Order")                  |
+|                                                         | test("Edit an Internal Order with an invalid state")         |
+|                                                         | test("Edit a non-existing Internal Order")                   |
+| internalOrderController.js -> deleteInternalOrder(id)     | test("Successfully delete an Internal Order")                 |
+|                                                         | test("Delete a non-existing Internal Order")                |
 
 
 ### Code coverage report
