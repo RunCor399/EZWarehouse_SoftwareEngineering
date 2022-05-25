@@ -944,120 +944,114 @@ The input value is the body of the HTTP POST Request.
  - Format of *row*
  - Format of *colummn*
 
+## 1) Test case : successful use of createPosition
+```
+test('successful use of createPosition', async () => {
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: 100,
+                maxVolume: 100,
+            })
+            const results = await positionController.getAllPositions();
+            assert.equal(results.length, 1);
+
+        })
+```
+
+## 2) Test case : attempt of createPosition with invalid PositionID
+```
+test('attempt of createPosition with invalid PositionID', async () => {
+            let errorValue
+            await positionController.createPosition({
+                positionID: "hello",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: 100,
+                maxVolume: 100,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 3) Test case : attempt of createPosition with incompatible position codes
+```
+test('attempt of createPosition with incompatible position codes', async () => {
+            let errorValue
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "0000",
+                row: "0000",
+                col: "0000",
+                maxWeight: 100,
+                maxVolume: 100,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 4) Test case : attempt of createPosition with an undefined parameter
+```
+test('attempt of createPosition with an undefined parameter', async () => {
+            let errorValue
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: undefined,
+                maxVolume: 100,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 5) Test case : attempt of createPosition with negative weight
+```
+test('attempt of createPosition with negative weight', async () => {
+            let errorValue
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: -100,
+                maxVolume: 100,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## 6) Test case : attempt of createPosition with negative volume
+```
+test('attempt of createPosition with negative volume', async () => {
+            let errorValue
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: 100,
+                maxVolume: -100,
+            }).catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422);
+
+        })
+```
 
 
-
-
-**Predicates for method *createPosition*:**
-
-|       Criteria        |                              Predicate                               |
-| :-------------------: | :------------------------------------------------------------------: |
-| Usage of *positionid* | There is no position with the specified *positionid* in the database |
-|                       | There is a position with the specified *positionid* in the database  |
-|  Sign of *maxWeight*  |                           Sign is positive                           |
-|                       |                           Sign is negative                           |
-|  Sign of *maxVolume*  |                           Sign is positive                           |
-|                       |                           Sign is negative                           |
-|    Format of *row*    |                      It is a string of 4 digits                      |
-|                       |                    It is not a string of 4 digits                    |
-|   Format of *aisle*   |                      It is a string of 4 digits                      |
-|                       |                    It is not a string of 4 digits                    |
-|  Format of *column*   |                      It is a string of 4 digits                      |
-|                       |                    It is not a string of 4 digits                    |
-
-
-
-
-
-**Boundaries**:
-
-|       Criteria        |  Boundary values  |
-| :-------------------: | :---------------: |
-| Usage of *positionid* | No boundary found |
-|  Sign of *maxWeight*  |         0         |
-|  Sign of *maxVolume*  |         0         |
-|    Format of *row*    | No boundary found |
-|   Format of *aisle*   | No boundary found |
-|  Format of *column*   | No boundary found |
-
-
-
-**Combination of predicates**:
-
-
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 6 | Valid / Invalid |                                                                                            Description of the test case                                                                                             | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
-|  Present   |  Positive  |  Positive  |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                  There is a position with the chosen *positionid*                                                                                   |                |
-|  Present   |  Positive  |  Positive  |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                   There is a position with the chosen *positionid*, the format of column is wrong                                                                   |                |
-|  Present   |  Positive  |  Positive  |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                   There is a position with the chosen *positionid*, the format of aisle is wrong                                                                    |                |
-|  Present   |  Positive  |  Positive  |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                    There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong                                                    |                |
-|  Present   |  Positive  |  Positive  |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                                    There is a position with the chosen *positionid*, the format of row is wrong                                                                     |                |
-|  Present   |  Positive  |  Positive  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                     There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong                                                     |                |
-|  Present   |  Positive  |  Positive  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                                     There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong                                                      |                |
-|  Present   |  Positive  |  Positive  |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                      There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong                                      |                |
-|  Present   |  Positive  |  Negative  |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                There is a position with the chosen *positionid*, the sign of *maxVolume* is negative                                                                |                |
-|  Present   |  Positive  |  Negative  |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                There is a position with the chosen *positionid*, the format of column is wrong, the sign of *maxVolume* is negative                                                 |                |
-|  Present   |  Positive  |  Negative  |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                 There is a position with the chosen *positionid*, the format of aisle is wrong, the sign of *maxVolume* is negative                                                 |                |
-|  Present   |  Positive  |  Negative  |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                 There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the sign of *maxVolume* is negative                                  |                |
-|  Present   |  Positive  |  Negative  |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                  There is a position with the chosen *positionid*, the format of row is wrong, the sign of *maxVolume* is negative                                                  |                |
-|  Present   |  Positive  |  Negative  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                  There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative                                   |                |
-|  Present   |  Positive  |  Negative  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                   There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative                                   |                |
-|  Present   |  Positive  |  Negative  |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                   There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative                    |                |
-|  Present   |  Negative  |  Positive  |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                There is a position with the chosen *positionid*, the sign of *maxWeight* is negative                                                                |                |
-|  Present   |  Negative  |  Positive  |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                There is a position with the chosen *positionid*, the format of column is wrong, the sign of *maxWeight* is negative                                                 |                |
-|  Present   |  Negative  |  Positive  |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                 There is a position with the chosen *positionid*, the format of aisle is wrong, the sign of *maxWeight* is negative                                                 |                |
-|  Present   |  Negative  |  Positive  |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                 There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the sign of *maxWeight* is negative                                  |                |
-|  Present   |  Negative  |  Positive  |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                  There is a position with the chosen *positionid*, the format of row is wrong, the sign of *maxWeight* is negative                                                  |                |
-|  Present   |  Negative  |  Positive  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                  There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong, the sign of *maxWeight* is negative                                   |                |
-|  Present   |  Negative  |  Positive  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                   There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative                                   |                |
-|  Present   |  Negative  |  Positive  |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                   There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative                    |                |
-|  Present   |  Negative  |  Negative  |   Valid    |   Valid    |   Valid    |     Invalid     |                                             There is a position with the chosen *positionid*, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                              |                |
-|  Present   |  Negative  |  Negative  |   Valid    |   Valid    |  Invalid   |     Invalid     |                              There is a position with the chosen *positionid*, the format of column is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                              |                |
-|  Present   |  Negative  |  Negative  |   Valid    |  Invalid   |   Valid    |     Invalid     |                              There is a position with the chosen *positionid*, the format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                               |                |
-|  Present   |  Negative  |  Negative  |   Valid    |  Invalid   |  Invalid   |     Invalid     |               There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative               |                |
-|  Present   |  Negative  |  Negative  |  Invalid   |   Valid    |   Valid    |     Invalid     |                               There is a position with the chosen *positionid*, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                |                |
-|  Present   |  Negative  |  Negative  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                There is a position with the chosen *positionid*, the format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                |                |
-|  Present   |  Negative  |  Negative  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                There is a position with the chosen *positionid*, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                 |                |
-|  Present   |  Negative  |  Negative  |  Invalid   |  Invalid   |  Invalid   |     Invalid     | There is a position with the chosen *positionid*, the format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative |                |
-|   Absent   |  Positive  |  Positive  |   Valid    |   Valid    |   Valid    |      Valid      |                                                                                         This is the only valid combination                                                                                          |                |
-|   Absent   |  Positive  |  Positive  |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                                            The format of column is wrong                                                                                            |                |
-|   Absent   |  Positive  |  Positive  |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                                            The format of aisle is wrong                                                                                             |                |
-|   Absent   |  Positive  |  Positive  |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                                             The format of column is wrong, the format of aisle is wrong                                                                             |                |
-|   Absent   |  Positive  |  Positive  |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                                                             The format of row is wrong                                                                                              |                |
-|   Absent   |  Positive  |  Positive  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                                              The format of column is wrong, the format of row is wrong                                                                              |                |
-|   Absent   |  Positive  |  Positive  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                                                              The format of aisle is wrong, the format of row is wrong                                                                               |                |
-|   Absent   |  Positive  |  Positive  |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                                               The format of column is wrong, the format of aisle is wrong, the format of row is wrong                                                               |                |
-|   Absent   |  Positive  |  Negative  |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                         The sign of *maxVolume* is negative                                                                                         |                |
-|   Absent   |  Positive  |  Negative  |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                         The format of column is wrong, the sign of *maxVolume* is negative                                                                          |                |
-|   Absent   |  Positive  |  Negative  |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                          The format of aisle is wrong, the sign of *maxVolume* is negative                                                                          |                |
-|   Absent   |  Positive  |  Negative  |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                                          The format of aisle is wrong, the sign of *maxVolume* is negative                                                                          |                |
-|   Absent   |  Positive  |  Negative  |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                                           The format of row is wrong, the sign of *maxVolume* is negative                                                                           |                |
-|   Absent   |  Positive  |  Negative  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                           The format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative                                                            |                |
-|   Absent   |  Positive  |  Negative  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                                            The format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative                                                            |                |
-|   Absent   |  Positive  |  Negative  |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                            The format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative                                             |                |
-|   Absent   |  Negative  |  Positive  |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                                         The sign of *maxWeight* is negative                                                                                         |                |
-|   Absent   |  Negative  |  Positive  |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                                         The format of column is wrong, the sign of *maxWeight* is negative                                                                          |                |
-|   Absent   |  Negative  |  Positive  |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                                          The format of aisle is wrong, the sign of *maxWeight* is negative                                                                          |                |
-|   Absent   |  Negative  |  Positive  |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                                          The format of column is wrong, the format of aisle is wrong, the sign of *maxWeight* is negative                                                           |                |
-|   Absent   |  Negative  |  Positive  |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                                           The format of row is wrong, the sign of *maxWeight* is negative                                                                           |                |
-|   Absent   |  Negative  |  Positive  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                                           The format of column is wrong, the format of row is wrong, the sign of *maxWeight* is negative                                                            |                |
-|   Absent   |  Negative  |  Positive  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                                            The format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative                                                            |                |
-|   Absent   |  Negative  |  Positive  |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                                            The format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxWeight* is negative                                             |                |
-|   Absent   |  Negative  |  Negative  |   Valid    |   Valid    |   Valid    |     Invalid     |                                                                      The sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                                                       |                |
-|   Absent   |  Negative  |  Negative  |   Valid    |   Valid    |  Invalid   |     Invalid     |                                                       The format of column is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                                       |                |
-|   Absent   |  Negative  |  Negative  |   Valid    |  Invalid   |   Valid    |     Invalid     |                                                       The format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                                        |                |
-|   Absent   |  Negative  |  Negative  |   Valid    |  Invalid   |  Invalid   |     Invalid     |                                        The format of column is wrong, the format of aisle is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                        |                |
-|   Absent   |  Negative  |  Negative  |  Invalid   |   Valid    |   Valid    |     Invalid     |                                                        The format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                                         |                |
-|   Absent   |  Negative  |  Negative  |  Invalid   |   Valid    |  Invalid   |     Invalid     |                                         The format of column is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                         |                |
-|   Absent   |  Negative  |  Negative  |  Invalid   |  Invalid   |   Valid    |     Invalid     |                                         The format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                                          |                |
-|   Absent   |  Negative  |  Negative  |  Invalid   |  Invalid   |  Invalid   |     Invalid     |                          The format of column is wrong, the format of aisle is wrong, the format of row is wrong, the sign of *maxVolume* is negative, the sign of *maxWeight* is negative                          |                |
-
-
-## **Class *positionController* - method *editPosition***
+## **Class *positionController* - method *editPositionVer1***
 
 The input value is the body of the HTTP PUT Request and the positionid.
 
-**Criteria for method *editPosition*:**
+**Criteria for method *editPositionVer1*:**
 	
  - Validity of *positionid*
  - Sign of *newmaxWeight*
@@ -1074,62 +1068,165 @@ The input value is the body of the HTTP PUT Request and the positionid.
 
 
 
-**Predicates for method *editPosition*:**
+**Predicates for method *editPositionVer1*:**
 
-|                 Criteria                 |                              Predicate                               |
-| :--------------------------------------: | :------------------------------------------------------------------: |
-|         Validity of *positionid*         | There is no position with the specified *positionid* in the database |
-|                                          | There is a position with the specified *positionid* in the database  |
-|          Sign of *newmaxWeight*          |                           Sign is positive                           |
-|                                          |                           Sign is negative                           |
-|          Sign of *newmaxVolume*          |                           Sign is positive                           |
-|                                          |                           Sign is negative                           |
-|       Sign of *newoccupiedWeight*        |                           Sign is positive                           |
-|                                          |                           Sign is negative                           |
-|       Sign of *newoccupiedVolume*        |                           Sign is positive                           |
-|                                          |                           Sign is negative                           |
-| Sign of *newmaxWeight-newoccupiedWeight* |                           Sign is positive                           |
-|                                          |                           Sign is negative                           |
-| Sign of *newmaxVolume-newoccupiedVolume* |                           Sign is positive                           |
-|                                          |                           Sign is negative                           |
-|            Format of *newrow*            |                      It is a string of 4 digits                      |
-|                                          |                    It is not a string of 4 digits                    |
-|           Format of *newaisle*           |                      It is a string of 4 digits                      |
-|                                          |                    It is not a string of 4 digits                    |
-|          Format of *newcolumn*           |                      It is a string of 4 digits                      |
-|                                          |                    It is not a string of 4 digits                    |
+## 1) Test case : successful use of editPositionVer1
+```
+test('successful use of editPositionVer1', async () => {
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: 100,
+                maxVolume: 100,
+            })
+
+            await positionController.editPositionVer1("123456789012",
+                {
+                    newAisleID: "9999",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: 100,
+                    newMaxVolume: 100,
+                    newOccupiedWeight: 100,
+                    newOccupiedVolume: 100,
+                })
+            const results = await positionController.getAllPositions();
+            assert.equal(results.length, 1);
+            assert.equal(results[0].positionID, "999956789012")
+        })
+```
+
+## 2) Test case : attempt of editPositionVer1 with an invalid positionID
+```
+test('attempt of editPositionVer1 with an invalid positionID', async () => {
+            let errorValue;
+            await positionController.editPositionVer1("hello",
+                {
+                    newAisleID: "9999",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: 100,
+                    newMaxVolume: 100,
+                    newOccupiedWeight: 100,
+                    newOccupiedVolume: 100,
+                }).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422);
+        })
+```
+
+## 3) Test case : attempt of editPositionVer1 with non-existant position
+```
+test('attempt of editPositionVer1 with non-existant position', async () => {
+
+            let errorValue;
+            await positionController.editPositionVer1("123456789012",
+                {
+                    newAisleID: "9999",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: 100,
+                    newMaxVolume: 100,
+                    newOccupiedWeight: 100,
+                    newOccupiedVolume: 100,
+                }).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 404);
+        })
+```
 
 
+## 4) Test case : attempt of editPositionVer1 with invalid position codes
+```
+test('attempt of editPositionVer1 with invalid position codes', async () => {
+            let errorValue;
+            await positionController.editPositionVer1("123456789012",
+                {
+                    newAisleID: "hello",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: 100,
+                    newMaxVolume: 100,
+                    newOccupiedWeight: 100,
+                    newOccupiedVolume: 100,
+                }).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422);
+        })
+```
 
+## 5) Test case : attempt of editPositionVer1 with negative weight
+```
+test('attempt of editPositionVer1 with negative weight', async () => {
+            let errorValue;
+            await positionController.editPositionVer1("123456789012",
+                {
+                    newAisleID: "hello",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: -100,
+                    newMaxVolume: 100,
+                    newOccupiedWeight: 100,
+                    newOccupiedVolume: 100,
+                }).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422);
+        })
+```
 
+## 6) Test case : attempt of editPositionVer1 with negative volume
+```
+test('attempt of editPositionVer1 with negative volume', async () => {
+            let errorValue;
+            await positionController.editPositionVer1("123456789012",
+                {
+                    newAisleID: "hello",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: 100,
+                    newMaxVolume: -100,
+                    newOccupiedWeight: 100,
+                    newOccupiedVolume: 100,
+                }).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422);
+        })
+```
 
-**Boundaries**:
+## 7) Test case : attempt of editPositionVer1 with negative occupiedWeight
+```
+ test('attempt of editPositionVer1 with negative occupiedWeight', async () => {
+            let errorValue;
+            await positionController.editPositionVer1("123456789012",
+                {
+                    newAisleID: "hello",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: 100,
+                    newMaxVolume: -100,
+                    newOccupiedWeight: -100,
+                    newOccupiedVolume: 100,
+                }).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422);
+        })
+```
 
-|                 Criteria                 |  Boundary values  |
-| :--------------------------------------: | :---------------: |
-|         Validity of *positionid*         | No boundary found |
-|          Sign of *newmaxWeight*          |         0         |
-|          Sign of *newmaxVolume*          |         0         |
-|       Sign of *newoccupiedWeight*        |         0         |
-|       Sign of *newoccupiedVolume*        |         0         |
-| Sign of *newmaxWeight-newoccupiedWeight* |         0         |
-| Sign of *newmaxVolume-newoccupiedVolume* |         0         |
-|            Format of *newrow*            | No boundary found |
-|           Format of *newaisle*           | No boundary found |
-|          Format of *newcolumn*           | No boundary found |
+## 8) Test case : attempt of editPositionVer1 with negative occupiedVolume
+```
+test('attempt of editPositionVer1 with negative occupiedVolume', async () => {
+            let errorValue;
+            await positionController.editPositionVer1("123456789012",
+                {
+                    newAisleID: "hello",
+                    newRow: "5678",
+                    newCol: "9012",
+                    newMaxWeight: 100,
+                    newMaxVolume: 100,
+                    newOccupiedWeight: 100,
+                    newOccupiedVolume: -100,
+                }).catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422);
+        })
+```
 
-
-
-
-**Combination of predicates**:
-
-
-| Criteria 1 | Criteria 2 | Criteria 3 | Criteria 4 | Criteria 5 | Criteria 5 | Criteria 7 | Criteria 8 | Criteria 9 | Criteria 10 | Valid / Invalid | Description of the test case | Jest test case |
-| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :--------: | :---------: | :-------------: | :--------------------------: | :------------: |
-
-THE COMBINATIONS ARE OMITTED BECAUSE OF THEIR HUGE NUMBER
-
-## **Class *positionController* - method *editPositionId***
+## **Class *positionController* - method *editPositionVer2***
 
 The input value is the body of the HTTP PUT Request and the positionid.
 
@@ -1142,7 +1239,7 @@ The input value is the body of the HTTP PUT Request and the positionid.
 
 
 
-**Predicates for method *editPositionId*:**
+**Predicates for method *editPositionVer2*:**
 
 |         Criteria         |                              Predicate                               |
 | :----------------------: | :------------------------------------------------------------------: |
@@ -1173,6 +1270,59 @@ The input value is the body of the HTTP PUT Request and the positionid.
 |   Valid    |   Absent   |      Valid      |                There is no position with *newpositionid*, we can change the id                |                |
 |  Invalid   |  Present   |     Invalid     | There is already a position with *newpositionid*, there is no position with such *positionid* |                |
 |  Invalid   |   Absent   |     Invalid     |                          There is no position with such *positionid*                          |                |
+
+## 1) Test case : successful use of editPositionVer2
+```
+test('successful use of editPositionVer2', async () => {
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: 100,
+                maxVolume: 100,
+            })
+            await positionController.editPositionVer2("123456789012",
+                { newPositionID: "123456789013" })
+            const results = await positionController.getAllPositions();
+            assert.equal(results.length, 1);
+            assert.equal(results[0].positionID, "123456789013")
+        })
+```
+
+## 2) Test case : attempt of editPositionVer2 with a non-existant position
+```
+ test('attempt of editPositionVer2 with a non-existant position', async () => {
+            let errorValue;
+            await positionController.editPositionVer2("123456789012",
+                { newPositionID: "123456789013" })
+                .catch(err => errorValue = err)
+            assert.equal(errorValue.code, 404)
+        })
+```
+
+## 3) Test case : attempt of editPositionVer2 with an invalid oldPositionID
+```
+ test('attempt of editPositionVer2 with an invalid oldPositionID', async () => {
+            let errorValue;
+            await positionController.editPositionVer2("hello",
+                { newPositionID: "123456789013" })
+                .catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422)
+        })
+```
+
+## 4) Test case : attempt of editPositionVer2 with an invalid newPositionID
+```
+ test('attempt of editPositionVer2 with an invalid newPositionID', async () => {
+            let errorValue;
+            await positionController.editPositionVer2("123456789012",
+                { newPositionID: "hello" })
+                .catch(err => errorValue = err)
+            assert.equal(errorValue.code, 422)
+        })
+
+```
 
 
 ## **Class *positionController* - method *deletePosition***
@@ -1212,6 +1362,138 @@ The input value is the positionid.
 | :--------: | :-------------: | :------------------------------------: | :------------: |
 |  Invalid   |     Invalid     | There is no position with *positionid* |                |
 |   Valid    |      Valid      | There is a position with *positionid*  |                |
+
+
+## 1) Test case : 
+```
+test('successful use of deletePosition', async () => {
+            let results;
+            await positionController.createPosition({
+                positionID: "123456789012",
+                aisleID: "1234",
+                row: "5678",
+                col: "9012",
+                maxWeight: 100,
+                maxVolume: 100,
+            })
+            results = await positionController.getAllPositions();
+            assert.equal(results.length, 1);
+            await positionController.deletePosition("123456789012")
+            results = await positionController.getAllPositions();
+            assert.equal(results.length, 0);
+
+        })
+```
+
+## 1) Test case : 
+```
+test('attempt of deletePosition with invalid positionId', async () => {
+            let errorValue;
+            await positionController.deletePosition("hello")
+                .catch(err => errorValue = err);
+            assert.equal(errorValue.code, 422);
+
+        })
+```
+
+## **Class *PositionController* - method *checkPositionID***
+
+The input value is the test id.
+
+**Criteria for method *checkPositionID*:**
+	
+ - Validity of *id*
+
+
+
+
+
+**Predicates for method *checkPositionID*:**
+
+| Criteria | Predicate |
+| :------: | :-------: |
+|          |           |
+|          |           |
+
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| :------: | :-------------: |
+|          |                 |
+
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+| :--------: | :-------------: | :--------------------------: | :------------: |
+|            |                 |                              |                |
+|            |                 |                              |                |
+
+## 1) Test case : successful use of checkPositionID
+```
+test('successful use of checkPositionID', async () => {
+            const result = positionController.checkPositionID("123456789012",
+                "1234", "5678", "9012")
+
+            assert.equal(result, true);
+
+        })
+```
+
+## 2) Test case : attempt of checkPositionID with invalid PositionID
+```
+test('attempt of checkPositionID with invalid PositionID', async () => {
+            const result = positionController.checkPositionID("hello",
+                "1234", "5678", "9012")
+
+            assert.equal(result, false);
+        })
+```
+
+## 3) Test case : attempt of checkPositionID with invalid aisleID
+```
+    test('attempt of checkPositionID with invalid aisleID', async () => {
+            const result = positionController.checkPositionID("123456789012",
+                "hello", "5678", "9012")
+
+            assert.equal(result, false);
+        })
+```
+
+## 4) Test case : attempt of checkPositionID with invalid row
+```
+test('attempt of checkPositionID with invalid row', async () => {
+            const result = positionController.checkPositionID("123456789012",
+                "1234", "hello", "9012")
+
+            assert.equal(result, false);
+        })
+```
+
+## 5) Test case : attempt of checkPositionID with invalid col
+```
+test('attempt of checkPositionID with invalid col', async () => {
+            const result = positionController.checkPositionID("123456789012",
+                "1234", "5678", "hello")
+
+            assert.equal(result, false);
+        })
+```
+
+## 6) Test case : attempt of checkPositionID with incompatible codes
+```
+test('attempt of checkPositionID with incompatible codes', async () => {
+            const result = positionController.checkPositionID("123456789012",
+                "0000", "0000", "0000")
+
+            assert.equal(result, false);
+        })
+```
 
 ## **Class *TestDescriptorController* - method *getTestDescriptor***
 
@@ -2714,20 +2996,23 @@ The input value is the body of the HTTP POST Request.
 
 **Boundaries**:
 
-|             Criteria             |  Boundary values  |
-| :------------------------------: | :---------------: |
-|            Price sign            |         0         |
-| Validity of SKUid per supplierId | No boundary found |
-|  Validity of id per supplierId   | No boundary found |
-|        Validity of SKUid         | No boundary found |
-|      Validity of supplierId      | No boundary found |
+|       Criteria        |  Boundary values  |
+| :-------------------: | :---------------: |
+|  Validity of params   | No boundary found |
+| Already existant item | No boundary found |
+|    Skuid validity     | No boundary found |
 
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Criteria 3 | Description of test case | Jest test case |
-| :--------: | :--------: | :--------: | :----------------------: | :------------: |
-|            |            |            |                          |                |
+| Criteria 1 | Criteria 2 | Criteria 3 | Valid/Invalid |          Description of test case          |                       Jest test case                        |
+| :--------: | :--------: | :--------: | :-----------: | :----------------------------------------: | :---------------------------------------------------------: |
+|   Valid    |   Valid    |   Valid    |     Valid     |  The params are valid and the Sku exists   |            test('successful use of createItem')             |
+|  Invalid   |   Valid    |   Valid    |    Invalid    |          A parameter is undefined          |  test('attempt of createItem with an undefined parameter')  |
+|  Invalid   |   Valid    |  Invalid   |    Invalid    |             The id is invalid              |      test('attempt of createItem with an invalid id')       |
+|  Invalid   |   Valid    |   Valid    |    Invalid    |          A parameter is negative           |   test('attempt of createItem with a negative parameter')   |
+|   Valid    |   Valid    |  Invalid   |    Invalid    |           The sku doesn't exist            |    test('attempt of createItem with a non-existant sku')    |
+|   Valid    |  Invalid   |   Valid    |    Invalid    | This item is already sold by same supplier | test('attempt of createItem with an already existant item') |
 
 
 ## 1) Test case : successful use of createItem
@@ -2886,11 +3171,13 @@ The input value is the item id and the body of the HTTP PUT Request
 
 **Combination of predicates**:
 
-| Criteria 1 | Criteria 2 | Valid / Invalid |                            Description of the test case                             |                                                                              Jest test case                                                                              |
-| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|   Valid    |  Positive  |      Valid      | There is an item order with the given *id* in the database and the sign is positive |                                                                    test('successful use of editItem')                                                                    |
-|   Valid    |  Negative  |     Invalid     |                                 Params are invalid                                  | test('attempt of editItem with a negative parameter') /   test('attempt of editItem with a invalid parameter') /  test('attempt of editItem with a undefined parameter') |
-|  Invalid   |  Positive  |     Invalid     | There is no item with the given *id* in the database or id is undefined or invalid  |                                                           test('attempt of editItem with a non-existant item')                                                           |
+| Criteria 1 | Criteria 2 | Valid / Invalid |                            Description of the test case                             |                     Jest test case                     |
+| :--------: | :--------: | :-------------: | :---------------------------------------------------------------------------------: | :----------------------------------------------------: |
+|   Valid    |  Positive  |      Valid      | There is an item order with the given *id* in the database and the sign is positive |           test('successful use of editItem')           |
+|   Valid    |  Negative  |     Invalid     |                                 Params are invalid                                  | test('attempt of editItem with a negative parameter')  |
+|            |            |                 |                                                                                     |  test('attempt of editItem with a invalid parameter')  |
+|            |            |                 |                                                                                     | test('attempt of editItem with a undefined parameter') |
+|  Invalid   |  Positive  |     Invalid     | There is no item with the given *id* in the database or id is undefined or invalid  |  test('attempt of editItem with a non-existant item')  |
 
 
 ## 1) Test case : successful use of editItem
