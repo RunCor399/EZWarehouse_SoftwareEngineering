@@ -4209,6 +4209,17 @@ test('attempt of deleteItem with invalid id', async () => {
 |                                   | test('attempt to delete a Sku with an invalid skuid')                                                                          |
 |                                   | test('Delete a non-existing Sku')                                                                                              |
 
+| Unit name                                                   | Jest test case                                                 |
+| ----------------------------------------------------------- | -------------------------------------------------------------- |
+| testDescriptorController.js -> createtestDescriptor(body)   | test("Successfully create a Test Descriptor")                  |
+|                                                             | test("Insertion of a test descriptor with a non-existing SKU") |
+|                                                             | test("Insertion of a test descriptor with invalid body")       |
+| testDescriptorController.js -> editTestDescriptor(id, body) | test("Successfully edit a Test Descriptor")                    |
+|                                                             | test("Edit a Test Descriptor with invalid id")                 |
+|                                                             | test("Edit a Test Descriptor with a non-existent SKU")         |
+| testDescriptorController.js -> deleteTestDescriptor(id)     | test("Successfully delete a Test Descriptor")                  |
+|                                                             | test("Delete a non-existing Test Descriptor")                  |
+
 
 ### Code coverage report
 Since we weren't supposed to implement UnitTests with the design adopted (due to the lack of data structures kept in memory apart from the data in the Database),
