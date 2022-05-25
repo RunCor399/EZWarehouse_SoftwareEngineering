@@ -432,8 +432,6 @@ describe("TestResultController Tests", () => {
 
             assert.equal(response.Result, false);
 
-
-
         });
 
         test("attempt of editTestResult with an undefined parameter", async() => {
