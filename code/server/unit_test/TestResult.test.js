@@ -18,6 +18,20 @@ afterEach(async () => {
 });
 
 describe("TestResultController Tests", () => {
+    describe("getTestResults method testing", () => {
+        test("", () => {
+
+        });
+        
+        test("", () => {
+
+        });
+        
+        test("", () => {
+
+        });
+    });
+
     describe("getTestResult method testing", () => {
         test("", () => {
 
