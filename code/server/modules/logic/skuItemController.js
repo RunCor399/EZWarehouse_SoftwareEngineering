@@ -38,6 +38,9 @@ class SkuItemController {
     */
     async getSkuItems(id) {
 
+
+        console.log("",id, "finetest");
+
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
             throw new Exceptions(401);
 
@@ -55,6 +58,7 @@ class SkuItemController {
             .catch(error => { throw error });
         if (!skuitems)
             throw new Exceptions(404)
+
 
 
         return skuitems;
@@ -138,8 +142,6 @@ class SkuItemController {
         const newRFID = body["newRFID"];
         const newAvailable = body["newAvailable"];
         const newDateOfStock = body["newDateOfStock"];
-
-        console.log("iniziotest", newAvailable, "finetest");
 
         if (this.#controller.checkRFID(oldRFID)
             || this.#controller.checkRFID(newRFID)
