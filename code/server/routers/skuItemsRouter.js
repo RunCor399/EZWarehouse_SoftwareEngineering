@@ -9,7 +9,7 @@ router.get('/api/skuitems', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET', req.url);
+    console.log('GET', req.url);
   
   await controller.getSkuItemController().getAllSkuItems()
     .then(skuitems => { return res.status(200).json(skuitems); })
@@ -62,7 +62,7 @@ router.put('/api/skuitems/:rfid', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('PUT', req.url);
+ console.log('PUT', req.url);
 
   await controller.getSkuItemController().editSkuItem(param, req.body)
     .then(() => { return res.status(200).end(); })

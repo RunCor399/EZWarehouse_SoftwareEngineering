@@ -313,7 +313,7 @@ class SkuController {
 
             const updatedOldOccupiedWeight = positionInfo[0].occupiedWeight - (sku.weight * sku.availableQuantity);
             const updatedOldOccupiedVolume = positionInfo[0].occupiedVolume - (sku.volume * sku.availableQuantity);
-            console.log(updatedOldOccupiedWeight, updatedOldOccupiedVolume);
+            //console.log(updatedOldOccupiedWeight, updatedOldOccupiedVolume);
             //reset position volume and weight
             await this.#dbManager.genericSqlRun('UPDATE Position SET occupiedWeight = ?, occupiedVolume = ? WHERE positionID = ?', updatedOldOccupiedWeight, updatedOldOccupiedVolume, String(positionOccupiedBySku.positionID))
                 .catch(error => { throw error })
