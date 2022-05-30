@@ -108,7 +108,7 @@ class Controller {
     }
 
     areUndefined(...params) {
-        const value = (params.includes(undefined));
+        const value = (params.includes(undefined) || params.includes(null));
        // console.log("undefined included: ", value)
         return value;
     }

@@ -30,7 +30,7 @@ CREATE TABLE SKUItem(
     RFID VARCHAR(50),
     SKUId INT,
     available INT,
-    dateOfStock VARCHAR(50),
+    DateOfStock VARCHAR(50),
     PRIMARY KEY (RFID),
     FOREIGN KEY (SKUId) REFERENCES SKU(id)
 );

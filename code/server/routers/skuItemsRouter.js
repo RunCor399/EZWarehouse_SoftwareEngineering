@@ -10,10 +10,12 @@ router.get('/api/skuitems', async (req, res) => {
   /** @type {Controller} */
   const controller = req.app.get("controller");
     console.log('GET', req.url);
-  
+  let skuitems;
   await controller.getSkuItemController().getAllSkuItems()
     .then(skuitems => { return res.status(200).json(skuitems); })
+    .then(v => skuitems = v)
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    
 
 });
 

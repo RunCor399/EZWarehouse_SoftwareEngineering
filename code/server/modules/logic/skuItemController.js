@@ -139,6 +139,8 @@ class SkuItemController {
         const newAvailable = body["newAvailable"];
         const newDateOfStock = body["newDateOfStock"];
 
+        console.log("iniziotest", newAvailable, "finetest");
+
         if (this.#controller.checkRFID(oldRFID)
             || this.#controller.checkRFID(newRFID)
             || this.#controller.areUndefined(newAvailable, newDateOfStock)
