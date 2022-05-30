@@ -118,7 +118,7 @@ class InternalOrderController {
             .catch((error) => { throw error });
 
         /*check if the internal order exists*/
-        console.log(row);
+        //console.log(row);
         if (!row)
             throw new Exceptions(404);
 

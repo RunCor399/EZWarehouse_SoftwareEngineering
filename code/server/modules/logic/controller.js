@@ -113,6 +113,21 @@ class Controller {
         return value;
     }
 
+    areEmptyStings(...params){
+        for(let i=0; i<params.length; i++){
+            if(String(params[i]).length===0)
+                return true;
+        }
+        return false;
+    }
+
+    areNotInt(...params) {
+        for(let i=0; i<params.length; i++){
+            if( params[i] % 1 !== 0)
+                return true;
+        }
+        return false;
+     }
 
     areNotNumbers(...params) {
         const value = params.some((num) => isNaN(Number(num)));
