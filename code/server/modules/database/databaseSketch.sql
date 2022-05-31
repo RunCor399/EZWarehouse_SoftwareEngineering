@@ -116,7 +116,7 @@ CREATE TABLE SKUItemsPerReturnOrder(
     RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
-    FOREIGN KEY(id) REFERENCES InternalOrder(id)
+    FOREIGN KEY(id) REFERENCES ReturnOrder(id)
 );
 CREATE TABLE InternalOrder(
     id INTEGER  PRIMARY KEY,
