@@ -114,7 +114,7 @@ class ReturnOrderController {
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, restockOrderId)
             .then((value) => row = value[0])
-            .catch((error) => { throw error });
+            .catch((error) => { throw new Exceptions(503) });
 
         
         /*check if the restock order exists*/
@@ -129,18 +129,29 @@ class ReturnOrderController {
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM ReturnOrder')
             .then(value => id = value[0]["COUNT(*)"])
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
 
         const sqlInstruction = `INSERT INTO ReturnOrder (id, returnDate, restockOrderId) 
                                 VALUES (?,?,?);`;
 
         await this.#dbManager.genericSqlRun(sqlInstruction, id + 1, dateToSave, restockOrderId)
-            .catch(error => { throw error })
+            .catch(error => { throw new Exceptions(503) })
 
+        //Same problem as in restock order, RFID not unique
+        const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerRestockOrder WHERE RFID = ?`;
         const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?,?,?);`;
+       
         for (let i = 0; i < products.length; i++) {
+            let count;
+            //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
+            await this.#dbManager.genericSqlGet(sqlGet, products[i].RFID).then((result) => count = result[0]["COUNT(*)"])
+                                                                         .catch((err) => {throw new Exceptions(503)});
+            if(count > 0){
+                continue;
+            }
+
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
-                .catch(error => {throw error })
+                .catch(error => {throw new Exceptions(506) })
         }
 
 

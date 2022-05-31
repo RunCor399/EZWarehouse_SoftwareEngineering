@@ -300,7 +300,7 @@ class RestockOrderController {
         
         for (let i = 0; i < skuItems.length; i++) {
             let count;
-            //Checking for already existent RFID   
+            //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
             await this.#dbManager.genericSqlGet(sqlGet, skuItems[i].rfid).then((result) => count = result[0]["COUNT(*)"])
                                                                          .catch((err) => {throw new Exceptions(503)});
             if(count > 0){
