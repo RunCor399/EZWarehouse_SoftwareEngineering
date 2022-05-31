@@ -155,7 +155,6 @@ class InternalOrderController {
         try {
             dateToSave = this.#controller.checkAndFormatDate(issueDate);
         } catch (error) {
-            console.log(error)
             throw new Exceptions(503);
         }
 
@@ -189,6 +188,7 @@ class InternalOrderController {
 
         const newState = body["newState"];
 
+
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "deliveryEmployee"))
             throw new Exceptions(401);
@@ -214,9 +214,11 @@ class InternalOrderController {
             if (!products)
                 throw new Exceptions(422);
 
+            
+            
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUId, RFID) VALUES (?, ?, ?);`;
             for (let i = 0; i < products.length; i++) {
-                await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SKUId, products[i].RFID)
+                await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SkuID, products[i].RFID)
                     .catch(error => { throw error });
             }
 
