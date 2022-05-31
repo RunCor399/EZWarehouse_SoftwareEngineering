@@ -147,7 +147,7 @@ CREATE TABLE Item(
     id INT,
     description VARCHAR(250),
     price FLOAT,
-    SKUid INT,
+    SKUId INT,
     supplierId INT,
     PRIMARY KEY (id),
     FOREIGN KEY (SKUid) REFERENCES SKU(id),

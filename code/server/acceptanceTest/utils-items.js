@@ -60,6 +60,9 @@ function testGetItem(agent,itemid, myexpitem, expCode){
                 let idsupp = ids.getIdSuppliers();
                 assert.equal(r.status, expCode);
                 if (r.status == 200) {
+
+                    console.log("*******", itemid, r.body)
+
                     r.body.should.be.a('object');
                     r.body.id.should.equal(itemid);
                     r.body.description.should.equal(myexpitem.description);

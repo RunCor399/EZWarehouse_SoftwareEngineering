@@ -31,6 +31,16 @@ class Controller {
 
     constructor() {
         this.#dbManager = new DBManager();
+
+         (async () => {
+            try {
+                await this.#dbManager.deleteAndAddUserData();
+            } catch (error) {
+            
+            }
+        }
+        )() 
+
         this.#itemController = new ItemController(this);
         this.#userController = new UserController(this);
         this.#positionController = new PositionController(this);
@@ -41,9 +51,10 @@ class Controller {
         this.#restockOrderController = new RestockOrderController(this);
         this.#returnOrderController = new ReturnOrderController(this);
         this.#internalOrderController = new InternalOrderController(this);
-        console.log("general Controller started");
+        console.log("general Controller started"); 
 
     }
+
 
     getUserController() {
         return this.#userController;

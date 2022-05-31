@@ -222,7 +222,32 @@ class DBManager {
         })
 
     }
-    async insertUserTestData(){
+
+    async deleteAndAddUserData() {
+        const queries = [
+            'DELETE FROM USERS WHERE 1=1',
+            'INSERT INTO Users (email, name, surname, password, type) \
+             VALUES  ("user1@ezwh.com","name1","surname1","e16b2ab8d12314bf4efbd6203906ea6c","customer"), \
+                    ("qualityEmployee1@ezwh.com", "name2","surname2","e16b2ab8d12314bf4efbd6203906ea6c","qualityEmployee"), \
+                    ("clerk1@ezwh.com","name3","surname3","e16b2ab8d12314bf4efbd6203906ea6c","clerk"),  \
+                    ("deliveryEmployee1@ezwh.com","name4","surname4","e16b2ab8d12314bf4efbd6203906ea6c","deliveryEmployee"), \
+                    ("supplier1@ezwh.com","name5","surname5","e16b2ab8d12314bf4efbd6203906ea6c","supplier"), \
+                    ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
+        ]
+            ;
+        try {
+            await this.genericSqlRun(queries[0])
+        } catch (error) {
+            
+        }
+        try {
+            await this.genericSqlRun(queries[1])
+        } catch (error) {
+            
+        }
+    }
+
+    async insertUserTestData() {
         const queries = [
             'INSERT INTO Users (email, name, surname, password, type) \
              VALUES  ("user1@ezwh.com","name1","surname1","e16b2ab8d12314bf4efbd6203906ea6c","customer"), \
@@ -233,7 +258,7 @@ class DBManager {
                     ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
         ];
 
-        
+
 
         return new Promise((resolve, reject) => {
             queries.forEach((query) => {

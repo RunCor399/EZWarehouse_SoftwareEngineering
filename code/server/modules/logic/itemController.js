@@ -88,6 +88,10 @@ class ItemController {
             || !this.#controller.areAllPositiveOrZero(id, price, SKUId, supplierId))
             throw new Exceptions(422);
 
+            //check if sku exists in the SKU table
+            await this.#controller.getSkuController().getSku(SKUId)
+                .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+        
         //check if the supplier already sells an item with the same SKUId
         let item;
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE SKUid = ? AND supplierId = ?', SKUId, supplierId)
@@ -106,9 +110,6 @@ class ItemController {
         }
 
 
-        //check if sku exists in the SKU table
-        await this.#controller.getSkuController().getSku(SKUId)
-            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
 
         await this.#dbManager.genericSqlRun(`INSERT INTO Item (id, description, price, SKUId, supplierId) 
