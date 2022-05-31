@@ -206,7 +206,7 @@ class InternalOrderController {
 
         /*check if the internal order exists*/
         await this.getInternalOrder(id)
-            .catch(error => { throw error });
+            .catch(error => { throw new Exceptions(503) });
 
         if (newState === "COMPLETED") {
 
@@ -215,18 +215,28 @@ class InternalOrderController {
                 throw new Exceptions(422);
 
             
-            
+             //Same problem as in restock order and return, RFID not unique
+            const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerInternalOrder WHERE RFID = ?`;
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUId, RFID) VALUES (?, ?, ?);`;
+            
             for (let i = 0; i < products.length; i++) {
+                let count;
+                //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
+                await this.#dbManager.genericSqlGet(sqlGet, products[i].RFID).then((result) => count = result[0]["COUNT(*)"])
+                                                                            .catch((err) => {throw new Exceptions(503)});
+                if(count > 0){
+                    continue;
+                }
+
                 await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SkuID, products[i].RFID)
-                    .catch(error => { throw error });
+                    .catch(error => { throw new Exceptions(505) });
             }
 
         }
             const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
 
             await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
-                .catch(error => { throw error })
+                .catch(error => { throw new Exceptions(503) })
         
     }
 

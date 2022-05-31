@@ -138,7 +138,7 @@ class ReturnOrderController {
             .catch(error => { throw new Exceptions(503) })
 
         //Same problem as in restock order, RFID not unique
-        const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerRestockOrder WHERE RFID = ?`;
+        const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerReturnOrder WHERE RFID = ?`;
         const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?,?,?);`;
        
         for (let i = 0; i < products.length; i++) {
@@ -151,7 +151,7 @@ class ReturnOrderController {
             }
 
             await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
-                .catch(error => {throw new Exceptions(506) })
+                .catch(error => {throw new Exceptions(503) })
         }
 
 
