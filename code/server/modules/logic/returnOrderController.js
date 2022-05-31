@@ -87,6 +87,8 @@ class ReturnOrderController {
     */
     async createReturnOrder(body) {
 
+        console.log("***************** returnOrderTest", body)
+
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401)
@@ -108,19 +110,21 @@ class ReturnOrderController {
             throw new Exceptions(422);
         }
 
+
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, restockOrderId)
             .then((value) => row = value[0])
             .catch((error) => { throw error });
 
+        
         /*check if the restock order exists*/
-        if (!row)
+        if (row === undefined)
             throw new Exceptions(404);
 
-        for (let i = 0; i < products.length; i++) {
+        /* for (let i = 0; i < products.length; i++) {
             await this.#controller.getSkuItemController().getSkuItem(products[i].RFID)
-                .catch(error => { /*if (error.getCode() === 500) throw new Exceptions(503); */throw error })
-        }
+                .catch(error => { console.log("******** ERROR", error); throw error })
+        } */
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM ReturnOrder')

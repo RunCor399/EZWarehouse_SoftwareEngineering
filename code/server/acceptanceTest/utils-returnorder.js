@@ -98,7 +98,7 @@ function testGetAllReturnOrders(agent, myretord, expCode){
         it(' get all return orders', function(done){
             agent.get('/api/returnOrders')
             .then(function(res){
-                //console.log(res.body);
+                console.log("*********** TESTBODY",res.body);
                 res.should.have.status(expCode);
                 res.body.should.be.a('array');
                 let idrestockorders = ids.getIdRestockOrdersIssued();

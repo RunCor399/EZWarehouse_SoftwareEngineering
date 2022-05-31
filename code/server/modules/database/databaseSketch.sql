@@ -104,7 +104,7 @@ CREATE TABLE SKUItemsPerRestockOrder(
 CREATE TABLE ReturnOrder(
     id INTEGER  PRIMARY KEY,
     returnDate VARCHAR(50),
-    restockOrderID INT,
+    restockOrderId INT,
     FOREIGN KEY(id) REFERENCES RestockOrder(id)
 );
 
@@ -139,7 +139,7 @@ CREATE TABLE SKUItemsPerInternalOrder(
     id INT,
     SKUId INT,
     RFID VARCHAR(50),
-    PRIMARY KEY(SKUId, RFID),
+    PRIMARY KEY(id, SKUId, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
     FOREIGN KEY(id) REFERENCES InternalOrder(id)
 );

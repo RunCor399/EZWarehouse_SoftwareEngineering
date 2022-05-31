@@ -188,7 +188,6 @@ class InternalOrderController {
 
         const newState = body["newState"];
 
-        console.log("*****", id, body)
 
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "deliveryEmployee"))
@@ -215,6 +214,8 @@ class InternalOrderController {
             if (!products)
                 throw new Exceptions(422);
 
+            
+            
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUId, RFID) VALUES (?, ?, ?);`;
             for (let i = 0; i < products.length; i++) {
                 await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SkuID, products[i].RFID)
