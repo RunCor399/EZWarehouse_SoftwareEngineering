@@ -32,7 +32,7 @@ class Controller {
     constructor() {
         this.#dbManager = new DBManager();
 
-         (async () => {
+        (async () => {
              try {
                 await this.#dbManager.deleteAllData();
 
