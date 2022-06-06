@@ -206,7 +206,7 @@ class InternalOrderController {
 
         /*check if the internal order exists*/
         await this.getInternalOrder(id)
-            .catch(error => { throw new Exceptions(503) });
+            .catch(error => { throw error });
 
         if (newState === "COMPLETED") {
 

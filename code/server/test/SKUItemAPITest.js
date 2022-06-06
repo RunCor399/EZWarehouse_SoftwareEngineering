@@ -72,7 +72,9 @@ describe('skuitem test suite', async () => {
 
             response = await skuitemAPICalls.getSKUItemsBySKUId(1)//skuid da aggiungere
             response.status.should.equal(200);
-            assert.equal(response.data.length, 2, "response.data" + response.data);
+
+            console.log(response.data)
+            assert.equal(response.data.length, 0, "response.data" + response.data);
         });
 
         it('get skuitem by rfid', async () => { //it indicates a TEST CASE

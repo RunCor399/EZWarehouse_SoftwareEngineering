@@ -199,7 +199,7 @@ class DBManager {
                                     VALUES (2,"test descriptor 1", "description", 1) \
                                    '];
 
-        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,10,"2022/02/02");`];
+        const insertSKUItems = [`INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES ("12345678901234567890123456789016",1,1,"2022/02/02");`];
         const insertTestResult = [' INSERT INTO TestResult("id", "idTestDescriptor", "RFID", "Date", "Result") \
                                      VALUES (1, 1, "12345678901234567890123456789016", "2022/01/02 10:10", true) \
                                     '];
