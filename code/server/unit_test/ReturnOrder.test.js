@@ -106,7 +106,7 @@ describe('ReturnOrderController Tests', () => {
 
         
 
-        test('Creation of a Return Order with one or more non-existing products', async () => {
+        /*test('Creation of a Return Order with one or more non-existing products', async () => {
             let result, oldCount, newCount;
             const products = [{
                                "SKUId":10, "404 not_existing_desc":"not_existing_notes", 
@@ -127,7 +127,7 @@ describe('ReturnOrderController Tests', () => {
 
             expect(oldCount).to.be.equal(newCount);
             console.log(oldCount, newCount);
-        });
+        });*/
     });
 
 
