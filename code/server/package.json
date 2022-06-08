@@ -30,6 +30,6 @@
     "apiTest": "mocha test --runInBand--timeout 10000 ",
     "test": "jest --runInBand --coverage ",
     "acceptanceTest": "npx mocha --runInBand --spec acceptanceTest/testEzWhAPI.js --reporter mochawesome --timeout 10000 --exit",
-    "totalcoverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha test --runInBand --timeout 10000 --exit"
+    "totalcoverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha test --runInBand --timeout 20000 --exit"
   }
 }
