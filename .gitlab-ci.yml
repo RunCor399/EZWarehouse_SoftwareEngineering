@@ -21,4 +21,4 @@ test_with_mocha:
   stage: test
   script:
     - cd code/server/
-    - npm run acceptanceTest
+    - npm run acceptanceTest --timeout 20000
