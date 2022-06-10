@@ -38,6 +38,9 @@ class SkuItemController {
     */
     async getSkuItems(id) {
 
+
+        console.log("",id, "finetest");
+
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
             throw new Exceptions(401);
 
@@ -51,10 +54,11 @@ class SkuItemController {
         await this.#controller.getSkuController().getSku(id)
             .catch((error) => { throw error });
 
-        let skuitems = await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ?;`, id)
+        let skuitems = await this.#dbManager.genericSqlGet(`SELECT * FROM SKUItem WHERE SKUId= ? AND available = 1;`, id)
             .catch(error => { throw error });
         if (!skuitems)
             throw new Exceptions(404)
+
 
 
         return skuitems;

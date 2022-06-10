@@ -30,7 +30,7 @@ CREATE TABLE SKUItem(
     RFID VARCHAR(50),
     SKUId INT,
     available INT,
-    dateOfStock VARCHAR(50),
+    DateOfStock VARCHAR(50),
     PRIMARY KEY (RFID),
     FOREIGN KEY (SKUId) REFERENCES SKU(id)
 );
@@ -104,7 +104,7 @@ CREATE TABLE SKUItemsPerRestockOrder(
 CREATE TABLE ReturnOrder(
     id INTEGER  PRIMARY KEY,
     returnDate VARCHAR(50),
-    restockOrderID INT,
+    restockOrderId INT,
     FOREIGN KEY(id) REFERENCES RestockOrder(id)
 );
 
@@ -116,7 +116,7 @@ CREATE TABLE SKUItemsPerReturnOrder(
     RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
-    FOREIGN KEY(id) REFERENCES InternalOrder(id)
+    FOREIGN KEY(id) REFERENCES ReturnOrder(id)
 );
 CREATE TABLE InternalOrder(
     id INTEGER  PRIMARY KEY,
@@ -139,15 +139,16 @@ CREATE TABLE SKUItemsPerInternalOrder(
     id INT,
     SKUId INT,
     RFID VARCHAR(50),
-    PRIMARY KEY(id, RFID),
+    PRIMARY KEY(id, SKUId, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
+    FOREIGN KEY(SKUId) REFERENCES SKU(id),
     FOREIGN KEY(id) REFERENCES InternalOrder(id)
 );
 CREATE TABLE Item(
     id INT,
     description VARCHAR(250),
     price FLOAT,
-    SKUid INT,
+    SKUId INT,
     supplierId INT,
     PRIMARY KEY (id),
     FOREIGN KEY (SKUid) REFERENCES SKU(id),

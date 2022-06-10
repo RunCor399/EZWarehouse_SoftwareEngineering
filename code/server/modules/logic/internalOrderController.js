@@ -118,7 +118,7 @@ class InternalOrderController {
             .catch((error) => { throw error });
 
         /*check if the internal order exists*/
-        console.log(row);
+        //console.log(row);
         if (!row)
             throw new Exceptions(404);
 
@@ -155,7 +155,6 @@ class InternalOrderController {
         try {
             dateToSave = this.#controller.checkAndFormatDate(issueDate);
         } catch (error) {
-            console.log(error)
             throw new Exceptions(503);
         }
 
@@ -189,6 +188,7 @@ class InternalOrderController {
 
         const newState = body["newState"];
 
+
         /*check if the user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer", "deliveryEmployee"))
             throw new Exceptions(401);
@@ -214,17 +214,29 @@ class InternalOrderController {
             if (!products)
                 throw new Exceptions(422);
 
+            
+             //Same problem as in restock order and return, RFID not unique
+            const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerInternalOrder WHERE RFID = ?`;
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUId, RFID) VALUES (?, ?, ?);`;
+            
             for (let i = 0; i < products.length; i++) {
-                await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SKUId, products[i].RFID)
-                    .catch(error => { throw error });
+                let count;
+                //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
+                await this.#dbManager.genericSqlGet(sqlGet, products[i].RFID).then((result) => count = result[0]["COUNT(*)"])
+                                                                            .catch((err) => {throw new Exceptions(503)});
+                if(count > 0){
+                    continue;
+                }
+
+                await this.#dbManager.genericSqlRun(sqlInsert, id, products[i].SkuID, products[i].RFID)
+                    .catch(error => { throw new Exceptions(505) });
             }
 
         }
             const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
 
             await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
-                .catch(error => { throw error })
+                .catch(error => { throw new Exceptions(503) })
         
     }
 

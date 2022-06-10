@@ -293,12 +293,22 @@ class RestockOrderController {
 
         let skuidInfo;
         let num;
+        const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerRestockOrder WHERE RFID = ?`;
         const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`
         const sqlInsert2 = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
         const sqlUpdate = `UPDATE SKUPerRestockOrder SET qty = qty + 1 WHERE SKUid = ?`
         
         for (let i = 0; i < skuItems.length; i++) {
-            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid).catch((error) => { throw error })
+            let count;
+            //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
+            await this.#dbManager.genericSqlGet(sqlGet, skuItems[i].rfid).then((result) => count = result[0]["COUNT(*)"])
+                                                                         .catch((err) => {throw new Exceptions(503)});
+            if(count > 0){
+                continue;
+            }
+
+            
+            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid).catch((error) => { throw new Exceptions(503) })
             skuidInfo = await this.#controller.getSkuController().getSku(skuItems[i].SKUId)
 
             num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?", skuidInfo.id).catch(error => { throw new Exceptions(503) });

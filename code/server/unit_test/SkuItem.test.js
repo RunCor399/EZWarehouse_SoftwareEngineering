@@ -85,6 +85,14 @@ describe('SKUItemController Tests', () => {
                 }
             ).catch(error => (console.log(error)))
 
+            await skuItemController.editSkuItem(rfid1,
+                {
+                    newRFID: rfid1,
+                    newAvailable: 1,
+                    newDateOfStock: "2022/01/01",
+                }
+            )
+
             const items = await skuItemController.getSkuItems(1).catch(error => { throw error })
             assert.equal(items.length, 1)
             assert.equal(items[0].RFID, rfid1)

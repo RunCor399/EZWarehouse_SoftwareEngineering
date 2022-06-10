@@ -31,6 +31,18 @@ class Controller {
 
     constructor() {
         this.#dbManager = new DBManager();
+
+        (async () => {
+             try {
+                await this.#dbManager.deleteAllData();
+
+                //await this.#dbManager.deleteAndAddUserData();
+            } catch (error) {
+            
+            }
+        }
+        )() 
+
         this.#itemController = new ItemController(this);
         this.#userController = new UserController(this);
         this.#positionController = new PositionController(this);
@@ -41,9 +53,10 @@ class Controller {
         this.#restockOrderController = new RestockOrderController(this);
         this.#returnOrderController = new ReturnOrderController(this);
         this.#internalOrderController = new InternalOrderController(this);
-        console.log("general Controller started");
+        console.log("general Controller started"); 
 
     }
+
 
     getUserController() {
         return this.#userController;
@@ -108,11 +121,26 @@ class Controller {
     }
 
     areUndefined(...params) {
-        const value = (params.includes(undefined));
+        const value = (params.includes(undefined) || params.includes(null));
        // console.log("undefined included: ", value)
         return value;
     }
 
+    areEmptyStings(...params){
+        for(let i=0; i<params.length; i++){
+            if(String(params[i]).length===0)
+                return true;
+        }
+        return false;
+    }
+
+    areNotInt(...params) {
+        for(let i=0; i<params.length; i++){
+            if( params[i] % 1 !== 0)
+                return true;
+        }
+        return false;
+     }
 
     areNotNumbers(...params) {
         const value = params.some((num) => isNaN(Number(num)));
@@ -152,11 +180,19 @@ class Controller {
         
         //console.log(dayjs("2022/02/02 10:10","YYYY/MM/DD HH:mm", true).isValid());
 
-        if (dayjs(date, "YYYY/MM/DD", true).isValid() || dayjs(date, "YYYY/MM/DD HH:mm", true).isValid()) {
-            let formattedDate = (dayjs(date).hour() === 0 && dayjs(date).minute() === 0) ? dayjs(date).format("YYYY/MM/DD") : dayjs(date).format("YYYY/MM/DD HH:mm")
-            return formattedDate
+        let formattedDate;
+        if (dayjs(date, "YYYY/MM/DD", true).isValid()) {
+            formattedDate = dayjs(date).format("YYYY/MM/DD")
         }
-        throw new Exceptions(422);
+        else if (dayjs(date, "YYYY/MM/DD HH:mm", true).isValid()) {
+            formattedDate = dayjs(date).format("YYYY/MM/DD HH:mm")
+        }
+        else if (dayjs(date, "YYYY/MM/DD H:mm", true).isValid()) {
+            formattedDate = dayjs(date).format("YYYY/MM/DD H:mm")
+
+        }
+        else throw new Exceptions(422);
+        return formattedDate
     }
 
 }

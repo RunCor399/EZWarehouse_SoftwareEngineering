@@ -7,6 +7,7 @@ class UserController {
     /** @type {Controller} */
     #controller;
     #dbManager;
+    #validTypes = ["manager", "customer", "supplier", "clerk", "deliveryEmployee", "qualityEmployee"]
     #user = {
         id: undefined,
         username: undefined,
@@ -20,7 +21,7 @@ class UserController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-       //console.log("testController started");
+        //console.log("testController started");
 
 
     }
@@ -43,7 +44,7 @@ class UserController {
      */
     getUser() {
         console.log("log check", this.#logged)
-        if (!this.#logged){
+        if (!this.#logged) {
             throw new Exceptions(401);
         }
         return this.#user;
@@ -76,7 +77,7 @@ class UserController {
         let users = await this.#dbManager.genericSqlGet("SELECT * FROM USERS U")
             .catch(error => { throw error });
 
-         return users;
+        return users;
     }
 
 
@@ -140,7 +141,7 @@ class UserController {
 
         if (!row)
             throw new Exceptions(401);
-        
+
 
         this.#user.id = row.id;
         this.#user.username = row.email;
@@ -176,16 +177,16 @@ class UserController {
      * @throws 503 Service Unavailable (generic error)
      */
     async editUser(username, body) {
-        if(username== "undefined")
-            username=undefined;
-        
-        if (!this.#controller.isLoggedAndHasPermission("manager")){
+        if (username == "undefined")
+            username = undefined;
+
+        if (!this.#controller.isLoggedAndHasPermission("manager")) {
             throw new Exceptions(401);
         }
 
         const oldType = body["oldType"];
         const newType = body["newType"];
-        
+
         if (this.#controller.areUndefined(username, oldType, newType) || oldType === "manager")
             throw new Exceptions(422);
 
@@ -197,7 +198,8 @@ class UserController {
             throw new Exceptions(404);
 
         let filteredUsers = users.filter((us) => us.email === username && us.type === oldType)
-        if (!filteredUsers)
+        console.log("testUser", filteredUsers, "fineTest")
+        if (filteredUsers.length===0)
             throw new Exceptions(404);
 
         await this.#dbManager.genericSqlRun
@@ -210,13 +212,16 @@ class UserController {
      * @throws 422 Unprocessable Entity (validation of username or of type failed or attempt to delete a manager/administrator)
      * @throws 503 Service Unavailable (generic error). */
     async deleteUser(username, type) {
-        if(username== "undefined")
-            username=undefined;
+        if (username == "undefined")
+            username = undefined;
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
         if (this.#controller.areUndefined(username, type) || type === "manager")
             throw new Exceptions(422);
+
+        if(!this.validateEmail(username)) throw new Exceptions(422)
+        if(!this.#validTypes.includes(type)) throw new Exceptions(422)
 
         await this.#dbManager.genericSqlRun
             (`DELETE FROM USERS WHERE email= ? AND type= ?;`, username, type)
@@ -230,6 +235,14 @@ class UserController {
         console.log(" bool: " + validType.includes(type));
         return validType.includes(type);
     }
+
+    validateEmail = (email) => {
+        return String(email)
+          .toLowerCase()
+          .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          );
+      };
 
 }
 

@@ -134,9 +134,13 @@ class SkuController {
         const availableQuantity = body["availableQuantity"];
 
 
+        if(this.#controller.areEmptyStings(description, notes))
+        throw new Exceptions(422);
+
         //validation of the body
-        if (this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
+        if ( this.#controller.areUndefined(description, weight, volume, notes, price, availableQuantity)
             || this.#controller.areNotNumbers(weight, volume, price, availableQuantity)
+            || this.#controller.areNotInt(weight, volume, availableQuantity)
             || !this.#controller.areAllPositiveOrZero(weight, volume, price, availableQuantity)) {
                 throw new Exceptions(422);
             }
@@ -309,7 +313,7 @@ class SkuController {
 
             const updatedOldOccupiedWeight = positionInfo[0].occupiedWeight - (sku.weight * sku.availableQuantity);
             const updatedOldOccupiedVolume = positionInfo[0].occupiedVolume - (sku.volume * sku.availableQuantity);
-            console.log(updatedOldOccupiedWeight, updatedOldOccupiedVolume);
+            //console.log(updatedOldOccupiedWeight, updatedOldOccupiedVolume);
             //reset position volume and weight
             await this.#dbManager.genericSqlRun('UPDATE Position SET occupiedWeight = ?, occupiedVolume = ? WHERE positionID = ?', updatedOldOccupiedWeight, updatedOldOccupiedVolume, String(positionOccupiedBySku.positionID))
                 .catch(error => { throw error })
@@ -354,6 +358,9 @@ class SkuController {
         await this.#dbManager.genericSqlRun(`DELETE FROM SKU WHERE id= ?;`, id)
             .catch((error) => { throw error });
     }
+
+
+    
 }
 
 module.exports = SkuController;

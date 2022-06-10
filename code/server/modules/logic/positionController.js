@@ -116,12 +116,12 @@ class PositionController {
         
         //checks if new generated positionID will match another one already existing
         const newPositionID = newAisleID + "" + newRow + "" + newCol;
-        let exists;
-        await this.positionExists(newAisleID + "" + newRow + "" + newCol).then((result) => exists = result );
+        //let exists;
+        /*await this.positionExists(newAisleID + "" + newRow + "" + newCol).then((result) => exists = result );
             
         if(exists && (id != newPositionID)){
             throw new Exceptions(422);
-        }
+        }*/
 
             
         let positions = await this.getAllPositions()
@@ -130,8 +130,10 @@ class PositionController {
         const positionIDs = positions.map(pos => String(pos.positionID));
         console.log(positionIDs);
 
-        if (!positionIDs.includes(id))
+        if (!positionIDs.includes(id)){
             throw new Exceptions(404);
+        }
+            
 
         await this.deletePosition(id)
             .catch(error => { throw error });
