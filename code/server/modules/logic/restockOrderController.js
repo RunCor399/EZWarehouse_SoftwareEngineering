@@ -14,7 +14,7 @@ class RestockOrderController {
         //console.log("restockOrderController started");
     }
 
-    /** TO BE CHECKED - getter function to retreive all the restock orders
+    /**getter function to retreive all the restock orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error). 
     */
@@ -61,7 +61,7 @@ class RestockOrderController {
         return skuItems;
     }
 
-    /**TO BE CHECKED - getter function to retreive all the issued restock orders
+    /**getter function to retreive all the issued restock orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
     */
@@ -87,7 +87,7 @@ class RestockOrderController {
         return rows;
     }
 
-    /**TO BE CHECKED - getter function to retreive a single restock order, given its ID
+    /**getter function to retreive a single restock order, given its ID
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of id failed)
@@ -132,7 +132,7 @@ class RestockOrderController {
         return row;
     }
 
-    /**TO BE CHECKED - function to retreive the sku items to be returned of a restock order
+    /**function to retreive the sku items to be returned of a restock order
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of id failed or restock order state != COMPLETEDRETURN)
@@ -180,7 +180,7 @@ class RestockOrderController {
         }
     }
 
-    /**TO BE CHECKED - creation of a restock order
+    /**creation of a restock order
      * @throws  401 Unauthorized (not logged in or wrong permissions)
      * @throws 422 Unprocessable Entity (validation of request body failed)
      * @throws 503 Service Unavailable (generic error).
@@ -235,7 +235,7 @@ class RestockOrderController {
 
     }
 
-    /**COMPLETED - function to edit a state of a restock order, given its ID
+    /**function to edit a state of a restock order, given its ID
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of request body or of id failed)
@@ -264,7 +264,7 @@ class RestockOrderController {
 
     }
 
-    /**TO BE CHECKED - function to add a list of sku items to a restock order 
+    /**function to add a list of sku items to a restock order 
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of request body or of id failed or order state != DELIVERED)
@@ -341,8 +341,8 @@ class RestockOrderController {
 
 
 
-    /**TO BE CHECKED - function to add a transport note to a restock order, given its ID
-     *@throws  401 Unauthorized (not logged in or wrong permissions)
+    /**function to add a transport note to a restock order, given its ID
+     @throws  401 Unauthorized (not logged in or wrong permissions)
      @throws 404 Not Found (no restock order associated to id)
      @throws 422 Unprocessable Entity (validation of request body or of id failed or order state != DELIVERY or deliveryDate is before issueDate)
      @throws 503 Service Unavailable (generic error).
@@ -399,7 +399,7 @@ class RestockOrderController {
     await this.#dbManager.genericSqlRun(sqlInstruction, transportNote.deliveryDate, id).catch((error) => { throw error })
 }
 
-    /** COMPLETED - delete function to remove a restock order from the table, given its ID
+    /**delete function to remove a restock order from the table, given its ID
     * @throws 401 Unauthorized (not logged in or wrong permissions)
     * @throws 422 Unprocessable Entity (validation of id failed)
     * @throws 503 Service Unavailable (generic error).

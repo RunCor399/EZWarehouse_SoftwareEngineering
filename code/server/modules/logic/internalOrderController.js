@@ -14,7 +14,7 @@ class InternalOrderController {
     }
 
 
-    /**TO BE CHECKED - getter function to retreive all the internal orders
+    /**getter function to retreive all the internal orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
     */
@@ -54,7 +54,7 @@ class InternalOrderController {
         return products;
     }
 
-    /**TO BE CHECKED - getter function to retreive all the issued internal orders
+    /**getter function to retreive all the issued internal orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
     */
@@ -75,7 +75,7 @@ class InternalOrderController {
 
     }
 
-    /**TO BE CHECKED - getter function to retreive all the accepted internal orders
+    /**getter function to retreive all the accepted internal orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
     */
@@ -95,7 +95,7 @@ class InternalOrderController {
         return rows;
     }
 
-    /**TO BE CHECKED - getter function to retreive a single internal order, given its ID
+    /**getter function to retreive a single internal order, given its ID
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no internal order associated to id)
      * @throws 422 Unprocessable Entity (validation of id failed)
@@ -130,7 +130,7 @@ class InternalOrderController {
 
     }
 
-    /**TO BE CHECKED - creation of a new internal order
+    /**creation of a new internal order
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 422 Unprocessable Entity (validation of request body failed)
      * @throws 503 Service Unavailable (generic error).
@@ -178,7 +178,7 @@ class InternalOrderController {
 
     }
 
-    /**TO BE CHECKED - function to edit the state of an internal order, given its ID
+    /**function to edit the state of an internal order, given its ID
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no internal order associated to id)
      * @throws 422 Unprocessable Entity (validation of request body or of id failed)
@@ -241,7 +241,7 @@ class InternalOrderController {
     }
 
 
-    /**COMPLETED - delete function to remove an internal order from the table, given its ID 
+    /**delete function to remove an internal order from the table, given its ID 
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 422 Unprocessable Entity (validation of id failed)
      * @throws 503 Service Unavailable (generic error).
