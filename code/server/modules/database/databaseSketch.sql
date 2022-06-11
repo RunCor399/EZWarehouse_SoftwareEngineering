@@ -14,8 +14,6 @@ DROP TABLE SKU_in_Position;
 DROP TABLE TestDescriptor;
 DROP TABLE TestResult;
 DROP TABLE Users;
-
-
 CREATE TABLE SKU(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     weight FLOAT,
@@ -25,7 +23,6 @@ CREATE TABLE SKU(
     description VARCHAR(250),
     availableQuantity INT
 );
-
 CREATE TABLE SKUItem(
     RFID VARCHAR(50),
     SKUId INT,
@@ -68,7 +65,7 @@ CREATE TABLE TestResult(
     FOREIGN KEY (RFID) REFERENCES SKUItem(RFID)
 );
 CREATE TABLE Users(
-    id INTEGER  PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     email VARCHAR(250),
     name VARCHAR(100),
     surname VARCHAR(100),
@@ -86,40 +83,45 @@ CREATE TABLE RestockOrder(
 CREATE TABLE SKUPerRestockOrder(
     id INT,
     SKUid INT,
+    itemId INT,
     description VARCHAR(250),
     price FLOAT,
     qty INT,
     PRIMARY KEY(id, SKUid),
     FOREIGN KEY(SKUid) REFERENCES SKU(id),
-    FOREIGN KEY(id) REFERENCES RestockOrder(id)
+    FOREIGN KEY(id) REFERENCES RestockOrder(id),
+    FOREIGN KEY(itemId) REFERENCES ITEM(id)
 );
 CREATE TABLE SKUItemsPerRestockOrder(
     id INT,
     SKUID INT,
+    itemId INT,
     RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
-    FOREIGN KEY(id) REFERENCES RestockOrder(id)
+    FOREIGN KEY(id) REFERENCES RestockOrder(id),
+    FOREIGN KEY(itemId) REFERENCES ITEM(id)
 );
 CREATE TABLE ReturnOrder(
-    id INTEGER  PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     returnDate VARCHAR(50),
     restockOrderId INT,
     FOREIGN KEY(id) REFERENCES RestockOrder(id)
 );
-
 CREATE TABLE SKUItemsPerReturnOrder(
     id INT,
     SKUId INT,
+    itemId INT,
     description VARCHAR(50),
     price FLOAT,
     RFID VARCHAR(50),
     PRIMARY KEY(id, RFID),
     FOREIGN KEY(RFID) REFERENCES SKUItem(RFID),
-    FOREIGN KEY(id) REFERENCES ReturnOrder(id)
+    FOREIGN KEY(id) REFERENCES ReturnOrder(id),
+    FOREIGN KEY(itemId) REFERENCES ITEM(id)
 );
 CREATE TABLE InternalOrder(
-    id INTEGER  PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     issueDate VARCHAR(50),
     state VARCHAR(250),
     customerId INT,
@@ -150,7 +152,7 @@ CREATE TABLE Item(
     price FLOAT,
     SKUId INT,
     supplierId INT,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id, supplierId),
     FOREIGN KEY (SKUid) REFERENCES SKU(id),
     FOREIGN KEY (supplierId) REFERENCES Users(id),
     CONSTRAINT SS_Item UNIQUE(SKUid, supplierId)
@@ -163,7 +165,7 @@ VALUES (
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "customer"
     );
-INSERT INTO Users ( email, name, surname, password, type)
+INSERT INTO Users (email, name, surname, password, type)
 VALUES (
         "qualityEmployee1@ezwh.com",
         "name2",
@@ -179,7 +181,7 @@ VALUES (
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "clerk"
     );
-INSERT INTO Users ( email, name, surname, password, type)
+INSERT INTO Users (email, name, surname, password, type)
 VALUES (
         "deliveryEmployee1@ezwh.com",
         "name4",
@@ -187,7 +189,7 @@ VALUES (
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "deliveryEmployee"
     );
-INSERT INTO Users ( email, name, surname, password, type)
+INSERT INTO Users (email, name, surname, password, type)
 VALUES (
         "supplier1@ezwh.com",
         "name5",
@@ -203,4 +205,3 @@ VALUES (
         "e16b2ab8d12314bf4efbd6203906ea6c",
         "manager"
     );
-    
