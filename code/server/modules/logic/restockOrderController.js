@@ -326,6 +326,7 @@ class RestockOrderController {
             //itemIdInfo = await this.#controller.getItemController().getItem(skuItems[i].itemId).id;
             //to check if the id of the item is valid
 
+            //Do we need also to add a WHERE for itemId = itemIdInfo ? 
             num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?", skuidInfo.id).catch(error => { throw new Exceptions(503) });
                 
             if (num.length === 0) {
