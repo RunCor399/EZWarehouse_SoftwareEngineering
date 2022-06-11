@@ -25,7 +25,7 @@ class RestockOrderController {
 
         let orders = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;").catch((error) => { throw error });
 
-        for (let i = 0; i < orders.length; i++) { // WHERE ARE THIS METHODS?
+        for (let i = 0; i < orders.length; i++) {
             if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
                 orders[i].products = await this.getProductsForOrders(orders[i].id).catch((error) => { throw error });
 
@@ -43,6 +43,7 @@ class RestockOrderController {
     /** @throws 500 */
     async getProductsForOrders(id) {
         let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
+        //let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, itemId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
         return products;
     }
 
@@ -56,6 +57,7 @@ class RestockOrderController {
     /** @throws 500 */
     async getSKUItemsForOrders(id) {
         let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
+        //let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, itemId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
         return skuItems;
     }
 
@@ -223,6 +225,14 @@ class RestockOrderController {
                 .catch((error) => { throw error })
         }
 
+        /*
+        const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, itemId, description, price, qty) VALUES (?,?,?,?,?);`
+        for (let i = 0; i < products.length; i++) {
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].itemId, products[i].description, products[i].price, products[i].qty)
+                .catch((error) => { throw error })
+        } 
+        */
+
     }
 
     /**COMPLETED - function to edit a state of a restock order, given its ID
@@ -295,7 +305,9 @@ class RestockOrderController {
         let num;
         const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerRestockOrder WHERE RFID = ?`;
         const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`
+        //const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, itemId, RFID) VALUES (?,?,?,?);`
         const sqlInsert2 = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
+        //const sqlInsert2 = `INSERT INTO SKUPerRestockOrder (id, SKUid, itemId, description, price, qty) VALUES (?,?,?,?,?,?);`
         const sqlUpdate = `UPDATE SKUPerRestockOrder SET qty = qty + 1 WHERE SKUid = ?`
         
         for (let i = 0; i < skuItems.length; i++) {
@@ -309,12 +321,16 @@ class RestockOrderController {
 
             
             await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid).catch((error) => { throw new Exceptions(503) })
+            //await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].itemId, skuItems[i].rfid).catch((error) => { throw new Exceptions(503) });
             skuidInfo = await this.#controller.getSkuController().getSku(skuItems[i].SKUId)
+            //itemIdInfo = await this.#controller.getItemController().getItem(skuItems[i].itemId).id;
+            //to check if the id of the item is valid
 
             num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?", skuidInfo.id).catch(error => { throw new Exceptions(503) });
                 
             if (num.length === 0) {
                 await this.#dbManager.genericSqlRun(sqlInsert2, id, skuidInfo.id, skuidInfo.description, skuidInfo.price, 1).catch((error) => { throw new Exceptions(503) })
+                //await this.#dbManager.genericSqlRun(sqlInsert2, id, skuidInfo.id, itemIdInfo, skuidInfo.description, skuidInfo.price, 1).catch((error) => { throw new Exceptions(503) })
             }
             else {
                 await this.#dbManager.genericSqlRun(sqlUpdate, skuidInfo.id).catch((error) => { throw new Exceptions(503) })
