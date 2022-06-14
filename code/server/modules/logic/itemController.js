@@ -39,7 +39,7 @@ class ItemController {
      * @throws 422 Unprocessable Entity (validation of id failed)
      * @throws 500 Internal Server Error (generic error).
     */
-    async getItem(id) {
+    async getItem(id, supplierId) {
 
         /*check if the current user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager"))
@@ -51,7 +51,7 @@ class ItemController {
             throw new Exceptions(422);
 
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ?;`, id)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ? AND supplierId = ?;`, id, supplierId)
             .then(value => row = value[0])
             .catch(error => { throw error });
 
@@ -124,7 +124,7 @@ class ItemController {
      * @throws 422 Unprocessable Entity (validation of request body failed)
      * @throws 503 Service Unavailable (generic error).
     */
-    async editItem(id, body) {
+    async editItem(id, supplierId, body) {
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("supplier"))
@@ -139,10 +139,10 @@ class ItemController {
             || !this.#controller.areAllPositiveOrZero(newPrice))
             throw new Exceptions(422);
 
-        await this.getItem(id)
+        await this.getItem(id, supplierId)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
-        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE SKUid= ?;`, newDescription, newPrice, id)
+        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE id= ? AND supplierId;`, newDescription, newPrice, id, supplierId)
             .catch(error => { throw error });
 
     }
@@ -163,7 +163,7 @@ class ItemController {
             || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE ID= ?;`, id)
+        await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE id = ? AND supplierId;`, id, supplierId)
             .catch((error) => { throw error });
     }
 

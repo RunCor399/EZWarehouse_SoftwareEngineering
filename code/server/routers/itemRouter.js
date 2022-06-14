@@ -14,17 +14,18 @@ router.get('/api/items', async (req, res) => {
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
-//GET /api/items/:id
-router.get('/api/items/:id', async (req, res) => {
-  const param = req.params.id;
-  
-  let item;
+
+
+//GET /api/items/:id/:supplierId
+router.get('/api/items/:id/:supplierId', async (req, res) => {
+  const itemId = req.params.id;
+  const supplierId = req.params.supplierId;
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
   //console.log('GET',req.url);
 
-  await controller.getItemController().getItem(param)
+  await controller.getItemController().getItem(itemId, supplierId)
     .then((item) => { return res.status(200).json(item); })
     .catch(error => {  return res.status(error.getCode()).send(error.getMessage()); });
 });
@@ -42,29 +43,31 @@ router.post('/api/item',async (req, res) => {
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
-//PUT /api/item/:id
-router.put('/api/item/:id', async (req, res) => {
-  const param = req.params.id;
-  
+//PUT /api/item/:id/:supplierId
+router.put('/api/item/:id/:supplierId', async (req, res) => {
+  const itemId = req.params.id;
+  const supplierId = req.params.supplierId;
+
   /** @type {Controller} */
   const controller = req.app.get("controller");
   //console.log('PUT',req.url);
 
-  await controller.getItemController().editItem(param, req.body)
+  await controller.getItemController().editItem(itemId, supplierId, req.body)
     .then(() => { return res.status(200).end(); })
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //DELETE /api/items/:id
 router.delete('/api/items/:id', async(req, res) => {
-  const param = req.params.id;
+  const itemId = req.params.id;
+  const supplierId = req.params.supplierId;d;
   
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
   //console.log('DELETE',req.url);
 
-  await controller.getItemController().deleteItem(param)
+  await controller.getItemController().deleteItem(itemId, supplierId)
     .then(() => { return res.status(204).end(); })
     .catch(error => {  return res.status(error.getCode()).send(error.getMessage()); });
 });
