@@ -7,7 +7,7 @@ router.get('/api/items', async (req, res) => {
 
 /** @type {Controller} */
   const controller = req.app.get("controller");
-  ////console.log('GET',req.url);
+  //console.log('GET',req.url);
 
   await controller.getItemController().getAllItems()
     .then((items) => { return res.status(200).json(items); })
