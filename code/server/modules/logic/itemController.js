@@ -39,21 +39,32 @@ class ItemController {
      * @throws 422 Unprocessable Entity (validation of id failed)
      * @throws 500 Internal Server Error (generic error).
     */
-    async getItem(id) {
+    async getItem(id, supplierId) {
 
         /*check if the current user is authorized */
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
         //check if the id is valid
-        if (!id || isNaN(Number(id))
+        if (!this.#controller.areUndefined(id, supplierId) || !this.#controller.areNotNumbers(id, supplierId)
             || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
+
+        const suppliers = await this.#controller.getUserController().getAllSuppliers()
+            .catch(err => { throw err })
+
+        const suppliersCode = suppliers.map(s => s.id);
+        if (!suppliersCode.includes(supplierId))
+            throw new Exceptions(404)
+        
+
         let row;
-        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ?;`, id)
+        await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ? AND supplierId = ?;`, id, supplierId)
             .then(value => row = value[0])
             .catch(error => { throw error });
+
+
 
         //check if the item exists
         if (!row)
@@ -88,10 +99,10 @@ class ItemController {
             || !this.#controller.areAllPositiveOrZero(id, price, SKUId, supplierId))
             throw new Exceptions(422);
 
-            //check if sku exists in the SKU table
-            await this.#controller.getSkuController().getSku(SKUId)
-                .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
-        
+        //check if sku exists in the SKU table
+        await this.#controller.getSkuController().getSku(SKUId)
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+
         //check if the supplier already sells an item with the same SKUId
         let item;
         await this.#dbManager.genericSqlGet('SELECT * FROM Item WHERE SKUid = ? AND supplierId = ?', SKUId, supplierId)
@@ -124,7 +135,7 @@ class ItemController {
      * @throws 422 Unprocessable Entity (validation of request body failed)
      * @throws 503 Service Unavailable (generic error).
     */
-    async editItem(id, body) {
+    async editItem(id, supplierId, body) {
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("supplier"))
@@ -134,15 +145,22 @@ class ItemController {
         const newPrice = body["newPrice"];
 
         /*check if the body is valid*/
-        if (this.#controller.areUndefined(newDescription, newPrice)
-            || isNaN(Number(newPrice))
+        if (this.#controller.areUndefined(newDescription, newPrice, id, supplierId)
+            || this.#controller.areNotNumbers(id, supplierId, newPrice)
             || !this.#controller.areAllPositiveOrZero(newPrice))
             throw new Exceptions(422);
 
-        await this.getItem(id)
+        await this.getItem(id, supplierId)
             .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
-        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE SKUid= ?;`, newDescription, newPrice, id)
+        const suppliers = await this.#controller.getUserController().getAllSuppliers()
+            .catch(err => { throw err })
+
+        const suppliersCode = suppliers.map(s => s.id);
+        if (!suppliersCode.includes(supplierId))
+            throw new Exceptions(404)
+
+        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE id= ? AND supplierId;`, newDescription, newPrice, id, supplierId)
             .catch(error => { throw error });
 
     }
@@ -152,18 +170,26 @@ class ItemController {
      * @throws 422 Unprocessable Entity (validation of id failed)
      * @throws 503 Service Unavailable (generic error).
     */
-    async deleteItem(id) {
+    async deleteItem(id, supplierId) {
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("supplier"))
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (isNaN(Number(id)) || !id
+        if (!this.#controller.areUndefined(id, supplierId) || !this.#controller.areNotNumbers(id, supplierId)
             || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
-        await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE ID= ?;`, id)
+
+        const suppliers = await this.#controller.getUserController().getAllSuppliers()
+            .catch(err => { throw err })
+
+        const suppliersCode = suppliers.map(s => s.id);
+        if (!suppliersCode.includes(supplierId))
+            throw new Exceptions(404)
+
+        await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE id = ? AND supplierId;`, id, supplierId)
             .catch((error) => { throw error });
     }
 
