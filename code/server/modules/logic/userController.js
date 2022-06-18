@@ -220,7 +220,7 @@ class UserController {
         if (this.#controller.areUndefined(username, type) || type === "manager")
             throw new Exceptions(422);
 
-        if(!this.validateEmail(username)) throw new Exceptions(422)
+        if(!this.#controller.validateEmail(username)) throw new Exceptions(422)
         if(!this.#validTypes.includes(type)) throw new Exceptions(422)
 
         await this.#dbManager.genericSqlRun
@@ -236,13 +236,7 @@ class UserController {
         return validType.includes(type);
     }
 
-    validateEmail = (email) => {
-        return String(email)
-          .toLowerCase()
-          .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          );
-      };
+   
 
 }
 
