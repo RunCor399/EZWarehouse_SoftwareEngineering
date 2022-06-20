@@ -69,7 +69,6 @@ class DBManager {
             "DELETE FROM SKUPerInternalOrder WHERE 1=1",
             "DELETE FROM SKUItemsPerInternalOrder WHERE 1=1",
             "DELETE FROM Item WHERE 1=1",
-
             "DELETE FROM SQLITE_SEQUENCE WHERE name='SKU'",
             "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItem'",
             "DELETE FROM SQLITE_SEQUENCE WHERE name='Position'",
@@ -96,6 +95,7 @@ class DBManager {
                     ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
         ];
 
+       
 
 
         return new Promise((resolve, reject) => {
@@ -109,7 +109,9 @@ class DBManager {
                     }
                 });
             });
-        })
+        }) 
+
+
     }
 
 
@@ -238,12 +240,12 @@ class DBManager {
         try {
             await this.genericSqlRun(queries[0])
         } catch (error) {
-            
+
         }
         try {
             await this.genericSqlRun(queries[1])
         } catch (error) {
-            
+
         }
     }
 

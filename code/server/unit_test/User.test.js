@@ -98,7 +98,7 @@ describe("UserController Tests", () => {
     describe("getAllSuppliers method testing", () => {
         test("Succesfully get all the Suppliers", async () => {
             let result = await userController.getAllSuppliers();
-            console.log(result)
+            //console.log(result)
             expect(result.length).to.be.equal(1);
         });
 

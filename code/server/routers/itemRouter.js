@@ -21,6 +21,8 @@ router.get('/api/items/:id/:supplierId', async (req, res) => {
   const itemId = req.params.id;
   const supplierId = req.params.supplierId;
 
+  console.log(itemId, supplierId)
+
   /** @type {Controller} */
   const controller = req.app.get("controller");
   //console.log('GET',req.url);
@@ -57,10 +59,10 @@ router.put('/api/item/:id/:supplierId', async (req, res) => {
     .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
-//DELETE /api/items/:id
-router.delete('/api/items/:id', async(req, res) => {
+//DELETE /api/items/:id/:supplierId
+router.delete('/api/items/:id/:supplierId', async(req, res) => {
   const itemId = req.params.id;
-  const supplierId = req.params.supplierId;d;
+  const supplierId = req.params.supplierId;
   
 
   /** @type {Controller} */

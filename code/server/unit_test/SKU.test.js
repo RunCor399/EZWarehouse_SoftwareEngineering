@@ -28,7 +28,7 @@ describe('skuController Tests', () => {
         test('successful use of getAllSku', async () => {
 
             const result = await skuController.getAllSku();
-            console.log(result);
+            //console.log(result);
             assert.equal(result.length, 1);
         })
     })
@@ -37,7 +37,7 @@ describe('skuController Tests', () => {
         test('successful use of getSku', async () => {
 
             const result = await skuController.getSku(1);
-            console.log(result);
+            //console.log(result);
             assert.equal(result.id, 1);
         })
 

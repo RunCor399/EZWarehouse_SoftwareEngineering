@@ -76,7 +76,7 @@ describe('ReturnOrderController Tests', () => {
 
             result = await returnOrderController.getAllReturnOrders();
             newCount = result.length;
-            console.log(result.products);
+            //console.log(result.products);
 
             expect(oldCount).to.be.equal(newCount);
         });

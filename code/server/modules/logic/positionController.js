@@ -16,7 +16,7 @@ class PositionController {
         const value = (String(positionID).substring(0, 4) === String(aisleID)
             && String(positionID).substring(4, 8) === String(row)
             && String(positionID).substring(8, 12) === String(col))
-        console.log("is position ok: ", value);
+        //console.log("is position ok: ", value);
         return value;
     }
 
@@ -70,7 +70,7 @@ class PositionController {
         let exists = await this.positionExists(positionID)
             .catch(error => {throw error})
         
-        console.log("exists", exists.length)
+        //console.log("exists", exists.length)
         
         if(exists.length){
             throw new Exceptions(422);
@@ -128,7 +128,7 @@ class PositionController {
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
-        console.log(positionIDs);
+        //console.log(positionIDs);
 
         if (!positionIDs.includes(id)){
             throw new Exceptions(404);
@@ -169,8 +169,8 @@ class PositionController {
             throw new Exceptions(401);
 
         const newPositionID = body["newPositionID"];
-        console.log(body);
-        console.log("IDS", oldId, newPositionID);
+        //console.log(body);
+        //console.log("IDS", oldId, newPositionID);
 
         if (this.#controller.areUndefined(oldId, newPositionID)
             || String(oldId).length !== 12 || String(newPositionID).length !== 12)

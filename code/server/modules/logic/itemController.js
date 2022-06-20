@@ -45,19 +45,21 @@ class ItemController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        //check if the id is valid
-        if (!this.#controller.areUndefined(id, supplierId) || !this.#controller.areNotNumbers(id, supplierId)
-            || !this.#controller.areAllPositiveOrZero(id))
-            throw new Exceptions(422);
 
+        //check if the id is valid
+        if (this.#controller.areUndefined(id, supplierId) || this.#controller.areNotNumbers(id, supplierId)
+            || !this.#controller.areAllPositiveOrZero(id)) {
+            throw new Exceptions(422);
+        }
 
         const suppliers = await this.#controller.getUserController().getAllSuppliers()
             .catch(err => { throw err })
 
         const suppliersCode = suppliers.map(s => s.id);
-        if (!suppliersCode.includes(supplierId))
+        if (!suppliersCode.includes(supplierId)) {
+            console.log("test supplier", suppliersCode, supplierId)
             throw new Exceptions(404)
-        
+}
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ? AND supplierId = ?;`, id, supplierId)
@@ -67,7 +69,7 @@ class ItemController {
 
 
         //check if the item exists
-        if (!row)
+        if (!row) 
             throw new Exceptions(404)
 
         return row;
@@ -101,7 +103,7 @@ class ItemController {
 
         //check if sku exists in the SKU table
         await this.#controller.getSkuController().getSku(SKUId)
-            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else { console.log("err", error); throw error } })
 
         //check if the supplier already sells an item with the same SKUId
         let item;
@@ -157,10 +159,10 @@ class ItemController {
             .catch(err => { throw err })
 
         const suppliersCode = suppliers.map(s => s.id);
-        if (!suppliersCode.includes(supplierId))
+        if (!suppliersCode.includes(supplierId), suppliersCode.includes(supplierId))
             throw new Exceptions(404)
 
-        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE id= ? AND supplierId;`, newDescription, newPrice, id, supplierId)
+        await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE id= ? AND supplierId = ?;`, newDescription, newPrice, id, supplierId)
             .catch(error => { throw error });
 
     }
@@ -177,7 +179,7 @@ class ItemController {
             throw new Exceptions(401);
 
         /*check if the id is valid*/
-        if (!this.#controller.areUndefined(id, supplierId) || !this.#controller.areNotNumbers(id, supplierId)
+        if (this.#controller.areUndefined(id, supplierId) || this.#controller.areNotNumbers(id, supplierId)
             || !this.#controller.areAllPositiveOrZero(id))
             throw new Exceptions(422);
 
@@ -186,10 +188,11 @@ class ItemController {
             .catch(err => { throw err })
 
         const suppliersCode = suppliers.map(s => s.id);
-        if (!suppliersCode.includes(supplierId))
+        if (!suppliersCode.includes(Number(supplierId))) {
+            console.log("test suppliers", supplierId, suppliersCode, suppliersCode.includes(supplierId))
             throw new Exceptions(404)
-
-        await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE id = ? AND supplierId;`, id, supplierId)
+}
+        await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE id = ? AND supplierId = ?;`, id, supplierId)
             .catch((error) => { throw error });
     }
 

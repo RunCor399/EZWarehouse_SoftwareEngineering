@@ -43,7 +43,7 @@ class UserController {
      * @throws 401 (Not Authorized)
      */
     getUser() {
-        console.log("log check", this.#logged)
+        //console.log("log check", this.#logged)
         if (!this.#logged) {
             throw new Exceptions(401);
         }
@@ -133,7 +133,7 @@ class UserController {
 
         const hashedPassword = MD5(password).toString();
         const sqlInstruction = `SELECT * FROM USERS U WHERE email= ? AND password= ? AND type= ?`;
-        console.log(username, hashedPassword)
+        //console.log(username, hashedPassword)
         let row;
         await this.#dbManager.genericSqlGet(sqlInstruction, username, hashedPassword, type)
             .then(value => row = value[0])
@@ -149,7 +149,7 @@ class UserController {
         this.#user.surname = row.surname;
         this.#user.type = row.type;
         this.#logged = true;
-        console.log("logged", this.#logged);
+        //console.log("logged", this.#logged);
 
         return ({
             id: this.#user.id,
@@ -198,7 +198,7 @@ class UserController {
             throw new Exceptions(404);
 
         let filteredUsers = users.filter((us) => us.email === username && us.type === oldType)
-        console.log("testUser", filteredUsers, "fineTest")
+        //console.log("testUser", filteredUsers, "fineTest")
         if (filteredUsers.length===0)
             throw new Exceptions(404);
 
@@ -230,9 +230,9 @@ class UserController {
 
     hasPermission(type, validType) {
         //console.log(type, validType, validType.includes(type))
-        console.log("Type: " + type);
+        /* console.log("Type: " + type);
         console.log(" validType: " + validType);
-        console.log(" bool: " + validType.includes(type));
+        console.log(" bool: " + validType.includes(type)); */
         return validType.includes(type);
     }
 

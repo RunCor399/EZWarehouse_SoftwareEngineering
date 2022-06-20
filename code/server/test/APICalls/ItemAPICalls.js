@@ -21,8 +21,8 @@ class ItemAPICalls {
         return response;
     }
 
-    async getItemByIdTest(id) {
-        const url = this.#baseURL + "/api/items/" + id;
+    async getItemByIdTest(id, supplierId) {
+        const url = this.#baseURL + "/api/items/" + id + "/" +supplierId;
         let response;
 
         await axios.get(url)
@@ -53,8 +53,8 @@ class ItemAPICalls {
     }
 
     //PUT
-    async editItemTest(id, newDescription, newPrice) {
-        const url = this.#baseURL + "/api/item/" + id;
+    async editItemTest(id, supplierId, newDescription, newPrice) {
+        const url = this.#baseURL + "/api/item/" + id + "/" + supplierId;
         const body = {
             newDescription: newDescription,
             newPrice: newPrice
@@ -70,8 +70,8 @@ class ItemAPICalls {
     }
 
     //DELETE
-    async deleteItemTest(id) {
-        const url = this.#baseURL + "/api/items/" + id;
+    async deleteItemTest(id, supplierId) {
+        const url = this.#baseURL + "/api/items/" + id + "/" + supplierId;
         let response;
 
         await axios.delete(url)
