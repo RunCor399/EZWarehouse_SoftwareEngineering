@@ -57,9 +57,9 @@ class ItemController {
 
         const suppliersCode = suppliers.map(s => s.id);
         if (!suppliersCode.includes(supplierId)) {
-            console.log("test supplier", suppliersCode, supplierId)
+            console.log("test supplier", suppliersCode, supplierId, suppliersCode.includes(supplierId))
             throw new Exceptions(404)
-}
+        }
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ? AND supplierId = ?;`, id, supplierId)
@@ -69,7 +69,7 @@ class ItemController {
 
 
         //check if the item exists
-        if (!row) 
+        if (!row)
             throw new Exceptions(404)
 
         return row;
@@ -159,8 +159,10 @@ class ItemController {
             .catch(err => { throw err })
 
         const suppliersCode = suppliers.map(s => s.id);
-        if (!suppliersCode.includes(supplierId), suppliersCode.includes(supplierId))
+        if (!suppliersCode.includes(supplierId)){
+            console.log(suppliersCode.includes(supplierId))
             throw new Exceptions(404)
+        }
 
         await this.#dbManager.genericSqlRun(`UPDATE Item SET description= ? , price= ? WHERE id= ? AND supplierId = ?;`, newDescription, newPrice, id, supplierId)
             .catch(error => { throw error });
@@ -191,7 +193,7 @@ class ItemController {
         if (!suppliersCode.includes(Number(supplierId))) {
             console.log("test suppliers", supplierId, suppliersCode, suppliersCode.includes(supplierId))
             throw new Exceptions(404)
-}
+        }
         await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE id = ? AND supplierId = ?;`, id, supplierId)
             .catch((error) => { throw error });
     }
