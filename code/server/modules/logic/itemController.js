@@ -12,7 +12,6 @@ class ItemController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        //console.log("itemController started");
     }
 
 
@@ -42,7 +41,6 @@ class ItemController {
     async getItem(id, supplierId) {
 
         /*check if the current user is authorized */
-        console.log("called get item");
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
@@ -60,21 +58,15 @@ class ItemController {
 
 
         const suppliersCode = suppliers.map(s => s.id);
-        // if (!suppliersCode.includes(supplierId)) {
-        //     console.log("test supplier", suppliersCode[0] == supplierId);
-        //     throw new Exceptions(404)
-        // }
 
         let supplierFound = false;
         for(let supCode of suppliersCode){
-            //console.log("fd", supCode, supplierId)
             if(Number(supCode) === Number(supplierId)){
                 supplierFound = true;
             }
         }
 
         if(!supplierFound){
-            console.log("dfsdff");
             throw new Exceptions(404)
         }
 
@@ -85,7 +77,6 @@ class ItemController {
             .catch(error => { throw error });
 
 
-        console.log(await this.getAllItems());
         //check if the item exists
         if (!row)
             throw new Exceptions(404)
@@ -178,10 +169,6 @@ class ItemController {
             .catch(err => { throw err })
 
         const suppliersCode = suppliers.map(s => s.id);
-        // if (!suppliersCode.includes(supplierId)){
-        //     console.log(suppliersCode.includes(supplierId))
-        //     throw new Exceptions(404)
-        // }
 
         let supplierFound = false;
 
@@ -192,7 +179,6 @@ class ItemController {
         }
 
         if(!supplierFound){
-            console.log("tira");
             throw new Exceptions(404)
         }
 
@@ -223,7 +209,6 @@ class ItemController {
 
         const suppliersCode = suppliers.map(s => s.id);
         if (!suppliersCode.includes(Number(supplierId))) {
-            console.log("test suppliers", supplierId, suppliersCode, suppliersCode.includes(supplierId))
             throw new Exceptions(404)
         }
         await this.#dbManager.genericSqlRun(`DELETE FROM Item WHERE id = ? AND supplierId = ?;`, id, supplierId)

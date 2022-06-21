@@ -5,7 +5,6 @@ const assert = chai.assert;
 const expect = chai.expect;
 const should = chai.should();
 
-const UtilityCalls = require('./APICalls/UtilityCalls');
 const ReturnOrdersAPICalls = require('./APICalls/ReturnOrdersAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 

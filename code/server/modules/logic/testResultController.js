@@ -11,7 +11,7 @@ class TestResultController {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
 
-        //console.log("testResultController started");
+    
     }
 
     /** getter function to retreive all test results related to an SKUItem, given its RFID - more than a single test
