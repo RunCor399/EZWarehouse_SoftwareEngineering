@@ -13,7 +13,6 @@ const PositionAPICalls = require('./APICalls/PositionAPICalls');
 const baseURL = "http://localhost:3001";
 
 const dbmanager = new DBManager()
-const utilityCalls = new UtilityCalls();
 const skuAPICalls = new SkuAPICalls();
 const positionAPICalls = new PositionAPICalls();
 

@@ -12,7 +12,6 @@ const DBManager = require('../modules/database/databaseManager');
 
 const baseURL = "http://localhost:3001";
 
-const utilityCalls = new UtilityCalls();
 const skuAPICalls = new SkuAPICalls()
 const itemAPICalls = new ItemAPICalls();
 const dbmanager = new DBManager();
