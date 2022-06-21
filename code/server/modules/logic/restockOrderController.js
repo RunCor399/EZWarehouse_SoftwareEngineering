@@ -328,7 +328,7 @@ class RestockOrderController {
             //await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid).catch((error) => { throw new Exceptions(503) })
             await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].itemId, skuItems[i].rfid).catch((error) => { throw new Exceptions(503) });
             skuidInfo = await this.#controller.getSkuController().getSku(skuItems[i].SKUId).catch((err) => {
-                console.log("4", err);
+                console.log(err);
             })
             itemIdInfo = await this.#controller.getItemController().getItem(skuItems[i].itemId, supplierId);
 
