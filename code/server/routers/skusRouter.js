@@ -7,7 +7,6 @@ router.get('/api/skus', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET', req.url);
 
   await controller.getSkuController().getAllSku()
     .then(skus => {  return res.status(200).json(skus); })
@@ -23,7 +22,6 @@ router.get('/api/skus/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('GET', req.url);
 
   await controller.getSkuController().getSku(param)
     .then(sku => { return res.status(200).json(sku); })
@@ -37,11 +35,10 @@ router.post('/api/sku', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('POST', req.url);
 
   await controller.getSkuController().createSku(req.body)
     .then(() => { return res.status(201).end(); })
-    .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => {return res.status(error.getCode()).send(error.getMessage()); });
 
 
 });
@@ -52,11 +49,10 @@ router.put('/api/sku/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('PUT', req.url);
 
   await controller.getSkuController().editSku(param, req.body)
     .then(() => { res.status(200).end(); })
-    .catch(error => { console.log(error);return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //PUT /api/sku/:id/position
@@ -65,11 +61,10 @@ router.put('/api/sku/:id/position', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('PUT', req.url);
 
   await controller.getSkuController().setPosition(param, req.body)
     .then(() => { res.status(200).end(); })
-    .catch(error => { console.log(error); return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //DELETE /api/skus/:id
@@ -78,7 +73,6 @@ router.delete('/api/skus/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  console.log('DELETE', req.url);
 
   await controller.getSkuController().deleteSku(param)
   .then(() => { res.status(204).end(); })

@@ -9,8 +9,6 @@ class SkuItemController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-
-        //console.log("skuItemController started");
     }
 
     /** getter function to retreive all the SKUItems.
@@ -38,8 +36,6 @@ class SkuItemController {
     */
     async getSkuItems(id) {
 
-
-        console.log("",id, "finetest");
 
         if (!this.#controller.isLoggedAndHasPermission("manager", "customer"))
             throw new Exceptions(401);
@@ -118,7 +114,7 @@ class SkuItemController {
 
         //check if sku exists
         await this.#controller.getSkuController().getSku(SKUId)
-            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503);  else throw error});
+            .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlInstruction = `INSERT INTO SKUItem (RFID, SKUId, Available, DateOfStock) VALUES (?,?,?,?);`;
 
@@ -149,18 +145,17 @@ class SkuItemController {
             || isNaN(Number(newAvailable)) || Number(newAvailable) < 0)
             throw new Exceptions(422);
 
-            
-            let formattedDate
-            try {
-                formattedDate = this.#controller.checkAndFormatDate(newDateOfStock)
-            } catch (error) {
-                console.log("here",error)
-                throw error
-            }
-            
-            //check if skuitem exists
-            await this.getSkuItem(oldRFID)
-                .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
+
+        let formattedDate
+        try {
+            formattedDate = this.#controller.checkAndFormatDate(newDateOfStock)
+        } catch (error) {
+            throw error
+        }
+
+        //check if skuitem exists
+        await this.getSkuItem(oldRFID)
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error });
 
         const sqlUpdate = `UPDATE SKUItem SET RFID= ?, Available= ?,DateOfStock= ? WHERE RFID= ?;`;
 

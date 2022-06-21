@@ -9,8 +9,6 @@ router.get('/api/userinfo', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
-
 
   let user;
   try {
@@ -27,7 +25,6 @@ router.get('/api/suppliers', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getUserController().getAllSuppliers()
     .then((suppliers) => { return res.status(200).json(suppliers); })
@@ -39,7 +36,6 @@ router.get('/api/users', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getUserController().getAllUsers()
     .then((users) => { return res.status(200).json(users); })
@@ -52,7 +48,6 @@ router.post('/api/newUser', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('POST', req.url);
 
   await controller.getUserController().createUser(req.body)
     .then(() => { return res.status(201).end() })
@@ -64,7 +59,6 @@ router.post('/api/managerSessions', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('POST', req.url);
 
   await controller.getUserController().login(req.body, "manager")
     .then((value) => { return res.status(200).json(value) })
@@ -76,7 +70,6 @@ router.post('/api/customerSessions', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('POST', req.url);
 
   await controller.getUserController().login(req.body, "customer")
     .then(() => { return res.status(200).end() })
@@ -88,7 +81,6 @@ router.post('/api/supplierSessions', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "supplier")
     .then(() => { return res.status(200).end() })
@@ -100,7 +92,6 @@ router.post('/api/clerkSessions', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "clerk")
     .then(() => { return res.status(200).end() })
@@ -112,7 +103,6 @@ router.post('/api/qualityEmployeeSessions', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "qualityEmployee")
     .then(() => { return res.status(200).end() })
@@ -124,7 +114,6 @@ router.post('/api/deliveryEmployeeSessions', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getUserController().login(req.body, "deliveryEmployee")
     .then(() => { return res.status(200).end() })
@@ -136,7 +125,6 @@ router.post('/api/logout', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   try {
     controller.getUserController().logout()
@@ -154,7 +142,6 @@ router.put('/api/users/:username', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('PUT', req.url);
 
   await controller.getUserController().editUser(param, req.body)
     .then(() => { return res.status(200).end() })
@@ -168,7 +155,6 @@ router.delete('/api/users/:username/:type', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('DELETE', req.url);
 
   await controller.getUserController().deleteUser(paramUsername, paramType)
     .then(() => { return res.status(204).end() })

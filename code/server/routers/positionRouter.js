@@ -8,7 +8,6 @@ router.get('/api/positions', async(req, res) => {
   
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getPositionController().getAllPositions()
     .then((positions) => { return res.status(200).json(positions); })
@@ -22,7 +21,6 @@ router.post('/api/position', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('POST',req.url);
 
 
   await controller.getPositionController().createPosition(req.body)
@@ -37,7 +35,6 @@ router.put('/api/position/:positionID', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('PUT',req.url);
 
   await controller.getPositionController().editPositionVer1(param, req.body)
     .then(() => { return res.status(200).end(); })
@@ -51,7 +48,6 @@ router.put('/api/position/:positionID/changeID', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('PUT',req.url);
 
   await controller.getPositionController().editPositionVer2(param, req.body)
     .then(() => { return res.status(200).end(); })
@@ -65,7 +61,6 @@ router.delete('/api/position/:positionID', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('DELETE',req.url);
 
   await controller.getPositionController().deletePosition(param)
     .then((user) => { return res.status(204).end(); })

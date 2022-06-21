@@ -8,7 +8,6 @@ router.get('/api/testDescriptors', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getTestDescriptorController().getAllTestDescriptors()
     .then((testDescriptors) => { return res.status(200).json(testDescriptors); })
@@ -22,7 +21,6 @@ router.get('/api/testDescriptors/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getTestDescriptorController().getTestDescriptor(param)
     .then((testDescriptor) => { return res.status(200).json(testDescriptor); })
@@ -34,7 +32,6 @@ router.post('/api/testDescriptor', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('POST', req.url);
 
   await controller.getTestDescriptorController().createTestDescriptor(req.body)
     .then(() => { return res.status(201).end(); })
@@ -47,7 +44,6 @@ router.put('/api/testDescriptor/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('PUT', req.url);
   
 
   await controller.getTestDescriptorController().editTestDescriptor(param, req.body)
@@ -61,7 +57,6 @@ router.delete('/api/testDescriptor/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('DELETE', req.url);
   
 
   await controller.getTestDescriptorController().deleteTestDescriptor(param)
@@ -78,7 +73,6 @@ router.get('/api/skuitems/:rfid/testResults', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
 
   await controller.getTestResultController().getTestResults(param)
     .then((user) => { return res.status(200).json(user); })
@@ -92,8 +86,6 @@ router.get('/api/skuitems/:rfid/testResults/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET', req.url);
-  let testResult;
 
   await controller.getTestResultController().getTestResult(paramRfid, paramId)
     .then((user) => { return res.status(200).json(user); })
@@ -105,7 +97,6 @@ router.post('/api/skuitems/testResult', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('POST', req.url);
 
   await controller.getTestResultController().createTestResult(req.body)
     .then((user) => { return res.status(201).json(user); })
@@ -119,7 +110,6 @@ router.put('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('PUT', req.url);
 
   await controller.getTestResultController().editTestResult(paramRfid, paramId, req.body)
     .then((user) => { return res.status(200).json(user); })
@@ -133,7 +123,6 @@ router.delete('/api/skuitems/:rfid/testResult/:id', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('DELETE', req.url);
 
   await controller.getTestResultController().deleteTestResult(paramRfid, paramId)
     .then((user) => { return res.status(204).json(user); })
