@@ -17,9 +17,7 @@ beforeEach(async () => {
     })
 });
 afterEach(async () => {
-    await dbManager.deleteAllData().then(async () => {
-        //await dbManager.insertSkuTestData();
-    })
+    await dbManager.deleteAllData().then(async () => {})
 });
 
 describe('skuController Tests', () => {
@@ -28,7 +26,6 @@ describe('skuController Tests', () => {
         test('successful use of getAllSku', async () => {
 
             const result = await skuController.getAllSku();
-            //console.log(result);
             assert.equal(result.length, 1);
         })
     })
@@ -37,7 +34,6 @@ describe('skuController Tests', () => {
         test('successful use of getSku', async () => {
 
             const result = await skuController.getSku(1);
-            //console.log(result);
             assert.equal(result.id, 1);
         })
 

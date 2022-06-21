@@ -19,7 +19,6 @@ beforeEach(async () => {
   });
 
 afterEach(async () => {
-    //console.log("executed after rest");
     await dbManager.deleteAllData();
 });
 

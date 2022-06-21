@@ -198,7 +198,7 @@ describe.only('itemController Tests', () => {
             VALUES ( ?, ?, ?, ?, ?, ?);`;
 
             await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
-                .catch((error) => { console.log("e", error); throw error });
+                .catch((error) => { throw error });
 
             await itemController.createItem(
                 {

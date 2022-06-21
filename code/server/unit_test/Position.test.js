@@ -9,12 +9,10 @@ const dbManager = controller.getDBManager();
 
 
 beforeEach(async () => {
-    //console.log("executed before rest")
     await dbManager.deleteAllData();
 });
 
 afterEach(async () => {
-    //console.log("executed after rest");
     await dbManager.deleteAllData();
 });
 
