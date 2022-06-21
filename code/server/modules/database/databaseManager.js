@@ -132,6 +132,11 @@ class DBManager {
 
 
     async insertRestockAndReturnOrderTestData() {
+        const insertItems = [`INSERT INTO Item ("id", "description", "price", "SKUId", "supplierId")
+                              VALUES (1, "item1", 10, 1, 5),
+                                     (2, "item2", 20, 2, 5)`];
+
+
         const insertRestockOrder = [` INSERT INTO RestockOrder ("issueDate", "state", "transportNote", "supplierId") 
                                      VALUES ("2021/01/01 01:01", "ISSUED", "", 5), 
                                             ("2022/01/02 10:10", "COMPLETEDRETURN", "", 4),
@@ -143,8 +148,11 @@ class DBManager {
                                     VALUES ("2022/02/02", 1);
         `];
 
-        const insertSKUItemsPerReturnOrder = [`INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) 
-                                               VALUES (1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
+        const insertSKUItemsPerReturnOrder = [`INSERT INTO SKUItemsPerReturnOrder (id, SKUId, itemId, description, price,  RFID) 
+                                               VALUES (1, 1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
+
+        const insertSKUItemsPerRestockOrder = [`INSERT INTO SKUItemsPerRestockOrder (id, SKUID, itemId, RFID)
+                                                VALUES (1, 1, 1, "12345678901234567890123456789016")`];
 
         const insertSKU = [`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
                             VALUES ( 10, 20, 30, "note", "description", 40),
@@ -154,7 +162,7 @@ class DBManager {
                                  VALUES ("12345678901234567890123456789016",1,10,"2022/02/02"),
                                         ("78901234567890161234567890123456",2,20, "2022/03/03");`];
 
-        const insertQueries = [insertRestockOrder, insertReturnOrder, insertSKU, insertSKUItemsPerReturnOrder, insertSKUItems];
+        const insertQueries = [insertItems, insertRestockOrder, insertReturnOrder, insertSKU, insertSKUItemsPerReturnOrder, insertSKUItems];
 
         return new Promise((resolve, reject) => {
             insertQueries.forEach((querySet) => {

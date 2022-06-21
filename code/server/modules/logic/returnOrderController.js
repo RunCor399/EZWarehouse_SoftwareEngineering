@@ -71,9 +71,9 @@ class ReturnOrderController {
 
     /** @throws 500 */
     async getProductsPerReturnOrder(id) {
-        let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, description, price, RFID FROM SKUItemsPerReturnOrder WHERE id = ? `, id).catch(error => { throw error })
+        //let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, description, price, RFID FROM SKUItemsPerReturnOrder WHERE id = ? `, id).catch(error => { throw error })
 
-        //let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, itemId, description, price, RFID FROM SKUItemsPerReturnOrder WHERE id = ? `, id).catch(error => { throw error })
+        let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, itemId, description, price, RFID FROM SKUItemsPerReturnOrder WHERE id = ? `, id).catch(error => { throw error })
 
         return products;
 
@@ -139,8 +139,8 @@ class ReturnOrderController {
 
         //Same problem as in restock order, RFID not unique
         const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerReturnOrder WHERE RFID = ?`;
-        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?,?,?);`;
-        //const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, itemId, description, price, RFID) VALUES (?,?,?,?,?,?);`;
+        //const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?,?,?);`;
+        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, itemId, description, price, RFID) VALUES (?,?,?,?,?,?);`;
 
         for (let i = 0; i < products.length; i++) {
             let count;
@@ -151,9 +151,10 @@ class ReturnOrderController {
                 continue;
             }
 
-            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
-                .catch(error => { throw new Exceptions(503) })
-            //await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].itemId, products[i].description, products[i].price, products[i].RFID).catch(error => { throw new Exceptions(503) })
+            // await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
+            //     .catch(error => { throw new Exceptions(503) })
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].itemId, products[i].description, products[i].price, products[i].RFID)
+                   .catch(error => { throw new Exceptions(503) })
         }
 
 

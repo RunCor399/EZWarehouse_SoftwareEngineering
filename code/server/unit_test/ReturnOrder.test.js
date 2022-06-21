@@ -28,7 +28,7 @@ describe('ReturnOrderController Tests', () => {
         test('Successfully create a new Return Order', async () => {
             let result, oldCount, newCount;
             const products = [{
-                               "SKUId":2, "description_return":"return description", 
+                               "SKUId":2, "itemId":2, "description_return":"return description", 
                                "price":30, "RFID":"78901234567890161234567890123456"
                              }];
             const body = {
@@ -61,7 +61,7 @@ describe('ReturnOrderController Tests', () => {
         test('Creation of a Return Order with an invalid Restock Order id', async () => {
             let result, oldCount, newCount;
             const products = [{
-                               "SKUId":2, "description_return":"return description", 
+                               "SKUId":2, "itemId":2, "description_return":"return description", 
                                "price":30, "RFID":"78901234567890161234567890123456"
                              }];
             const body = {
@@ -84,7 +84,7 @@ describe('ReturnOrderController Tests', () => {
         test('Creation of a Return Order with an invalid date', async () => {
             let result, oldCount, newCount;
             const products = [{
-                               "SKUId":2, "description_return":"return description", 
+                               "SKUId":2, "itemId":2, "description_return":"return description", 
                                "price":30, "RFID":"78901234567890161234567890123456"
                              }];
             const body = {

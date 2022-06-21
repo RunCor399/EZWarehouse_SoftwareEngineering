@@ -120,7 +120,7 @@ describe('RestockOrderController Tests', () => {
         test("Add SKU Items to Restock Order", async () => {
             let result;
 
-            const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
+            const list = [{"SKUId":1, "itemId":1, "rfid":"12345678901234567890123456789016"}];
                 
             await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
             await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list});
@@ -136,7 +136,7 @@ describe('RestockOrderController Tests', () => {
         test("Failed to add SKU Items due to invalid SKU", async () => {
             let result;
 
-            const list = [{"SKUId":100, "rfid":"01234567812345678990123456789016"}];
+            const list = [{"SKUId":100, "itemId":1, "rfid":"01234567812345678990123456789016"}];
                 
             await restockOrderController.editRestockOrder(1, {newState:"DELIVERED"});
             await restockOrderController.addSkuItemsToRestockOrder(1, {skuItems:list}).catch(() => {});

@@ -83,7 +83,7 @@ class SkuController {
      * @throws 500 Internal Server Error (generic error).
     */
     async getSku(id) {
-
+        console.log("called get sku");
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 

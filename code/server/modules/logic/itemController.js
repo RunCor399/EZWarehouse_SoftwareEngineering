@@ -42,6 +42,7 @@ class ItemController {
     async getItem(id, supplierId) {
 
         /*check if the current user is authorized */
+        console.log("called get item");
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
@@ -49,6 +50,7 @@ class ItemController {
         //check if the id is valid
         if (this.#controller.areUndefined(id, supplierId) || this.#controller.areNotNumbers(id, supplierId)
             || !this.#controller.areAllPositiveOrZero(id)) {
+            //console.log(this.#controller.areUndefined(id, supplierId), this.#controller.areNotNumbers(id, supplierId), !this.#controller.areAllPositiveOrZero(id));
             throw new Exceptions(422);
         }
 
