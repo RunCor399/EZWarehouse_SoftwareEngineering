@@ -6,14 +6,12 @@ const expect = chai.expect;
 const should = chai.should();
 const axios = require('axios');
 
-const UtilityCalls = require('./APICalls/UtilityCalls');
 const SKUItemAPICalls = require('./APICalls/SKUItemAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 const SkuAPICalls = require('./APICalls/SkuAPICalls');
 
 const baseURL = "http://localhost:3001";
 
-const utilityCalls = new UtilityCalls();
 const skuitemAPICalls = new SKUItemAPICalls();
 const skuAPICalls = new SkuAPICalls();
 const dbmanager = new DBManager();
@@ -73,7 +71,6 @@ describe('skuitem test suite', async () => {
             response = await skuitemAPICalls.getSKUItemsBySKUId(1)//skuid da aggiungere
             response.status.should.equal(200);
 
-            console.log(response.data)
             assert.equal(response.data.length, 0, "response.data" + response.data);
         });
 

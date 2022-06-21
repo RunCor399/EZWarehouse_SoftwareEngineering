@@ -6,14 +6,12 @@ const expect = chai.expect;
 const should = chai.should();
 const axios = require('axios');
 
-const UtilityCalls = require('./APICalls/UtilityCalls');
 const PositionAPICalls = require('./APICalls/PositionAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 
 const baseURL = "http://localhost:3001";
 
 const dbmanager = new DBManager()
-const utilityCalls = new UtilityCalls();
 const positionAPICalls = new PositionAPICalls();
 
 describe('position test suite', async () => {

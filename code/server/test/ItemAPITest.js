@@ -6,14 +6,12 @@ const expect = chai.expect;
 const should = chai.should();
 const axios = require('axios');
 
-const UtilityCalls = require('./APICalls/UtilityCalls');
 const ItemAPICalls = require('./APICalls/ItemAPICalls');
 const SkuAPICalls = require('./APICalls/SkuAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 
 const baseURL = "http://localhost:3001";
 
-const utilityCalls = new UtilityCalls();
 const skuAPICalls = new SkuAPICalls()
 const itemAPICalls = new ItemAPICalls();
 const dbmanager = new DBManager();
@@ -34,24 +32,19 @@ describe('Items test suite', async () => {
 
 
                 response = await skuAPICalls.getSKUsTest();
-                console.log(response.data, "######")
 
 
                 response = await skuAPICalls.addSKUTest("descriptionTest", 10, 20, "noteTest", 10.99, 5);
-                console.log("***********1", response.data)
                 response.status.should.equal(201);
                 
                 response = await skuAPICalls.getSKUsTest();
-                console.log(response.data, "*******")
 
 
                 response = await itemAPICalls.addItemTest(1, "first_item", 9.99, 1, 5);
-                console.log("***********2",response.data)
 
                 response.status.should.equal(201);
 
                 response = await itemAPICalls.getItemByIdTest(1, 5);
-                console.log("***********3",response.data)
                 response.data.id.should.equal(1);
             });
 

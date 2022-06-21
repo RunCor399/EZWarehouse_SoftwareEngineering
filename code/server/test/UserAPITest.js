@@ -6,14 +6,12 @@ const expect = chai.expect;
 const should = chai.should();
 const axios = require('axios');
 
-const UtilityCalls = require('./APICalls/UtilityCalls');
 const UserAPICalls = require('./APICalls/UserAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 
 const baseURL = "http://localhost:3001";
 
 const dbmanager = new DBManager()
-const utilityCalls = new UtilityCalls();
 const userAPICalls = new UserAPICalls();
 
 
