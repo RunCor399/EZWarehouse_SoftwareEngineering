@@ -11,10 +11,9 @@ class RestockOrderController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        //console.log("restockOrderController started");
     }
 
-    /** TO BE CHECKED - getter function to retreive all the restock orders
+    /**getter function to retreive all the restock orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error). 
     */
@@ -25,7 +24,7 @@ class RestockOrderController {
 
         let orders = await this.#dbManager.genericSqlGet("SELECT * FROM RestockOrder;").catch((error) => { throw error });
 
-        for (let i = 0; i < orders.length; i++) { // WHERE ARE THIS METHODS?
+        for (let i = 0; i < orders.length; i++) {
             if (orders[i].state !== 'ISSUED' && orders[i].state !== 'DELIVERY') {
                 orders[i].products = await this.getProductsForOrders(orders[i].id).catch((error) => { throw error });
 
@@ -42,7 +41,8 @@ class RestockOrderController {
 
     /** @throws 500 */
     async getProductsForOrders(id) {
-        let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
+        //let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
+        let products = await this.#dbManager.genericSqlGet(`SELECT SKUId, itemId, description, price, qty FROM SKUPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
         return products;
     }
 
@@ -55,11 +55,12 @@ class RestockOrderController {
 
     /** @throws 500 */
     async getSKUItemsForOrders(id) {
-        let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
+        //let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
+        let skuItems = await this.#dbManager.genericSqlGet(`SELECT SKUId, itemId, RFID FROM SKUItemsPerRestockOrder WHERE id = ?;`, id).catch((error) => { throw error });
         return skuItems;
     }
 
-    /**TO BE CHECKED - getter function to retreive all the issued restock orders
+    /**getter function to retreive all the issued restock orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
     */
@@ -85,7 +86,7 @@ class RestockOrderController {
         return rows;
     }
 
-    /**TO BE CHECKED - getter function to retreive a single restock order, given its ID
+    /**getter function to retreive a single restock order, given its ID
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of id failed)
@@ -130,7 +131,7 @@ class RestockOrderController {
         return row;
     }
 
-    /**TO BE CHECKED - function to retreive the sku items to be returned of a restock order
+    /**function to retreive the sku items to be returned of a restock order
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of id failed or restock order state != COMPLETEDRETURN)
@@ -178,13 +179,12 @@ class RestockOrderController {
         }
     }
 
-    /**TO BE CHECKED - creation of a restock order
+    /**creation of a restock order
      * @throws  401 Unauthorized (not logged in or wrong permissions)
      * @throws 422 Unprocessable Entity (validation of request body failed)
      * @throws 503 Service Unavailable (generic error).
     */
     async createRestockOrder(body) {
-        //IS THIS CHECKING IF SKU's INCLUDED IN BODY EXIST?
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager", "supplier"))
             throw new Exceptions(401)
@@ -217,15 +217,23 @@ class RestockOrderController {
         await this.#dbManager.genericSqlRun(sqlInstruction, id, dateToSave, supplierId)
             .catch((error) => { throw error });
 
-        const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
+        // const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
+        // for (let i = 0; i < products.length; i++) {
+        //     await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
+        //         .catch((error) => { throw error })
+        // }
+
+        
+        const sqlInsert = `INSERT INTO SKUPerRestockOrder (id, SKUid, itemId, description, price, qty) VALUES (?,?,?,?,?,?);`
         for (let i = 0; i < products.length; i++) {
-            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].qty)
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].itemId, products[i].description, products[i].price, products[i].qty)
                 .catch((error) => { throw error })
-        }
+        } 
+        
 
     }
 
-    /**COMPLETED - function to edit a state of a restock order, given its ID
+    /**function to edit a state of a restock order, given its ID
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of request body or of id failed)
@@ -254,7 +262,7 @@ class RestockOrderController {
 
     }
 
-    /**TO BE CHECKED - function to add a list of sku items to a restock order 
+    /**function to add a list of sku items to a restock order 
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to id)
      * @throws 422 Unprocessable Entity (validation of request body or of id failed or order state != DELIVERED)
@@ -269,14 +277,21 @@ class RestockOrderController {
 
         const skuItems = body["skuItems"];
 
+
         /*check if the body is valid*/
-        if (!skuItems)
+        if (!skuItems){
             throw new Exceptions(422);
+        }
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM RestockOrder WHERE id=?;`, id)
             .then(value => row = value[0])
             .catch((error) => { throw error });
+
+        if(row === undefined){
+            throw new Exceptions(404);
+        }
+        const supplierId = row.supplierId;
 
     
         /*check if the restock order exists*/
@@ -289,32 +304,36 @@ class RestockOrderController {
             throw new Exceptions(422)
         }
 
-        //console.log(skuItems);
 
-        let skuidInfo;
+        let skuidInfo, itemIdInfo;
         let num;
         const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerRestockOrder WHERE RFID = ?`;
-        const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, RFID) VALUES (?,?,?);`
-        const sqlInsert2 = `INSERT INTO SKUPerRestockOrder (id, SKUid, description, price, qty) VALUES (?,?,?,?,?);`
+        const sqlInsert = `INSERT INTO SKUItemsPerRestockOrder (id, SKUID, itemId, RFID) VALUES (?,?,?,?);`
+        const sqlInsert2 = `INSERT INTO SKUPerRestockOrder (id, SKUid, itemId, description, price, qty) VALUES (?,?,?,?,?,?);`
         const sqlUpdate = `UPDATE SKUPerRestockOrder SET qty = qty + 1 WHERE SKUid = ?`
         
+  
         for (let i = 0; i < skuItems.length; i++) {
             let count;
+
             //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
             await this.#dbManager.genericSqlGet(sqlGet, skuItems[i].rfid).then((result) => count = result[0]["COUNT(*)"])
-                                                                         .catch((err) => {throw new Exceptions(503)});
+                                                                         .catch((err) => {throw new Exceptions(503)});                                                            
             if(count > 0){
                 continue;
             }
 
-            
-            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].rfid).catch((error) => { throw new Exceptions(503) })
-            skuidInfo = await this.#controller.getSkuController().getSku(skuItems[i].SKUId)
+
+            await this.#dbManager.genericSqlRun(sqlInsert, id, skuItems[i].SKUId, skuItems[i].itemId, skuItems[i].rfid).catch((error) => { throw new Exceptions(503) });
+            skuidInfo = await this.#controller.getSkuController().getSku(skuItems[i].SKUId).catch((err) => {
+                throw err
+            });
+            itemIdInfo = await this.#controller.getItemController().getItem(skuItems[i].itemId, supplierId);
 
             num = await this.#dbManager.genericSqlGet("SELECT SKUId FROM SKUPerRestockOrder WHERE SKUId = ?", skuidInfo.id).catch(error => { throw new Exceptions(503) });
                 
             if (num.length === 0) {
-                await this.#dbManager.genericSqlRun(sqlInsert2, id, skuidInfo.id, skuidInfo.description, skuidInfo.price, 1).catch((error) => { throw new Exceptions(503) })
+                await this.#dbManager.genericSqlRun(sqlInsert2, id, skuidInfo.id, itemIdInfo, skuidInfo.description, skuidInfo.price, 1).catch((error) => { throw new Exceptions(503) })
             }
             else {
                 await this.#dbManager.genericSqlRun(sqlUpdate, skuidInfo.id).catch((error) => { throw new Exceptions(503) })
@@ -325,8 +344,8 @@ class RestockOrderController {
 
 
 
-    /**TO BE CHECKED - function to add a transport note to a restock order, given its ID
-     *@throws  401 Unauthorized (not logged in or wrong permissions)
+    /**function to add a transport note to a restock order, given its ID
+     @throws  401 Unauthorized (not logged in or wrong permissions)
      @throws 404 Not Found (no restock order associated to id)
      @throws 422 Unprocessable Entity (validation of request body or of id failed or order state != DELIVERY or deliveryDate is before issueDate)
      @throws 503 Service Unavailable (generic error).
@@ -383,7 +402,7 @@ class RestockOrderController {
     await this.#dbManager.genericSqlRun(sqlInstruction, transportNote.deliveryDate, id).catch((error) => { throw error })
 }
 
-    /** COMPLETED - delete function to remove a restock order from the table, given its ID
+    /**delete function to remove a restock order from the table, given its ID
     * @throws 401 Unauthorized (not logged in or wrong permissions)
     * @throws 422 Unprocessable Entity (validation of id failed)
     * @throws 503 Service Unavailable (generic error).

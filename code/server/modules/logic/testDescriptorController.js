@@ -11,7 +11,6 @@ class TestDescriptorController {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
 
-        //console.log("testDescriptorController started");
     }
 
     /**getter function to retreive all test descriptors

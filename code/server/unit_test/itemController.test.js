@@ -20,7 +20,7 @@ afterEach(async () => {
     await dbManager.deleteAllData()
 });
 
-describe('itemController Tests', () => {
+describe.only('itemController Tests', () => {
 
     describe('getAllItems method test', () => {
         test('successful use of getAllItems', async () => {
@@ -46,7 +46,7 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             )
             await itemController.createItem(
@@ -55,26 +55,26 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 2,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             )
 
-            const result = await itemController.getItem(2);
+            const result = await itemController.getItem(2, 5);
             assert.equal(result.id, 2)
         })
 
         test('attempt of getItem with undefined id', async () => {
-            await itemController.getItem(undefined).catch(err => errorValue = err);
+            await itemController.getItem(undefined, 5).catch(err => errorValue = err);
             assert.equal(errorValue.code, 422)
         })
 
         test('attempt of getItem with invalid id', async () => {
-            await itemController.getItem("hello").catch(err => errorValue = err);
+            await itemController.getItem("hello", 5).catch(err => errorValue = err);
             assert.equal(errorValue.code, 422)
         })
 
         test('attempt of getItem with non-existant item', async () => {
-            await itemController.getItem(1).catch(err => errorValue = err);
+            await itemController.getItem(1, 5).catch(err => errorValue = err);
             assert.equal(errorValue.code, 404)
         })
 
@@ -98,11 +98,11 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             )
 
-            const result = await itemController.getItem(1);
+            const result = await itemController.getItem(1, 5);
             assert.equal(result.id, 1)
         })
 
@@ -113,7 +113,7 @@ describe('itemController Tests', () => {
                     description: undefined,
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             ).catch(err => errorValue = err);
             assert.equal(errorValue.code, 422)
@@ -126,7 +126,7 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             ).catch(err => errorValue = err);
             assert.equal(errorValue.code, 422)
@@ -139,7 +139,7 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: -10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             ).catch(err => errorValue = err);
             assert.equal(errorValue.code, 422)
@@ -152,7 +152,7 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             ).catch(err => errorValue = err);
             assert.equal(errorValue.code, 404)
@@ -173,7 +173,7 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             )
             await itemController.createItem(
@@ -182,7 +182,7 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             ).catch(err => errorValue = err);
             assert.equal(errorValue.code, 422)
@@ -198,7 +198,7 @@ describe('itemController Tests', () => {
             VALUES ( ?, ?, ?, ?, ?, ?);`;
 
             await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
-                .catch(() => { throw error });
+                .catch((error) => { throw error });
 
             await itemController.createItem(
                 {
@@ -206,22 +206,22 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             )
 
-            await itemController.editItem(1, {
+            await itemController.editItem(1, 5, {
                 newDescription: "newDescription",
                 newPrice: 15,
             })
 
-            const result = await itemController.getItem(1);
+            const result = await itemController.getItem(1, 5);
             assert.equal(result.description, "newDescription")
 
         })
 
         test('attempt of editItem with an undefined parameter', async () => {
-            await itemController.editItem(1, {
+            await itemController.editItem(1, 5, {
                 newDescription: undefined,
                 newPrice: 15,
             }).catch(err => errorValue = err);
@@ -229,7 +229,7 @@ describe('itemController Tests', () => {
         })
 
         test('attempt of editItem with a invalid parameter', async () => {
-            await itemController.editItem(1, {
+            await itemController.editItem(1, 5, {
                 newDescription: "newDescription",
                 newPrice: "hello",
             }).catch(err => errorValue = err);
@@ -237,7 +237,7 @@ describe('itemController Tests', () => {
         })
 
         test('attempt of editItem with a negative parameter', async () => {
-            await itemController.editItem(1, {
+            await itemController.editItem(1, 5, {
                 newDescription: "newDescription",
                 newPrice: -15,
             }).catch(err => errorValue = err);
@@ -245,7 +245,7 @@ describe('itemController Tests', () => {
         })
 
         test('attempt of editItem with a non-existant item', async () => {
-            await itemController.editItem(1, {
+            await itemController.editItem(1, 5, {
                 newDescription: "newDescription",
                 newPrice: 15,
             }).catch(err => errorValue = err);
@@ -269,24 +269,24 @@ describe('itemController Tests', () => {
                     description: "description",
                     price: 10.99,
                     SKUId: 1,
-                    supplierId: 1,
+                    supplierId: 5,
                 }
             )
 
-            const result = await itemController.getItem(1);
+            const result = await itemController.getItem(1, 5);
             assert.equal(result.id, 1)
-            await itemController.deleteItem(1)
-            await itemController.getItem(1).catch(err => errorValue = err)
+            await itemController.deleteItem(1, 5)
+            await itemController.getItem(1, 5).catch(err => errorValue = err)
             assert.equal(errorValue.code, 404)
         })
 
         test('attempt of deleteItem with undefined id', async () => {
-            await itemController.deleteItem(undefined).catch(err => errorValue = err)
+            await itemController.deleteItem(undefined, 5).catch(err => errorValue = err)
             assert.equal(errorValue.code, 422)
         })
 
         test('attempt of deleteItem with invalid id', async () => {
-            await itemController.deleteItem("hello").catch(err => errorValue = err)
+            await itemController.deleteItem("hello", 5).catch(err => errorValue = err)
             assert.equal(errorValue.code, 422)
         })
 

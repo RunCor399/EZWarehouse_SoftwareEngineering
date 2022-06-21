@@ -1,5 +1,4 @@
 # Project Estimation  
-<<<<<<< HEAD
 
 Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto Giovanna
 
@@ -8,18 +7,12 @@ Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto G
 | 1.0            | Initial base version      |
 | 2.0            | Updated estimation tables |
 
-=======
-Date:
-
-Version:
->>>>>>> master
 
 
 # Estimation approach
 Consider the EZWH  project as described in YOUR requirement document, assume that you are going to develop the project INDEPENDENT of the deadlines of the course
 # Estimate by size
 ### 
-<<<<<<< HEAD
 |                                                                                                         | Estimate                                                                  |
 | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | NC =  Estimated number of classes to be developed                                                       | 25 (model) + 30 (interfaces + abstract) + 10 (view) + 25(Controller) = 90 |
@@ -43,34 +36,10 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 | unit tests           | 48                              |
 | api tests            | 80                              |
 | management documents | 32                              |
-=======
-|             | Estimate                        |             
-| ----------- | ------------------------------- |  
-| NC =  Estimated number of classes to be developed   |                             |             
-|  A = Estimated average size per class, in LOC       |                            | 
-| S = Estimated size of project, in LOC (= NC * A) | |
-| E = Estimated effort, in person hours (here use productivity 10 LOC per person hour)  |                                      |   
-| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro) | | 
-| Estimated calendar time, in calendar weeks (Assume team of 4 people, 8 hours per day, 5 days per week ) |                    |               
-
-# Estimate by product decomposition
-### 
-|         component name    | Estimated effort (person hours)   |             
-| ----------- | ------------------------------- | 
-|requirement document    | |
-| GUI prototype ||
-|design document ||
-|code ||
-| unit tests ||
-| api tests ||
-| management documents  ||
-
->>>>>>> master
 
 
 # Estimate by activity decomposition
 ### 
-<<<<<<< HEAD
 | Activity name |                                        | Estimated effort (person hours) |
 | ------------- | -------------------------------------- | ------------------------------- |
 | Git Maven     |                                        | 32                              |
@@ -105,21 +74,13 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 
 ### Gantt Chart
 
-<img src="./images/Gantt_chart.png" />
+<img src="./images/Gantt_chart.PNG" />
 
-=======
-|         Activity name    | Estimated effort (person hours)   |             
-| ----------- | ------------------------------- | 
-| | |
-###
-Insert here Gantt chart with above activities
->>>>>>> master
 
 # Summary
 
 Report here the results of the three estimation approaches. The  estimates may differ. Discuss here the possible reasons for the difference
 
-<<<<<<< HEAD
 |                                    | Estimated effort (person hours) | Estimated duration (days) |
 | ---------------------------------- | ------------------------------- | ------------------------- |
 | estimate by size                   | 1200                            | 54                        |
@@ -131,13 +92,6 @@ The estimation obtained by size of the project is the most reliable one as it is
 The other two values instead are purely based on estimation and suppositions related to the amount of work that four people could do to get to the desired results.
 
 Since the amount of experience on which the last two estimation are built upon is low, the two results are very similar one to another
-=======
-|             | Estimated effort                        |   Estimated duration |          
-| ----------- | ------------------------------- | ---------------|
-| estimate by size ||
-| estimate by product decomposition ||
-| estimate by activity decomposition ||
->>>>>>> master
 
 
 

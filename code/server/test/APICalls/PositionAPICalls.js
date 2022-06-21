@@ -55,7 +55,6 @@ class PositionAPICalls {
     }
 
     async changePositionID(positionID, newPositionID) {
-        //console.log(newPositionID);
         let response;
         await axios.put(this.#baseURL + "/api/position/" + positionID + '/changeID',
             {

@@ -12,14 +12,12 @@ const dbManager = controller.getDBManager();
 
 
 beforeEach(async () => {
-    //console.log("executed before return")
     await dbManager.deleteAllData().then(async () => {
         await dbManager.insertRestockAndReturnOrderTestData();
     })
   });
 
 afterEach(async () => {
-    //console.log("executed after return")
     await dbManager.deleteAllData();
 });
 
@@ -28,7 +26,7 @@ describe('ReturnOrderController Tests', () => {
         test('Successfully create a new Return Order', async () => {
             let result, oldCount, newCount;
             const products = [{
-                               "SKUId":2, "description_return":"return description", 
+                               "SKUId":2, "itemId":2, "description_return":"return description", 
                                "price":30, "RFID":"78901234567890161234567890123456"
                              }];
             const body = {
@@ -39,29 +37,19 @@ describe('ReturnOrderController Tests', () => {
 
             oldCount = (await returnOrderController.getAllReturnOrders()).length;
 
-            await returnOrderController.createReturnOrder(body).catch(() => {
-                console.log("error");
-            });
+            await returnOrderController.createReturnOrder(body).catch(() => {});
 
             result = await returnOrderController.getAllReturnOrders();
             newCount = result.length;
 
             expect(oldCount).to.be.equal(newCount-1);
             expect(result[1].products.length).to.be.above(0);
-
-            //  currId = ((await returnOrderController.getAllReturnOrders()).length) + 1;
-            //  await returnOrderController.createReturnOrder(body).catch(() => {});
-            //  result = await returnOrderController.getReturnOrder(currId).catch(() => {});
-    
-        
-            //  expect(result).not.to.be.undefined;
-
         });
 
         test('Creation of a Return Order with an invalid Restock Order id', async () => {
             let result, oldCount, newCount;
             const products = [{
-                               "SKUId":2, "description_return":"return description", 
+                               "SKUId":2, "itemId":2, "description_return":"return description", 
                                "price":30, "RFID":"78901234567890161234567890123456"
                              }];
             const body = {
@@ -76,7 +64,6 @@ describe('ReturnOrderController Tests', () => {
 
             result = await returnOrderController.getAllReturnOrders();
             newCount = result.length;
-            console.log(result.products);
 
             expect(oldCount).to.be.equal(newCount);
         });
@@ -84,7 +71,7 @@ describe('ReturnOrderController Tests', () => {
         test('Creation of a Return Order with an invalid date', async () => {
             let result, oldCount, newCount;
             const products = [{
-                               "SKUId":2, "description_return":"return description", 
+                               "SKUId":2, "itemId":2, "description_return":"return description", 
                                "price":30, "RFID":"78901234567890161234567890123456"
                              }];
             const body = {
@@ -102,32 +89,6 @@ describe('ReturnOrderController Tests', () => {
 
             expect(oldCount).to.be.equal(newCount);
         });
-
-
-        
-
-        /*test('Creation of a Return Order with one or more non-existing products', async () => {
-            let result, oldCount, newCount;
-            const products = [{
-                               "SKUId":10, "404 not_existing_desc":"not_existing_notes", 
-                               "price":130, "RFID":"90161234567890123456789012345678"
-                             }];
-            const body = {
-                returnDate : "2022/04/04",
-                products : products,
-                restockOrderId : 3
-            }
-
-            oldCount = (await returnOrderController.getAllReturnOrders()).length;
-
-            await returnOrderController.createReturnOrder(body).then(() => {}).catch(() => {});
-
-            result = await returnOrderController.getAllReturnOrders();
-            newCount = result.length;
-
-            expect(oldCount).to.be.equal(newCount);
-            console.log(oldCount, newCount);
-        });*/
     });
 
 

@@ -1,5 +1,7 @@
 'use strict'
 
+//EZWH - Software Engineering - Group 25
+
 const PositionController = require("./positionController");
 const SkuController = require("./skuController");
 const UserController = require("./userController");
@@ -35,8 +37,6 @@ class Controller {
         (async () => {
              try {
                 await this.#dbManager.deleteAllData();
-
-                //await this.#dbManager.deleteAndAddUserData();
             } catch (error) {
             
             }
@@ -122,7 +122,6 @@ class Controller {
 
     areUndefined(...params) {
         const value = (params.includes(undefined) || params.includes(null));
-       // console.log("undefined included: ", value)
         return value;
     }
 
@@ -144,7 +143,6 @@ class Controller {
 
     areNotNumbers(...params) {
         const value = params.some((num) => isNaN(Number(num)));
-       // console.log("there is a Nan:", value)
         return value;
     }
 
@@ -157,7 +155,6 @@ class Controller {
             if (Number(numbers[i]) < 0)
                 return false;
         }
-      //  console.log("positive ok")
         return true;
     }
 
@@ -177,9 +174,6 @@ class Controller {
 
     checkAndFormatDate(date) {
 
-        
-        //console.log(dayjs("2022/02/02 10:10","YYYY/MM/DD HH:mm", true).isValid());
-
         let formattedDate;
         if (dayjs(date, "YYYY/MM/DD", true).isValid()) {
             formattedDate = dayjs(date).format("YYYY/MM/DD")
@@ -195,6 +189,15 @@ class Controller {
         return formattedDate
     }
 
+
+    validateEmail(email){
+        return String(email)
+          .toLowerCase()
+          .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          );
+    };
+    
 }
 
 module.exports = Controller;

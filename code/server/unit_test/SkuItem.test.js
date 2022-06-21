@@ -10,12 +10,10 @@ const dbManager = controller.getDBManager();
 
 
 beforeEach(async () => {
-    //console.log("executed before rest")
     await dbManager.deleteAllData();
 });
 
 afterEach(async () => {
-    //console.log("executed after rest");
     await dbManager.deleteAllData();
 });
 
@@ -39,7 +37,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch((error) => {});
 
             await skuItemController.createSkuItem(
                 {
@@ -47,7 +45,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch((error) => {});
 
             const items = await skuItemController.getAllSkuItems().catch(error => { throw error });
 
@@ -59,7 +57,7 @@ describe('SKUItemController Tests', () => {
         test('successful use of getSkuItems', async () => {
 
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
-        VALUES ( ?, ?, ?, ?, ?, ?);`;
+                                    VALUES ( ?, ?, ?, ?, ?, ?);`;
 
             await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "first sku", 50)
                 .catch(() => { throw error });
@@ -75,7 +73,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch(error => {});
 
             await skuItemController.createSkuItem(
                 {
@@ -83,7 +81,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 2,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch(error => {});
 
             await skuItemController.editSkuItem(rfid1,
                 {
@@ -100,13 +98,15 @@ describe('SKUItemController Tests', () => {
 
         test('attempt to use getSkuItems with a non-existant skuid', async () => {
             let errorValue;
-            const items = await skuItemController.getSkuItems(1).catch(error => { errorValue = error })
+            await skuItemController.getSkuItems(1).catch(error => { errorValue = error })
+
+
             assert.equal(errorValue.code, 404)
         })
 
         test('attempt to use getSkuItems with an invalid skuid', async () => {
             let errorValue;
-            const items = await skuItemController.getSkuItems("hello").catch(error => { errorValue = error })
+           await skuItemController.getSkuItems("hello").catch(error => { errorValue = error })
             assert.equal(errorValue.code, 422)
         })
     })
@@ -125,7 +125,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch(error => {});
             const item = await skuItemController.getSkuItem(rfid);
             assert.equal(item.RFID, rfid);
         })
@@ -149,7 +149,7 @@ describe('SKUItemController Tests', () => {
         test('successful use of createSKUitem', async () => {
 
             const sqlInstruction = `INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
-        VALUES ( ?, ?, ?, ?, ?, ?);`;
+                                    VALUES ( ?, ?, ?, ?, ?, ?);`;
 
             await dbManager.genericSqlRun(sqlInstruction, 100, 50, 10.99, "notes", "a new sku", 50)
                 .catch(() => { throw error });
@@ -162,10 +162,10 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch(error => {});
 
             const value = await skuItemController.getSkuItem(rfid)
-                .catch(error => (console.log(error)))
+                .catch(error => {});
             assert.equal(value.RFID, rfid)
 
         })
@@ -180,7 +180,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (errorValue = error));
+            ).catch(error => {errorValue = error});
 
             assert.equal(errorValue.code, 404);
 
@@ -196,7 +196,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (errorValue = error));
+            ).catch(error => {errorValue = error});
 
             assert.equal(errorValue.code, 422);
 
@@ -283,7 +283,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch(error => {});
 
             await skuItemController.editSkuItem(rfid,
                 {
@@ -291,10 +291,10 @@ describe('SKUItemController Tests', () => {
                     newAvailable: 1,
                     newDateOfStock: "2020/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch(error => {});
 
             const value = await skuItemController.getSkuItem("12345678901234567890123456789018")
-                .catch(error => (console.log("get:", error)))
+                .catch(error => {});
             assert.equal(value.RFID, "12345678901234567890123456789018")
         })
 
@@ -377,13 +377,13 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => (console.log(error)))
+            ).catch(error => {});
 
 
             await skuItemController.deleteSkuItem(rfid);
 
             const value = await skuItemController.getAllSkuItems()
-                .catch(error => (console.log("get:", error)))
+                .catch(error => {});
             assert.equal(value.length, 0)
         });
 

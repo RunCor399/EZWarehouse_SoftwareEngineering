@@ -6,7 +6,6 @@ const expect = chai.expect;
 const should = chai.should();
 const axios = require('axios');
 
-const UtilityCalls = require('./APICalls/UtilityCalls');
 const RestockOrdersAPICalls = require('./APICalls/RestockOrdersAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 
@@ -119,7 +118,7 @@ describe('Restock Orders Testing', async () => {
 
         describe('Add a list of SKUItems to a Restock Order by id', async () => {
             it('Successfully add a list of SKUItems', async () => {
-                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
+                const list = [{"SKUId":1, "itemId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 await restockOrdersAPICalls.editRestockOrderState(1, "DELIVERED");
 
@@ -132,7 +131,7 @@ describe('Restock Orders Testing', async () => {
             });
 
             it('State of Restock Order different from DELIVERED', async () => {
-                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
+                const list = [{"SKUId":1, "itemId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 await restockOrdersAPICalls.editRestockOrderState(1, "ISSUED");
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(1, list);
@@ -141,8 +140,8 @@ describe('Restock Orders Testing', async () => {
                 response.status.should.equal(422);
             });
 
-            it('State of Restock Order different from DELIVERED', async () => {
-                const list = [{"SKUId":1, "rfid":"12345678901234567890123456789016"}];
+            it('Invalid SKUId', async () => {
+                const list = [{"SKUId":1, "itemId":1, "rfid":"12345678901234567890123456789016"}];
                 
                 let response = await restockOrdersAPICalls.addSKUItemsToRestockOrder(100, list);
 

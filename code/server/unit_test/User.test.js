@@ -98,7 +98,6 @@ describe("UserController Tests", () => {
     describe("getAllSuppliers method testing", () => {
         test("Succesfully get all the Suppliers", async () => {
             let result = await userController.getAllSuppliers();
-            console.log(result)
             expect(result.length).to.be.equal(1);
         });
 
@@ -124,7 +123,7 @@ describe("UserController Tests", () => {
             }
             let oldCount = await userController.getAllUsers();
             let result = await userController.createUser(body);
-            let newCount = await userController.getAllUsers().catch((err) => (console.log(err)));
+            let newCount = await userController.getAllUsers().catch();
             expect(newCount.length).to.be.equal(oldCount.length + 1);
         });
 
@@ -249,7 +248,7 @@ describe("UserController Tests", () => {
         test("Succesfully delete an user", async () => {
             let oldCount = await userController.getAllUsers();
             let result = await userController.deleteUser("user1@ezwh.com", "customer");
-            let newCount = await userController.getAllUsers().catch((err) => (console.log(err)));
+            let newCount = await userController.getAllUsers().catch();
             expect(newCount.length).to.be.equal(oldCount.length - 1);
         });
 
@@ -258,7 +257,7 @@ describe("UserController Tests", () => {
             let error;
             let result = await userController.deleteUser("manager1@ezwh.com", "manager").catch((err) => (error = err));
             expect(error.code).to.be.equal(422);
-            let newCount = await userController.getAllUsers().catch((err) => (console.log(err)));
+            let newCount = await userController.getAllUsers().catch();
             expect(newCount.length).to.be.equal(oldCount.length);
         });
 
@@ -266,7 +265,7 @@ describe("UserController Tests", () => {
             let oldCount = await userController.getAllUsers();
             let error;
             let result = await userController.deleteUser("customer12@ezwh.com", "customer").catch((err) => (error = err));
-            let newCount = await userController.getAllUsers().catch((err) => (console.log(err)));
+            let newCount = await userController.getAllUsers().catch();
             expect(newCount.length).to.be.equal(oldCount.length);
         });
     });

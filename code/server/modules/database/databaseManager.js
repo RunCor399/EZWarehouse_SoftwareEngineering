@@ -13,15 +13,12 @@ class DBManager {
             }
         });
 
-        //console.log("DBManager started");
-
     }
 
     /** execute an update/insert/delete given an istruction and params 
      * @throws 500
     */
     async genericSqlRun(query, ...params) {
-        //console.log(params);
         return new Promise((resolve, reject) => {
             this.#db.run(query, params, (err) => {
                 if (err) {
@@ -49,7 +46,35 @@ class DBManager {
         })
     }
 
-    //TESTING PURPOSES
+    async deleteP1(queries) {
+        return new Promise((resolve, reject) => {
+            queries.forEach((query) => {
+                this.#db.run(query, (err, rows) => {
+                    if (err) {
+                        console.log("Database get error: err", err);
+                        reject(new Exceptions(500));
+                    } else {
+                        resolve(rows)
+                    }
+                });
+            });
+        })
+    }
+
+    async addP1(query) {
+        return new Promise((resolve, reject) => {
+            this.#db.run(query, (err, rows) => {
+                if (err) {
+                    console.log("Database get error: err", err);
+                    reject(new Exceptions(500));
+                } else {
+                    resolve(rows)
+                }
+            });
+        })
+    }
+
+    //TESTING PURPOSE
 
     async deleteAllData() {
         const queries = [
@@ -69,7 +94,6 @@ class DBManager {
             "DELETE FROM SKUPerInternalOrder WHERE 1=1",
             "DELETE FROM SKUItemsPerInternalOrder WHERE 1=1",
             "DELETE FROM Item WHERE 1=1",
-
             "DELETE FROM SQLITE_SEQUENCE WHERE name='SKU'",
             "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItem'",
             "DELETE FROM SQLITE_SEQUENCE WHERE name='Position'",
@@ -85,35 +109,29 @@ class DBManager {
             "DELETE FROM SQLITE_SEQUENCE WHERE name='InternalOrder'",
             "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUPerInternalOrder'",
             "DELETE FROM SQLITE_SEQUENCE WHERE name='SKUItemsPerInternalOrder'",
-            "DELETE FROM SQLITE_SEQUENCE WHERE name='Item'",
-
-            'INSERT INTO Users (email, name, surname, password, type) \
-             VALUES  ("user1@ezwh.com","name1","surname1","e16b2ab8d12314bf4efbd6203906ea6c","customer"), \
-                    ("qualityEmployee1@ezwh.com", "name2","surname2","e16b2ab8d12314bf4efbd6203906ea6c","qualityEmployee"), \
-                    ("clerk1@ezwh.com","name3","surname3","e16b2ab8d12314bf4efbd6203906ea6c","clerk"),  \
-                    ("deliveryEmployee1@ezwh.com","name4","surname4","e16b2ab8d12314bf4efbd6203906ea6c","deliveryEmployee"), \
-                    ("supplier1@ezwh.com","name5","surname5","e16b2ab8d12314bf4efbd6203906ea6c","supplier"), \
-                    ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
+            "DELETE FROM SQLITE_SEQUENCE WHERE name='Item'"
         ];
 
+        const query2 = 'INSERT INTO Users (email, name, surname, password, type) \
+       VALUES  ("user1@ezwh.com","name1","surname1","e16b2ab8d12314bf4efbd6203906ea6c","customer"), \
+              ("qualityEmployee1@ezwh.com", "name2","surname2","e16b2ab8d12314bf4efbd6203906ea6c","qualityEmployee"), \
+              ("clerk1@ezwh.com","name3","surname3","e16b2ab8d12314bf4efbd6203906ea6c","clerk"),  \
+              ("deliveryEmployee1@ezwh.com","name4","surname4","e16b2ab8d12314bf4efbd6203906ea6c","deliveryEmployee"), \
+              ("supplier1@ezwh.com","name5","surname5","e16b2ab8d12314bf4efbd6203906ea6c","supplier"), \
+              ("manager1@ezwh.com","name6","surname6","e16b2ab8d12314bf4efbd6203906ea6c","manager")'
 
+        await this.deleteP1(queries);
+        await this.addP1(query2)
 
-        return new Promise((resolve, reject) => {
-            queries.forEach((query) => {
-                this.#db.run(query, (err, rows) => {
-                    if (err) {
-                        console.log("Database get error: err", err);
-                        reject(new Exceptions(500));
-                    } else {
-                        resolve(rows)
-                    }
-                });
-            });
-        })
     }
 
 
     async insertRestockAndReturnOrderTestData() {
+        const insertItems = [`INSERT INTO Item ("id", "description", "price", "SKUId", "supplierId")
+                              VALUES (1, "item1", 10, 1, 5),
+                                     (2, "item2", 20, 2, 5)`];
+
+
         const insertRestockOrder = [` INSERT INTO RestockOrder ("issueDate", "state", "transportNote", "supplierId") 
                                      VALUES ("2021/01/01 01:01", "ISSUED", "", 5), 
                                             ("2022/01/02 10:10", "COMPLETEDRETURN", "", 4),
@@ -125,8 +143,8 @@ class DBManager {
                                     VALUES ("2022/02/02", 1);
         `];
 
-        const insertSKUItemsPerReturnOrder = [`INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) 
-                                               VALUES (1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
+        const insertSKUItemsPerReturnOrder = [`INSERT INTO SKUItemsPerReturnOrder (id, SKUId, itemId, description, price,  RFID) 
+                                               VALUES (1, 1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
 
         const insertSKU = [`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
                             VALUES ( 10, 20, 30, "note", "description", 40),
@@ -136,7 +154,7 @@ class DBManager {
                                  VALUES ("12345678901234567890123456789016",1,10,"2022/02/02"),
                                         ("78901234567890161234567890123456",2,20, "2022/03/03");`];
 
-        const insertQueries = [insertRestockOrder, insertReturnOrder, insertSKU, insertSKUItemsPerReturnOrder, insertSKUItems];
+        const insertQueries = [insertItems, insertRestockOrder, insertReturnOrder, insertSKU, insertSKUItemsPerReturnOrder, insertSKUItems];
 
         return new Promise((resolve, reject) => {
             insertQueries.forEach((querySet) => {
@@ -238,12 +256,12 @@ class DBManager {
         try {
             await this.genericSqlRun(queries[0])
         } catch (error) {
-            
+
         }
         try {
             await this.genericSqlRun(queries[1])
         } catch (error) {
-            
+
         }
     }
 
@@ -317,8 +335,6 @@ class DBManager {
         const insertInternalOrder = [`INSERT INTO InternalOrder(issueDate, state, customerId) VALUES ("2022/03/21", "ISSUED", 3)`];
 
         const insertSKUPerInternalOrder = [`INSERT INTO SKUPerInternalOrder(id, SKUId, description, price, qty) VALUES (1, 1, "skuPerInternalOrder", 50.00, 20)`];
-
-        /*check if insertSKUItemsPerInternalOrder and insertSKU are needed*/
 
         const insertQueries = [insertInternalOrder, insertSKUPerInternalOrder];
 

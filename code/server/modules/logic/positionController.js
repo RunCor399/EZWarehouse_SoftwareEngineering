@@ -9,14 +9,12 @@ class PositionController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        //console.log("positionController started");
     }
 
     checkPositionID(positionID, aisleID, row, col) {
         const value = (String(positionID).substring(0, 4) === String(aisleID)
             && String(positionID).substring(4, 8) === String(row)
             && String(positionID).substring(8, 12) === String(col))
-        console.log("is position ok: ", value);
         return value;
     }
 
@@ -47,7 +45,7 @@ class PositionController {
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401);
 
-        const positionID = body["positionID"];  //the client calls it barcode
+        const positionID = body["positionID"];
         const aisleID = body["aisleID"];
         const row = body["row"];
         const col = body["col"];
@@ -69,8 +67,6 @@ class PositionController {
 
         let exists = await this.positionExists(positionID)
             .catch(error => {throw error})
-        
-        console.log("exists", exists.length)
         
         if(exists.length){
             throw new Exceptions(422);
@@ -116,19 +112,12 @@ class PositionController {
         
         //checks if new generated positionID will match another one already existing
         const newPositionID = newAisleID + "" + newRow + "" + newCol;
-        //let exists;
-        /*await this.positionExists(newAisleID + "" + newRow + "" + newCol).then((result) => exists = result );
-            
-        if(exists && (id != newPositionID)){
-            throw new Exceptions(422);
-        }*/
 
             
         let positions = await this.getAllPositions()
             .catch((error) => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
 
         const positionIDs = positions.map(pos => String(pos.positionID));
-        console.log(positionIDs);
 
         if (!positionIDs.includes(id)){
             throw new Exceptions(404);
@@ -169,8 +158,6 @@ class PositionController {
             throw new Exceptions(401);
 
         const newPositionID = body["newPositionID"];
-        console.log(body);
-        console.log("IDS", oldId, newPositionID);
 
         if (this.#controller.areUndefined(oldId, newPositionID)
             || String(oldId).length !== 12 || String(newPositionID).length !== 12)
@@ -228,10 +215,6 @@ class PositionController {
 
         await this.#dbManager.genericSqlGet(query, positionID)
                              .then(value => position = value[0]);
-
-
-        
-        //console.log(position !== undefined);
 
         return new Promise((resolve) => {
             position !== undefined ? resolve(true) : resolve(false)

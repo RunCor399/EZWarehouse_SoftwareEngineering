@@ -9,11 +9,10 @@ class ReturnOrderController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        //console.log("returnOrderController started");
     }
 
 
-    /**TO BE CHECKED - getter function to retreive all the return orders
+    /**getter function to retreive all the return orders
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 500 Internal Server Error (generic error).
     */
@@ -35,7 +34,7 @@ class ReturnOrderController {
         return orders;
     }
 
-    /**TO BE CHECKED - getter function to retreive a single return order, given its ID
+    /**getter function to retreive a single return order, given its ID
     * @throws 401 Unauthorized (not logged in or wrong permissions)
     * @throws 404 Not Found (no return order associated to id)
     * @throws 422 Unprocessable Entity (validation of id failed)
@@ -71,24 +70,19 @@ class ReturnOrderController {
 
     /** @throws 500 */
     async getProductsPerReturnOrder(id) {
-        let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, description, price, RFID
-        FROM SKUItemsPerReturnOrder WHERE id = ? `, id)
-            .catch(error => { throw error })
+        let products = await this.#dbManager.genericSqlGet(`SELECT SKUID, itemId, description, price, RFID FROM SKUItemsPerReturnOrder WHERE id = ? `, id).catch(error => { throw error })
 
         return products;
 
     }
 
-    /**TO BE CHECKED - function to create a return order
+    /**function to create a return order
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 404 Not Found (no restock order associated to restockOrderId)
      * @throws 422 Unprocessable Entity (validation of request body failed)
      * @throws 503 Service Unavailable (generic error).
     */
     async createReturnOrder(body) {
-
-        console.log("***************** returnOrderTest", body)
-
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))
             throw new Exceptions(401)
@@ -105,7 +99,7 @@ class ReturnOrderController {
 
         let dateToSave
         try {
-             dateToSave = this.#controller.checkAndFormatDate(returnDate);
+            dateToSave = this.#controller.checkAndFormatDate(returnDate);
         } catch (error) {
             throw new Exceptions(422);
         }
@@ -116,15 +110,10 @@ class ReturnOrderController {
             .then((value) => row = value[0])
             .catch((error) => { throw new Exceptions(503) });
 
-        
+
         /*check if the restock order exists*/
         if (row === undefined)
             throw new Exceptions(404);
-
-        /* for (let i = 0; i < products.length; i++) {
-            await this.#controller.getSkuItemController().getSkuItem(products[i].RFID)
-                .catch(error => { console.log("******** ERROR", error); throw error })
-        } */
 
         let id;
         await this.#dbManager.genericSqlGet('SELECT COUNT(*) FROM ReturnOrder')
@@ -139,25 +128,25 @@ class ReturnOrderController {
 
         //Same problem as in restock order, RFID not unique
         const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerReturnOrder WHERE RFID = ?`;
-        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, description, price,  RFID) VALUES (?,?,?,?,?);`;
-       
+        const sqlInsert = `INSERT INTO SKUItemsPerReturnOrder (id, SKUId, itemId, description, price, RFID) VALUES (?,?,?,?,?,?);`;
+
         for (let i = 0; i < products.length; i++) {
             let count;
             //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
             await this.#dbManager.genericSqlGet(sqlGet, products[i].RFID).then((result) => count = result[0]["COUNT(*)"])
-                                                                         .catch((err) => {throw new Exceptions(503)});
-            if(count > 0){
+                .catch((err) => { throw new Exceptions(503) });
+            if (count > 0) {
                 continue;
             }
 
-            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].description, products[i].price, products[i].RFID)
-                .catch(error => {throw new Exceptions(503) })
+            await this.#dbManager.genericSqlRun(sqlInsert, id + 1, products[i].SKUId, products[i].itemId, products[i].description, products[i].price, products[i].RFID)
+                   .catch(error => { throw new Exceptions(503) })
         }
 
 
     }
 
-    /**COMPLETED - delete function to remove a return order from the table, given its ID
+    /**delete function to remove a return order from the table, given its ID
      * @throws 401 Unauthorized (not logged in or wrong permissions)
      * @throws 422 Unprocessable Entity (validation of id failed)
      * @throws 503 Service Unavailable (generic error)
