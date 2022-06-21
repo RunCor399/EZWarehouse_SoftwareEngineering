@@ -74,7 +74,7 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 
 ### Gantt Chart
 
-<img src="./images/Gantt_chart.png" />
+<img src="./images/Gantt_chart.PNG" />
 
 
 # Summary
