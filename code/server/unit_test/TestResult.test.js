@@ -41,14 +41,14 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.createTestResult({
                 rfid: "12345678901234567890123456789015",
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: false,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResults("12345678901234567890123456789015")
 
@@ -75,14 +75,14 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.createTestResult({
                 rfid: "12345678901234567890123456789015",
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: false,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResults(undefined)
                 .catch(err => errorValue = err);
@@ -109,14 +109,14 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.createTestResult({
                 rfid: "12345678901234567890123456789015",
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: false,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResults("hello")
                 .catch(err => errorValue = err);
@@ -158,14 +158,14 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.createTestResult({
                 rfid: "12345678901234567890123456789015",
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: false,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
 
@@ -192,14 +192,14 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.createTestResult({
                 rfid: "12345678901234567890123456789015",
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: false,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResult(undefined, 1)
                 .catch(err => errorValue = err);
@@ -226,14 +226,14 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.createTestResult({
                 rfid: "12345678901234567890123456789015",
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: false,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResult("hello", 1)
                 .catch(err => errorValue = err);
@@ -273,7 +273,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
 
@@ -420,7 +420,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.editTestResult("12345678901234567890123456789015", 1, {
                 "newIdTestDescriptor": 2,
@@ -460,7 +460,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.editTestResult(undefined, 1, {
                 "newIdTestDescriptor": 2,
@@ -499,7 +499,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.editTestResult("hello", 1, {
                 "newIdTestDescriptor": 2,
@@ -537,7 +537,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.editTestResult("12345678901234567890123456789015", 1, {
                 "newIdTestDescriptor": 10,
@@ -575,7 +575,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.editTestResult("12345678901234567890123456789015", 2, {
                 "newIdTestDescriptor": 2,
@@ -613,7 +613,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             await testResultController.editTestResult("12345678901234567890123456789016", 1, {
                 "newIdTestDescriptor": 2,
@@ -648,7 +648,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
 
@@ -683,7 +683,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
 
@@ -715,7 +715,7 @@ describe("TestResultController Tests", () => {
                 idTestDescriptor: 1,
                 Date: "2020/01/01",
                 Result: true,
-            }).catch(error => console.log(error))
+            }).catch()
 
             response = await testResultController.getTestResult("12345678901234567890123456789015", 1)
 
