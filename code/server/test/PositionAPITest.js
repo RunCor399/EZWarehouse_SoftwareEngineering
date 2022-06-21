@@ -6,7 +6,6 @@ const expect = chai.expect;
 const should = chai.should();
 const axios = require('axios');
 
-const UtilityCalls = require('./APICalls/UtilityCalls');
 const PositionAPICalls = require('./APICalls/PositionAPICalls');
 const DBManager = require('../modules/database/databaseManager');
 
