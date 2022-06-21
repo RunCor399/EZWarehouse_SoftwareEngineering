@@ -98,13 +98,15 @@ describe('SKUItemController Tests', () => {
 
         test('attempt to use getSkuItems with a non-existant skuid', async () => {
             let errorValue;
-            const items = await skuItemController.getSkuItems(1).catch(error => { errorValue = error })
+            await skuItemController.getSkuItems(1).catch(error => { errorValue = error })
+
+
             assert.equal(errorValue.code, 404)
         })
 
         test('attempt to use getSkuItems with an invalid skuid', async () => {
             let errorValue;
-            const items = await skuItemController.getSkuItems("hello").catch(error => { errorValue = error })
+           await skuItemController.getSkuItems("hello").catch(error => { errorValue = error })
             assert.equal(errorValue.code, 422)
         })
     })
@@ -178,7 +180,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => {});
+            ).catch(error => {errorValue = error});
 
             assert.equal(errorValue.code, 404);
 
@@ -194,7 +196,7 @@ describe('SKUItemController Tests', () => {
                     SKUId: 1,
                     DateOfStock: "2022/01/01",
                 }
-            ).catch(error => {});
+            ).catch(error => {errorValue = error});
 
             assert.equal(errorValue.code, 422);
 

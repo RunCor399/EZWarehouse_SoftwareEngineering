@@ -112,7 +112,7 @@ class ItemController {
 
         //check if sku exists in the SKU table
         await this.#controller.getSkuController().getSku(SKUId)
-            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else { console.log("err", error); throw error } })
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error } )
 
         //check if the supplier already sells an item with the same SKUId
         let item;
@@ -163,7 +163,7 @@ class ItemController {
             throw new Exceptions(422);
 
         await this.getItem(id, supplierId)
-            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else {console.log(error); throw error} })
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else  throw error} )
 
         const suppliers = await this.#controller.getUserController().getAllSuppliers()
             .catch(err => { throw err })

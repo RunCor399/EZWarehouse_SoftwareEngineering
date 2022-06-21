@@ -7,7 +7,6 @@ router.get('/api/items', async (req, res) => {
 
 /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET',req.url);
 
   await controller.getItemController().getAllItems()
     .then((items) => { return res.status(200).json(items); })
@@ -21,11 +20,9 @@ router.get('/api/items/:id/:supplierId', async (req, res) => {
   const itemId = req.params.id;
   const supplierId = req.params.supplierId;
 
-  console.log(itemId, supplierId)
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('GET',req.url);
 
   await controller.getItemController().getItem(itemId, supplierId)
     .then((item) => { return res.status(200).json(item); })
@@ -38,7 +35,6 @@ router.post('/api/item',async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('POST',req.url);
 
   await controller.getItemController().createItem(req.body)
     .then(() => { return res.status(201).end(); })
