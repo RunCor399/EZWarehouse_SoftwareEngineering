@@ -87,7 +87,7 @@ class ReturnOrderController {
     */
     async createReturnOrder(body) {
 
-        console.log("***************** returnOrderTest", body)
+        //console.log("***************** returnOrderTest", body)
 
         /*check if the current user is authorized*/
         if (!this.#controller.isLoggedAndHasPermission("manager"))

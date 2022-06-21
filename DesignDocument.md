@@ -9,6 +9,8 @@ Authors: Bianchi Giulia, Colella Edoardo, Colotti Manuel Enrique, Di Benedetto G
 | 1.0            | First drafts of Design Document                        |
 | 2.0            | Final version of Design Document (Before Coding)       |
 | 3.0            | Final version of Design Doument (After implementation) |
+| 4.0            | Final version of Design Doument (After change1)        |
+
 
 # Contents
 
@@ -50,7 +52,7 @@ The backend package is divided in a data package that provides all the data stru
 
 
 ## Class Diagram
-<img src="images/newDesignImage.png" alt="ClassDiagram" width="1000"/>
+<img src="images/finalDesign.png" alt="ClassDiagram" width="1200"/>
 
 
 

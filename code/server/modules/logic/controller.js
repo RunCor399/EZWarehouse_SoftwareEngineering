@@ -196,7 +196,7 @@ class Controller {
     }
 
 
-    validateEmail = (email) => {
+    validateEmail(email){
         return String(email)
           .toLowerCase()
           .match(
