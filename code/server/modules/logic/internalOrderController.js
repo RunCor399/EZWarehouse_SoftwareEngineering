@@ -10,7 +10,6 @@ class InternalOrderController {
     constructor(controller) {
         this.#controller = controller;
         this.#dbManager = this.#controller.getDBManager();
-        //console.log("internalOrderController started");
     }
 
 
@@ -39,11 +38,11 @@ class InternalOrderController {
     async getProductsForInternalOrder(id, state) {
         let final_query;
 
-        if(state !== "COMPLETED"){
+        if (state !== "COMPLETED") {
             final_query = `SELECT SKUId, description, price, qty
             FROM SKUPerInternalOrder WHERE id = ?;`;
         }
-        else{
+        else {
             final_query = `SELECT SPI.SKUId, SPI.description, SPI.price, SI.rfid
             FROM SKUPerInternalOrder SPI, SKUItem SI  WHERE id = ? AND SPI.SKUId = SI.SKUId;`;
         }
@@ -118,7 +117,6 @@ class InternalOrderController {
             .catch((error) => { throw error });
 
         /*check if the internal order exists*/
-        //console.log(row);
         if (!row)
             throw new Exceptions(404);
 
@@ -197,10 +195,10 @@ class InternalOrderController {
         if (this.#controller.areUndefined(id, newState)
             || isNaN(Number(id))
             || !this.#controller.areAllPositiveOrZero(id))
-                throw new Exceptions(422);
-            
+            throw new Exceptions(422);
 
-        if (!this.#controller.checkStateInternalOrders(newState)){
+
+        if (!this.#controller.checkStateInternalOrders(newState)) {
             throw new Exceptions(422);
         }
 
@@ -214,17 +212,16 @@ class InternalOrderController {
             if (!products)
                 throw new Exceptions(422);
 
-            
-             //Same problem as in restock order and return, RFID not unique
+
             const sqlGet = `SELECT COUNT(*) FROM SKUItemsPerInternalOrder WHERE RFID = ?`;
             const sqlInsert = `INSERT INTO SKUItemsPerInternalOrder (id, SKUId, RFID) VALUES (?, ?, ?);`;
-            
+
             for (let i = 0; i < products.length; i++) {
                 let count;
                 //Checking for already existent RFID  (other way to solve is to remove the check since it's not requested)
                 await this.#dbManager.genericSqlGet(sqlGet, products[i].RFID).then((result) => count = result[0]["COUNT(*)"])
-                                                                            .catch((err) => {throw new Exceptions(503)});
-                if(count > 0){
+                    .catch((err) => { throw new Exceptions(503) });
+                if (count > 0) {
                     continue;
                 }
 
@@ -233,11 +230,11 @@ class InternalOrderController {
             }
 
         }
-            const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
+        const sqlInstruction = `UPDATE InternalOrder SET state = ? WHERE ID = ?`;
 
-            await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
-                .catch(error => { throw new Exceptions(503) })
-        
+        await this.#dbManager.genericSqlRun(sqlInstruction, newState, id)
+            .catch(error => { throw new Exceptions(503) })
+
     }
 
 
