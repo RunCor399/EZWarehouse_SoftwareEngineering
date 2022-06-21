@@ -52,7 +52,6 @@ router.put('/api/item/:id/:supplierId', async (req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('PUT',req.url);
 
   await controller.getItemController().editItem(itemId, supplierId, req.body)
     .then(() => { return res.status(200).end(); })
@@ -67,7 +66,6 @@ router.delete('/api/items/:id/:supplierId', async(req, res) => {
 
   /** @type {Controller} */
   const controller = req.app.get("controller");
-  //console.log('DELETE',req.url);
 
   await controller.getItemController().deleteItem(itemId, supplierId)
     .then(() => { return res.status(204).end(); })
