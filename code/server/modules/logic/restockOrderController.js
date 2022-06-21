@@ -289,6 +289,9 @@ class RestockOrderController {
             .then(value => row = value[0])
             .catch((error) => { throw error });
 
+        if(row === undefined){
+            throw new Exceptions(404);
+        }
         const supplierId = row.supplierId;
 
     

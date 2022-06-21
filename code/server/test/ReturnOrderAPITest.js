@@ -28,7 +28,7 @@ describe('Return Orders Tests', async () => {
 
     describe('Create Return Orders Tests', async () => {
         it('Succesfullly create a Return Order', async () => {
-            const products = [{"SKUId":1, "description":"return description", 
+            const products = [{"SKUId":1, "itemId":1, "description":"return description", 
                                "price":20, "RFID":"12345678901234567890123456789016"
                              }];
             
@@ -37,7 +37,7 @@ describe('Return Orders Tests', async () => {
         });
 
         it('New Return Order with non-existing restockOrderId', async () => {
-            const products = [{"SKUId":1, "description":"return description", 
+            const products = [{"SKUId":1, "itemId":1, "description":"return description", 
                                "price":20, "RFID":"12345678901234567890123456789016"
                              }];
             
@@ -46,7 +46,7 @@ describe('Return Orders Tests', async () => {
         });
 
         it('New Return Order with malformed date', async () => {
-            const products = [{"SKUId":1, "description":"return description", 
+            const products = [{"SKUId":1, "itemId":1, "description":"return description", 
                                "price":20, "RFID":"12345678901234567890123456789016"
                              }];
             

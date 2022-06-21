@@ -50,18 +50,34 @@ class ItemController {
         //check if the id is valid
         if (this.#controller.areUndefined(id, supplierId) || this.#controller.areNotNumbers(id, supplierId)
             || !this.#controller.areAllPositiveOrZero(id)) {
-            //console.log(this.#controller.areUndefined(id, supplierId), this.#controller.areNotNumbers(id, supplierId), !this.#controller.areAllPositiveOrZero(id));
             throw new Exceptions(422);
+            
         }
-
+        
+        
         const suppliers = await this.#controller.getUserController().getAllSuppliers()
             .catch(err => { throw err })
 
+
         const suppliersCode = suppliers.map(s => s.id);
-        if (!suppliersCode.includes(supplierId)) {
-            console.log("test supplier", suppliersCode, supplierId, suppliersCode.includes(supplierId))
+        // if (!suppliersCode.includes(supplierId)) {
+        //     console.log("test supplier", suppliersCode[0] == supplierId);
+        //     throw new Exceptions(404)
+        // }
+
+        let supplierFound = false;
+        for(let supCode of suppliersCode){
+            //console.log("fd", supCode, supplierId)
+            if(Number(supCode) === Number(supplierId)){
+                supplierFound = true;
+            }
+        }
+
+        if(!supplierFound){
+            console.log("dfsdff");
             throw new Exceptions(404)
         }
+
 
         let row;
         await this.#dbManager.genericSqlGet(`SELECT * FROM Item WHERE id= ? AND supplierId = ?;`, id, supplierId)
@@ -69,7 +85,7 @@ class ItemController {
             .catch(error => { throw error });
 
 
-
+        console.log(await this.getAllItems());
         //check if the item exists
         if (!row)
             throw new Exceptions(404)
@@ -131,6 +147,7 @@ class ItemController {
         VALUES (?,?,?,?,?);`, id, description, price, SKUId, supplierId)
             .catch(error => { throw error });
 
+
     }
 
     /**function to edit the properties of a specific item, given its ID
@@ -155,14 +172,27 @@ class ItemController {
             throw new Exceptions(422);
 
         await this.getItem(id, supplierId)
-            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else throw error })
+            .catch(error => { if (error.getCode() === 500) throw new Exceptions(503); else {console.log(error); throw error} })
 
         const suppliers = await this.#controller.getUserController().getAllSuppliers()
             .catch(err => { throw err })
 
         const suppliersCode = suppliers.map(s => s.id);
-        if (!suppliersCode.includes(supplierId)){
-            console.log(suppliersCode.includes(supplierId))
+        // if (!suppliersCode.includes(supplierId)){
+        //     console.log(suppliersCode.includes(supplierId))
+        //     throw new Exceptions(404)
+        // }
+
+        let supplierFound = false;
+
+        for(let supCode of suppliersCode){
+            if(Number(supCode) === Number(supplierId)){
+                supplierFound = true;
+            }
+        }
+
+        if(!supplierFound){
+            console.log("tira");
             throw new Exceptions(404)
         }
 

@@ -56,7 +56,7 @@ router.put('/api/item/:id/:supplierId', async (req, res) => {
 
   await controller.getItemController().editItem(itemId, supplierId, req.body)
     .then(() => { return res.status(200).end(); })
-    .catch(error => { return res.status(error.getCode()).send(error.getMessage()); });
+    .catch(error => {return res.status(error.getCode()).send(error.getMessage()); });
 });
 
 //DELETE /api/items/:id/:supplierId
