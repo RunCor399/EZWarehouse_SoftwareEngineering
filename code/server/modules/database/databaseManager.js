@@ -13,15 +13,12 @@ class DBManager {
             }
         });
 
-        //console.log("DBManager started");
-
     }
 
     /** execute an update/insert/delete given an istruction and params 
      * @throws 500
     */
     async genericSqlRun(query, ...params) {
-        //console.log(params);
         return new Promise((resolve, reject) => {
             this.#db.run(query, params, (err) => {
                 if (err) {
@@ -53,7 +50,6 @@ class DBManager {
         return new Promise((resolve, reject) => {
             queries.forEach((query) => {
                 this.#db.run(query, (err, rows) => {
-                    //console.log(query)
                     if (err) {
                         console.log("Database get error: err", err);
                         reject(new Exceptions(500));
@@ -68,7 +64,6 @@ class DBManager {
     async addP1(query) {
         return new Promise((resolve, reject) => {
             this.#db.run(query, (err, rows) => {
-                //console.log(query)
                 if (err) {
                     console.log("Database get error: err", err);
                     reject(new Exceptions(500));
@@ -150,9 +145,6 @@ class DBManager {
 
         const insertSKUItemsPerReturnOrder = [`INSERT INTO SKUItemsPerReturnOrder (id, SKUId, itemId, description, price,  RFID) 
                                                VALUES (1, 1, 1, "skuPerReturnOrder", 30, "12345678901234567890123456789016");`];
-
-        const insertSKUItemsPerRestockOrder = [`INSERT INTO SKUItemsPerRestockOrder (id, SKUID, itemId, RFID)
-                                                VALUES (1, 1, 1, "12345678901234567890123456789016")`];
 
         const insertSKU = [`INSERT INTO SKU ( weight, volume, price, notes, description, availableQuantity)
                             VALUES ( 10, 20, 30, "note", "description", 40),
@@ -343,8 +335,6 @@ class DBManager {
         const insertInternalOrder = [`INSERT INTO InternalOrder(issueDate, state, customerId) VALUES ("2022/03/21", "ISSUED", 3)`];
 
         const insertSKUPerInternalOrder = [`INSERT INTO SKUPerInternalOrder(id, SKUId, description, price, qty) VALUES (1, 1, "skuPerInternalOrder", 50.00, 20)`];
-
-        /*check if insertSKUItemsPerInternalOrder and insertSKU are needed*/
 
         const insertQueries = [insertInternalOrder, insertSKUPerInternalOrder];
 
